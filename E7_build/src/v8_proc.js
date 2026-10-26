@@ -29,8 +29,8 @@ function filterBar(){
   const d=document.createElement("div"); d.className="pd-fbar";
   const sel=(k,label,opts,icon)=>`<label class="pd-f"><span>${label}</span><span class="pd-sel">${icon||""}<select data-f="${k}">${opts.map(o=>`<option value="${esc(o[0])}"${o[0]===PF[k]?" selected":""}>${esc(o[1])}</option>`).join("")}</select></span></label>`;
   const pg=P.PROGS.find(x=>x.code===PF.project);
-  d.innerHTML=(pg&&window.V8Art?`<div class="pd-carbox">${window.V8Art.car(pg.code)}<div class="cap"><b>${esc(pg.name)}</b><small>${esc(pg.segment)}</small></div></div>`:"")+sel("project","Project",P.PROGS.map(p=>[p.code,p.name]),Icons.svg("car"))+
-    sel("category","Vertical",[["","All verticals"]].concat(P.CATS.map(c=>[c.name,c.name])),Icons.svg("layers"))+
+  d.innerHTML=(pg&&window.V8Art?`<div class="pd-carbox">${window.V8Art.car(pg.code)}<div class="cap"><b>${esc(pg.name)}</b><small>${esc(pg.segment)}</small></div></div>`:"")+sel("project","Project",P.PROGS.map(p=>[p.code,p.name]).sort((a,b)=>a[1].localeCompare(b[1])),Icons.svg("car"))+
+    sel("category","Vertical",[["","All verticals"]].concat(P.CATS.map(c=>[c.name,c.name]).sort((a,b)=>a[0].localeCompare(b[0]))),Icons.svg("layers"))+
     sel("supplier","Supplier",[["","All suppliers ("+P.VENDS.length+")"]].concat(P.VENDS.map(v=>[v.name,v.name]).sort((a,b)=>a[0].localeCompare(b[0]))),Icons.svg("building"))+
     `<button type="button" class="pd-reset" data-f="reset" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`;
   d.addEventListener("change",e=>{ const k=e.target.dataset&&e.target.dataset.f; if(k&&k!=="reset"){ PF[k]=e.target.value||(k==="project"?DEFAULT_PROJECT:""); Router.render(); } });
@@ -116,7 +116,7 @@ function decisionsPanel(){
   const open=ApprovalEngine.flows.filter(f=>ApprovalEngine.currentStep(f)&&f.steps.some(s=>s.status==="current")).map(f=>({f,esc2:ApprovalEngine.escalationFor(f)})).sort((a,b)=>(!!b.esc2)-(!!a.esc2));
   const body=open.length?`<div class="pd-t pd-dec"><div class="h"><span>#</span><span>Type</span><span>Item</span><span>Stage</span><span class="ra">Status</span></div>${open.slice(0,5).map((o,i)=>{ const cur=ApprovalEngine.currentStep(o.f);
       return `<div class="r" data-act="go:approvals" role="button" tabindex="0"><span class="k">${i+1}</span><span class="n"><b>${esc(LBL[o.f.kind]||o.f.kind)}</b><small>${esc(o.f.wf)}</small></span><span class="it">${esc(o.f.entity)}</span><span class="st">${esc(cur?cur.label:"Complete")}</span><span class="v">${o.esc2?`<span class="chip chip-red"><span class="chip-dot"></span>Escalated</span>`:`<span class="chip chip-amber"><span class="chip-dot"></span>Pending</span>`}</span></div>`; }).join("")}</div>`:empty("No decision is pending.");
-  return U.panel(ptitle("Pending procurement decisions","Approval workflows with an open step (change requests, commodity prices, technical changes, milestone amendments). Platform-wide: the project, vertical and supplier filters do not apply."),body);
+  return U.panel(ptitle("Pending procurement decisions","Approval workflows with an open step (change requests, commodity prices, technical changes, milestone amendments). Platform-wide: the project, vertical and supplier filters do not apply."),body,{id:"pd-decisions"});
 }
 
 /* shows 5 rows at a time with a small pager under the table (rows keep their rank numbers; the page resets when the filters change) */
@@ -146,7 +146,7 @@ function build(){
     kcard({icon:"trend-up",label:"Since nomination",value:sgn(chNom),tone:chNom>0?"bad":"good",sub:`${cr(nom)} → ${cr(cur)}`,chip:`<b class="${cur-nom>0?"bad":"good"}">${U.spend(cur-nom,true)}</b><small>per vehicle</small>`,chipTip:"Rupee change per vehicle since nomination",act:"pprice:",tip:"Change in cost per vehicle against the nominated prices. Click to open Price Analysis."}),
     kcard({icon:"target",label:"Spend above target",value:overAnn==null?"—":cr(overAnn),tone:overAnn>0?"bad":"",sub:overAnn==null?"no cost target in this selection":`${U.spend(overPer)} per vehicle · ${sgn(avgT)} vs target`,tip:"Yearly spend above cost target: for the parts that have a cost breakdown and a cost target, (piece price − target) × quantity per vehicle × planned annual volume of the project. Only parts above their target count."}),
     kcard({icon:"users",label:"Top-4 supplier share",value:sup.length?Math.round(top4)+"%":"—",sub:sup[0]?`largest: ${esc(sup[0].name)} ${Math.round(sup[0].share)}%`:"",tip:"Share of cost per vehicle held by the four largest suppliers."}),
-    kcard({icon:"clipboard-check",label:"Decisions pending",value:openF.length,sub:escN?`<span class="v8-bad">${escN} escalated</span>`:"none escalated",act:"go:approvals",tip:"Approvals waiting for a decision (platform-wide)."})].join("")}</div></div>`);
+    kcard({icon:"clipboard-check",label:"Decisions pending",value:openF.length,sub:escN?`<span class="v8-bad">${escN} escalated</span>`:"none escalated",act:"pscroll:pd-decisions",tip:"Approvals waiting for a decision (platform-wide). Click to jump to the list on this page."})].join("")}</div></div>`);
   const gw=add(`<div class="pd-gw"><div class="pd-grid"></div></div>`), g=gw.querySelector(".pd-grid");
   [categoryPanel(listNoCat),topCostPanel(list),supplierPanel(list,cur),increasePanel(list),targetPanel(priced),decisionsPanel()].forEach((h,i)=>{ const e=U.el(h); g.appendChild(e); if(i===0) paginate(e,5); });
   w.appendChild(U.el(`<div class="v8-foot">Cost per vehicle of the tracked parts (piece price × quantity per vehicle) — the same basis as the <a href="#" data-act="go:fc-outlook">Forecast Dashboard</a>. Part prices are illustrative; cost vs target covers the ${Object.keys(DATA.priceVersions).length} parts with a cost breakdown.</div>`));
@@ -154,10 +154,19 @@ function build(){
 }
 
 window.V8Proc={PF,DEFAULT:DEFAULT_PROJECT,pricedParts};
+/* floating "back to top" button on the Procurement dashboard pages (the page scrolls inside #content) */
+(function(){
+  let b=null; const box=()=>document.getElementById("content");
+  const ensure=()=>{ if(b) return b; b=document.createElement("button"); b.id="v8-top"; b.type="button"; b.title="Back to top"; b.setAttribute("aria-label","Back to top");
+    b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'; b.onclick=()=>{ const c=box(); if(c) c.scrollTo({top:0,behavior:"smooth"}); }; document.body.appendChild(b); return b; };
+  const upd=()=>{ const c=box(), on=!!c&&/^proc-/.test(Router.screen||"")&&c.scrollTop>360; ensure().classList.toggle("on",on); };
+  document.addEventListener("scroll",upd,true); setInterval(upd,400);
+})();
 /* ------------------------------------------------------------ wiring */
 Object.assign(U.actions,{
   pset:v=>{ const [k,val]=v.split("="); PF[k]=(k==="category"&&PF.category===val)?"":val; Router.render(); },
   pgo:v=>{ const [k,id]=v.split("|"); if(k==="price") __openPrice(id); },
+  pscroll:id=>{ const el=document.getElementById(id); if(!el) return; el.scrollIntoView({behavior:"smooth",block:"start"}); el.classList.remove("pd-flash"); void el.offsetWidth; el.classList.add("pd-flash"); setTimeout(()=>el.classList.remove("pd-flash"),1800); },
 });
 NAV.procurement.splice(1,0,{sep:"Procurement dashboard"},{id:"proc-overview",label:"Procurement Dashboard",icon:"📊"});
 Object.assign(NAV_ICONS,{"proc-overview":"layout"}); Object.assign(NAV_SHORT,{"proc-overview":"Overview"});

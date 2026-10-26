@@ -14,7 +14,7 @@ const sgn=(v,d)=>U.sgn(v,d==null?1:d), cr=v=>U.cr(v), inr=(v,d)=>U.inr(v,d), sp=
 const short=n=>String(n).replace(/^(SKODA|VW) /,"");
 const fmtDate=d=>{ try{ return new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}); }catch(e){ return String(d); } };
 const A=()=>window.__cbdApi;
-const CTX={part:null,vert:"",sup:"",supplier:null,svert:"",spart:"",price:{category:"",supplier:"",part:"",vpart:"",vtab:"category"}};
+const CTX={part:null,vert:"",pname:"",sup:"",supplier:null,svert:"",spart:"",price:{category:"",supplier:"",part:"",vpart:"",vtab:"category"}};
 const progOf=code=>P.PROGS.find(p=>p.code===code)||P.PROGS[0];
 const projectParts=code=>P.PARTS.filter(p=>p.progCode===code);
 const costOf=(l,f)=>sum(l,f);                       // one project at a time → cost of that car
@@ -32,7 +32,7 @@ const more=(act,label)=>`<div class="pd-more"><a href="#" data-act="${act}">${la
 const srm=()=>{ try{ if(typeof SrmData==="undefined"||!window.V8Srm) return null; const m=V8Srm.model(); return {m,ev:SrmData.evaluate(m)}; }catch(e){ return null; } };
 const kcard=(o)=>`<div class="pd-kpi${o.act?" kpi-link":""}" ${o.act?`data-act="${o.act}" role="button" tabindex="0"`:""} title="${esc(o.tip||"")}"><div class="top"><span class="ic">${Icons.svg(o.icon)}</span><span class="lb${o.wrap?" wrap":""}">${o.label}</span></div><div class="mid"><span class="vl ${o.tone||""}">${o.value}</span>${o.chip?`<span class="ch" title="${esc(o.chipTip||"")}">${o.chip}</span>`:""}</div><div class="sb" title="${esc(String(o.sub||"").replace(/<[^>]*>/g,""))}">${o.sub||""}</div></div>`;
 const sel=(k,label,opts,val,icon)=>`<label class="pd-f"><span>${label}</span><span class="pd-sel">${icon?Icons.svg(icon):""}<select data-pf="${k}">${opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(val)?" selected":""}>${esc(o[1])}</option>`).join("")}</select></span></label>`;
-const projSel=()=>sel("project","Project",P.PROGS.map(p=>[p.code,p.name]),PX.PF.project,"car");
+const projSel=()=>sel("project","Project",P.PROGS.map(p=>[p.code,p.name]).sort((a,b)=>a[1].localeCompare(b[1])),PX.PF.project,"car");
 function go(screen){ Router.go(screen,"procurement"); }
 /* shows `size` rows at a time with a pager under the table */
 function paginate(panel,rowSel,size,host){
@@ -64,16 +64,51 @@ const kpis=(w,cards,n)=>add(w,`<div class="pd-kw"><div class="pd-kpis k${n||card
 const note=t=>`<div class="v8-foot">${t}</div>`;
 
 /* ================================================================== PART DETAILS */
-function pickPart(){
-  let p=CTX.part?P.part(CTX.part):null; const missing=!!CTX.part&&!p;
-  if(p) PX.PF.project=p.progCode; else p=projectParts(PX.PF.project).sort((a,b)=>lineCost(b)-lineCost(a))[0];
-  CTX.part=p.id; return {p,missing};
+/* Part Details needs all four filters before it shows any data: Project, Vertical, Part (the name only) and Supplier.
+   The three lists narrow each other, and a change clears any other selection that no longer fits. */
+const pfMatch=(x,v,n,sp)=>(!v||x.category===v)&&(!n||x.name===n)&&(!sp||x.vendorName===sp);
+function pfOptions(code){
+  const all=projectParts(code);
+  return {vert:P.CATS.map(c=>c.name).sort().filter(c=>all.some(x=>pfMatch(x,c,CTX.pname,CTX.sup))),
+    name:[...new Set(all.filter(x=>pfMatch(x,CTX.vert,"",CTX.sup)).map(x=>x.name))].sort((a,b)=>a.localeCompare(b)),
+    sup:[...new Set(all.filter(x=>pfMatch(x,CTX.vert,CTX.pname,"")).map(x=>x.vendorName))].sort()};
+}
+function pfTidy(changed){
+  const all=projectParts(PX.PF.project), has=(v,n,sp)=>all.some(x=>pfMatch(x,v,n,sp)), keys=["vert","pname","sup"];
+  if(!changed){ if(CTX.vert&&!has(CTX.vert,"","")) CTX.vert=""; if(CTX.pname&&!has(CTX.vert,CTX.pname,"")) CTX.pname=""; if(CTX.sup&&!has(CTX.vert,CTX.pname,CTX.sup)) CTX.sup=""; return; }
+  const pair=(a,b)=>has(a==="vert"||b==="vert"?CTX.vert:"",a==="pname"||b==="pname"?CTX.pname:"",a==="sup"||b==="sup"?CTX.sup:"");
+  keys.forEach(k=>{ if(k!==changed&&CTX[k]&&CTX[changed]&&!pair(changed,k)) CTX[k]=""; });
+  if(CTX.vert&&CTX.pname&&CTX.sup&&!has(CTX.vert,CTX.pname,CTX.sup)){ const o=keys.filter(k=>k!==changed); CTX[o[o.length-1]]=""; }
+}
+function pfPart(){
+  if(!CTX.vert||!CTX.pname||!CTX.sup) return null;
+  return projectParts(PX.PF.project).filter(x=>pfMatch(x,CTX.vert,CTX.pname,CTX.sup)).sort((a,b)=>lineCost(b)-lineCost(a))[0]||null;
+}
+function pfFrame(){
+  const O=pfOptions(PX.PF.project), opt=(ph,list)=>[["",ph+" ("+list.length+")"]].concat(list.map(n=>[n,n]));
+  return frame("Part Details",
+    projSel()+sel("vert","Vertical",opt("Select vertical",O.vert),CTX.vert,"layers")+sel("part","Part",opt("Select part",O.name),CTX.pname,"wrench")+sel("sup","Supplier",opt("Select supplier",O.sup),CTX.sup,"building")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
+    (k,v)=>{ if(k==="project"){ PX.PF.project=v; pfTidy(null); }
+      else if(k==="vert"){ CTX.vert=v; pfTidy("vert"); } else if(k==="part"){ CTX.pname=v; pfTidy("pname"); } else if(k==="sup"){ CTX.sup=v; pfTidy("sup"); }
+      else { PX.PF.project=PX.DEFAULT; CTX.vert=CTX.pname=CTX.sup=""; }
+      Router.render(); });
+}
+function buildPartEmpty(missing){
+  const w=pfFrame(), need=[!CTX.vert&&"a vertical",!CTX.pname&&"a part",!CTX.sup&&"a supplier"].filter(Boolean);
+  if(missing) add(w,U.note("The requested part was not found.","warn"));
+  add(w,U.panel("No part selected",empty(`Select ${need.length>1?need.slice(0,-1).join(", ")+" and "+need[need.length-1]:need[0]||"all filters"} to see the part's price history and cost breakdown. Project, vertical, part and supplier are all needed.`)));
+  U.wire(w); return w;
 }
 function partHeader(p,tgt){
   const s=srm(), ev=s&&s.ev.find(e=>e.pt.id===p.id), st=ev&&SrmData.STAGES[ev.stage];
   const vs=versionsOf(p.id), last=vs[vs.length-1], lastUp=last?fmtDate(last.effectiveFrom):P.monthLabel(P.MONTHS[NH-1]);
   const phase=ev?(ev.stage<0?"Not started":st.label):null;
-  return `<div class="pd-card pd-slim"><dl class="meta"><div><dt>Part number</dt><dd class="mono">${esc(p.id)}</dd></div><div><dt>Program phase</dt><dd>${phase?esc(phase):"—"}</dd></div><div><dt>SRM status</dt><dd>${ev?`<span class="chip ${({ok:"chip-green",risk:"chip-amber",delayed:"chip-red",notstarted:"chip-gray"})[ev.status]}"><span class="chip-dot"></span>${esc(SrmData.STATUS[ev.status])}</span>`:"—"}</dd></div><div><dt>Last price update</dt><dd>${esc(lastUp)}</dd></div></dl></div>`;
+  const item=(t,v)=>`<div><dt>${t}</dt><dd>${v}</dd></div>`;
+  return `<div class="pd-card pd-slim stack pd-part"><dl class="meta">`+
+    item("Part",`${esc(p.name)} <span class="mono pd-pid">(${esc(p.id)})</span>`)+item("Program phase",phase?esc(phase):"—")+
+    item("SRM status",ev?`<span class="chip ${({ok:"chip-green",risk:"chip-amber",delayed:"chip-red",notstarted:"chip-gray"})[ev.status]}"><span class="chip-dot"></span>${esc(SrmData.STATUS[ev.status])}</span>`:"—")+
+    item("Last price update",esc(lastUp))+item("Supplier",esc(p.vendorName))+
+    `</dl></div>`;
 }
 function priceHistoryPanel(p,tgt){
   const vs=versionsOf(p.id); let chart;
@@ -103,7 +138,12 @@ function costBreakdownPanel(p){
   const nodes=window.CbdCore?CbdCore.contributing(cbd):cbd.tree.filter(n=>+n.cost>0), tot=sum(nodes,n=>+n.cost)||1, pal=["#0a6a4e","#2f8f6e","#5bb08f","#8fcdb3","#c3e5d4","#9db7ad"];
   const slices=nodes.map((n,i)=>({label:n.name.replace(/\s*\(.*\)$/,""),value:+n.cost,color:pal[i%pal.length]}));
   const donut=C.donut(slices,{size:150,center:inr(tot),centerSub:"per part",aria:"Cost breakdown"}).replace(/<ul class="pc-dl">[\s\S]*?<\/ul>/,"");
-  return U.panel(ptitle("Cost breakdown (current price)","Components of the cost breakdown: raw material (weights × commodity price), import content (× FX) and manual cost nodes. Total is the cost-breakdown price, which the part's piece price follows."),`<div class="pd-conc2"><div class="dn">${donut}</div><div class="lg">${slices.map(s=>`<div class="o"><i style="background:${s.color}"></i><span title="${esc(s.label)}">${esc(s.label)}</span><b>${(s.value/tot*100).toFixed(0)}% · ${inr(s.value)}</b></div>`).join("")}</div></div><div class="pd-tag">Cost-breakdown total <b>${inr(tot)}</b> · piece price <b>${inr(p.cur)}</b></div>`);
+  const gap=p.cur-tot, gp=p.cur?gap/p.cur*100:0, over=gap<0;
+  const gapTip=over?"The calculated breakdown is above the supplier's piece price. That usually means two cost lines overlap, so check the cost breakdown for double counting."
+    :"The breakdown is calculated from net weight × commodity price, import content × FX and the cost lines entered for this part. The piece price is what the supplier charges today. The difference is price that no cost line explains, such as supplier margin and overheads, or cost lines that are not entered yet.";
+  return U.panel(ptitle("Cost breakdown (current price)","Components of the cost breakdown: raw material (weights × commodity price), import content (× FX) and the cost lines entered for this part. It is a calculation, not the price: the supplier's piece price is shown below for comparison."),
+    `<div class="pd-conc2 pd-cb"><div class="dn">${donut}</div><div class="lg">${slices.map(s=>`<div class="o"><i style="background:${s.color}"></i><span title="${esc(s.label)}">${esc(s.label)}</span><em>${inr(s.value)}</em><b>${Math.round(s.value/tot*100)}%</b></div>`).join("")}</div></div>`+
+    `<div class="pd-cbn"><div><span>Cost breakdown <small>calculated</small></span><b>${inr(tot)}</b></div><div><span>Piece price <small>supplier, current</small></span><b>${inr(p.cur)}</b></div><div class="g ${over?"bad":""}"><span>${over?"Breakdown above price":"Not explained by the breakdown"} ${info(gapTip)}</span><b>${over?"+":""}${inr(Math.abs(gap))} <small>${Math.abs(gp).toFixed(1)}% of price</small></b></div></div>`);
 }
 function decisionsFor(match){
   const out=[];
@@ -116,32 +156,20 @@ function decisionsTable(list){
   return list.length?U.table(["Type","Reference","Subject","Stage","Status"],list.slice(0,6).map(d=>`<tr class="v8-row" data-act="go:approvals" role="button" tabindex="0"><td><b>${esc(d.kind)}</b></td><td>${Components.wfChip(d.wf)}</td><td>${esc(d.subject)}</td><td>${esc(d.stage)}</td><td>${stChip(d.status)}</td></tr>`).join(""))+(list.length>6?`<div class="mut small" style="margin-top:6px">+${list.length-6} more</div>`:""):empty("No commercial decision is linked to this selection.");
 }
 function notesPanel(p){
-  const vs=versionsOf(p.id), dp=dpOf(p.id), items=[];
-  vs.slice().reverse().slice(0,4).forEach((v,i,a)=>items.push(`${fmtDate(v.effectiveFrom)} — ${esc(v.source)}${v.changeReq?" ("+esc(v.changeReq)+")":""}: ${inr(v.price)}`));
-  if(dp) items.push(`Part master last updated ${esc(fmtDate(dp.lastUpdated))} — data status <b>${esc(dp.status)}</b>.`);
-  if(DATA.cbds[p.id]) items.push(`Cost breakdown last updated ${esc(fmtDate(DATA.cbds[p.id].lastUpdated))}.`);
-  return U.panel(ptitle("Notes & remarks","Recorded sources only: price-version sources, the part master and the cost breakdown. Nothing is added here."),items.length?`<ul class="pd-notes">${items.map(x=>`<li>${x}</li>`).join("")}</ul>`:empty("No notes are recorded for this part."));
+  const vs=versionsOf(p.id), dp=dpOf(p.id);
+  const rows=vs.map((v,i)=>({v,prev:i?vs[i-1]:null})).reverse().slice(0,4).map(({v,prev})=>{ const d=prev?v.price-prev.price:0;
+    return `<div class="nr"><span class="d">${esc(fmtDate(v.effectiveFrom))}</span><span class="t"><b>${esc(v.source)}</b>${v.changeReq?`<small>${esc(v.changeReq)}</small>`:""}</span><span class="v">${inr(v.price)}${prev?`<small class="${d>0?"bad":d<0?"good":""}">${d>=0?"+":"−"}${inr(Math.abs(d))} · ${sgn(pct(v.price,prev.price))}</small>`:`<small>nomination</small>`}</span></div>`; }).join("");
+  const rec=[]; if(dp) rec.push(`<div class="nr"><span class="d">${esc(fmtDate(dp.lastUpdated))}</span><span class="t"><b>Part master updated</b></span><span class="v">${Components.chip(dp.status)}</span></div>`);
+  if(DATA.cbds[p.id]) rec.push(`<div class="nr"><span class="d">${esc(fmtDate(DATA.cbds[p.id].lastUpdated))}</span><span class="t"><b>Cost breakdown updated</b></span><span class="v"></span></div>`);
+  return U.panel(ptitle("Notes & remarks","Recorded sources only: the latest price versions, the part master and the cost breakdown. Nothing is added here."),
+    rows||rec.length?`<div class="pd-nt">${rows?`<div class="h">Latest price versions</div>${rows}`:""}${rec.length?`<div class="h">Records</div>${rec.join("")}`:""}</div>`:empty("No notes are recorded for this part."));
 }
 function buildPart(){
-  const {p,missing}=pickPart(), pg=progOf(p.progCode), tgt=targetOf(p.id), cpv=lineCost(p), annual=(p.cur-p.nom)*p.qty*pg.volume;
-  const parts=projectParts(p.progCode).sort((a,b)=>lineCost(b)-lineCost(a));
-  if(CTX.vert&&p.category!==CTX.vert) CTX.vert="";      // a part opened from elsewhere wins over the vertical / supplier filters
-  if(CTX.sup&&p.vendorName!==CTX.sup) CTX.sup="";
-  const byCost=(a,b)=>lineCost(b)-lineCost(a), scope=(code,v,s)=>projectParts(code).filter(x=>(!v||x.category===v)&&(!s||x.vendorName===s)).sort(byCost), top=(code,v,s)=>{ const l=scope(code,v,s); return l[0]?l[0].id:null; };
-  const pick=scope(p.progCode,CTX.vert,CTX.sup);
-  const vertOpts=P.CATS.map(c=>c.name).filter(n=>scope(p.progCode,"",CTX.sup).some(x=>x.category===n)), supOpts=[...new Set(scope(p.progCode,CTX.vert,"").map(x=>x.vendorName))].sort();   // each list only offers values that still have parts
-  const dup={}; pick.forEach(x=>{ dup[x.name]=(dup[x.name]||0)+1; }); const seen={};   // same part name more than once: number them, biggest cost first
-  const partOpts=pick.map(x=>[x.id,dup[x.name]>1?`${x.name} (${(seen[x.name]=(seen[x.name]||0)+1)})`:x.name]);
-  const w=frame("Part Details",
-    projSel()+sel("vert","Vertical",[["","All verticals"]].concat(vertOpts.map(n=>[n,n])),CTX.vert,"layers")+sel("sup","Supplier",[["","All suppliers"]].concat(supOpts.map(n=>[n,n])),CTX.sup,"building")+sel("part","Part",partOpts,p.id,"wrench")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
-    (k,v)=>{ const pj=PX.PF.project; let id;
-      if(k==="project"){ PX.PF.project=v; id=top(v,CTX.vert,CTX.sup); if(!id){ CTX.vert=CTX.sup=""; id=top(v,"",""); } CTX.part=id; }
-      else if(k==="vert"){ CTX.vert=v; id=top(pj,v,CTX.sup); if(!id){ CTX.sup=""; id=top(pj,v,""); } CTX.part=id; }
-      else if(k==="sup"){ CTX.sup=v; id=top(pj,CTX.vert,v); if(!id){ CTX.vert=""; id=top(pj,"",v); } CTX.part=id; }
-      else if(k==="part") CTX.part=v;
-      else { PX.PF.project=PX.DEFAULT; CTX.part=null; CTX.vert=CTX.sup=""; }
-      Router.render(); });
-  if(missing) add(w,U.note("The selected part was not found — showing the part with the highest cost per vehicle in "+esc(p.progName)+".","warn"));
+  let missing=false;
+  if(CTX.part){ const q=P.part(CTX.part); if(q){ PX.PF.project=q.progCode; CTX.vert=q.category; CTX.pname=q.name; CTX.sup=q.vendorName; } else missing=true; CTX.part=null; }   // opened for one part: its project, vertical, name and supplier fill the filters
+  const p=pfPart(); if(!p) return buildPartEmpty(missing);
+  const pg=progOf(p.progCode), tgt=targetOf(p.id), cpv=lineCost(p), annual=(p.cur-p.nom)*p.qty*pg.volume;
+  const w=pfFrame();
   add(w,partHeader(p,tgt));
   kpis(w,[
     kcard({icon:"coins",label:"Nomination price",value:inr(p.nom,0),sub:esc(P.monthLabel(P.MONTHS[0]))+" · piece price"}),
@@ -166,19 +194,29 @@ function pickSupplier(){
   if(!s) s=names[0]; CTX.supplier=s; return {s,missing,names};
 }
 function seriesIdx(list){ const base=costOf(list,p=>p.qty*p.h[0])||1; return P.MONTHS.map((m,i)=>costOf(list,p=>p.qty*p.h[i])/base*100); }
+/* after "Reset filters": every filter is cleared, including the supplier; the page waits for a supplier to be picked */
+function buildSupplierEmpty(){
+  const code=PX.PF.project, all=projectParts(code), vertOpts=P.CATS.map(c=>c.name).sort().filter(n=>all.some(x=>x.category===n)), names=[...new Set(all.filter(x=>!CTX.svert||x.category===CTX.svert).map(x=>x.vendorName))].sort();
+  const w=frame("Supplier Details",
+    projSel()+sel("svert","Vertical",[["","All verticals ("+vertOpts.length+")"]].concat(vertOpts.map(n=>[n,n])),CTX.svert,"layers")+sel("spart","Part",[["","All parts"]],"","wrench")+sel("supplier","Supplier",[["","Select a supplier ("+names.length+")"]].concat(names.map(n=>[n,n])),"","building")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
+    (k,v)=>{ if(k==="project"){ PX.PF.project=v; CTX.svert=""; } else if(k==="svert") CTX.svert=v; else if(k==="supplier"){ if(v){ CTX.supplier=v; CTX.sclr=false; } } else if(k==="spart"){ } else { PX.PF.project=PX.DEFAULT; CTX.svert=CTX.spart=""; CTX.supplier=null; CTX.sclr=true; } Router.render(); });
+  add(w,U.panel("No supplier selected",empty(`Pick a supplier above to see its spend, parts and price performance. ${names.length} supplier${names.length===1?"":"s"} match the filters.`)));
+  U.wire(w); return w;
+}
 function buildSupplier(){
+  if(CTX.sclr) return buildSupplierEmpty();
   const {s,missing}=pickSupplier(), code=PX.PF.project, pg=progOf(code), all=projectParts(code), sm=DATA.suppliers.find(x=>x.name===s), vend=P.VENDS.find(v=>v.name===s);
   const byCost=(a,b)=>lineCost(b)-lineCost(a), sAll=all.filter(p=>p.vendorName===s);
   if(CTX.svert&&!sAll.some(p=>p.category===CTX.svert)) CTX.svert="";      // same filters as Part Details; each list only offers values that still have parts
   const inV=p=>!CTX.svert||p.category===CTX.svert, sV=sAll.filter(inV).sort(byCost);
   if(CTX.spart&&!sV.some(p=>p.id===CTX.spart)) CTX.spart="";
   const list=sV.filter(p=>!CTX.spart||p.id===CTX.spart), allV=all.filter(inV);
-  const vertOpts=P.CATS.map(c=>c.name).filter(n=>sAll.some(p=>p.category===n)), supOpts=[...new Set(allV.map(p=>p.vendorName))].sort();
+  const vertOpts=P.CATS.map(c=>c.name).sort().filter(n=>sAll.some(p=>p.category===n)), supOpts=[...new Set(allV.map(p=>p.vendorName))].sort();
   const dup={}; sV.forEach(x=>{ dup[x.name]=(dup[x.name]||0)+1; }); const seen={};
-  const partOpts=sV.map(x=>[x.id,dup[x.name]>1?`${x.name} (${(seen[x.name]=(seen[x.name]||0)+1)})`:x.name]);
+  const partOpts=sV.map(x=>[x.id,dup[x.name]>1?`${x.name} (${(seen[x.name]=(seen[x.name]||0)+1)})`:x.name]).sort((a,b)=>a[1].localeCompare(b[1]));
   const w=frame("Supplier Details",
-    projSel()+sel("svert","Vertical",[["","All verticals"]].concat(vertOpts.map(n=>[n,n])),CTX.svert,"layers")+sel("supplier","Supplier",supOpts.map(n=>[n,n]),s,"building")+sel("spart","Part",[["","All parts"]].concat(partOpts),CTX.spart,"wrench")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
-    (k,v)=>{ if(k==="project"){ PX.PF.project=v; CTX.spart=""; } else if(k==="svert"){ CTX.svert=v; CTX.spart=""; } else if(k==="supplier"){ CTX.supplier=v; CTX.spart=""; } else if(k==="spart") CTX.spart=v; else { PX.PF.project=PX.DEFAULT; CTX.supplier=null; CTX.svert=CTX.spart=""; } Router.render(); });
+    projSel()+sel("svert","Vertical",[["","All verticals"]].concat(vertOpts.map(n=>[n,n])),CTX.svert,"layers")+sel("spart","Part",[["","All parts"]].concat(partOpts),CTX.spart,"wrench")+sel("supplier","Supplier",supOpts.map(n=>[n,n]),s,"building")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
+    (k,v)=>{ if(k==="project"){ PX.PF.project=v; CTX.spart=""; } else if(k==="svert"){ CTX.svert=v; CTX.spart=""; } else if(k==="supplier"){ CTX.supplier=v; CTX.spart=""; } else if(k==="spart") CTX.spart=v; else { PX.PF.project=PX.DEFAULT; CTX.supplier=null; CTX.svert=CTX.spart=""; CTX.sclr=true; } Router.render(); });
   if(missing) add(w,U.note("The selected supplier was not found — showing another supplier of this project.","warn"));
   const totCost=costOf(all,lineCost), cost=costOf(list,lineCost), nomC=costOf(list,p=>p.qty*p.nom), annual=cost*pg.volume;
   const sr=srm(), sv=sr&&sr.m.vend[s];
@@ -200,14 +238,14 @@ function buildSupplier(){
   const catPanel=U.panel(ptitle("Spend by component category","This supplier's cost per vehicle by vertical in the selected project."),`<div class="pd-catv"><div class="dn">${donut}</div><div class="lg">${catRows.map((r,i)=>`<div class="o"><i style="background:${pal[i%pal.length]}"></i><span title="${esc(r.k)} · ${r.n} part${r.n===1?"":"s"}">${esc(r.k)}</span><b>${(r.c/cost*100).toFixed(0)}%</b></div>`).join("")}</div></div>`);
   /* parts supplied (filterable, paginated) */
   const prows=list.sort((a,b)=>lineCost(b)-lineCost(a)).map(p=>({p}));
-  const ft=FTable.create({id:"sup-parts",pageSize:10,rowAct:r=>"ppart:"+r.p.id,empty:"No part matches these filters.",rows:prows,columns:[
-    {key:"part",label:"Part",get:r=>r.p.name,html:r=>`<span class="pd-pname">${V8Art.part(r.p.name,r.p.category,"sm")}<span><b>${esc(r.p.name)}</b><small class="v8-sm">${esc(r.p.id)}</small></span></span>`},
-    {key:"vertical",label:"Vertical",get:r=>r.p.category},
-    {key:"qty",label:"Qty / vehicle",get:r=>r.p.qty,align:"r",order:r=>r.p.qty},
-    {key:"price",label:"Current price (₹)",get:r=>nf(r.p.cur,0),align:"r",order:r=>r.p.cur},
-    {key:"var",label:"Variance vs nomination",get:r=>pct(r.p.cur,r.p.nom)>0?"Price up":pct(r.p.cur,r.p.nom)<0?"Price down":"Unchanged",html:r=>chip(pct(r.p.cur,r.p.nom))},
-    {key:"cpv",label:"Cost / vehicle (₹)",get:r=>nf(lineCost(r.p),0),align:"r",order:r=>lineCost(r.p)},
-    {key:"share",label:"Share of supplier cost",get:r=>(lineCost(r.p)/cost*100).toFixed(1)+"%",align:"r",order:r=>lineCost(r.p)}]});
+  const ft=FTable.create({id:"sup-parts",pageSize:10,sortable:true,sort:{key:"vertical",dir:"asc"},rowAct:r=>"ppart:"+r.p.id,empty:"No part matches these filters.",rows:prows,columns:[
+    {key:"vertical",label:"Vertical",w:"13%",get:r=>r.p.category},
+    {key:"part",label:"Part",w:"27%",get:r=>r.p.name,html:r=>`<span class="pd-pname">${V8Art.part(r.p.name,r.p.category,"sm")}<span><b>${esc(r.p.name)}</b><small class="v8-sm">${esc(r.p.id)}</small></span></span>`},
+    {key:"qty",label:"Qty / vehicle",w:"9%",get:r=>r.p.qty,align:"r",order:r=>r.p.qty},
+    {key:"price",label:"Current price (₹)",w:"12%",get:r=>nf(r.p.cur,0),align:"r",order:r=>r.p.cur},
+    {key:"var",label:"Variance vs nomination",w:"14%",get:r=>pct(r.p.cur,r.p.nom)>0?"Price up":pct(r.p.cur,r.p.nom)<0?"Price down":"Unchanged",order:r=>pct(r.p.cur,r.p.nom),html:r=>chip(pct(r.p.cur,r.p.nom))},
+    {key:"cpv",label:"Cost / vehicle (₹)",w:"12.5%",get:r=>nf(lineCost(r.p),0),align:"r",order:r=>lineCost(r.p)},
+    {key:"share",label:"Share of supplier cost",w:"12.5%",get:r=>(lineCost(r.p)/cost*100).toFixed(1)+"%",align:"r",order:r=>lineCost(r.p)}]});
   const partsHtml=U.panel(ptitle("Parts supplied to "+esc(short(pg.name)),"Every tracked part this supplier delivers to the selected project. Click a row for the part."),"");
   /* price performance */
   const ids=seriesIdx(list), idsAll=seriesIdx(allV), lab=P.MONTHS.map(U.ml);
@@ -265,7 +303,7 @@ function tipRing(items,S,center,sub,centerTip){
 function buildPrice(){
   const f=CTX.price, code=PX.PF.project, pg=progOf(code), pp=projectParts(code), list=paScope(), fl=[];
   const w=frame("Price Analysis",
-    projSel()+sel("category","Vertical",[["","All verticals"]].concat(P.CATS.map(c=>[c.name,c.name])),f.category,"layers")+sel("supplier","Supplier",[["","All suppliers"]].concat(supplierNames(code).map(n=>[n,n])),f.supplier,"building")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
+    projSel()+sel("category","Vertical",[["","All verticals"]].concat(P.CATS.map(c=>[c.name,c.name]).sort((a,b)=>a[0].localeCompare(b[0]))),f.category,"layers")+sel("supplier","Supplier",[["","All suppliers"]].concat(supplierNames(code).map(n=>[n,n])),f.supplier,"building")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
     (k,v)=>{ if(k==="project"){ PX.PF.project=v; f.supplier=""; f.part=""; } else if(k==="category"){ f.category=v; f.part=""; } else if(k==="supplier"){ f.supplier=v; f.part=""; } else { PX.PF.project=PX.DEFAULT; f.category=f.supplier=f.part=""; } Router.render(); });
   if(!list.length){ add(w,U.panel("No parts",empty("No tracked part matches these filters."))); U.wire(w); return w; }
   const cur=costOf(list,lineCost), nom=costOf(list,p=>p.qty*p.nom), chg=pct(cur,nom), imp=cur-nom, vol=pg.volume;
@@ -335,8 +373,8 @@ function buildPrice(){
 
 /* ------------------------------------------------------------ actions and routing */
 Object.assign(U.actions,{
-  ppart:v=>{ const p=P.part(v); if(!p) return; CTX.part=p.id; PX.PF.project=p.progCode; go("proc-part"); },
-  psup:v=>{ CTX.supplier=v; go("proc-supplier"); },
+  ppart:v=>{ const p=P.part(v); if(!p) return; CTX.part=p.id; PX.PF.project=p.progCode; go("proc-part"); },   // opened for one part: the filters follow it
+  psup:v=>{ CTX.supplier=v; CTX.sclr=false; go("proc-supplier"); },
   pprice:v=>{ const f=CTX.price; f.part=""; if(Router.screen==="proc-overview"){ f.category=PX.PF.category||""; f.supplier=PX.PF.supplier||""; } if(v){ const [k,val]=v.split("="); if(k==="part"){ f.part=val; const p=P.part(val); if(p) PX.PF.project=p.progCode; } else if(k==="category") f.category=val; else if(k==="supplier") f.supplier=val; } go("proc-price"); },
   pafilter:v=>{ const [k,val]=v.split("="); CTX.price[k]=CTX.price[k]===val?"":val; CTX.price.part=""; Router.render(); },
   vhmore:v=>openVersionModal(v),

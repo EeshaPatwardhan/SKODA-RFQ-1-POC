@@ -165,3 +165,15 @@
 .vm-n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--brand);color:var(--on-brand,#fff);font-style:normal;font-size:11.5px;font-weight:700;}
 .vm-pill{display:inline-block;padding:1px 9px;border-radius:8px;font-size:12px;font-weight:650;background:var(--raise);color:var(--text);} .vm-pill.bad{background:color-mix(in srgb,var(--red) 10%,var(--panel));color:var(--red);} .vm-pill.good{background:color-mix(in srgb,var(--ok) 13%,var(--panel));color:var(--ok);}
 .vm-cr{display:inline-block;padding:1px 8px;border-radius:7px;background:var(--raise);font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--text);white-space:nowrap;}
+
+/* Procurement dashboard: jump target highlight + floating back-to-top button */
+.pd-flash{animation:pdflash 1.8s ease-out;} @keyframes pdflash{0%{box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 55%,transparent);}100%{box-shadow:0 0 0 3px transparent;}}
+#v8-top{position:fixed;right:26px;bottom:26px;z-index:60;width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--brand);color:var(--on-brand,#fff);box-shadow:0 6px 18px rgba(10,30,24,.28);cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .18s,transform .18s,background .15s;}
+#v8-top.on{opacity:1;transform:none;pointer-events:auto;} #v8-top:hover{background:color-mix(in srgb,var(--brand) 85%,#000);}
+#v8-top svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+@media (max-width:640px){ #v8-top{right:16px;bottom:16px;} }
+/* Part Details info strip: part and supplier facts, title over value, two rows of five */
+.pd-slim.stack.pd-part{padding:14px 20px;} .pd-slim.stack.pd-part .meta{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 20px;} .pd-slim.stack.pd-part .meta dd{font-size:13.5px;}
+@media (max-width:1100px){ .pd-slim.stack.pd-part .meta{grid-template-columns:repeat(3,minmax(0,1fr));} }
+@media (max-width:640px){ .pd-slim.stack.pd-part .meta{grid-template-columns:repeat(2,minmax(0,1fr));} }
+

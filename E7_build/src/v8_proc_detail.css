@@ -46,3 +46,22 @@
 
 .pd-kpi .lb.wrap{white-space:normal;line-height:1.2;}
 .pd-pa .r .s{text-align:left;}
+.pd-head .meta .pd-pid,.pd-slim .meta .pd-pid{font-size:12.5px;font-weight:500;color:var(--muted);}
+
+/* Part Details: cost breakdown legend (name, ₹ and % on one row) + comparison with the piece price */
+.pd-conc2.pd-cb{gap:22px;} .pd-conc2.pd-cb .lg{flex:1 1 auto;max-width:360px;} .pd-conc2.pd-cb .lg .o{grid-template-columns:10px minmax(0,1fr) auto 44px;gap:10px;padding:7px 4px;font-size:12.5px;border-bottom:1px solid var(--line2);} .pd-conc2.pd-cb .lg .o:last-child{border-bottom:0;}
+.pd-conc2.pd-cb .lg .o span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .pd-conc2.pd-cb .lg .o em{font-style:normal;font-weight:650;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right;} .pd-conc2.pd-cb .lg .o b{font-weight:600;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;}
+.pd-cbn{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;} .pd-cbn > div{display:flex;flex-direction:column;gap:2px;padding:9px 12px;border:1px solid var(--line2);border-radius:10px;background:var(--raise);min-width:0;}
+.pd-cbn span{font-size:11.5px;color:var(--muted);} .pd-cbn span small{font-size:10.5px;opacity:.8;} .pd-cbn b{font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums;} .pd-cbn b small{font-size:11.5px;font-weight:600;color:var(--muted);margin-left:4px;} .pd-cbn .g b{color:var(--ink);} .pd-cbn .g.bad b{color:var(--red);}
+/* Part Details: notes & remarks */
+.pd-nt{display:flex;flex-direction:column;} .pd-nt .h{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:2px 0 6px;} .pd-nt .h:not(:first-child){margin-top:12px;border-top:1px solid var(--line2);padding-top:12px;}
+.pd-nt .nr{display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13px;} .pd-nt .nr:last-child{border-bottom:0;}
+.pd-nt .d{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;} .pd-nt .t{display:flex;flex-direction:column;min-width:0;} .pd-nt .t b{color:var(--ink);font-weight:650;} .pd-nt .t small{font-size:11.5px;color:var(--muted);font-family:ui-monospace,Consolas,monospace;}
+.pd-nt .v{display:flex;flex-direction:column;align-items:flex-end;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;} .pd-nt .v small{font-size:11.5px;font-weight:600;color:var(--muted);} .pd-nt .v small.bad{color:var(--red);} .pd-nt .v small.good{color:var(--ok);}
+@media (max-width:640px){ .pd-nt .nr{grid-template-columns:80px minmax(0,1fr) auto;gap:8px;} }
+.pd-nt .nr > .t{text-align:left;align-items:flex-start;} .pd-nt .nr > .d{text-align:left;}
+
+/* dashboard filters: a single clean focus ring on the box, none on the inner select */
+#content .pd-sel select,#content .pd-sel select:focus,#content .pd-sel select:focus-visible{padding:0;min-height:0;border:0;border-radius:0;background:none;box-shadow:none;outline:0;}
+#content .pd-sel:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 14%,transparent);}
+

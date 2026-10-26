@@ -1602,6 +1602,22 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .dr-asof{margin:-4px 0 10px;font-size:11.5px;color:var(--muted);line-height:1.45;}
 .dr-tbl td.bad,.dr-tbl td.warn{font-weight:700;}
 @media (max-width:760px){ .pv-sum{grid-template-columns:minmax(0,1fr);} }
+.ft-sb{cursor:pointer;} .ft-sb span{white-space:nowrap;} .ft-sb:hover{color:var(--brand);} .ft-sb.on svg{color:var(--brand);}
+
+/* tables that declare column widths: fixed layout, headings wrap, numeric headings sit over their numbers */
+.ft-fixed .ft-t{table-layout:fixed;} .ft-fixed .ft-t thead th{white-space:normal;} .ft-fixed .ft-h{align-items:center;} .ft-fixed .ft-h span{white-space:normal;line-height:1.25;text-align:left;}
+.ft-fixed .ft-t thead th.r .ft-h{justify-content:flex-end;} .ft-fixed .ft-t thead th.r .ft-h span{text-align:right;}
+.ft-fixed .ft-t tbody td{overflow-wrap:anywhere;}
+/* sortable tables: the label sorts, the funnel beside it filters */
+.ft-hd{display:flex;align-items:center;} .ft-hd .ft-sb{width:auto;flex:0 1 auto;padding-right:4px;} .ft-hd .ft-fb{width:auto;flex:none;padding:11px 12px 11px 4px;gap:4px;} .ft-hd .ft-fb svg{opacity:.7;} .ft-hd .ft-fb:hover svg{opacity:1;color:var(--brand);}
+.ft-sb{cursor:pointer;} .ft-sb:hover{color:var(--brand);} .ft-sb.on svg{color:var(--brand);}
+.ft-fixed .ft-t thead th.r .ft-hd{justify-content:flex-end;}
+/* heading menu (sortable tables): sort buttons above the value filter */
+.ft-mb svg{opacity:.7;} .ft-mb.on{color:var(--brand);} .ft-mb:hover svg{opacity:1;color:var(--brand);}
+.ft-so{display:flex;align-items:center;gap:6px;padding:2px 0 8px;} .ft-so b{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-right:4px;}
+.ft-so button{flex:1;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;} .ft-so button:hover{border-color:var(--brand);} .ft-so button.on{background:var(--brand);border-color:var(--brand);color:var(--on-brand,#fff);}
+.ft-fh{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;padding:6px 0 0;border-top:1px solid var(--line2);}
+
 
 
 /* ===== V8 additions: v8_proc_dash.css ===== */
@@ -1721,6 +1737,25 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 
 .pd-kpi .lb.wrap{white-space:normal;line-height:1.2;}
 .pd-pa .r .s{text-align:left;}
+.pd-head .meta .pd-pid,.pd-slim .meta .pd-pid{font-size:12.5px;font-weight:500;color:var(--muted);}
+
+/* Part Details: cost breakdown legend (name, ₹ and % on one row) + comparison with the piece price */
+.pd-conc2.pd-cb{gap:22px;} .pd-conc2.pd-cb .lg{flex:1 1 auto;max-width:360px;} .pd-conc2.pd-cb .lg .o{grid-template-columns:10px minmax(0,1fr) auto 44px;gap:10px;padding:7px 4px;font-size:12.5px;border-bottom:1px solid var(--line2);} .pd-conc2.pd-cb .lg .o:last-child{border-bottom:0;}
+.pd-conc2.pd-cb .lg .o span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .pd-conc2.pd-cb .lg .o em{font-style:normal;font-weight:650;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right;} .pd-conc2.pd-cb .lg .o b{font-weight:600;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;}
+.pd-cbn{margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;} .pd-cbn > div{display:flex;flex-direction:column;gap:2px;padding:9px 12px;border:1px solid var(--line2);border-radius:10px;background:var(--raise);min-width:0;}
+.pd-cbn span{font-size:11.5px;color:var(--muted);} .pd-cbn span small{font-size:10.5px;opacity:.8;} .pd-cbn b{font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums;} .pd-cbn b small{font-size:11.5px;font-weight:600;color:var(--muted);margin-left:4px;} .pd-cbn .g b{color:var(--ink);} .pd-cbn .g.bad b{color:var(--red);}
+/* Part Details: notes & remarks */
+.pd-nt{display:flex;flex-direction:column;} .pd-nt .h{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:2px 0 6px;} .pd-nt .h:not(:first-child){margin-top:12px;border-top:1px solid var(--line2);padding-top:12px;}
+.pd-nt .nr{display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13px;} .pd-nt .nr:last-child{border-bottom:0;}
+.pd-nt .d{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;} .pd-nt .t{display:flex;flex-direction:column;min-width:0;} .pd-nt .t b{color:var(--ink);font-weight:650;} .pd-nt .t small{font-size:11.5px;color:var(--muted);font-family:ui-monospace,Consolas,monospace;}
+.pd-nt .v{display:flex;flex-direction:column;align-items:flex-end;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;} .pd-nt .v small{font-size:11.5px;font-weight:600;color:var(--muted);} .pd-nt .v small.bad{color:var(--red);} .pd-nt .v small.good{color:var(--ok);}
+@media (max-width:640px){ .pd-nt .nr{grid-template-columns:80px minmax(0,1fr) auto;gap:8px;} }
+.pd-nt .nr > .t{text-align:left;align-items:flex-start;} .pd-nt .nr > .d{text-align:left;}
+
+/* dashboard filters: a single clean focus ring on the box, none on the inner select */
+#content .pd-sel select,#content .pd-sel select:focus,#content .pd-sel select:focus-visible{padding:0;min-height:0;border:0;border-radius:0;background:none;box-shadow:none;outline:0;}
+#content .pd-sel:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 14%,transparent);}
+
 
 
 /* ===== V8 additions: v8_art.css ===== */
@@ -1891,6 +1926,18 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .vm-n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--brand);color:var(--on-brand,#fff);font-style:normal;font-size:11.5px;font-weight:700;}
 .vm-pill{display:inline-block;padding:1px 9px;border-radius:8px;font-size:12px;font-weight:650;background:var(--raise);color:var(--text);} .vm-pill.bad{background:color-mix(in srgb,var(--red) 10%,var(--panel));color:var(--red);} .vm-pill.good{background:color-mix(in srgb,var(--ok) 13%,var(--panel));color:var(--ok);}
 .vm-cr{display:inline-block;padding:1px 8px;border-radius:7px;background:var(--raise);font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--text);white-space:nowrap;}
+
+/* Procurement dashboard: jump target highlight + floating back-to-top button */
+.pd-flash{animation:pdflash 1.8s ease-out;} @keyframes pdflash{0%{box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 55%,transparent);}100%{box-shadow:0 0 0 3px transparent;}}
+#v8-top{position:fixed;right:26px;bottom:26px;z-index:60;width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--brand);color:var(--on-brand,#fff);box-shadow:0 6px 18px rgba(10,30,24,.28);cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .18s,transform .18s,background .15s;}
+#v8-top.on{opacity:1;transform:none;pointer-events:auto;} #v8-top:hover{background:color-mix(in srgb,var(--brand) 85%,#000);}
+#v8-top svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+@media (max-width:640px){ #v8-top{right:16px;bottom:16px;} }
+/* Part Details info strip: part and supplier facts, title over value, two rows of five */
+.pd-slim.stack.pd-part{padding:14px 20px;} .pd-slim.stack.pd-part .meta{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 20px;} .pd-slim.stack.pd-part .meta dd{font-size:13.5px;}
+@media (max-width:1100px){ .pd-slim.stack.pd-part .meta{grid-template-columns:repeat(3,minmax(0,1fr));} }
+@media (max-width:640px){ .pd-slim.stack.pd-part .meta{grid-template-columns:repeat(2,minmax(0,1fr));} }
+
 
 
 /* ===== V8 additions: v8_srm_ops.css ===== */
@@ -9363,8 +9410,8 @@ function filterBar(extraBtn){
   bar.innerHTML=`<div class="pd-carbox solo">${pic||V8Art.lineup()||'<span class="va-car" aria-hidden="true"></span>'}</div>`+   // an empty frame of the same size keeps the filters in place when no project is picked
     sel("car","Project",[["","All projects ("+cars.length+")"]].concat(cars.map(c=>[c,c])),F.car,"car")+
     sel("vert","Vertical",[["","All verticals ("+verts.length+")"]].concat(verts.map(v=>[v,v])),F.vert,"layers")+
-    sel("supplier","Supplier",[["","All suppliers ("+sups.length+")"]].concat(sups.map(s=>[s,s])),F.supplier,"building")+
     sel("part","Part",[["","All parts ("+list.length+")"]].concat(list.map(p=>[p.number,label(p,list)])),F.part||"","wrench")+
+    sel("supplier","Supplier",[["","All suppliers ("+sups.length+")"]].concat(sups.map(s=>[s,s])),F.supplier,"building")+
     `<button type="button" class="pd-reset" data-f="reset" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`;
   if(extraBtn){ extraBtn.style.marginTop="22px"; extraBtn.style.flex="none"; bar.appendChild(extraBtn); }
   bar.addEventListener("change",e=>{ const k=e.target.dataset&&e.target.dataset.f; if(k&&k!=="reset") onFilter(k,e.target.value); });
@@ -10413,23 +10460,30 @@ return {COL,LABEL,band,legend,stacked,funnel,heat,gauge,ring,gantt,scatter,fmtDa
    V8  ·  FTable — a table with pagination and a value filter on every column header.
    Click a column header → a small panel lists that column's values (with counts, search when long) → tick the ones to keep.
    The options of a column follow the filters set on the other columns, so a filter never offers a value that would give no rows.
-   FTable.create({ id, columns:[{key,label,get(row)→text, html?(row)→markup, align?, order?(row)→number}], rows, pageSize?, rowAct?(row)→"action:arg", empty? }) → element
+   FTable.create({ id, columns:[{key,label,get(row)→text, html?(row)→markup, align?, order?(row)→number}], rows, pageSize?, rowAct?(row)→"action:arg", empty?, filter?:false, sortable?:true, sort?:{key,dir} }) → element
+   A column may carry w (a CSS width such as "14%"); when any does, the table uses fixed column widths and the headings wrap.
+   sortable:true → the heading label sorts (click again to reverse) and the funnel beside it opens the value filter.
+   filter:false → no value filters; a click on a column heading sorts by that column instead (sort sets the starting order; the sort is stable).
    ===================================================================== */
 window.FTable=(function(){
 "use strict";
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const FUNNEL='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>';
+const ARR_U='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>', ARR_D='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>';
+const CHEV='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 let POP=null, POP_OWNER=null;
 function closePop(){ if(POP){ POP.remove(); POP=null; POP_OWNER=null; document.removeEventListener("mousedown",onDoc,true); document.removeEventListener("keydown",onKey,true); window.removeEventListener("resize",closePop); } }
 function onDoc(e){ if(POP&&!POP.contains(e.target)&&!(e.target.closest&&e.target.closest(".ft-h"))) closePop(); }
 function onKey(e){ if(e.key==="Escape") closePop(); }
 
 function create(o){
-  const cols=o.columns, rows=o.rows, st={f:{},page:0,size:o.pageSize||10};
-  const root=document.createElement("div"); root.className="ft"; root.id=o.id||"";
+  const cols=o.columns, rows=o.rows, st={f:{},page:0,size:o.pageSize||10,sort:o.sort?{key:o.sort.key,dir:o.sort.dir||"asc"}:null}, FILT=o.filter!==false;
+  const root=document.createElement("div"); root.className="ft"+(cols.some(c=>c.w)?" ft-fixed":""); root.id=o.id||"";
   const val=(c,r)=>{ const v=c.get(r); return v==null||v===""?"—":String(v); };
   const passes=(r,skip)=>cols.every(c=>c.key===skip||!st.f[c.key]||st.f[c.key].has(val(c,r)));
-  const filtered=()=>rows.filter(r=>passes(r));
+  const sorted=a=>{ if(!st.sort) return a; const c=cols.find(x=>x.key===st.sort.key); if(!c) return a; const k=r=>c.order?c.order(r):val(c,r), d=st.sort.dir==="desc"?-1:1;
+    return a.map((r,i)=>[r,i]).sort((x,y)=>{ const p=k(x[0]), q=k(y[0]); const v=(typeof p==="number"&&typeof q==="number")?p-q:String(p).localeCompare(String(q),undefined,{numeric:true}); return v*d||x[1]-y[1]; }).map(x=>x[0]); };
+  const filtered=()=>sorted(rows.filter(r=>passes(r)));
   const activeN=()=>Object.keys(st.f).filter(k=>st.f[k]).length;
   function options(c){
     const m=new Map(); rows.filter(r=>passes(r,c.key)).forEach(r=>{ const v=val(c,r), e=m.get(v)||{v,n:0,o:c.order?c.order(r):null}; e.n++; if(c.order&&(e.o==null||c.order(r)<e.o)) e.o=c.order(r); m.set(v,e); });
@@ -10439,7 +10493,9 @@ function create(o){
     if(POP&&POP_OWNER===c.key&&POP.__root===root){ closePop(); return; } closePop();
     const opts=options(c), cur=st.f[c.key], chosen=new Set(cur?[...cur].filter(v=>opts.some(x=>x.v===v)):opts.map(x=>x.v));
     const pop=document.createElement("div"); pop.className="ft-pop"; pop.__root=root; POP=pop; POP_OWNER=c.key;
-    pop.innerHTML=`<div class="ft-pt"><b>${esc(c.label)}</b><span>${opts.length} value${opts.length===1?"":"s"}</span></div>${opts.length>7?`<input class="ft-ps" type="search" placeholder="Search ${esc(c.label.toLowerCase())}…" aria-label="Search values">`:""}
+    const num=!!c.order, sdir=st.sort&&st.sort.key===c.key?st.sort.dir:"";
+    const sortHtml=o.sortMenu?`<div class="ft-so"><b>Sort</b><button type="button" data-a="sort-asc" class="${sdir==="asc"?"on":""}">${num?"Low to high":"A to Z"}</button><button type="button" data-a="sort-desc" class="${sdir==="desc"?"on":""}">${num?"High to low":"Z to A"}</button></div><div class="ft-fh">Filter</div>`:"";
+    pop.innerHTML=`${sortHtml}<div class="ft-pt"><b>${esc(c.label)}</b><span>${opts.length} value${opts.length===1?"":"s"}</span></div>${opts.length>7?`<input class="ft-ps" type="search" placeholder="Search ${esc(c.label.toLowerCase())}…" aria-label="Search values">`:""}
       <div class="ft-pa"><button type="button" data-a="all">Select all</button><button type="button" data-a="none">Clear</button></div><div class="ft-pl"></div>
       <div class="ft-pf"><button type="button" class="btn btn-sm" data-a="reset">Reset</button><button type="button" class="btn btn-sm btn-primary" data-a="apply">Apply</button></div>`;
     const list=pop.querySelector(".ft-pl");
@@ -10449,6 +10505,7 @@ function create(o){
     list.addEventListener("change",e=>{ const v=e.target.dataset.v; if(v==null) return; e.target.checked?chosen.add(v):chosen.delete(v); });
     const ps=pop.querySelector(".ft-ps"); if(ps) ps.addEventListener("input",draw);
     pop.addEventListener("click",e=>{ const a=e.target.dataset&&e.target.dataset.a; if(!a) return;
+      if(a==="sort-asc"||a==="sort-desc"){ st.sort={key:c.key,dir:a==="sort-desc"?"desc":"asc"}; st.page=0; closePop(); render(); return; }
       if(a==="all"){ opts.forEach(x=>chosen.add(x.v)); draw(); } else if(a==="none"){ chosen.clear(); draw(); }
       else if(a==="reset"){ delete st.f[c.key]; st.page=0; closePop(); render(); }
       else if(a==="apply"){ if(chosen.size===opts.length) delete st.f[c.key]; else st.f[c.key]=new Set(chosen); st.page=0; closePop(); render(); } });
@@ -10462,16 +10519,22 @@ function create(o){
     const p=st.page, nums=[]; for(let i=0;i<pages;i++) if(i===0||i===pages-1||Math.abs(i-p)<=1) nums.push(i); const out=[]; nums.forEach((n,i)=>{ if(i&&n-nums[i-1]>1) out.push("…"); out.push(n); });
     return `<div class="ft-pg"><button type="button" data-p="${p-1}" ${p<=0?"disabled":""} aria-label="Previous page">‹</button>${out.map(n=>n==="…"?`<span class="gap">…</span>`:`<button type="button" data-p="${n}" class="${n===p?"on":""}" ${n===p?'aria-current="page"':""}>${n+1}</button>`).join("")}<button type="button" data-p="${p+1}" ${p>=pages-1?"disabled":""} aria-label="Next page">›</button></div>`;
   }
+  const sortedOn=c=>st.sort&&st.sort.key===c.key, arrow=c=>sortedOn(c)?(st.sort.dir==="desc"?ARR_D:ARR_U):"";
+  const sortBtn=c=>`<button type="button" class="ft-h ft-sb ${sortedOn(c)?"on":""}" data-sort="${esc(c.key)}" title="Sort by ${esc(c.label)}"><span>${esc(c.label)}</span>${arrow(c)}</button>`;
+  const filtBtn=(c,both)=>`<button type="button" class="ft-h ${both?"ft-fb":""} ${st.f[c.key]?"on":""}" data-col="${esc(c.key)}" aria-haspopup="true" title="Filter ${esc(c.label)}">${both?"":`<span>${esc(c.label)}</span>`}${FUNNEL}${st.f[c.key]?`<i>${st.f[c.key].size}</i>`:""}</button>`;
+  const menuBtn=c=>`<button type="button" class="ft-h ft-mb ${st.f[c.key]||sortedOn(c)?"on":""}" data-col="${esc(c.key)}" aria-haspopup="true" title="Sort or filter ${esc(c.label)}"><span>${esc(c.label)}</span>${arrow(c)}${CHEV}${st.f[c.key]?`<i>${st.f[c.key].size}</i>`:""}</button>`;
+  const head=c=>`<th class="${c.align==="r"?"r":""}" ${c.w?`style="width:${c.w}"`:""} ${sortedOn(c)?`aria-sort="${st.sort.dir==="desc"?"descending":"ascending"}"`:""}>${!FILT?sortBtn(c):o.sortable?`<div class="ft-hd">${sortBtn(c)}${filtBtn(c,true)}</div>`:filtBtn(c,false)}</th>`;
   function render(){
     const list=filtered(), pages=Math.max(1,Math.ceil(list.length/st.size)); if(st.page>=pages) st.page=pages-1;
     const from=st.page*st.size, shown=list.slice(from,from+st.size), n=activeN();
     const chips=Object.keys(st.f).filter(k=>st.f[k]).map(k=>{ const c=cols.find(x=>x.key===k), vs=[...st.f[k]]; return `<span class="ft-chip"><b>${esc(c.label)}</b> ${esc(vs.length<=2?vs.join(", "):vs.length+" selected")}<button type="button" data-clear="${esc(k)}" aria-label="Remove filter ${esc(c.label)}">×</button></span>`; }).join("");
-    root.innerHTML=`<div class="ft-bar"><span class="ft-sum"><b>${list.length}</b> of ${rows.length} rows${n?` · ${n} filter${n===1?"":"s"} on`:""}</span>${chips}${n?`<button type="button" class="ft-clr" data-clearall="1">Clear all filters</button>`:`<span class="ft-tip">Click a column heading to filter it</span>`}</div>
-      <div class="ft-sc"><table class="ft-t"><thead><tr>${cols.map(c=>`<th class="${c.align==="r"?"r":""}"><button type="button" class="ft-h ${st.f[c.key]?"on":""}" data-col="${esc(c.key)}" aria-haspopup="true" title="Filter ${esc(c.label)}"><span>${esc(c.label)}</span>${FUNNEL}${st.f[c.key]?`<i>${st.f[c.key].size}</i>`:""}</button></th>`).join("")}</tr></thead>
+    root.innerHTML=`<div class="ft-bar"><span class="ft-sum"><b>${list.length}</b> of ${rows.length} rows${n?` · ${n} filter${n===1?"":"s"} on`:""}</span>${chips}${n?`<button type="button" class="ft-clr" data-clearall="1">Clear all filters</button>`:`${o.sortable?"":`<span class="ft-tip">${!FILT?"Click a column heading to sort it":"Click a column heading to filter it"}</span>`}`}</div>
+      <div class="ft-sc"><table class="ft-t"><thead><tr>${cols.map(head).join("")}</tr></thead>
       <tbody>${shown.length?shown.map(r=>`<tr ${o.rowAct?`class="ft-row" data-act="${esc(o.rowAct(r))}" role="button" tabindex="0"`:""}>${cols.map(c=>`<td class="${c.align==="r"?"r":""}">${c.html?c.html(r):esc(val(c,r))}</td>`).join("")}</tr>`).join(""):`<tr><td colspan="${cols.length}"><div class="table-empty">${esc(o.empty||"No rows match these filters.")}</div></td></tr>`}</tbody></table></div>
       <div class="ft-foot"><span>${list.length?`${from+1}–${Math.min(list.length,from+st.size)} of ${list.length}`:"0 rows"}</span>${pages>1?pager(list.length,pages):""}<label class="ft-size">Rows per page <select aria-label="Rows per page">${[10,25,50].map(x=>`<option value="${x}" ${x===st.size?"selected":""}>${x}</option>`).join("")}</select></label></div>`;
   }
   root.addEventListener("click",e=>{
+    const sb=e.target.closest("[data-sort]"); if(sb){ e.stopPropagation(); const k=sb.dataset.sort; st.sort=st.sort&&st.sort.key===k?{key:k,dir:st.sort.dir==="asc"?"desc":"asc"}:{key:k,dir:"asc"}; st.page=0; render(); return; }
     const h=e.target.closest(".ft-h"); if(h){ e.stopPropagation(); openPop(cols.find(c=>c.key===h.dataset.col),h); return; }
     const p=e.target.closest("[data-p]"); if(p&&!p.disabled){ e.stopPropagation(); st.page=+p.dataset.p; render(); return; }
     const c=e.target.closest("[data-clear]"); if(c){ e.stopPropagation(); delete st.f[c.dataset.clear]; st.page=0; render(); return; }
@@ -11246,8 +11309,8 @@ function filterBar(){
   const d=document.createElement("div"); d.className="pd-fbar";
   const sel=(k,label,opts,icon)=>`<label class="pd-f"><span>${label}</span><span class="pd-sel">${icon||""}<select data-f="${k}">${opts.map(o=>`<option value="${esc(o[0])}"${o[0]===PF[k]?" selected":""}>${esc(o[1])}</option>`).join("")}</select></span></label>`;
   const pg=P.PROGS.find(x=>x.code===PF.project);
-  d.innerHTML=(pg&&window.V8Art?`<div class="pd-carbox">${window.V8Art.car(pg.code)}<div class="cap"><b>${esc(pg.name)}</b><small>${esc(pg.segment)}</small></div></div>`:"")+sel("project","Project",P.PROGS.map(p=>[p.code,p.name]),Icons.svg("car"))+
-    sel("category","Vertical",[["","All verticals"]].concat(P.CATS.map(c=>[c.name,c.name])),Icons.svg("layers"))+
+  d.innerHTML=(pg&&window.V8Art?`<div class="pd-carbox">${window.V8Art.car(pg.code)}<div class="cap"><b>${esc(pg.name)}</b><small>${esc(pg.segment)}</small></div></div>`:"")+sel("project","Project",P.PROGS.map(p=>[p.code,p.name]).sort((a,b)=>a[1].localeCompare(b[1])),Icons.svg("car"))+
+    sel("category","Vertical",[["","All verticals"]].concat(P.CATS.map(c=>[c.name,c.name]).sort((a,b)=>a[0].localeCompare(b[0]))),Icons.svg("layers"))+
     sel("supplier","Supplier",[["","All suppliers ("+P.VENDS.length+")"]].concat(P.VENDS.map(v=>[v.name,v.name]).sort((a,b)=>a[0].localeCompare(b[0]))),Icons.svg("building"))+
     `<button type="button" class="pd-reset" data-f="reset" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`;
   d.addEventListener("change",e=>{ const k=e.target.dataset&&e.target.dataset.f; if(k&&k!=="reset"){ PF[k]=e.target.value||(k==="project"?DEFAULT_PROJECT:""); Router.render(); } });
@@ -11333,7 +11396,7 @@ function decisionsPanel(){
   const open=ApprovalEngine.flows.filter(f=>ApprovalEngine.currentStep(f)&&f.steps.some(s=>s.status==="current")).map(f=>({f,esc2:ApprovalEngine.escalationFor(f)})).sort((a,b)=>(!!b.esc2)-(!!a.esc2));
   const body=open.length?`<div class="pd-t pd-dec"><div class="h"><span>#</span><span>Type</span><span>Item</span><span>Stage</span><span class="ra">Status</span></div>${open.slice(0,5).map((o,i)=>{ const cur=ApprovalEngine.currentStep(o.f);
       return `<div class="r" data-act="go:approvals" role="button" tabindex="0"><span class="k">${i+1}</span><span class="n"><b>${esc(LBL[o.f.kind]||o.f.kind)}</b><small>${esc(o.f.wf)}</small></span><span class="it">${esc(o.f.entity)}</span><span class="st">${esc(cur?cur.label:"Complete")}</span><span class="v">${o.esc2?`<span class="chip chip-red"><span class="chip-dot"></span>Escalated</span>`:`<span class="chip chip-amber"><span class="chip-dot"></span>Pending</span>`}</span></div>`; }).join("")}</div>`:empty("No decision is pending.");
-  return U.panel(ptitle("Pending procurement decisions","Approval workflows with an open step (change requests, commodity prices, technical changes, milestone amendments). Platform-wide: the project, vertical and supplier filters do not apply."),body);
+  return U.panel(ptitle("Pending procurement decisions","Approval workflows with an open step (change requests, commodity prices, technical changes, milestone amendments). Platform-wide: the project, vertical and supplier filters do not apply."),body,{id:"pd-decisions"});
 }
 
 /* shows 5 rows at a time with a small pager under the table (rows keep their rank numbers; the page resets when the filters change) */
@@ -11363,7 +11426,7 @@ function build(){
     kcard({icon:"trend-up",label:"Since nomination",value:sgn(chNom),tone:chNom>0?"bad":"good",sub:`${cr(nom)} → ${cr(cur)}`,chip:`<b class="${cur-nom>0?"bad":"good"}">${U.spend(cur-nom,true)}</b><small>per vehicle</small>`,chipTip:"Rupee change per vehicle since nomination",act:"pprice:",tip:"Change in cost per vehicle against the nominated prices. Click to open Price Analysis."}),
     kcard({icon:"target",label:"Spend above target",value:overAnn==null?"—":cr(overAnn),tone:overAnn>0?"bad":"",sub:overAnn==null?"no cost target in this selection":`${U.spend(overPer)} per vehicle · ${sgn(avgT)} vs target`,tip:"Yearly spend above cost target: for the parts that have a cost breakdown and a cost target, (piece price − target) × quantity per vehicle × planned annual volume of the project. Only parts above their target count."}),
     kcard({icon:"users",label:"Top-4 supplier share",value:sup.length?Math.round(top4)+"%":"—",sub:sup[0]?`largest: ${esc(sup[0].name)} ${Math.round(sup[0].share)}%`:"",tip:"Share of cost per vehicle held by the four largest suppliers."}),
-    kcard({icon:"clipboard-check",label:"Decisions pending",value:openF.length,sub:escN?`<span class="v8-bad">${escN} escalated</span>`:"none escalated",act:"go:approvals",tip:"Approvals waiting for a decision (platform-wide)."})].join("")}</div></div>`);
+    kcard({icon:"clipboard-check",label:"Decisions pending",value:openF.length,sub:escN?`<span class="v8-bad">${escN} escalated</span>`:"none escalated",act:"pscroll:pd-decisions",tip:"Approvals waiting for a decision (platform-wide). Click to jump to the list on this page."})].join("")}</div></div>`);
   const gw=add(`<div class="pd-gw"><div class="pd-grid"></div></div>`), g=gw.querySelector(".pd-grid");
   [categoryPanel(listNoCat),topCostPanel(list),supplierPanel(list,cur),increasePanel(list),targetPanel(priced),decisionsPanel()].forEach((h,i)=>{ const e=U.el(h); g.appendChild(e); if(i===0) paginate(e,5); });
   w.appendChild(U.el(`<div class="v8-foot">Cost per vehicle of the tracked parts (piece price × quantity per vehicle) — the same basis as the <a href="#" data-act="go:fc-outlook">Forecast Dashboard</a>. Part prices are illustrative; cost vs target covers the ${Object.keys(DATA.priceVersions).length} parts with a cost breakdown.</div>`));
@@ -11371,10 +11434,19 @@ function build(){
 }
 
 window.V8Proc={PF,DEFAULT:DEFAULT_PROJECT,pricedParts};
+/* floating "back to top" button on the Procurement dashboard pages (the page scrolls inside #content) */
+(function(){
+  let b=null; const box=()=>document.getElementById("content");
+  const ensure=()=>{ if(b) return b; b=document.createElement("button"); b.id="v8-top"; b.type="button"; b.title="Back to top"; b.setAttribute("aria-label","Back to top");
+    b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'; b.onclick=()=>{ const c=box(); if(c) c.scrollTo({top:0,behavior:"smooth"}); }; document.body.appendChild(b); return b; };
+  const upd=()=>{ const c=box(), on=!!c&&/^proc-/.test(Router.screen||"")&&c.scrollTop>360; ensure().classList.toggle("on",on); };
+  document.addEventListener("scroll",upd,true); setInterval(upd,400);
+})();
 /* ------------------------------------------------------------ wiring */
 Object.assign(U.actions,{
   pset:v=>{ const [k,val]=v.split("="); PF[k]=(k==="category"&&PF.category===val)?"":val; Router.render(); },
   pgo:v=>{ const [k,id]=v.split("|"); if(k==="price") __openPrice(id); },
+  pscroll:id=>{ const el=document.getElementById(id); if(!el) return; el.scrollIntoView({behavior:"smooth",block:"start"}); el.classList.remove("pd-flash"); void el.offsetWidth; el.classList.add("pd-flash"); setTimeout(()=>el.classList.remove("pd-flash"),1800); },
 });
 NAV.procurement.splice(1,0,{sep:"Procurement dashboard"},{id:"proc-overview",label:"Procurement Dashboard",icon:"📊"});
 Object.assign(NAV_ICONS,{"proc-overview":"layout"}); Object.assign(NAV_SHORT,{"proc-overview":"Overview"});
@@ -11402,7 +11474,7 @@ const sgn=(v,d)=>U.sgn(v,d==null?1:d), cr=v=>U.cr(v), inr=(v,d)=>U.inr(v,d), sp=
 const short=n=>String(n).replace(/^(SKODA|VW) /,"");
 const fmtDate=d=>{ try{ return new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}); }catch(e){ return String(d); } };
 const A=()=>window.__cbdApi;
-const CTX={part:null,vert:"",sup:"",supplier:null,svert:"",spart:"",price:{category:"",supplier:"",part:"",vpart:"",vtab:"category"}};
+const CTX={part:null,vert:"",pname:"",sup:"",supplier:null,svert:"",spart:"",price:{category:"",supplier:"",part:"",vpart:"",vtab:"category"}};
 const progOf=code=>P.PROGS.find(p=>p.code===code)||P.PROGS[0];
 const projectParts=code=>P.PARTS.filter(p=>p.progCode===code);
 const costOf=(l,f)=>sum(l,f);                       // one project at a time → cost of that car
@@ -11420,7 +11492,7 @@ const more=(act,label)=>`<div class="pd-more"><a href="#" data-act="${act}">${la
 const srm=()=>{ try{ if(typeof SrmData==="undefined"||!window.V8Srm) return null; const m=V8Srm.model(); return {m,ev:SrmData.evaluate(m)}; }catch(e){ return null; } };
 const kcard=(o)=>`<div class="pd-kpi${o.act?" kpi-link":""}" ${o.act?`data-act="${o.act}" role="button" tabindex="0"`:""} title="${esc(o.tip||"")}"><div class="top"><span class="ic">${Icons.svg(o.icon)}</span><span class="lb${o.wrap?" wrap":""}">${o.label}</span></div><div class="mid"><span class="vl ${o.tone||""}">${o.value}</span>${o.chip?`<span class="ch" title="${esc(o.chipTip||"")}">${o.chip}</span>`:""}</div><div class="sb" title="${esc(String(o.sub||"").replace(/<[^>]*>/g,""))}">${o.sub||""}</div></div>`;
 const sel=(k,label,opts,val,icon)=>`<label class="pd-f"><span>${label}</span><span class="pd-sel">${icon?Icons.svg(icon):""}<select data-pf="${k}">${opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(val)?" selected":""}>${esc(o[1])}</option>`).join("")}</select></span></label>`;
-const projSel=()=>sel("project","Project",P.PROGS.map(p=>[p.code,p.name]),PX.PF.project,"car");
+const projSel=()=>sel("project","Project",P.PROGS.map(p=>[p.code,p.name]).sort((a,b)=>a[1].localeCompare(b[1])),PX.PF.project,"car");
 function go(screen){ Router.go(screen,"procurement"); }
 /* shows `size` rows at a time with a pager under the table */
 function paginate(panel,rowSel,size,host){
@@ -11452,16 +11524,51 @@ const kpis=(w,cards,n)=>add(w,`<div class="pd-kw"><div class="pd-kpis k${n||card
 const note=t=>`<div class="v8-foot">${t}</div>`;
 
 /* ================================================================== PART DETAILS */
-function pickPart(){
-  let p=CTX.part?P.part(CTX.part):null; const missing=!!CTX.part&&!p;
-  if(p) PX.PF.project=p.progCode; else p=projectParts(PX.PF.project).sort((a,b)=>lineCost(b)-lineCost(a))[0];
-  CTX.part=p.id; return {p,missing};
+/* Part Details needs all four filters before it shows any data: Project, Vertical, Part (the name only) and Supplier.
+   The three lists narrow each other, and a change clears any other selection that no longer fits. */
+const pfMatch=(x,v,n,sp)=>(!v||x.category===v)&&(!n||x.name===n)&&(!sp||x.vendorName===sp);
+function pfOptions(code){
+  const all=projectParts(code);
+  return {vert:P.CATS.map(c=>c.name).sort().filter(c=>all.some(x=>pfMatch(x,c,CTX.pname,CTX.sup))),
+    name:[...new Set(all.filter(x=>pfMatch(x,CTX.vert,"",CTX.sup)).map(x=>x.name))].sort((a,b)=>a.localeCompare(b)),
+    sup:[...new Set(all.filter(x=>pfMatch(x,CTX.vert,CTX.pname,"")).map(x=>x.vendorName))].sort()};
+}
+function pfTidy(changed){
+  const all=projectParts(PX.PF.project), has=(v,n,sp)=>all.some(x=>pfMatch(x,v,n,sp)), keys=["vert","pname","sup"];
+  if(!changed){ if(CTX.vert&&!has(CTX.vert,"","")) CTX.vert=""; if(CTX.pname&&!has(CTX.vert,CTX.pname,"")) CTX.pname=""; if(CTX.sup&&!has(CTX.vert,CTX.pname,CTX.sup)) CTX.sup=""; return; }
+  const pair=(a,b)=>has(a==="vert"||b==="vert"?CTX.vert:"",a==="pname"||b==="pname"?CTX.pname:"",a==="sup"||b==="sup"?CTX.sup:"");
+  keys.forEach(k=>{ if(k!==changed&&CTX[k]&&CTX[changed]&&!pair(changed,k)) CTX[k]=""; });
+  if(CTX.vert&&CTX.pname&&CTX.sup&&!has(CTX.vert,CTX.pname,CTX.sup)){ const o=keys.filter(k=>k!==changed); CTX[o[o.length-1]]=""; }
+}
+function pfPart(){
+  if(!CTX.vert||!CTX.pname||!CTX.sup) return null;
+  return projectParts(PX.PF.project).filter(x=>pfMatch(x,CTX.vert,CTX.pname,CTX.sup)).sort((a,b)=>lineCost(b)-lineCost(a))[0]||null;
+}
+function pfFrame(){
+  const O=pfOptions(PX.PF.project), opt=(ph,list)=>[["",ph+" ("+list.length+")"]].concat(list.map(n=>[n,n]));
+  return frame("Part Details",
+    projSel()+sel("vert","Vertical",opt("Select vertical",O.vert),CTX.vert,"layers")+sel("part","Part",opt("Select part",O.name),CTX.pname,"wrench")+sel("sup","Supplier",opt("Select supplier",O.sup),CTX.sup,"building")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
+    (k,v)=>{ if(k==="project"){ PX.PF.project=v; pfTidy(null); }
+      else if(k==="vert"){ CTX.vert=v; pfTidy("vert"); } else if(k==="part"){ CTX.pname=v; pfTidy("pname"); } else if(k==="sup"){ CTX.sup=v; pfTidy("sup"); }
+      else { PX.PF.project=PX.DEFAULT; CTX.vert=CTX.pname=CTX.sup=""; }
+      Router.render(); });
+}
+function buildPartEmpty(missing){
+  const w=pfFrame(), need=[!CTX.vert&&"a vertical",!CTX.pname&&"a part",!CTX.sup&&"a supplier"].filter(Boolean);
+  if(missing) add(w,U.note("The requested part was not found.","warn"));
+  add(w,U.panel("No part selected",empty(`Select ${need.length>1?need.slice(0,-1).join(", ")+" and "+need[need.length-1]:need[0]||"all filters"} to see the part's price history and cost breakdown. Project, vertical, part and supplier are all needed.`)));
+  U.wire(w); return w;
 }
 function partHeader(p,tgt){
   const s=srm(), ev=s&&s.ev.find(e=>e.pt.id===p.id), st=ev&&SrmData.STAGES[ev.stage];
   const vs=versionsOf(p.id), last=vs[vs.length-1], lastUp=last?fmtDate(last.effectiveFrom):P.monthLabel(P.MONTHS[NH-1]);
   const phase=ev?(ev.stage<0?"Not started":st.label):null;
-  return `<div class="pd-card pd-slim"><dl class="meta"><div><dt>Part number</dt><dd class="mono">${esc(p.id)}</dd></div><div><dt>Program phase</dt><dd>${phase?esc(phase):"—"}</dd></div><div><dt>SRM status</dt><dd>${ev?`<span class="chip ${({ok:"chip-green",risk:"chip-amber",delayed:"chip-red",notstarted:"chip-gray"})[ev.status]}"><span class="chip-dot"></span>${esc(SrmData.STATUS[ev.status])}</span>`:"—"}</dd></div><div><dt>Last price update</dt><dd>${esc(lastUp)}</dd></div></dl></div>`;
+  const item=(t,v)=>`<div><dt>${t}</dt><dd>${v}</dd></div>`;
+  return `<div class="pd-card pd-slim stack pd-part"><dl class="meta">`+
+    item("Part",`${esc(p.name)} <span class="mono pd-pid">(${esc(p.id)})</span>`)+item("Program phase",phase?esc(phase):"—")+
+    item("SRM status",ev?`<span class="chip ${({ok:"chip-green",risk:"chip-amber",delayed:"chip-red",notstarted:"chip-gray"})[ev.status]}"><span class="chip-dot"></span>${esc(SrmData.STATUS[ev.status])}</span>`:"—")+
+    item("Last price update",esc(lastUp))+item("Supplier",esc(p.vendorName))+
+    `</dl></div>`;
 }
 function priceHistoryPanel(p,tgt){
   const vs=versionsOf(p.id); let chart;
@@ -11491,7 +11598,12 @@ function costBreakdownPanel(p){
   const nodes=window.CbdCore?CbdCore.contributing(cbd):cbd.tree.filter(n=>+n.cost>0), tot=sum(nodes,n=>+n.cost)||1, pal=["#0a6a4e","#2f8f6e","#5bb08f","#8fcdb3","#c3e5d4","#9db7ad"];
   const slices=nodes.map((n,i)=>({label:n.name.replace(/\s*\(.*\)$/,""),value:+n.cost,color:pal[i%pal.length]}));
   const donut=C.donut(slices,{size:150,center:inr(tot),centerSub:"per part",aria:"Cost breakdown"}).replace(/<ul class="pc-dl">[\s\S]*?<\/ul>/,"");
-  return U.panel(ptitle("Cost breakdown (current price)","Components of the cost breakdown: raw material (weights × commodity price), import content (× FX) and manual cost nodes. Total is the cost-breakdown price, which the part's piece price follows."),`<div class="pd-conc2"><div class="dn">${donut}</div><div class="lg">${slices.map(s=>`<div class="o"><i style="background:${s.color}"></i><span title="${esc(s.label)}">${esc(s.label)}</span><b>${(s.value/tot*100).toFixed(0)}% · ${inr(s.value)}</b></div>`).join("")}</div></div><div class="pd-tag">Cost-breakdown total <b>${inr(tot)}</b> · piece price <b>${inr(p.cur)}</b></div>`);
+  const gap=p.cur-tot, gp=p.cur?gap/p.cur*100:0, over=gap<0;
+  const gapTip=over?"The calculated breakdown is above the supplier's piece price. That usually means two cost lines overlap, so check the cost breakdown for double counting."
+    :"The breakdown is calculated from net weight × commodity price, import content × FX and the cost lines entered for this part. The piece price is what the supplier charges today. The difference is price that no cost line explains, such as supplier margin and overheads, or cost lines that are not entered yet.";
+  return U.panel(ptitle("Cost breakdown (current price)","Components of the cost breakdown: raw material (weights × commodity price), import content (× FX) and the cost lines entered for this part. It is a calculation, not the price: the supplier's piece price is shown below for comparison."),
+    `<div class="pd-conc2 pd-cb"><div class="dn">${donut}</div><div class="lg">${slices.map(s=>`<div class="o"><i style="background:${s.color}"></i><span title="${esc(s.label)}">${esc(s.label)}</span><em>${inr(s.value)}</em><b>${Math.round(s.value/tot*100)}%</b></div>`).join("")}</div></div>`+
+    `<div class="pd-cbn"><div><span>Cost breakdown <small>calculated</small></span><b>${inr(tot)}</b></div><div><span>Piece price <small>supplier, current</small></span><b>${inr(p.cur)}</b></div><div class="g ${over?"bad":""}"><span>${over?"Breakdown above price":"Not explained by the breakdown"} ${info(gapTip)}</span><b>${over?"+":""}${inr(Math.abs(gap))} <small>${Math.abs(gp).toFixed(1)}% of price</small></b></div></div>`);
 }
 function decisionsFor(match){
   const out=[];
@@ -11504,32 +11616,20 @@ function decisionsTable(list){
   return list.length?U.table(["Type","Reference","Subject","Stage","Status"],list.slice(0,6).map(d=>`<tr class="v8-row" data-act="go:approvals" role="button" tabindex="0"><td><b>${esc(d.kind)}</b></td><td>${Components.wfChip(d.wf)}</td><td>${esc(d.subject)}</td><td>${esc(d.stage)}</td><td>${stChip(d.status)}</td></tr>`).join(""))+(list.length>6?`<div class="mut small" style="margin-top:6px">+${list.length-6} more</div>`:""):empty("No commercial decision is linked to this selection.");
 }
 function notesPanel(p){
-  const vs=versionsOf(p.id), dp=dpOf(p.id), items=[];
-  vs.slice().reverse().slice(0,4).forEach((v,i,a)=>items.push(`${fmtDate(v.effectiveFrom)} — ${esc(v.source)}${v.changeReq?" ("+esc(v.changeReq)+")":""}: ${inr(v.price)}`));
-  if(dp) items.push(`Part master last updated ${esc(fmtDate(dp.lastUpdated))} — data status <b>${esc(dp.status)}</b>.`);
-  if(DATA.cbds[p.id]) items.push(`Cost breakdown last updated ${esc(fmtDate(DATA.cbds[p.id].lastUpdated))}.`);
-  return U.panel(ptitle("Notes & remarks","Recorded sources only: price-version sources, the part master and the cost breakdown. Nothing is added here."),items.length?`<ul class="pd-notes">${items.map(x=>`<li>${x}</li>`).join("")}</ul>`:empty("No notes are recorded for this part."));
+  const vs=versionsOf(p.id), dp=dpOf(p.id);
+  const rows=vs.map((v,i)=>({v,prev:i?vs[i-1]:null})).reverse().slice(0,4).map(({v,prev})=>{ const d=prev?v.price-prev.price:0;
+    return `<div class="nr"><span class="d">${esc(fmtDate(v.effectiveFrom))}</span><span class="t"><b>${esc(v.source)}</b>${v.changeReq?`<small>${esc(v.changeReq)}</small>`:""}</span><span class="v">${inr(v.price)}${prev?`<small class="${d>0?"bad":d<0?"good":""}">${d>=0?"+":"−"}${inr(Math.abs(d))} · ${sgn(pct(v.price,prev.price))}</small>`:`<small>nomination</small>`}</span></div>`; }).join("");
+  const rec=[]; if(dp) rec.push(`<div class="nr"><span class="d">${esc(fmtDate(dp.lastUpdated))}</span><span class="t"><b>Part master updated</b></span><span class="v">${Components.chip(dp.status)}</span></div>`);
+  if(DATA.cbds[p.id]) rec.push(`<div class="nr"><span class="d">${esc(fmtDate(DATA.cbds[p.id].lastUpdated))}</span><span class="t"><b>Cost breakdown updated</b></span><span class="v"></span></div>`);
+  return U.panel(ptitle("Notes & remarks","Recorded sources only: the latest price versions, the part master and the cost breakdown. Nothing is added here."),
+    rows||rec.length?`<div class="pd-nt">${rows?`<div class="h">Latest price versions</div>${rows}`:""}${rec.length?`<div class="h">Records</div>${rec.join("")}`:""}</div>`:empty("No notes are recorded for this part."));
 }
 function buildPart(){
-  const {p,missing}=pickPart(), pg=progOf(p.progCode), tgt=targetOf(p.id), cpv=lineCost(p), annual=(p.cur-p.nom)*p.qty*pg.volume;
-  const parts=projectParts(p.progCode).sort((a,b)=>lineCost(b)-lineCost(a));
-  if(CTX.vert&&p.category!==CTX.vert) CTX.vert="";      // a part opened from elsewhere wins over the vertical / supplier filters
-  if(CTX.sup&&p.vendorName!==CTX.sup) CTX.sup="";
-  const byCost=(a,b)=>lineCost(b)-lineCost(a), scope=(code,v,s)=>projectParts(code).filter(x=>(!v||x.category===v)&&(!s||x.vendorName===s)).sort(byCost), top=(code,v,s)=>{ const l=scope(code,v,s); return l[0]?l[0].id:null; };
-  const pick=scope(p.progCode,CTX.vert,CTX.sup);
-  const vertOpts=P.CATS.map(c=>c.name).filter(n=>scope(p.progCode,"",CTX.sup).some(x=>x.category===n)), supOpts=[...new Set(scope(p.progCode,CTX.vert,"").map(x=>x.vendorName))].sort();   // each list only offers values that still have parts
-  const dup={}; pick.forEach(x=>{ dup[x.name]=(dup[x.name]||0)+1; }); const seen={};   // same part name more than once: number them, biggest cost first
-  const partOpts=pick.map(x=>[x.id,dup[x.name]>1?`${x.name} (${(seen[x.name]=(seen[x.name]||0)+1)})`:x.name]);
-  const w=frame("Part Details",
-    projSel()+sel("vert","Vertical",[["","All verticals"]].concat(vertOpts.map(n=>[n,n])),CTX.vert,"layers")+sel("sup","Supplier",[["","All suppliers"]].concat(supOpts.map(n=>[n,n])),CTX.sup,"building")+sel("part","Part",partOpts,p.id,"wrench")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
-    (k,v)=>{ const pj=PX.PF.project; let id;
-      if(k==="project"){ PX.PF.project=v; id=top(v,CTX.vert,CTX.sup); if(!id){ CTX.vert=CTX.sup=""; id=top(v,"",""); } CTX.part=id; }
-      else if(k==="vert"){ CTX.vert=v; id=top(pj,v,CTX.sup); if(!id){ CTX.sup=""; id=top(pj,v,""); } CTX.part=id; }
-      else if(k==="sup"){ CTX.sup=v; id=top(pj,CTX.vert,v); if(!id){ CTX.vert=""; id=top(pj,"",v); } CTX.part=id; }
-      else if(k==="part") CTX.part=v;
-      else { PX.PF.project=PX.DEFAULT; CTX.part=null; CTX.vert=CTX.sup=""; }
-      Router.render(); });
-  if(missing) add(w,U.note("The selected part was not found — showing the part with the highest cost per vehicle in "+esc(p.progName)+".","warn"));
+  let missing=false;
+  if(CTX.part){ const q=P.part(CTX.part); if(q){ PX.PF.project=q.progCode; CTX.vert=q.category; CTX.pname=q.name; CTX.sup=q.vendorName; } else missing=true; CTX.part=null; }   // opened for one part: its project, vertical, name and supplier fill the filters
+  const p=pfPart(); if(!p) return buildPartEmpty(missing);
+  const pg=progOf(p.progCode), tgt=targetOf(p.id), cpv=lineCost(p), annual=(p.cur-p.nom)*p.qty*pg.volume;
+  const w=pfFrame();
   add(w,partHeader(p,tgt));
   kpis(w,[
     kcard({icon:"coins",label:"Nomination price",value:inr(p.nom,0),sub:esc(P.monthLabel(P.MONTHS[0]))+" · piece price"}),
@@ -11554,19 +11654,29 @@ function pickSupplier(){
   if(!s) s=names[0]; CTX.supplier=s; return {s,missing,names};
 }
 function seriesIdx(list){ const base=costOf(list,p=>p.qty*p.h[0])||1; return P.MONTHS.map((m,i)=>costOf(list,p=>p.qty*p.h[i])/base*100); }
+/* after "Reset filters": every filter is cleared, including the supplier; the page waits for a supplier to be picked */
+function buildSupplierEmpty(){
+  const code=PX.PF.project, all=projectParts(code), vertOpts=P.CATS.map(c=>c.name).sort().filter(n=>all.some(x=>x.category===n)), names=[...new Set(all.filter(x=>!CTX.svert||x.category===CTX.svert).map(x=>x.vendorName))].sort();
+  const w=frame("Supplier Details",
+    projSel()+sel("svert","Vertical",[["","All verticals ("+vertOpts.length+")"]].concat(vertOpts.map(n=>[n,n])),CTX.svert,"layers")+sel("spart","Part",[["","All parts"]],"","wrench")+sel("supplier","Supplier",[["","Select a supplier ("+names.length+")"]].concat(names.map(n=>[n,n])),"","building")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
+    (k,v)=>{ if(k==="project"){ PX.PF.project=v; CTX.svert=""; } else if(k==="svert") CTX.svert=v; else if(k==="supplier"){ if(v){ CTX.supplier=v; CTX.sclr=false; } } else if(k==="spart"){ } else { PX.PF.project=PX.DEFAULT; CTX.svert=CTX.spart=""; CTX.supplier=null; CTX.sclr=true; } Router.render(); });
+  add(w,U.panel("No supplier selected",empty(`Pick a supplier above to see its spend, parts and price performance. ${names.length} supplier${names.length===1?"":"s"} match the filters.`)));
+  U.wire(w); return w;
+}
 function buildSupplier(){
+  if(CTX.sclr) return buildSupplierEmpty();
   const {s,missing}=pickSupplier(), code=PX.PF.project, pg=progOf(code), all=projectParts(code), sm=DATA.suppliers.find(x=>x.name===s), vend=P.VENDS.find(v=>v.name===s);
   const byCost=(a,b)=>lineCost(b)-lineCost(a), sAll=all.filter(p=>p.vendorName===s);
   if(CTX.svert&&!sAll.some(p=>p.category===CTX.svert)) CTX.svert="";      // same filters as Part Details; each list only offers values that still have parts
   const inV=p=>!CTX.svert||p.category===CTX.svert, sV=sAll.filter(inV).sort(byCost);
   if(CTX.spart&&!sV.some(p=>p.id===CTX.spart)) CTX.spart="";
   const list=sV.filter(p=>!CTX.spart||p.id===CTX.spart), allV=all.filter(inV);
-  const vertOpts=P.CATS.map(c=>c.name).filter(n=>sAll.some(p=>p.category===n)), supOpts=[...new Set(allV.map(p=>p.vendorName))].sort();
+  const vertOpts=P.CATS.map(c=>c.name).sort().filter(n=>sAll.some(p=>p.category===n)), supOpts=[...new Set(allV.map(p=>p.vendorName))].sort();
   const dup={}; sV.forEach(x=>{ dup[x.name]=(dup[x.name]||0)+1; }); const seen={};
-  const partOpts=sV.map(x=>[x.id,dup[x.name]>1?`${x.name} (${(seen[x.name]=(seen[x.name]||0)+1)})`:x.name]);
+  const partOpts=sV.map(x=>[x.id,dup[x.name]>1?`${x.name} (${(seen[x.name]=(seen[x.name]||0)+1)})`:x.name]).sort((a,b)=>a[1].localeCompare(b[1]));
   const w=frame("Supplier Details",
-    projSel()+sel("svert","Vertical",[["","All verticals"]].concat(vertOpts.map(n=>[n,n])),CTX.svert,"layers")+sel("supplier","Supplier",supOpts.map(n=>[n,n]),s,"building")+sel("spart","Part",[["","All parts"]].concat(partOpts),CTX.spart,"wrench")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
-    (k,v)=>{ if(k==="project"){ PX.PF.project=v; CTX.spart=""; } else if(k==="svert"){ CTX.svert=v; CTX.spart=""; } else if(k==="supplier"){ CTX.supplier=v; CTX.spart=""; } else if(k==="spart") CTX.spart=v; else { PX.PF.project=PX.DEFAULT; CTX.supplier=null; CTX.svert=CTX.spart=""; } Router.render(); });
+    projSel()+sel("svert","Vertical",[["","All verticals"]].concat(vertOpts.map(n=>[n,n])),CTX.svert,"layers")+sel("spart","Part",[["","All parts"]].concat(partOpts),CTX.spart,"wrench")+sel("supplier","Supplier",supOpts.map(n=>[n,n]),s,"building")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
+    (k,v)=>{ if(k==="project"){ PX.PF.project=v; CTX.spart=""; } else if(k==="svert"){ CTX.svert=v; CTX.spart=""; } else if(k==="supplier"){ CTX.supplier=v; CTX.spart=""; } else if(k==="spart") CTX.spart=v; else { PX.PF.project=PX.DEFAULT; CTX.supplier=null; CTX.svert=CTX.spart=""; CTX.sclr=true; } Router.render(); });
   if(missing) add(w,U.note("The selected supplier was not found — showing another supplier of this project.","warn"));
   const totCost=costOf(all,lineCost), cost=costOf(list,lineCost), nomC=costOf(list,p=>p.qty*p.nom), annual=cost*pg.volume;
   const sr=srm(), sv=sr&&sr.m.vend[s];
@@ -11588,14 +11698,14 @@ function buildSupplier(){
   const catPanel=U.panel(ptitle("Spend by component category","This supplier's cost per vehicle by vertical in the selected project."),`<div class="pd-catv"><div class="dn">${donut}</div><div class="lg">${catRows.map((r,i)=>`<div class="o"><i style="background:${pal[i%pal.length]}"></i><span title="${esc(r.k)} · ${r.n} part${r.n===1?"":"s"}">${esc(r.k)}</span><b>${(r.c/cost*100).toFixed(0)}%</b></div>`).join("")}</div></div>`);
   /* parts supplied (filterable, paginated) */
   const prows=list.sort((a,b)=>lineCost(b)-lineCost(a)).map(p=>({p}));
-  const ft=FTable.create({id:"sup-parts",pageSize:10,rowAct:r=>"ppart:"+r.p.id,empty:"No part matches these filters.",rows:prows,columns:[
-    {key:"part",label:"Part",get:r=>r.p.name,html:r=>`<span class="pd-pname">${V8Art.part(r.p.name,r.p.category,"sm")}<span><b>${esc(r.p.name)}</b><small class="v8-sm">${esc(r.p.id)}</small></span></span>`},
-    {key:"vertical",label:"Vertical",get:r=>r.p.category},
-    {key:"qty",label:"Qty / vehicle",get:r=>r.p.qty,align:"r",order:r=>r.p.qty},
-    {key:"price",label:"Current price (₹)",get:r=>nf(r.p.cur,0),align:"r",order:r=>r.p.cur},
-    {key:"var",label:"Variance vs nomination",get:r=>pct(r.p.cur,r.p.nom)>0?"Price up":pct(r.p.cur,r.p.nom)<0?"Price down":"Unchanged",html:r=>chip(pct(r.p.cur,r.p.nom))},
-    {key:"cpv",label:"Cost / vehicle (₹)",get:r=>nf(lineCost(r.p),0),align:"r",order:r=>lineCost(r.p)},
-    {key:"share",label:"Share of supplier cost",get:r=>(lineCost(r.p)/cost*100).toFixed(1)+"%",align:"r",order:r=>lineCost(r.p)}]});
+  const ft=FTable.create({id:"sup-parts",pageSize:10,sortable:true,sort:{key:"vertical",dir:"asc"},rowAct:r=>"ppart:"+r.p.id,empty:"No part matches these filters.",rows:prows,columns:[
+    {key:"vertical",label:"Vertical",w:"13%",get:r=>r.p.category},
+    {key:"part",label:"Part",w:"27%",get:r=>r.p.name,html:r=>`<span class="pd-pname">${V8Art.part(r.p.name,r.p.category,"sm")}<span><b>${esc(r.p.name)}</b><small class="v8-sm">${esc(r.p.id)}</small></span></span>`},
+    {key:"qty",label:"Qty / vehicle",w:"9%",get:r=>r.p.qty,align:"r",order:r=>r.p.qty},
+    {key:"price",label:"Current price (₹)",w:"12%",get:r=>nf(r.p.cur,0),align:"r",order:r=>r.p.cur},
+    {key:"var",label:"Variance vs nomination",w:"14%",get:r=>pct(r.p.cur,r.p.nom)>0?"Price up":pct(r.p.cur,r.p.nom)<0?"Price down":"Unchanged",order:r=>pct(r.p.cur,r.p.nom),html:r=>chip(pct(r.p.cur,r.p.nom))},
+    {key:"cpv",label:"Cost / vehicle (₹)",w:"12.5%",get:r=>nf(lineCost(r.p),0),align:"r",order:r=>lineCost(r.p)},
+    {key:"share",label:"Share of supplier cost",w:"12.5%",get:r=>(lineCost(r.p)/cost*100).toFixed(1)+"%",align:"r",order:r=>lineCost(r.p)}]});
   const partsHtml=U.panel(ptitle("Parts supplied to "+esc(short(pg.name)),"Every tracked part this supplier delivers to the selected project. Click a row for the part."),"");
   /* price performance */
   const ids=seriesIdx(list), idsAll=seriesIdx(allV), lab=P.MONTHS.map(U.ml);
@@ -11653,7 +11763,7 @@ function tipRing(items,S,center,sub,centerTip){
 function buildPrice(){
   const f=CTX.price, code=PX.PF.project, pg=progOf(code), pp=projectParts(code), list=paScope(), fl=[];
   const w=frame("Price Analysis",
-    projSel()+sel("category","Vertical",[["","All verticals"]].concat(P.CATS.map(c=>[c.name,c.name])),f.category,"layers")+sel("supplier","Supplier",[["","All suppliers"]].concat(supplierNames(code).map(n=>[n,n])),f.supplier,"building")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
+    projSel()+sel("category","Vertical",[["","All verticals"]].concat(P.CATS.map(c=>[c.name,c.name]).sort((a,b)=>a[0].localeCompare(b[0]))),f.category,"layers")+sel("supplier","Supplier",[["","All suppliers"]].concat(supplierNames(code).map(n=>[n,n])),f.supplier,"building")+`<button type="button" class="pd-reset" data-pf-reset="1" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`,
     (k,v)=>{ if(k==="project"){ PX.PF.project=v; f.supplier=""; f.part=""; } else if(k==="category"){ f.category=v; f.part=""; } else if(k==="supplier"){ f.supplier=v; f.part=""; } else { PX.PF.project=PX.DEFAULT; f.category=f.supplier=f.part=""; } Router.render(); });
   if(!list.length){ add(w,U.panel("No parts",empty("No tracked part matches these filters."))); U.wire(w); return w; }
   const cur=costOf(list,lineCost), nom=costOf(list,p=>p.qty*p.nom), chg=pct(cur,nom), imp=cur-nom, vol=pg.volume;
@@ -11723,8 +11833,8 @@ function buildPrice(){
 
 /* ------------------------------------------------------------ actions and routing */
 Object.assign(U.actions,{
-  ppart:v=>{ const p=P.part(v); if(!p) return; CTX.part=p.id; PX.PF.project=p.progCode; go("proc-part"); },
-  psup:v=>{ CTX.supplier=v; go("proc-supplier"); },
+  ppart:v=>{ const p=P.part(v); if(!p) return; CTX.part=p.id; PX.PF.project=p.progCode; go("proc-part"); },   // opened for one part: the filters follow it
+  psup:v=>{ CTX.supplier=v; CTX.sclr=false; go("proc-supplier"); },
   pprice:v=>{ const f=CTX.price; f.part=""; if(Router.screen==="proc-overview"){ f.category=PX.PF.category||""; f.supplier=PX.PF.supplier||""; } if(v){ const [k,val]=v.split("="); if(k==="part"){ f.part=val; const p=P.part(val); if(p) PX.PF.project=p.progCode; } else if(k==="category") f.category=val; else if(k==="supplier") f.supplier=val; } go("proc-price"); },
   pafilter:v=>{ const [k,val]=v.split("="); CTX.price[k]=CTX.price[k]===val?"":val; CTX.price.part=""; Router.render(); },
   vhmore:v=>openVersionModal(v),

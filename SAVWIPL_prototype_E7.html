@@ -8547,8 +8547,8 @@ function filterBar(extraBtn){
   bar.innerHTML=`<div class="pd-carbox solo">${pic||V8Art.lineup()||'<span class="va-car" aria-hidden="true"></span>'}</div>`+   // an empty frame of the same size keeps the filters in place when no project is picked
     sel("car","Project",[["","All projects ("+cars.length+")"]].concat(cars.map(c=>[c,c])),F.car,"car")+
     sel("vert","Vertical",[["","All verticals ("+verts.length+")"]].concat(verts.map(v=>[v,v])),F.vert,"layers")+
-    sel("supplier","Supplier",[["","All suppliers ("+sups.length+")"]].concat(sups.map(s=>[s,s])),F.supplier,"building")+
     sel("part","Part",[["","All parts ("+list.length+")"]].concat(list.map(p=>[p.number,label(p,list)])),F.part||"","wrench")+
+    sel("supplier","Supplier",[["","All suppliers ("+sups.length+")"]].concat(sups.map(s=>[s,s])),F.supplier,"building")+
     `<button type="button" class="pd-reset" data-f="reset" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`;
   if(extraBtn){ extraBtn.style.marginTop="22px"; extraBtn.style.flex="none"; bar.appendChild(extraBtn); }
   bar.addEventListener("change",e=>{ const k=e.target.dataset&&e.target.dataset.f; if(k&&k!=="reset") onFilter(k,e.target.value); });

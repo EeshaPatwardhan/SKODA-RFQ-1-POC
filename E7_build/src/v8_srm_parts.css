@@ -52,3 +52,19 @@
 .dr-asof{margin:-4px 0 10px;font-size:11.5px;color:var(--muted);line-height:1.45;}
 .dr-tbl td.bad,.dr-tbl td.warn{font-weight:700;}
 @media (max-width:760px){ .pv-sum{grid-template-columns:minmax(0,1fr);} }
+.ft-sb{cursor:pointer;} .ft-sb span{white-space:nowrap;} .ft-sb:hover{color:var(--brand);} .ft-sb.on svg{color:var(--brand);}
+
+/* tables that declare column widths: fixed layout, headings wrap, numeric headings sit over their numbers */
+.ft-fixed .ft-t{table-layout:fixed;} .ft-fixed .ft-t thead th{white-space:normal;} .ft-fixed .ft-h{align-items:center;} .ft-fixed .ft-h span{white-space:normal;line-height:1.25;text-align:left;}
+.ft-fixed .ft-t thead th.r .ft-h{justify-content:flex-end;} .ft-fixed .ft-t thead th.r .ft-h span{text-align:right;}
+.ft-fixed .ft-t tbody td{overflow-wrap:anywhere;}
+/* sortable tables: the label sorts, the funnel beside it filters */
+.ft-hd{display:flex;align-items:center;} .ft-hd .ft-sb{width:auto;flex:0 1 auto;padding-right:4px;} .ft-hd .ft-fb{width:auto;flex:none;padding:11px 12px 11px 4px;gap:4px;} .ft-hd .ft-fb svg{opacity:.7;} .ft-hd .ft-fb:hover svg{opacity:1;color:var(--brand);}
+.ft-sb{cursor:pointer;} .ft-sb:hover{color:var(--brand);} .ft-sb.on svg{color:var(--brand);}
+.ft-fixed .ft-t thead th.r .ft-hd{justify-content:flex-end;}
+/* heading menu (sortable tables): sort buttons above the value filter */
+.ft-mb svg{opacity:.7;} .ft-mb.on{color:var(--brand);} .ft-mb:hover svg{opacity:1;color:var(--brand);}
+.ft-so{display:flex;align-items:center;gap:6px;padding:2px 0 8px;} .ft-so b{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-right:4px;}
+.ft-so button{flex:1;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;} .ft-so button:hover{border-color:var(--brand);} .ft-so button.on{background:var(--brand);border-color:var(--brand);color:var(--on-brand,#fff);}
+.ft-fh{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;padding:6px 0 0;border-top:1px solid var(--line2);}
+
