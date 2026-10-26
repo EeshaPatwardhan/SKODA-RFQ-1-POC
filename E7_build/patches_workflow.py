@@ -41,6 +41,5 @@ rep('  "price-history": buildPriceHistory,\n', "")
 rep("""      <button class="btn" onclick="Drawer.close();PRICE_ACTIVE='${partNumber}';Router.go('price-history','procurement')">Price history</button>\n""", "")
 
 # ----------------------------------------------------------------------------- collapsed sidebar: no expanded flash on reload, scrollable flyout
-rep('<div id="app-shell">', '<div id="app-shell"><script>try{ if(localStorage.getItem("ais-rail")==="1") document.getElementById("app-shell").classList.add("rail"); }catch(e){}</script>')
+rep('<div id="app-shell">', '<div id="app-shell"><script>try{ if(localStorage.getItem("ais-rail-v2")!=="0") document.getElementById("app-shell").classList.add("rail"); }catch(e){ document.getElementById("app-shell").classList.add("rail"); }</script>')
 rep('f.style.top = Math.max(12, Math.min(r.top - 6, window.innerHeight - h - 12)) + "px";', 'const ft = Math.max(12, Math.min(r.top - 6, window.innerHeight - h - 12)); f.style.top = ft + "px"; f.style.maxHeight = (window.innerHeight - ft - 12) + "px";   // opened sub-groups scroll inside the flyout instead of running off the screen')
-

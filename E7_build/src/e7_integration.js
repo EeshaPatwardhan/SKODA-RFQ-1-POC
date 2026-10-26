@@ -94,9 +94,12 @@ function homeBlock(){
   U.wire(d); return d;
 }
 ["procurement","techchange","srm","admin"].forEach(m=>{
-  const orig=SCREENS[m].home;
+  const orig=SCREENS[m]["task-centre"];   // the E6 task list (V8 replaces Home itself with v8_home.js)
   const wrapped=function(){ const w=orig(); try{ const k=w.querySelector(".grid.grid-4"); if(k) k.after(homeBlock()); }catch(e){ console.error("home forecast block",e); } return w; };
-  SCREENS[m]["task-centre"]=wrapped;   // Home itself no longer carries the forecast block (price outlook + geopolitical alerts)
+  if(window.V8Home){   // V8: there is no separate Task centre any more — its panels (price outlook, geopolitical alerts, email log) are built into Home; an old link to it lands on Home
+    window.__tcSource=window.__tcSource||wrapped;
+    SCREENS[m]["task-centre"]=function(){ return SCREENS[m].home(); };
+  } else SCREENS[m]["task-centre"]=wrapped;
 });
 
 /* ---------------------------------------------------------------- Material Cost: pointer to the all-parts forecast */
@@ -194,6 +197,7 @@ document.addEventListener("click",e=>{
 })();
 
 /* ---------------------------------------------------------------- boot */
+window.__bootHold=false;   // every module is loaded: draw the page now (see the hold set before the Router)
 Notif.updateBadge();
 Router.render();
 })();

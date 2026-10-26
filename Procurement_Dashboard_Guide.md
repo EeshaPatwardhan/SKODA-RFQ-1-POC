@@ -56,7 +56,7 @@ Forecast curves and risks (Forecast Dashboard), supplier readiness and tooling s
 
 
 ## Layout update (reference design)
-The page now follows the reference layout: filter bar (Vehicle / Project is a single select — one project at a time; Vertical; Supplier; Reset filters), five KPI cards, then six panels: Material cost by component category · Top parts by material cost · Supplier spend concentration · Parts with highest price increase · Cost vs target (top parts over target) · Pending procurement decisions. The numbers are the same ones described above; "Cost per vehicle" is now always for the selected project. Pending procurement decisions covers all projects (approvals are not project-specific). Program Phase and Time Period filters are not shown because the prototype has no such data.
+The page now follows the reference layout: filter bar (Vehicle / Project is a single select — one project at a time; Vertical; Supplier; Reset filters), five KPI cards, then six panels: Cost per vehicle by vertical · Top parts by cost per vehicle · Supplier spend concentration · Parts with highest price increase · Cost vs target (top parts over target) · Pending procurement decisions. The numbers are the same ones described above; "Cost per vehicle" is now always for the selected project. Pending procurement decisions covers all projects (approvals are not project-specific). Program Phase and Time Period filters are not shown because the prototype has no such data.
 
 ## Drill-down dashboards (V8)
 

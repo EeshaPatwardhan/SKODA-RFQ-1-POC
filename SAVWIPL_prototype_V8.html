@@ -1943,6 +1943,10 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 @media (max-width:1100px){ .pd-slim.stack.pd-part .meta{grid-template-columns:repeat(3,minmax(0,1fr));} }
 @media (max-width:640px){ .pd-slim.stack.pd-part .meta{grid-template-columns:repeat(2,minmax(0,1fr));} }
 
+/* Home: panels carried over from the old Task centre */
+.hm-x{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px;align-items:start;} .hm-x.one{grid-template-columns:minmax(0,1fr);} .hm-x > .panel{margin:0 !important;min-width:0;}
+@media (max-width:1100px){ .hm-x{grid-template-columns:minmax(0,1fr);} }
+
 
 
 /* ===== V8 additions: v8_srm_ops.css ===== */
@@ -2013,11 +2017,99 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
   .tcd-prod .h,.tcd-prod .r{grid-template-columns:14px minmax(0,1fr) 74px 84px;} .tcd-hi .h,.tcd-hi .r{grid-template-columns:14px minmax(0,1fr) 72px 84px;} .tcd-od .h,.tcd-od .r{grid-template-columns:14px minmax(0,1fr) 48px minmax(54px,.7fr);}
 }
 
+
+/* ===== V8 additions: v8_home.css ===== */
+/* V8 · Home / My Tasks */
+.hm .page-header.hero{align-items:flex-end;flex-wrap:wrap;gap:14px 24px;}
+.hm .page-header.hero .sub{max-width:760px;font-size:15px;line-height:1.55;color:var(--muted);} .hm .page-header.hero .sub b{color:var(--ink);} .hm .hm-bad{color:var(--red);}
+.hm-hero-ac{margin-left:auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:10px;}
+.hm-asof{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:20px;background:var(--brand-soft);color:var(--brand);font-size:12px;font-weight:600;} .hm-asof svg.i{width:14px;height:14px;}
+.hm .pd-kpi .vl.bad{color:var(--red);}
+
+/* two columns: work list + side panels, then the platform pulse */
+.hm-mw{container-type:inline-size;margin-bottom:8px;}
+.hm-main{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:stretch;}
+@container (min-width:980px){ .hm-main{grid-template-columns:minmax(0,1.7fr) minmax(300px,1fr);} }
+.hm-col{display:grid;gap:16px;min-width:0;} .hm-col > .panel{margin:0 !important;}
+.hm-work{margin:0 !important;min-width:0;display:flex;flex-direction:column;} .hm-work .hm-list{flex:1;}
+.hm-work .panel-header{flex-wrap:wrap;} .ph-s{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px;}
+.hm-search{display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--muted);min-width:0;flex:0 1 220px;} .hm-search:focus-within{border-color:var(--brand);}
+.hm-search svg.i{width:16px;height:16px;flex:none;} .hm-search input{flex:1;min-width:0;border:0;background:none;outline:0;font-size:13px;color:var(--ink);height:100%;}
+.hm-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:12px 20px 0;}
+.hm-tab{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border:1px solid var(--line);border-radius:20px;background:var(--panel);color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;}
+.hm-tab b{font-size:11px;line-height:18px;min-width:18px;text-align:center;padding:0 5px;border-radius:9px;background:var(--line2);color:var(--muted);}
+.hm-tab:hover{border-color:var(--brand);color:var(--brand);} .hm-tab.on{background:var(--brand);border-color:var(--brand);color:var(--on-brand);} .hm-tab.on b{background:rgba(255,255,255,.22);color:var(--on-brand);}
+.hm-list{padding:6px 12px 14px !important;}
+
+.hm-grp{margin-top:10px;} .hm-gh{display:flex;align-items:center;gap:8px;padding:8px 8px 6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.hm-gh b{font-size:11px;line-height:18px;min-width:18px;text-align:center;border-radius:9px;background:var(--line2);color:var(--muted);padding:0 5px;letter-spacing:0;}
+.hm-grp.bad .hm-gh{color:var(--red);} .hm-grp.bad .hm-gh b{background:var(--red-soft);color:var(--red);}
+.hm-grp.warn .hm-gh{color:var(--amber);} .hm-grp.warn .hm-gh b{background:var(--amber-soft);color:var(--amber);}
+.hm-row{position:relative;display:flex;align-items:center;gap:13px;padding:11px 10px 11px 14px;border-radius:12px;border:1px solid transparent;cursor:pointer;transition:background .14s,border-color .14s;}
+.hm-row::before{content:"";position:absolute;left:3px;top:11px;bottom:11px;width:3px;border-radius:3px;background:var(--line);}
+.hm-row.bad::before{background:var(--red);} .hm-row.warn::before{background:var(--amber);}
+.hm-row:hover,.hm-row:focus-visible{background:var(--raise);border-color:var(--line2);outline:0;}
+.hm-ic{flex:none;width:36px;height:36px;border-radius:11px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;} .hm-ic svg.i{width:18px;height:18px;}
+.hm-row.bad .hm-ic{background:var(--red-soft);color:var(--red);} .hm-row.warn .hm-ic{background:var(--amber-soft);color:var(--amber);}
+.hm-bd{flex:1;min-width:0;} .hm-t{font-weight:600;font-size:13.5px;color:var(--ink);line-height:1.35;}
+.hm-m{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;margin-top:4px;font-size:12px;color:var(--muted);min-width:0;} .hm-m > *{flex:none;} .hm-ty{font-weight:650;color:var(--text);white-space:nowrap;} .hm-sep{color:var(--faint);}
+.hm-m .hm-meta{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hm-due{flex:none;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:var(--raise);border:1px solid var(--line2);font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;} .hm-due svg.i{width:13px;height:13px;}
+.hm-due.bad{background:var(--red-soft);border-color:transparent;color:var(--red);} .hm-due.warn{background:var(--amber-soft);border-color:transparent;color:var(--amber);}
+.hm-ac{flex:none;display:flex;align-items:center;gap:6px;}
+.hm-done{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer;} .hm-done svg.i{width:15px;height:15px;}
+.hm-done:hover{border-color:var(--ok);color:var(--ok);background:var(--ok-soft);}
+.hm-showall{display:flex;justify-content:center;padding:14px 0 4px;}
+.hm-empty{display:grid;justify-items:center;gap:6px;padding:44px 16px;text-align:center;color:var(--muted);font-size:13px;} .hm-empty svg.i{width:34px;height:34px;color:var(--ok);} .hm-empty b{color:var(--ink);font-size:15px;}
+@container (max-width:760px){ .hm-row{flex-wrap:wrap;} .hm-bd{flex-basis:calc(100% - 60px);} .hm-due{margin-left:49px;} .hm-ac{margin-left:auto;} }
+
+/* side panels */
+.hm-side .panel-body{padding:14px 20px 16px;}
+.hm-stack{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--line2);gap:2px;} .hm-stack i{display:block;min-width:6px;}
+.hm-stack.slim{height:10px;margin-top:14px;}
+.hm-stack .over,.hm-leg .over,.hm-stack .delayed,.hm-leg .delayed{background:var(--red);} .hm-stack .soon,.hm-leg .soon,.hm-stack .risk,.hm-leg .risk{background:var(--amber);}
+.hm-stack .week,.hm-leg .week{background:var(--info);} .hm-stack .later,.hm-leg .later,.hm-stack .ns,.hm-leg .ns{background:var(--faint);} .hm-stack .ok,.hm-leg .ok{background:var(--ok);}
+.hm-leg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;margin-top:14px;} .hm-leg span{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);} .hm-leg span b{margin-left:auto;color:var(--ink);font-variant-numeric:tabular-nums;}
+.hm-leg i{flex:none;width:10px;height:10px;border-radius:3px;} .hm-leg.sm{margin-top:10px;gap:6px 14px;}
+.hm-ap{display:flex;align-items:center;gap:12px;width:100%;padding:10px 6px;border:0;border-bottom:1px solid var(--line2);background:none;text-align:left;cursor:pointer;border-radius:8px;color:var(--text);} .hm-ap:last-of-type{border-bottom:0;} .hm-ap:hover{background:var(--raise);}
+.hm-apt{flex:1;min-width:0;display:grid;gap:2px;} .hm-apt b{font-size:13px;color:var(--ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;} .hm-apt small{font-size:11.5px;color:var(--muted);}
+.hm-steps{display:flex;gap:4px;flex:none;} .hm-steps i{width:16px;height:6px;border-radius:3px;background:var(--line);} .hm-steps i.d{background:var(--ok);} .hm-steps i.c{background:var(--amber);}
+.hm-go{flex:none;color:var(--faint);} .hm-go svg.i{width:16px;height:16px;} .hm-ap:hover .hm-go{color:var(--brand);}
+.hm-more{padding-top:8px;font-size:12px;color:var(--muted);text-align:right;}
+.hm-none{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px;color:var(--muted);} .hm-none svg.i{width:20px;height:20px;flex:none;color:var(--ok);}
+.hm-dg{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line2);} .hm-dg:last-of-type{border-bottom:0;} .hm-dg > span{flex:none;width:30px;height:30px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;} .hm-dg svg.i{width:15px;height:15px;}
+.hm-dg b{display:block;font-size:12.5px;color:var(--ink);font-weight:600;line-height:1.35;} .hm-dg small{display:block;margin-top:2px;font-size:11.5px;color:var(--muted);} .hm-dg i.bad{font-style:normal;color:var(--red);font-weight:600;}
+
+/* platform pulse */
+.hm-pw{margin-top:22px;} .hm-sec-h{display:flex;align-items:baseline;gap:12px;margin:0 0 12px;} .hm-sec-h h2{margin:0;font-size:18px;font-weight:700;letter-spacing:-.01em;color:var(--ink);} .hm-sec-h span{font-size:12.5px;color:var(--muted);}
+.hm-pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px;} .hm-pg > .panel{margin:0 !important;min-width:0;display:flex;flex-direction:column;} .hm-pg > .panel > .panel-body{flex:1;}
+.hm-pulse .panel-header h3{font-size:14.5px;} .hm-pulse .panel-header .btn,.hm-side .panel-header .btn{flex:none;white-space:nowrap;} .hm-pg.b{align-items:start;} .hm-pulse .panel-body{padding:14px 20px 16px;}
+.hm-st3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;} .hm-st3 > div{display:grid;gap:3px;align-content:start;padding:10px 12px;border-radius:12px;background:var(--raise);border:1px solid var(--line2);min-width:0;}
+.hm-st3 span{font-size:11.5px;font-weight:600;color:var(--muted);} .hm-st3 b{font-size:20px;line-height:1.15;color:var(--ink);letter-spacing:-.01em;white-space:nowrap;} .hm-st3 b.bad{color:var(--red);} .hm-st3 small{font-size:11px;color:var(--muted);line-height:1.3;}
+.hm-lst{margin-top:10px;display:grid;} .hm-li{display:flex;align-items:center;gap:10px;width:100%;padding:9px 6px;border:0;border-bottom:1px solid var(--line2);background:none;text-align:left;cursor:pointer;border-radius:8px;color:var(--text);} .hm-li:last-child{border-bottom:0;} .hm-li:hover{background:var(--raise);}
+.hm-li .n{flex:1;min-width:0;display:grid;gap:2px;} .hm-li .n b{font-size:12.5px;color:var(--ink);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;} .hm-li .n small{font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hm-foot{margin-top:12px;padding:9px 12px;border-radius:10px;background:var(--raise);border:1px solid var(--line2);font-size:12px;color:var(--muted);} .hm-foot b{color:var(--ink);}
+.hm-fr,.hm-ac2{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line2);} .hm-fr:last-child,.hm-ac2:last-child{border-bottom:0;}
+.hm-fr .d,.hm-ac2 .d{flex:none;width:30px;height:30px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;} .hm-fr .d svg.i,.hm-ac2 .d svg.i{width:15px;height:15px;}
+.hm-fr > div,.hm-ac2 > div{flex:1;min-width:0;} .hm-fr b,.hm-ac2 b{display:block;font-size:12.5px;color:var(--ink);font-weight:600;line-height:1.35;} .hm-fr small,.hm-ac2 small{display:block;margin-top:1px;font-size:11.5px;color:var(--muted);}
+.hm-ac2 time{flex:none;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;}
+.hm-jump{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.hm-jb{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);font-size:12.5px;font-weight:600;text-align:left;cursor:pointer;min-width:0;}
+.hm-jb span{flex:none;width:28px;height:28px;border-radius:8px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;} .hm-jb svg.i{width:15px;height:15px;} .hm-jb:hover{border-color:var(--brand);background:var(--brand-soft);}
+
+@media (max-width:900px){ .hm-hero-ac{margin-left:0;justify-content:flex-start;} }
+@media (max-width:560px){ .hm-st3{grid-template-columns:1fr;} .hm-search{flex-basis:100%;} .hm-tabs{padding:12px 14px 0;} .hm-list{padding:6px 6px 12px !important;} .hm-jump{grid-template-columns:1fr;} }
+@media (max-width:620px){
+  .hm .pd-kpis{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px;}
+  .hm .pd-kpis.k5 .pd-kpi{height:auto;min-height:108px;padding:12px;} .hm .pd-kpis .pd-kpi:last-child{grid-column:1/-1;} .hm .pd-kpi .vl{font-size:22px;}
+  .hm .pd-kpis.k5 .sb{min-height:0;}
+}
+
 </style>
 </head>
 <body>
 
-<div id="app-shell"><script>try{ if(localStorage.getItem("ais-rail")==="1") document.getElementById("app-shell").classList.add("rail"); }catch(e){}</script>
+<div id="app-shell"><script>try{ if(localStorage.getItem("ais-rail-v2")!=="0") document.getElementById("app-shell").classList.add("rail"); }catch(e){ document.getElementById("app-shell").classList.add("rail"); }</script>
 
   <!-- ===================== SIDEBAR (emerald): workspace + modules > sub-sections > screens ===================== -->
   <aside id="sidebar" aria-label="Main navigation">
@@ -2314,7 +2406,7 @@ const Shell = {
     const sh=document.getElementById("app-shell"); const on=sh.classList.toggle("rail");
     if(typeof Flyout!=="undefined") Flyout.close();
     if(typeof Tip!=="undefined") Tip.hide();
-    this.store("ais-rail",on?"1":"0");
+    this.store("ais-rail-v2",on?"1":"0");
     const b=document.getElementById("rail-toggle");
     if(b){ b.title=on?"Expand sidebar":"Collapse sidebar"; b.setAttribute("aria-label",b.title); }
   },
@@ -2323,7 +2415,7 @@ const Shell = {
     if(!t) t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
     this.applyTheme(t);
     Icons.observe();
-    if(this.load("ais-rail")==="1") document.getElementById("app-shell").classList.add("rail");
+    if(this.load("ais-rail-v2")!=="0") document.getElementById("app-shell").classList.add("rail");   // collapsed by default; a stored "0" means the user expanded it (older saved values are ignored)
     const mac=/Mac|iPhone|iPad/.test(navigator.platform||"");
     const k=document.getElementById("search-kbd"); if(k) k.textContent=mac?"⌘ K":"Ctrl K";
     document.addEventListener("keydown",e=>{
@@ -3701,6 +3793,8 @@ function navLabel(moduleId, screenId){
 /* ---------------------------------------------------------
    4. ROUTER
 --------------------------------------------------------- */
+window.__bootHold=true;   // nothing is drawn until every module has loaded, so the E6 Home never flashes before the real one
+document.addEventListener("DOMContentLoaded",()=>setTimeout(()=>{ if(window.__bootHold){ window.__bootHold=false; Router.render(); } },0));   // safety net
 const Router = {
   module: "procurement",
   screen: "home",
@@ -3713,6 +3807,7 @@ const Router = {
   },
   goHome(){ this.go("home", this.module); },
   render(){
+    if(window.__bootHold) return;
     // keep the top-bar module tabs in sync with the current module (highlights the active tab)
     ModuleSwitcher.render(); Nav.render();
     const el = document.getElementById("content");
@@ -11368,17 +11463,17 @@ const more=(act,label)=>`<div class="pd-more"><a href="#" data-act="${act}">${la
 const empty=t=>`<div class="mut small" style="padding:8px 2px">${t}</div>`;
 const dim=(list)=>({np:P.projCount(list)});
 
-/* 1 · Material cost by component category (vertical). The Vertical filter does not apply here — it would leave one row. */
+/* 1 · Cost per vehicle by vertical. The Vertical filter does not apply here — it would leave one row. */
 function categoryPanel(listNoCat){
   const rows=group(listNoCat,p=>p.category).sort((a,b)=>b.cur-a.cur), mx=Math.max(1,...rows.map(r=>r.cur));
   const body=rows.length?`<div class="pd-t pd-cat"><div class="h"><span>Vertical</span><span></span><span class="ra">₹ per vehicle</span><span class="ra">Share</span></div>${rows.map(r=>`<button type="button" class="r ${PF.category===r.name?"on":""}" data-act="pset:category=${esc(r.name)}" title="Filter the other panels to ${esc(r.name)}"><span class="n"><b>${esc(r.name)}</b><small class="${r.chg12>0?"bad":"good"}">12 mo ${sgn(r.chg12)}</small></span><span class="bar"><i style="width:${(r.cur/mx*100).toFixed(1)}%"></i></span><span class="v">${nf(Math.round(r.cur),0)}</span><span class="s">${r.share.toFixed(0)}%</span></button>`).join("")}</div>`:empty("No parts in this selection.");
-  return U.panel(ptitle("Material cost by component category","Cost per vehicle of the tracked parts, by vertical (piece price × quantity per vehicle). The small figure is the change in that vertical's cost over 12 months. The Vertical filter does not narrow this panel; click a row to filter the others."),body);
+  return U.panel(ptitle("Cost per vehicle by vertical","Cost per vehicle of the tracked parts, by vertical (piece price × quantity per vehicle). The small figure is the change in that vertical's cost over 12 months. The Vertical filter does not narrow this panel; click a row to filter the others."),body);
 }
-/* 2 · Top parts by material cost */
+/* 2 · Top parts by cost per vehicle */
 function topCostPanel(list){
   const np=P.projCount(list), tot=P.cost(list,p=>p.cur,np)||1, rows=list.map(p=>({p,c:p.qty*p.cur/np})).sort((a,b)=>b.c-a.c).slice(0,5), mx=Math.max(1,...rows.map(r=>r.c));
   const body=rows.length?`<div class="pd-t pd-top"><div class="h"><span>#</span><span>Part</span><span></span><span class="ra">₹ per vehicle</span><span class="ra">Share</span></div>${rows.map((r,i)=>`<div class="r" data-act="ppart:${esc(r.p.id)}" role="button" tabindex="0" title="Open part details"><span class="k">${i+1}</span><span class="n hasth">${art(r.p)}<span class="nt"><b>${esc(r.p.name)}</b><small>${esc(r.p.id)}</small></span></span><span class="bar"><i style="width:${(r.c/mx*100).toFixed(1)}%"></i></span><span class="v">${nf(Math.round(r.c),0)}</span><span class="s">${(r.c/tot*100).toFixed(1)}%</span></div>`).join("")}</div>${more("go:fc-parts","View all parts")}`:empty("No parts in this selection.");
-  return U.panel(ptitle("Top parts by material cost","The five parts that add most to the cost per vehicle: piece price × quantity fitted per vehicle. Share = part's cost ÷ cost per vehicle of the selection."),body);
+  return U.panel(ptitle("Top parts by cost per vehicle","The five parts that add most to the cost per vehicle: piece price × quantity fitted per vehicle. Share = part's cost ÷ cost per vehicle of the selection."),body);
 }
 /* 3 · Supplier spend concentration */
 function supplierPanel(list,cur){
@@ -11446,12 +11541,12 @@ function build(){
 }
 
 window.V8Proc={PF,DEFAULT:DEFAULT_PROJECT,pricedParts};
-/* floating "back to top" button on the Procurement dashboard pages (the page scrolls inside #content) */
+/* floating "back to top" button on the Procurement dashboard pages and Home (the page scrolls inside #content) */
 (function(){
   let b=null; const box=()=>document.getElementById("content");
   const ensure=()=>{ if(b) return b; b=document.createElement("button"); b.id="v8-top"; b.type="button"; b.title="Back to top"; b.setAttribute("aria-label","Back to top");
     b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'; b.onclick=()=>{ const c=box(); if(c) c.scrollTo({top:0,behavior:"smooth"}); }; document.body.appendChild(b); return b; };
-  const upd=()=>{ const c=box(), on=!!c&&/^proc-/.test(Router.screen||"")&&c.scrollTop>360; ensure().classList.toggle("on",on); };
+  const upd=()=>{ const c=box(), on=!!c&&/^(proc-|home$|task-centre$)/.test(Router.screen||"")&&c.scrollTop>360; ensure().classList.toggle("on",on); };
   document.addEventListener("scroll",upd,true); setInterval(upd,400);
 })();
 /* ------------------------------------------------------------ wiring */
@@ -12352,6 +12447,237 @@ DATA.changes.forEach(c=>{ const d=CD[c.id]; if(d&&d.stageIdx>=7) tcEnsure(d); })
 
 </script>
 <script>
+/* ===== V8 · v8_home.js ===== */
+/* =====================================================================
+   V8  ·  Home / My Tasks — what needs you today, then how the platform is doing
+   Replaces the E6 task list on Home (the full Task & Notification Centre screen is unchanged and linked from here).
+   Nothing is invented: tasks are TaskCentre, approvals are the ApprovalEngine flows, forecast figures are PocCore, milestone
+   figures are the SRM model (SrmData), technical changes are DATA.changes, freshness is DATA.freshness, activity is DATA.auditLog.
+   ===================================================================== */
+(function(){
+"use strict";
+const P=PocCore, C=PocCharts, U=PocUI, S=SrmData, esc=C.esc;
+const T0=(typeof TODAY!=="undefined"?TODAY:"2026-07-29");
+const ST={tab:"all",q:"",all:false}, CAP=12;
+
+/* ------------------------------------------------------------ task vocabulary */
+const TYPE={
+  "approval-pending":{ic:"check-circle",act:"Review",tab:"approvals"},
+  "fill-details":{ic:"edit",act:"Fill in",tab:"fill"},
+  "rejection-follow-up":{ic:"undo",act:"Rework",tab:"fill"},
+  "milestone-alert":{ic:"flag",act:"View",tab:"alerts"},
+  "escalation":{ic:"alert",act:"Resolve",tab:"alerts"},
+  "reminder":{ic:"clock",act:"Open",tab:"reminders"},
+  "approval-result":{ic:"mail",act:"Open",tab:"reminders"}
+};
+const TABS=[["all","All"],["approvals","Approvals"],["fill","To fill in"],["alerts","Alerts & escalations"],["reminders","Reminders & FYI"]];
+const GROUPS=[
+  ["over","Overdue",t=>t.dueDays<0,"bad"],
+  ["soon","Today & tomorrow",t=>t.dueDays>=0&&t.dueDays<=1,"warn"],
+  ["week","Next 7 days",t=>t.dueDays>=2&&t.dueDays<=7,""],
+  ["later","Later",t=>t.dueDays>7,""]
+];
+const tabOf=t=>(TYPE[t.type]||{}).tab||"reminders";
+const isEsc=t=>t.reminders>=4||t.type==="escalation";
+const roleLabel=r=>(ROLES.find(x=>x.id===r)||{}).label||r;
+const typeLabel=t=>((window.TASK_TYPES||{})[t.type]||{}).label||"Task";
+const mineNow=()=>TaskCentre.forRole(RBAC.role);
+const nav=(screen,mod)=>`data-nav="${screen}|${mod}"`;
+const ic=n=>Icons.svg(n);
+const modOk=m=>(MODULE_ACCESS[RBAC.role]||[]).includes(m);
+const homeMod=()=>["procurement","techchange","srm"].includes(Router.module)?Router.module:"procurement";
+
+/* where a task without its own link should take the person (by workflow number / wording) */
+function target(t){
+  if(t.open){ Flow.openTask(t); return; }
+  const w=String(t.wf||""), ti=String(t.title||""); let r=null;
+  if(/^SRC-/.test(w)) r=["procurement",/cbd/i.test(ti)?"cbd-weights":"sourcing-records"];
+  else if(/^CMD-/.test(w)) r=["procurement","commodity"];
+  else if(/^CR-/.test(w)) r=["procurement","change-requests"];
+  else if(/^INV-/.test(w)) r=["procurement","investment"];
+  else if(/^PRJ-/.test(w)) r=["procurement","masters-hub"];
+  else if(/^GEO-/.test(w)) r=["procurement","fc-geo"];
+  else if(/^FCT-/.test(w)) r=["procurement","fc-outlook"];
+  else if(/^(AEKO|AWE|AEA)-/.test(w)) r=["techchange","change-dashboard"];
+  else if(/^(SRM|AMD)-/.test(w)) r=["srm",/tooling/i.test(ti)?"tool-readiness":/milestone|escalat/i.test(ti)?"alerts-escalations":"milestone-tracking"];
+  else if(/^ADM-/.test(w)) r=["admin","rbac-matrix"];
+  if(r&&modOk(r[0])) Router.go(r[1],r[0]); else Flow.openTask(t);
+}
+
+/* ------------------------------------------------------------ pieces */
+const kc=o=>`<div class="pd-kpi kpi-link" ${o.scroll?`data-scroll="${o.scroll}"`:`data-tab="${o.tab}"`} role="button" tabindex="0" title="${esc(o.tip||"")}"><div class="top"><span class="ic">${ic(o.icon)}</span><span class="lb">${o.label}</span></div><div class="mid"><span class="vl ${o.tone||""}">${o.value}</span></div><div class="sb">${o.sub}</div></div>`;
+
+function row(t){
+  const ty=TYPE[t.type]||{ic:"bell",act:"Open"}, tone=t.dueDays<0?"bad":t.dueDays<=1?"warn":"";
+  const primary=t.type==="approval-pending"||t.type==="escalation"||t.type==="rejection-follow-up";
+  return `<div class="hm-row ${tone}" data-id="${esc(t.id)}" tabindex="0"><span class="hm-ic">${ic(ty.ic)}</span>
+    <div class="hm-bd"><div class="hm-t">${esc(t.title)}</div>
+      <div class="hm-m"><span class="hm-ty">${esc(typeLabel(t))}</span>${t.meta?`<span class="hm-sep">·</span><span class="hm-meta">${esc(t.meta)}</span>`:""}<span class="hm-sep">·</span>${Components.wfChip(t.wf)}${isEsc(t)?`<span class="chip chip-red"><span class="chip-dot"></span>→ ${esc(t.escalationTarget||"Head")}</span>`:""}</div></div>
+    <span class="hm-due ${tone}" title="${esc(t.cadence?"Cadence: "+t.cadence:"")}">${ic(tone==="bad"?"alert":"calendar")}${esc(t.due||"")}</span>
+    <div class="hm-ac"><button type="button" class="btn btn-sm ${primary?"btn-primary":""}" data-go="${esc(t.id)}">${ty.act}</button><button type="button" class="hm-done" data-done="${esc(t.id)}" title="Mark as done" aria-label="Mark as done">${ic("check")}</button></div></div>`;
+}
+
+function listBody(){
+  const q=ST.q.trim().toLowerCase();
+  let list=mineNow().filter(t=>ST.tab==="all"||tabOf(t)===ST.tab);
+  if(q) list=list.filter(t=>(t.title+" "+t.meta+" "+t.wf+" "+t.entity).toLowerCase().includes(q));
+  if(!list.length){
+    const none=!mineNow().length;
+    return `<div class="hm-empty">${ic(none?"check-circle":"search")}<b>${none?"You are all caught up":"Nothing matches"}</b><span>${none?"No open tasks for "+esc(roleLabel(RBAC.role))+". New approvals, reminders and alerts appear here.":"Try another tab or clear the search."}</span></div>`;
+  }
+  let left=ST.all?1e9:CAP;
+  const html=GROUPS.map(([id,label,fn,tone])=>{
+    const g=list.filter(fn).sort((a,b)=>a.dueDays-b.dueDays); if(!g.length||left<=0) return "";
+    const show=g.slice(0,left); left-=show.length;
+    return `<div class="hm-grp ${tone}"><div class="hm-gh"><span>${label}</span><b>${g.length}</b></div>${show.map(row).join("")}</div>`;
+  }).join("");
+  return html+(list.length>CAP?`<div class="hm-showall"><button type="button" class="btn btn-sm" data-showall="1">${ST.all?"Show fewer":"Show all "+list.length+" tasks"}</button></div>`:"");
+}
+
+/* the same approval tasks the KPI counts; a task that belongs to an ApprovalEngine flow also shows its steps */
+function approvalsPanel(){
+  const ts=mineNow().filter(t=>t.type==="approval-pending").sort((a,b)=>a.dueDays-b.dueDays), live=ApprovalEngine.flows.filter(f=>f.status!=="approved"&&f.status!=="rejected").length;
+  const body=ts.length?ts.slice(0,5).map(t=>{
+    const f=ApprovalEngine.flows.find(x=>x.wf===t.wf), hs=f?f.steps.filter(s=>!s.system):[], cur=hs.findIndex(s=>s.status==="current");
+    return `<button type="button" class="hm-ap" data-go="${esc(t.id)}"><span class="hm-apt"><b>${esc(t.title)}</b><small>${esc(t.wf)}${f?" · "+esc(Flow.KIND[f.kind]||f.kind):""} · ${esc(t.due||"")}</small></span>
+      ${hs.length?`<span class="hm-steps" title="Step ${cur+1} of ${hs.length}">${hs.map(s=>`<i class="${s.status==="done"?"d":s.status==="current"?"c":""}"></i>`).join("")}</span>`:""}<span class="hm-go">${ic("chevron-right")}</span></button>`;
+  }).join("")+(ts.length>5?`<div class="hm-more">+ ${ts.length-5} more</div>`:"")
+  :`<div class="hm-none">${ic("check-circle")}<span>Nothing is waiting for your sign-off.</span></div>`;
+  return U.panel(`Waiting for your approval${ts.length?` <span class="count-pill">${ts.length}</span>`:""}`,body,{cls:"hm-side",sub:`${live} approval${live===1?"":"s"} in flight across the platform`,right:`<button type="button" class="btn btn-sm" ${nav("approvals",homeMod())}>All approvals</button>`});
+}
+
+function workloadPanel(list){
+  const n=GROUPS.map(([id,label,fn,tone])=>({id,label,tone,n:list.filter(fn).length})), tot=list.length;
+  const body=tot?`<div class="hm-stack" role="img" aria-label="Open tasks by due date">${n.map(g=>g.n?`<i class="${g.id}" style="flex:${g.n}" title="${g.label}: ${g.n}"></i>`:"").join("")}</div>
+    <div class="hm-leg">${n.map(g=>`<span><i class="${g.id}"></i>${g.label}<b>${g.n}</b></span>`).join("")}</div>`
+    :`<div class="hm-none">${ic("check-circle")}<span>No open tasks.</span></div>`;
+  return U.panel("Workload by due date",body,{cls:"hm-side",sub:`${tot} open task${tot===1?"":"s"} as ${esc(roleLabel(RBAC.role))}`});
+}
+
+function digestPanel(){
+  const d=TaskCentre.mondayDigest(RBAC.role); if(!d.length) return "";
+  return U.panel(`Monday reminder list <span class="count-pill">${d.length}</span>`,d.slice(0,4).map(t=>`<div class="hm-dg"><span>${ic("clock")}</span><div><b>${esc(t.title)}</b><small>${esc(t.cadence)} · ${esc(t.wf)}${t.reminders>=4?` · <i class="bad">escalating to ${esc(t.escalationTarget||"Head")}</i>`:""}</small></div></div>`).join("")+(d.length>4?`<div class="hm-more">+ ${d.length-4} more</div>`:""),
+    {cls:"hm-side",sub:`${d.length} reminder${d.length===1?"":"s"} merged into one e-mail every Monday`});
+}
+
+/* ------------------------------------------------------------ platform pulse */
+function pulseProc(){
+  const k=P.kpis(), top=P.ALERTS.slice(0,3);
+  return U.panel("Procurement · price outlook",`<div class="hm-st3"><div><span>Cost per vehicle</span><b>${U.cr(k.basket.value)}</b><small>${U.sgn(k.basket.change,2)} vs last month</small></div><div><span>Forecast ${esc(k.forecast.to)}</span><b>${U.cr(k.forecast.value)}</b><small>${U.sgn(k.forecast.change,2)}</small></div><div><span>Cost at risk (&gt;5%)</span><b>${U.cr(k.atrisk.value)}</b><small>${k.atrisk.parts} parts</small></div></div>
+    <div class="hm-lst">${top.map(a=>`<button type="button" class="hm-li" data-act="part:${esc(a.partId)}"><span class="n"><b>${esc(a.part?a.part.name:a.partId)}</b><small>${esc(a.part?a.part.progName+" · "+a.part.vendorName:a.title)}</small></span>${U.dirChip(a.change)}</button>`).join("")}</div>`,
+    {cls:"hm-pulse",right:`<button type="button" class="btn btn-sm" ${nav("proc-overview","procurement")}>Dashboard</button>`});
+}
+function pulseSrm(){
+  const m=V8Srm.model(), ev=S.evaluate(m), sm=S.summary(ev), al=S.ops.alerts(m,ev), over=al.filter(a=>a.level==="overdue").length, esc2=al.filter(a=>a.esc).length, am=S.ops.amendments(m,ev).filter(x=>x.status==="pending").length;
+  const c=sm.counts, tot=(c.ok+c.risk+c.delayed+c.notstarted)||1;
+  return U.panel("SRM · part readiness",`<div class="hm-st3"><div><span>Parts on track</span><b>${c.ok}</b><small>of ${sm.n} in scope</small></div><div><span>At risk / delayed</span><b class="${c.delayed?"bad":""}">${c.risk+c.delayed}</b><small>${c.delayed} delayed</small></div><div><span>Open alerts</span><b>${al.length}</b><small>${over} overdue · ${esc2} escalated</small></div></div>
+    <div class="hm-stack slim" role="img" aria-label="Parts by milestone status">${[["ok",c.ok],["risk",c.risk],["delayed",c.delayed],["ns",c.notstarted]].map(([k,v])=>v?`<i class="${k}" style="flex:${v}"></i>`:"").join("")}</div>
+    <div class="hm-leg sm"><span><i class="ok"></i>On track<b>${c.ok}</b></span><span><i class="risk"></i>At risk<b>${c.risk}</b></span><span><i class="delayed"></i>Delayed<b>${c.delayed}</b></span><span><i class="ns"></i>Not started<b>${c.notstarted}</b></span></div>
+    <div class="hm-foot">${am?`<b>${am}</b> milestone amendment${am===1?"":"s"} waiting for approval`:"No milestone amendment waiting"}</div>`,
+    {cls:"hm-pulse",right:`<button type="button" class="btn btn-sm" ${nav("srm-overview","srm")}>Overview</button>`});
+}
+function pulseTc(){
+  const ch=DATA.changes||[], open=ch.filter(c=>c.status!=="Approved"), pend=ch.filter(c=>c.status==="Pending");
+  const rows=open.slice(0,3).map(c=>`<button type="button" class="hm-li" ${nav("change-dashboard","techchange")}><span class="n"><b>${esc(c.part)}</b><small>${esc(c.type)} · ${esc(c.wf)} · ${esc(c.stage)}</small></span><span class="chip ${c.status==="Pending"?"chip-amber":"chip-blue"}"><span class="chip-dot"></span>${esc(c.status)}</span></button>`).join("");
+  return U.panel("Technical change · pipeline",`<div class="hm-st3"><div><span>Open changes</span><b>${open.length}</b><small>of ${ch.length} in total</small></div><div><span>Awaiting approval</span><b>${pend.length}</b><small>in the approval chain</small></div><div><span>Approved</span><b>${ch.length-open.length}</b><small>ready to implement</small></div></div><div class="hm-lst">${rows||`<div class="hm-none"><span>No open technical change.</span></div>`}</div>`,
+    {cls:"hm-pulse",right:`<button type="button" class="btn btn-sm" ${nav("change-dashboard","techchange")}>Dashboard</button>`});
+}
+const safe=(fn,name)=>{ try{ return fn(); }catch(e){ console.error("home "+name,e); return ""; } };
+
+function freshnessPanel(){
+  return U.panel("Data freshness",DATA.freshness.map(f=>`<div class="hm-fr"><span class="d">${ic("calendar")}</span><div><b>${esc(f.name)}</b><small>${esc(f.cadence)}${f.daysOverdue>0?" · "+f.daysOverdue+" days overdue":" · up to date"}</small></div>${Components.freshnessChip(f.daysOverdue)}</div>`).join(""),
+    {cls:"hm-pulse",right:modOk("procurement")?`<button type="button" class="btn btn-sm" ${nav("freshness-board","procurement")}>Board</button>`:""});
+}
+function activityPanel(){
+  const log=(DATA.auditLog||[]).slice(0,6);
+  return U.panel("Recent activity",log.length?log.map(a=>`<div class="hm-ac2"><span class="d">${ic("history")}</span><div><b>${esc(a.entity)} · ${esc(a.action)}</b><small>${esc(a.ref||"")}</small></div><time>${esc(String(a.when||"").slice(11,16))}</time></div>`).join("")
+      :`<div class="hm-none">${ic("history")}<span>Actions you take in this session — approvals, price changes, reminders — are listed here.</span></div>`,
+    {cls:"hm-pulse",right:modOk("admin")?`<button type="button" class="btn btn-sm" ${nav("audit-logs","admin")}>Audit log</button>`:""});
+}
+function jumpPanel(){
+  const L=[];
+  if(modOk("procurement")){ L.push(["Procurement dashboard","bar-chart",nav("proc-overview","procurement")],["Forecast dashboard","trend-up",nav("fc-outlook","procurement")],["Material cost forecast","coins",nav("fc-material","procurement")]); }
+  if(modOk("srm")) L.push(["SRM overview","gauge",nav("srm-overview","srm")],["Alerts & escalations","alert",nav("alerts-escalations","srm")]);
+  if(modOk("techchange")) L.push(["Change dashboard","swap",nav("change-dashboard","techchange")]);
+  L.push(["Approvals","check-circle",nav("approvals",homeMod())],["Ask AIS","sparkles",`data-act="ask:What needs my attention today?"`]);
+  return U.panel("Jump to",`<div class="hm-jump">${L.map(([l,i,a])=>`<button type="button" class="hm-jb" ${a}><span>${ic(i)}</span>${esc(l)}</button>`).join("")}</div>`,{cls:"hm-pulse"});
+}
+
+/* ------------------------------------------------------------ page */
+function build(){
+  const wrap=document.createElement("div"); wrap.className="v8-page hm";
+  const mine=mineNow(), over=mine.filter(t=>t.dueDays<0).length, today=mine.filter(t=>t.dueDays>=0&&t.dueDays<=1).length, soon=mine.filter(t=>t.dueDays>=0&&t.dueDays<=3).length;
+  const apr=mine.filter(t=>t.type==="approval-pending").length, esc3=mine.filter(isEsc).length;
+  const sub="";   // no summary sentence under the greeting
+  const hd=Components.pageHeader("Home / My Tasks",sub);
+  wrap.appendChild(hd);
+
+  const k=document.createElement("div"); k.className="pd-kw";
+  k.innerHTML=`<div class="pd-kpis k5">`+
+    kc({tab:"all",icon:"bell",label:"Open tasks",value:mine.length,sub:esc(roleLabel(RBAC.role)),tip:"Show all open tasks"})+
+    kc({tab:"all",icon:"alert",label:"Overdue",value:over,tone:over?"bad":"",sub:over?"past their due date":"nothing overdue",tip:"Jump to the overdue group"})+
+    kc({tab:"approvals",icon:"check-circle",label:"Waiting for approval",value:apr,tone:apr?"":"",sub:apr?"your sign-off is needed":"nothing to sign off",tip:"Show approvals only"})+
+    kc({tab:"alerts",icon:"flag",label:"Alerts & escalations",value:mine.filter(t=>tabOf(t)==="alerts").length,tone:esc3?"bad":"",sub:esc3?`${esc3} escalated`:"none escalated",tip:"Show alerts and escalations"})+
+    kc({scroll:"hm-email",icon:"mail",label:"Email log",value:TaskCentre.emailLog.length,sub:"mirror of every task",tip:"Jump to the email log at the bottom of this page"})+
+    `</div>`;
+  wrap.appendChild(k);
+
+  const main=document.createElement("div"); main.className="hm-mw"; wrap.appendChild(main);
+  const grid=document.createElement("div"); grid.className="hm-main"; main.appendChild(grid);
+  const left=document.createElement("div"); left.className="panel hm-work"; left.id="hm-work";
+  left.innerHTML=`<div class="panel-header"><div class="ph-t"><h3>My work <span class="count-pill" id="hm-cnt">${mine.length}</span></h3><div class="ph-s">What needs you, most urgent first</div></div>
+      <label class="hm-search">${ic("search")}<input type="search" id="hm-q" placeholder="Search tasks" value="${esc(ST.q)}" aria-label="Search tasks"></label></div>
+    <div class="hm-tabs" role="tablist">${TABS.map(([id,l])=>`<button type="button" role="tab" class="hm-tab ${ST.tab===id?"on":""}" data-tab="${id}">${l}<b>${id==="all"?mine.length:mine.filter(t=>tabOf(t)===id).length}</b></button>`).join("")}</div>
+    <div class="panel-body hm-list" id="hm-list">${listBody()}</div>`;
+  grid.appendChild(left);
+  const right=document.createElement("div"); right.className="hm-col";
+  right.innerHTML=workloadPanel(mine)+approvalsPanel()+digestPanel(); grid.appendChild(right);
+
+  /* what the old Task centre held beyond the task list: price outlook, geopolitical alerts for review, and the email log of every task */
+  try{ const src=window.__tcSource&&window.__tcSource();
+    if(src){ const pick=k=>[...src.querySelectorAll(".panel")].find(p=>{ const h=p.querySelector("h3"); return h&&h.innerText.trim().indexOf(k)===0; });
+      const price=pick("Price outlook"), geo=pick("Geopolitical alerts"), mail=pick("Email log");
+      if(price||geo){ const row=document.createElement("div"); row.className="hm-x"; [price,geo].forEach(p=>{ if(p) row.appendChild(p); }); wrap.appendChild(row); }
+      if(mail){ mail.id="hm-email"; const m=document.createElement("div"); m.className="hm-x one"; m.appendChild(mail); wrap.appendChild(m); } }
+  }catch(e){ console.error("home: task-centre panels",e); }
+  /* the "Across the platform" section (platform pulse cards, data freshness, recent activity, jump-to) is no longer shown on Home */
+
+  /* ---- behaviour */
+  const list=wrap.querySelector("#hm-list"), cnt=wrap.querySelector("#hm-cnt");
+  const redraw=()=>{ list.innerHTML=listBody(); wrap.querySelectorAll(".hm-tab").forEach(b=>b.classList.toggle("on",b.dataset.tab===ST.tab)); };
+  const setTab=(t,scroll)=>{ ST.tab=t; redraw(); if(scroll){ const el=wrap.querySelector("#hm-work"), cont=document.getElementById("content"); if(el&&cont) cont.scrollTo({top:Math.max(0,cont.scrollTop+el.getBoundingClientRect().top-cont.getBoundingClientRect().top-16),behavior:"smooth"}); } };
+  const goTo=id=>{ const el=document.getElementById(id), cont=document.getElementById("content"); if(!el) return; if(cont) cont.scrollTo({top:Math.max(0,cont.scrollTop+el.getBoundingClientRect().top-cont.getBoundingClientRect().top-16),behavior:"smooth"}); else el.scrollIntoView({behavior:"smooth"}); el.classList.remove("pd-flash"); void el.offsetWidth; el.classList.add("pd-flash"); setTimeout(()=>el.classList.remove("pd-flash"),1800); };
+  wrap.addEventListener("click",e=>{
+    const sc=e.target.closest("[data-scroll]"); if(sc&&wrap.contains(sc)){ goTo(sc.dataset.scroll); return; }
+    const t=e.target.closest("[data-tab]"); if(t&&wrap.contains(t)){ setTab(t.dataset.tab,!t.classList.contains("hm-tab")); return; }
+    const n=e.target.closest("[data-nav]"); if(n){ const [s,m]=n.dataset.nav.split("|"); Router.go(s,m); return; }
+    const w=e.target.closest("[data-wf]"); if(w){ Flow.openByWf(w.dataset.wf); return; }
+    const sa=e.target.closest("[data-showall]"); if(sa){ ST.all=!ST.all; redraw(); return; }
+    const d=e.target.closest("[data-done]"); if(d){ e.stopPropagation(); TaskCentre.markDone(d.dataset.done); Toast.show("Task marked done · audit entry written.","success"); return; }
+    const gbtn=e.target.closest("[data-go]"); if(gbtn){ e.stopPropagation(); const x=TaskCentre.tasks.find(y=>y.id===gbtn.dataset.go); if(x) target(x); return; }
+    const r=e.target.closest(".hm-row"); if(r&&list.contains(r)){ const x=TaskCentre.tasks.find(y=>y.id===r.dataset.id); if(x) target(x); }
+  });
+  wrap.addEventListener("keydown",e=>{
+    if(e.key!=="Enter"&&e.key!==" ") return;
+    const sc=e.target.closest("[data-scroll][role=button]"); if(sc){ e.preventDefault(); goTo(sc.dataset.scroll); return; }
+    const t=e.target.closest("[data-tab][role=button]"); if(t){ e.preventDefault(); setTab(t.dataset.tab,true); return; }
+    const r=e.target.closest(".hm-row"); if(r&&e.target===r){ e.preventDefault(); const x=TaskCentre.tasks.find(y=>y.id===r.dataset.id); if(x) target(x); }
+  });
+  wrap.querySelector("#hm-q").addEventListener("input",e=>{ ST.q=e.target.value; redraw(); });
+  U.wire(wrap);
+  return wrap;
+}
+
+/* Home → this page; the old E6 list stays reachable as the Task & Notification Centre (e7_integration wraps it) */
+["procurement","techchange","srm","admin"].forEach(m=>{ if(SCREENS[m]) SCREENS[m].home=build; });
+/* no separate Task centre in V8: no menu / search entry, and a stray link to it is titled as Home */
+["procurement","techchange","srm","admin"].forEach(m=>{ if(NAV[m]){ const i=NAV[m].findIndex(x=>x.id==="task-centre"); if(i>=0) NAV[m].splice(i,1); } });
+{ const _nl=navLabel; navLabel=function(m,s){ return s==="task-centre"?"Home / My Tasks":_nl(m,s); }; }
+window.V8Home={build,state:ST};
+})();
+
+</script>
+<script>
 /* ===== V8 · e7_integration.js ===== */
 /* =====================================================================
    E7  ·  Integration — wires the forecasting POC into the E6 workflow
@@ -12449,9 +12775,12 @@ function homeBlock(){
   U.wire(d); return d;
 }
 ["procurement","techchange","srm","admin"].forEach(m=>{
-  const orig=SCREENS[m].home;
+  const orig=SCREENS[m]["task-centre"];   // the E6 task list (V8 replaces Home itself with v8_home.js)
   const wrapped=function(){ const w=orig(); try{ const k=w.querySelector(".grid.grid-4"); if(k) k.after(homeBlock()); }catch(e){ console.error("home forecast block",e); } return w; };
-  SCREENS[m]["task-centre"]=wrapped;   // Home itself no longer carries the forecast block (price outlook + geopolitical alerts)
+  if(window.V8Home){   // V8: there is no separate Task centre any more — its panels (price outlook, geopolitical alerts, email log) are built into Home; an old link to it lands on Home
+    window.__tcSource=window.__tcSource||wrapped;
+    SCREENS[m]["task-centre"]=function(){ return SCREENS[m].home(); };
+  } else SCREENS[m]["task-centre"]=wrapped;
 });
 
 /* ---------------------------------------------------------------- Material Cost: pointer to the all-parts forecast */
@@ -12549,6 +12878,7 @@ document.addEventListener("click",e=>{
 })();
 
 /* ---------------------------------------------------------------- boot */
+window.__bootHold=false;   // every module is loaded: draw the page now (see the hold set before the Router)
 Notif.updateBadge();
 Router.render();
 })();

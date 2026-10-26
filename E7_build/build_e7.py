@@ -222,12 +222,13 @@ s = "\n".join(lines)
 exec(compile(open(os.path.join(HERE, "patches_workflow.py"), encoding="utf-8").read(), "patches_workflow.py", "exec"))
 exec(compile(open(os.path.join(HERE, "patches_approvals.py"), encoding="utf-8").read(), "patches_approvals.py", "exec"))
 exec(compile(open(os.path.join(HERE, "patches_cbd.py"), encoding="utf-8").read(), "patches_cbd.py", "exec"))
+exec(compile(open(os.path.join(HERE, "patches_boot.py"), encoding="utf-8").read(), "patches_boot.py", "exec"))
 
 # ----------------------------------------------------------------------------- modules (screens, radar, integration) appended before boot
 E7_MODS = ["e7_screens.js", "e7_views_dash.js", "e7_views_material.js", "e7_views_analysis.js", "e7_admin.js", "e7_radar.js", "e7_chat.js", "e7_cbd_core.js", "e7_cbd.js", "e7_price.js", "e7_workflow.js", "e7_pickers.js", "e7_btn_icons.js", "e7_integration.js"]
 E7_CSS = ["e7.css", "e7_poc.css", "e7_chat.css", "e7_cbd.css", "e7_ui.css"]
-V8_MODS = ["v8_art.js", "v8_srm_data.js", "v8_srm_ops_data.js", "v8_charts.js", "v8_ftable.js", "v8_srm.js", "v8_srm_ops.js", "v8_proc.js", "v8_proc_detail.js", "v8_tc.js"]      # V8 = E7 + the SRM dashboards (inserted before e7_integration, which boots the app)
-V8_CSS = ["v8_srm.css", "v8_tc.css", "v8_proc.css", "v8_srm_ui.css", "v8_srm_parts.css", "v8_proc_dash.css", "v8_proc_detail.css", "v8_art.css", "v8_srm_ops.css", "v8_tc_dash.css"]
+V8_MODS = ["v8_art.js", "v8_srm_data.js", "v8_srm_ops_data.js", "v8_charts.js", "v8_ftable.js", "v8_srm.js", "v8_srm_ops.js", "v8_proc.js", "v8_proc_detail.js", "v8_tc.js", "v8_home.js"]      # V8 = E7 + the SRM dashboards (inserted before e7_integration, which boots the app)
+V8_CSS = ["v8_srm.css", "v8_tc.css", "v8_proc.css", "v8_srm_ui.css", "v8_srm_parts.css", "v8_proc_dash.css", "v8_proc_detail.css", "v8_art.css", "v8_srm_ops.css", "v8_tc_dash.css", "v8_home.css"]
 V9_MODS = ["v9_brand.js"]      # V9 = V8 + brand moments (photographic sign-in and Home banner); photos come from assets/ (see make_hero_images.py)
 V9_CSS = ["v9.css"]
 

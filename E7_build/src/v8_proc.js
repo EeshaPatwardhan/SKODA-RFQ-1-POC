@@ -76,17 +76,17 @@ const more=(act,label)=>`<div class="pd-more"><a href="#" data-act="${act}">${la
 const empty=t=>`<div class="mut small" style="padding:8px 2px">${t}</div>`;
 const dim=(list)=>({np:P.projCount(list)});
 
-/* 1 · Material cost by component category (vertical). The Vertical filter does not apply here — it would leave one row. */
+/* 1 · Cost per vehicle by vertical. The Vertical filter does not apply here — it would leave one row. */
 function categoryPanel(listNoCat){
   const rows=group(listNoCat,p=>p.category).sort((a,b)=>b.cur-a.cur), mx=Math.max(1,...rows.map(r=>r.cur));
   const body=rows.length?`<div class="pd-t pd-cat"><div class="h"><span>Vertical</span><span></span><span class="ra">₹ per vehicle</span><span class="ra">Share</span></div>${rows.map(r=>`<button type="button" class="r ${PF.category===r.name?"on":""}" data-act="pset:category=${esc(r.name)}" title="Filter the other panels to ${esc(r.name)}"><span class="n"><b>${esc(r.name)}</b><small class="${r.chg12>0?"bad":"good"}">12 mo ${sgn(r.chg12)}</small></span><span class="bar"><i style="width:${(r.cur/mx*100).toFixed(1)}%"></i></span><span class="v">${nf(Math.round(r.cur),0)}</span><span class="s">${r.share.toFixed(0)}%</span></button>`).join("")}</div>`:empty("No parts in this selection.");
-  return U.panel(ptitle("Material cost by component category","Cost per vehicle of the tracked parts, by vertical (piece price × quantity per vehicle). The small figure is the change in that vertical's cost over 12 months. The Vertical filter does not narrow this panel; click a row to filter the others."),body);
+  return U.panel(ptitle("Cost per vehicle by vertical","Cost per vehicle of the tracked parts, by vertical (piece price × quantity per vehicle). The small figure is the change in that vertical's cost over 12 months. The Vertical filter does not narrow this panel; click a row to filter the others."),body);
 }
-/* 2 · Top parts by material cost */
+/* 2 · Top parts by cost per vehicle */
 function topCostPanel(list){
   const np=P.projCount(list), tot=P.cost(list,p=>p.cur,np)||1, rows=list.map(p=>({p,c:p.qty*p.cur/np})).sort((a,b)=>b.c-a.c).slice(0,5), mx=Math.max(1,...rows.map(r=>r.c));
   const body=rows.length?`<div class="pd-t pd-top"><div class="h"><span>#</span><span>Part</span><span></span><span class="ra">₹ per vehicle</span><span class="ra">Share</span></div>${rows.map((r,i)=>`<div class="r" data-act="ppart:${esc(r.p.id)}" role="button" tabindex="0" title="Open part details"><span class="k">${i+1}</span><span class="n hasth">${art(r.p)}<span class="nt"><b>${esc(r.p.name)}</b><small>${esc(r.p.id)}</small></span></span><span class="bar"><i style="width:${(r.c/mx*100).toFixed(1)}%"></i></span><span class="v">${nf(Math.round(r.c),0)}</span><span class="s">${(r.c/tot*100).toFixed(1)}%</span></div>`).join("")}</div>${more("go:fc-parts","View all parts")}`:empty("No parts in this selection.");
-  return U.panel(ptitle("Top parts by material cost","The five parts that add most to the cost per vehicle: piece price × quantity fitted per vehicle. Share = part's cost ÷ cost per vehicle of the selection."),body);
+  return U.panel(ptitle("Top parts by cost per vehicle","The five parts that add most to the cost per vehicle: piece price × quantity fitted per vehicle. Share = part's cost ÷ cost per vehicle of the selection."),body);
 }
 /* 3 · Supplier spend concentration */
 function supplierPanel(list,cur){
@@ -154,12 +154,12 @@ function build(){
 }
 
 window.V8Proc={PF,DEFAULT:DEFAULT_PROJECT,pricedParts};
-/* floating "back to top" button on the Procurement dashboard pages (the page scrolls inside #content) */
+/* floating "back to top" button on the Procurement dashboard pages and Home (the page scrolls inside #content) */
 (function(){
   let b=null; const box=()=>document.getElementById("content");
   const ensure=()=>{ if(b) return b; b=document.createElement("button"); b.id="v8-top"; b.type="button"; b.title="Back to top"; b.setAttribute("aria-label","Back to top");
     b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'; b.onclick=()=>{ const c=box(); if(c) c.scrollTo({top:0,behavior:"smooth"}); }; document.body.appendChild(b); return b; };
-  const upd=()=>{ const c=box(), on=!!c&&/^proc-/.test(Router.screen||"")&&c.scrollTop>360; ensure().classList.toggle("on",on); };
+  const upd=()=>{ const c=box(), on=!!c&&/^(proc-|home$|task-centre$)/.test(Router.screen||"")&&c.scrollTop>360; ensure().classList.toggle("on",on); };
   document.addEventListener("scroll",upd,true); setInterval(upd,400);
 })();
 /* ------------------------------------------------------------ wiring */

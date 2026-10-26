@@ -1149,7 +1149,7 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 </head>
 <body>
 
-<div id="app-shell"><script>try{ if(localStorage.getItem("ais-rail")==="1") document.getElementById("app-shell").classList.add("rail"); }catch(e){}</script>
+<div id="app-shell"><script>try{ if(localStorage.getItem("ais-rail-v2")!=="0") document.getElementById("app-shell").classList.add("rail"); }catch(e){ document.getElementById("app-shell").classList.add("rail"); }</script>
 
   <!-- ===================== SIDEBAR (emerald): workspace + modules > sub-sections > screens ===================== -->
   <aside id="sidebar" aria-label="Main navigation">
@@ -1446,7 +1446,7 @@ const Shell = {
     const sh=document.getElementById("app-shell"); const on=sh.classList.toggle("rail");
     if(typeof Flyout!=="undefined") Flyout.close();
     if(typeof Tip!=="undefined") Tip.hide();
-    this.store("ais-rail",on?"1":"0");
+    this.store("ais-rail-v2",on?"1":"0");
     const b=document.getElementById("rail-toggle");
     if(b){ b.title=on?"Expand sidebar":"Collapse sidebar"; b.setAttribute("aria-label",b.title); }
   },
@@ -1455,7 +1455,7 @@ const Shell = {
     if(!t) t=(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
     this.applyTheme(t);
     Icons.observe();
-    if(this.load("ais-rail")==="1") document.getElementById("app-shell").classList.add("rail");
+    if(this.load("ais-rail-v2")!=="0") document.getElementById("app-shell").classList.add("rail");   // collapsed by default; a stored "0" means the user expanded it (older saved values are ignored)
     const mac=/Mac|iPhone|iPad/.test(navigator.platform||"");
     const k=document.getElementById("search-kbd"); if(k) k.textContent=mac?"⌘ K":"Ctrl K";
     document.addEventListener("keydown",e=>{
@@ -2833,6 +2833,8 @@ function navLabel(moduleId, screenId){
 /* ---------------------------------------------------------
    4. ROUTER
 --------------------------------------------------------- */
+window.__bootHold=true;   // nothing is drawn until every module has loaded, so the E6 Home never flashes before the real one
+document.addEventListener("DOMContentLoaded",()=>setTimeout(()=>{ if(window.__bootHold){ window.__bootHold=false; Router.render(); } },0));   // safety net
 const Router = {
   module: "procurement",
   screen: "home",
@@ -2845,6 +2847,7 @@ const Router = {
   },
   goHome(){ this.go("home", this.module); },
   render(){
+    if(window.__bootHold) return;
     // keep the top-bar module tabs in sync with the current module (highlights the active tab)
     ModuleSwitcher.render(); Nav.render();
     const el = document.getElementById("content");
@@ -9345,9 +9348,12 @@ function homeBlock(){
   U.wire(d); return d;
 }
 ["procurement","techchange","srm","admin"].forEach(m=>{
-  const orig=SCREENS[m].home;
+  const orig=SCREENS[m]["task-centre"];   // the E6 task list (V8 replaces Home itself with v8_home.js)
   const wrapped=function(){ const w=orig(); try{ const k=w.querySelector(".grid.grid-4"); if(k) k.after(homeBlock()); }catch(e){ console.error("home forecast block",e); } return w; };
-  SCREENS[m]["task-centre"]=wrapped;   // Home itself no longer carries the forecast block (price outlook + geopolitical alerts)
+  if(window.V8Home){   // V8: there is no separate Task centre any more — its panels (price outlook, geopolitical alerts, email log) are built into Home; an old link to it lands on Home
+    window.__tcSource=window.__tcSource||wrapped;
+    SCREENS[m]["task-centre"]=function(){ return SCREENS[m].home(); };
+  } else SCREENS[m]["task-centre"]=wrapped;
 });
 
 /* ---------------------------------------------------------------- Material Cost: pointer to the all-parts forecast */
@@ -9445,6 +9451,7 @@ document.addEventListener("click",e=>{
 })();
 
 /* ---------------------------------------------------------------- boot */
+window.__bootHold=false;   // every module is loaded: draw the page now (see the hold set before the Router)
 Notif.updateBadge();
 Router.render();
 })();
