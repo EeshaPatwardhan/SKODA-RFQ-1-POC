@@ -1,0 +1,24 @@
+# Dependencies / build output
+node_modules/
+dist/
+dist-ssr/
+.vercel/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Secrets (API keys, KV/Redis tokens) - never commit
+.env
+.env.*
+!.env.example
+
+# Local tooling / OS / editor
+.claude/
+.DS_Store
+Thumbs.db
+~$*
+*.log

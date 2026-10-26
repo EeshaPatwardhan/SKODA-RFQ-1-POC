@@ -1,0 +1,48 @@
+/* E7 · CBD Tree filter bar (Car / Supplier / Part) */
+.cbd-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:10px;}
+.cbd-f{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.cbd-f > span{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);}
+.cbd-f select{padding:8px 12px;border:1px solid var(--line);border-radius:10px;font-size:13px;background:var(--panel);color:var(--ink);min-width:190px;max-width:100%;}
+.cbd-f:last-of-type select{min-width:300px;}
+.cbd-ctx{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:14px;font-size:12.5px;color:var(--muted);}
+.cbd-ctx b{color:var(--ink);font-size:14px;margin-right:2px;}
+.cbd-ctx span{background:var(--raise);border:1px solid var(--line2);border-radius:20px;padding:2px 10px;}
+.cbd-ctx span.m{background:none;border:0;padding:0;color:var(--faint);}
+.cbd-row:hover td{background:var(--raise);}
+@media (max-width:640px){ .cbd-f{flex:1 1 100%;} .cbd-f select,.cbd-f:last-of-type select{min-width:0;width:100%;} }
+
+/* ===== CBD screen: hierarchy, checks, references, forms, upload ===== */
+.cbd-banner{border-left:4px solid var(--amber);margin-bottom:14px;} .cbd-banner .panel-body{display:flex;align-items:center;gap:10px;} .cbd-banner-i{font-size:18px;}
+.cbd-checks{margin-bottom:14px;} .cbd-ok{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;font-size:13px;}
+.cbd-issues{list-style:none;margin:0;padding:0;display:grid;gap:8px;} .cbd-issues li{display:flex;gap:10px;align-items:flex-start;} .cbd-issues li .chip{flex:none;margin-top:1px;} .cbd-issues b{font-size:13px;font-weight:600;color:var(--ink);} .cbd-issues small{display:block;font-size:12px;color:var(--muted);margin-top:1px;}
+.cbd-hbtn{display:flex;gap:8px;}
+.cbd-tree{table-layout:auto;} .cbd-tree th.r,.cbd-tree td.cbd-v,.cbd-tree td.cbd-s{text-align:right;} .cbd-tree td{padding:8px 10px;vertical-align:middle;}
+.cbd-tree .cbd-n{white-space:nowrap;} .cbd-tree .cbd-nm{font-weight:600;color:var(--ink);} .cbd-tree .grp .cbd-nm{font-weight:700;}
+.cbd-tree .grp td{background:var(--raise);} .cbd-tree .cbd-b{color:var(--muted);font-size:12px;} .cbd-tree .cbd-v{font-variant-numeric:tabular-nums;font-weight:650;color:var(--ink);} .cbd-tree .cbd-s{color:var(--muted);font-size:12px;width:52px;}
+.cbd-tree tr[hidden]{display:none;} .cbd-tree .cbd-a{white-space:nowrap;text-align:right;}
+.cbd-car{display:inline-grid;place-items:center;width:20px;height:20px;margin-right:4px;padding:0;border:0;background:none;color:var(--muted);cursor:pointer;vertical-align:middle;} .cbd-car svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transform:rotate(90deg);transition:transform .15s;} .cbd-car.shut svg{transform:rotate(0);} .cbd-car.sp{cursor:default;}
+.cbd-tag{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:20px;font-size:10.5px;font-weight:650;letter-spacing:.02em;vertical-align:middle;} .cbd-tag.der{background:var(--brand-soft);color:var(--brand);} .cbd-tag.man{background:var(--raise);color:var(--muted);border:1px solid var(--line2);} .cbd-tag.tot{background:color-mix(in srgb,var(--amber,#e0a030) 18%,var(--panel));color:var(--ink);} .cbd-tag.warn{background:color-mix(in srgb,var(--red) 12%,var(--panel));color:var(--red);}
+.cbd-mut{color:var(--muted);font-weight:500;} .cbd-inc{font-style:italic;color:var(--muted);}
+.cbd-tree .cbd-tot td{background:var(--brand-soft);font-weight:700;color:var(--ink);border-top:2px solid var(--brand);} .cbd-tree .cbd-tot .cbd-v{font-size:15px;} .cbd-unit{margin-left:8px;font-size:11px;font-weight:500;color:var(--muted);}
+.cbd-roll{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;padding:12px 16px 14px;} .cbd-roll > div{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border:1px solid var(--line2);border-radius:10px;background:var(--raise);} .cbd-roll span{font-size:11.5px;color:var(--muted);} .cbd-roll b{font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums;} .cbd-roll .tot{background:var(--brand-soft);border-color:color-mix(in srgb,var(--brand) 30%,var(--line));} .cbd-roll .tot b{color:var(--brand);}
+.cbd-side{display:flex;flex-direction:column;gap:16px;min-width:0;} .cbd-grid > *{min-width:0;}
+.cbd-kv{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line2);font-size:13px;} .cbd-kv > span:first-child{flex:1;color:var(--muted);} .cbd-kv b{color:var(--ink);text-align:right;} .cbd-kv .cbd-tag{margin-left:0;}
+.cbd-wt{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0;} .cbd-wt th{padding:5px 6px;text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);} .cbd-wt td{padding:6px;border-bottom:1px solid var(--line2);font-variant-numeric:tabular-nums;} .cbd-wt .r{text-align:right;}
+.cbd-note{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.4;}
+.cbd-cmp td,.cbd-cmp th{padding:8px 12px;} .cbd-cmp .r{text-align:right;font-variant-numeric:tabular-nums;} .cbd-cmp td small{display:block;font-size:11px;color:var(--muted);} .cbd-cmp .bad{color:var(--red);font-weight:650;} .cbd-cmp .good{color:var(--ok);font-weight:650;} .cbd-cmp .cbd-calc td{background:var(--brand-soft);}
+.cbd-err{color:var(--red);font-size:12.5px;font-weight:600;min-height:18px;margin-top:6px;}
+.cbd-pair{display:grid;grid-template-columns:90px 1fr 1fr;gap:8px;align-items:end;margin-bottom:4px;} .cbd-pair > span{font-size:12.5px;font-weight:600;color:var(--ink);padding-bottom:10px;} .cbd-pair .form-row{margin:0;}
+.fc-modal.cbd-up{width:min(820px,100%);} .cbd-up-b{padding:0 22px;overflow:auto;display:grid;gap:12px;align-content:start;} .cbd-up-f{display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid var(--line2);}
+.cbd-up-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;} .cbd-up-row label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted);flex:1;} .cbd-up-row select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;font-size:13px;background:var(--panel);color:var(--ink);}
+.cbd-up-cols{font-size:12px;color:var(--muted);background:var(--raise);border-radius:10px;padding:8px 12px;line-height:1.45;}
+.cbd-up-ta{width:100%;min-height:120px;font-family:ui-monospace,Consolas,monospace;font-size:12px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);resize:vertical;}
+.cbd-up-h{font-weight:700;font-size:13px;margin-bottom:6px;} .cbd-up-h.bad{color:var(--red);} .cbd-up-h.ok{color:var(--ok);} .cbd-up-t .r{text-align:right;} .cbd-up-res{display:grid;gap:10px;}
+@media (max-width:640px){ .cbd-pair{grid-template-columns:1fr 1fr;} .cbd-pair > span{grid-column:1 / -1;padding-bottom:0;} .cbd-tree .cbd-b{display:none;} .cbd-tree th:nth-child(2){display:none;} }
+
+/* CBD KPI row: compact, label and icon on one line, value and its note on the next */
+.cbd-kpis{gap:12px;}
+.cbd-kpis .kpi-card{padding:12px 16px;}
+.cbd-kpis .kpi-card .kpi-label{font-size:12px;margin-bottom:6px;align-items:center;}
+.cbd-kpis .kpi-card .kpi-icon{width:28px;height:28px;border-radius:8px;font-size:14px;} .cbd-kpis .kpi-card .kpi-icon .ico{width:16px;height:16px;}
+.cbd-kpis .kpi-card .kpi-value{font-size:22px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+.cbd-kp-s{font-size:12px;font-weight:650;letter-spacing:0;} .cbd-kp-s.good{color:var(--ok);} .cbd-kp-s.bad{color:var(--red);}

@@ -1,0 +1,32 @@
+/* E7 / V8 · button icons */
+.btn.has-bi{display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+.btn .bi{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.btn.btn-sm .bi{width:13px;height:13px;}
+.btn.has-bi[disabled] .bi{opacity:.6;}
+
+/* Price History chart */
+.ph-wrap{display:block;} .ph-chart{display:block;width:100%;height:auto;overflow:visible;}
+.ph-hv{fill:transparent;} .ph-hv:hover{fill:color-mix(in srgb,var(--brand) 9%,transparent);}
+.ph-leg{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 0 6px;font-size:12px;color:var(--muted);}
+.ph-leg span{display:inline-flex;align-items:center;gap:7px;} .ph-leg i{display:inline-block;width:20px;height:0;border-top:3px solid;border-radius:2px;}
+.ph-leg .l1{border-color:var(--muted);height:0;border-top-width:2px;} .ph-leg .l2{border-color:var(--brand);} .ph-leg .l3{border-color:var(--ok);border-top-style:dashed;border-top-width:2px;} .ph-leg .l4{border-color:var(--c-amber);border-top-style:dashed;border-top-width:2px;}
+.ph-leg .l5{height:10px;border:0;border-radius:3px;background:color-mix(in srgb,var(--red) 22%,transparent);}
+
+/* KPI cards that are links: no hover caption ("View ...") in the corner */
+.kpi-card.kpi-link::after{content:none !important;display:none !important;}
+
+/* collapsed sidebar: slimmer rail, less padding around the icons; the flyout always fits the screen and scrolls */
+:root{--rail-w:60px;}
+@media (min-width:961px){
+  #app-shell.rail #sidebar .nav-item,#app-shell.rail #sidebar .mod-h{width:42px;height:42px;margin:3px 0;border-radius:12px;}
+  #app-shell.rail #sidebar .nav-grp-label{width:26px;}
+  #app-shell.rail #sidebar .sb-notif,#app-shell.rail #sidebar .um{width:42px;}
+  #app-shell.rail #sidebar .nav-item.active::before{left:-9px;}
+  #app-shell.rail #sidebar .cntb,#app-shell.rail #sidebar .sb-notif .badge{top:1px;right:0;}
+  .fly{left:calc(var(--rail-w) + 8px);}
+}
+.fly-body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;}
+
+
+/* "Viewing as" menu: never taller than the window, so it scrolls inside the pop-up instead of adding a scrollbar to the page */
+#role-pop{max-height:calc(100vh - var(--topbar-h,64px) - 28px);overflow-y:auto;overscroll-behavior:contain;}

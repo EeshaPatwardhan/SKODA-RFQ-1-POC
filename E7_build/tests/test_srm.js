@@ -1,0 +1,22 @@
+// Calibration + invariants for the SRM data model (v8_srm_data.js)
+const fs=require("fs"), vm=require("vm");
+globalThis.__POC__=JSON.parse(fs.readFileSync(__dirname+"/../poc_data.json","utf8"));
+vm.runInThisContext(fs.readFileSync(__dirname+"/../src/poc_core.js","utf8")+"\n;globalThis.PocCore=PocCore;");
+const S=require("../src/v8_srm_data.js"), P=PocCore;
+const SOP={TGN:"2027-03-01",KUS:"2027-06-15",KDQ:"2027-09-01",KYL:"2028-01-10",SLV:"2027-11-20",VRT:"2028-03-05"};
+const model=S.build({today:"2026-07-29",parts:P.PARTS,vendors:P.VENDS,programmes:P.PROGS.map(p=>({code:p.code,name:p.name,sop:SOP[p.code]}))});
+let fail=0; const ok=(c,m)=>{ if(!c){fail++; console.log("FAIL",m);} else console.log("ok  ",m); };
+const ev=S.evaluate(model), sm=S.summary(ev);
+console.log("parts",sm.n,"started",sm.started,"counts",JSON.stringify(sm.counts),"readiness",sm.readiness.toFixed(1),"tool",sm.toolN,sm.toolReadiness.toFixed(1),JSON.stringify(sm.toolCounts));
+P.PROGS.forEach(p=>{ const s=S.summary(ev.filter(e=>e.pt.prog===p.code)); console.log(p.code,"n",s.n,"started",s.started,JSON.stringify(s.counts),"rd",s.readiness==null?"-":s.readiness.toFixed(0)); });
+const st=S.STAGES.map((s,i)=>S.STAGES[i].label+" "+ev.filter(e=>e.stage>=i).length); console.log("funnel",st.join(" | "));
+S.FAMILIES.forEach(f=>{ const s=S.summary(ev.filter(e=>e.pt.family===f)); console.log(f,s.n,JSON.stringify(s.counts)); });
+const vs=Object.keys(model.vend).map(v=>{ const s=S.summary(ev.filter(e=>e.pt.vendor===v)); return [v,s.n,s.readiness==null?null:+s.readiness.toFixed(0),JSON.stringify(s.counts),model.vend[v].delivery,model.vend[v].quality]; }).sort((a,b)=>b[2]-a[2]);
+console.log(vs.map(x=>x.join(" ")).join("\n"));
+const ev7=S.evaluate(model,model.today-7*S.DAY), s7=S.summary(ev7); console.log("readiness 7d ago",s7.readiness.toFixed(1),"started",s7.started);
+ok(sm.n===480,"480 parts"); ok(sm.counts.ok+sm.counts.risk+sm.counts.delayed+sm.counts.notstarted===480,"statuses partition parts");
+ok(sm.counts.ok/sm.started>.5&&sm.counts.ok/sm.started<.8,"on-track share of started parts is plausible: "+(sm.counts.ok/sm.started*100).toFixed(0)+"%");
+ok(sm.counts.delayed/sm.started<.25,"delayed share plausible: "+(sm.counts.delayed/sm.started*100).toFixed(0)+"%");
+ok(sm.readiness>60&&sm.readiness<95,"readiness in range");
+ok(ev.every(e=>e.stage<=5),"stage index bounded");
+process.exit(fail?1:0);

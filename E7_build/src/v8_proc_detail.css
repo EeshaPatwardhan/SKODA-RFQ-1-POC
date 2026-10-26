@@ -1,0 +1,48 @@
+/* V8 · Procurement drill-downs — Part Details, Supplier Details, Price Analysis (reuses the .pd-* dashboard styles) */
+.pd-meta .btn{margin-left:4px;}
+.pd-seg{cursor:pointer;transition:opacity .15s;} .pd-seg:hover{opacity:.8;}
+.pd-kpis.k6{grid-template-columns:repeat(6,minmax(0,1fr));}
+@container (max-width:1240px){ .pd-kpis.k6{grid-template-columns:repeat(3,minmax(0,1fr));} }
+@container (max-width:900px){ .pd-kpis.k6{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@container (max-width:620px){ .pd-kpis.k6,.pd-kpis{grid-template-columns:minmax(0,1fr);} }
+.pd-kpi .sb{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+/* rows of panels */
+.pd-gw{container-type:inline-size;margin-bottom:16px;}
+.pd-row{display:grid;gap:16px;grid-template-columns:minmax(0,1fr);}
+.pd-row > .panel{min-width:0;margin:0 !important;display:flex;flex-direction:column;} .pd-row > .panel > .panel-body{flex:1;display:flex;flex-direction:column;}
+.pd-row .panel-header h3{font-size:15px;}
+@container (min-width:900px){
+  .pd-row.c21{grid-template-columns:minmax(0,2fr) minmax(0,1fr);} .pd-row.c12{grid-template-columns:minmax(0,1fr) minmax(0,2fr);} .pd-row.c21r{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);}
+  .pd-row.c3{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+@container (min-width:620px) and (max-width:899px){ .pd-row.c3{grid-template-columns:repeat(2,minmax(0,1fr));} }
+.pd-tscroll{overflow-x:auto;} .pd-tscroll .mtable td,.pd-tscroll .mtable th{padding:9px 10px;font-size:12.5px;} .pd-tscroll td.r{text-align:right;font-variant-numeric:tabular-nums;} .pd-tscroll td.bad{color:var(--red);font-weight:700;} .pd-tscroll td.good{color:var(--ok);font-weight:700;}
+.pd-empty{padding:14px 6px;color:var(--muted);font-size:13px;text-align:center;}
+
+/* header card */
+.pd-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin-bottom:16px;}
+.pd-head{display:flex;flex-wrap:wrap;gap:14px 36px;align-items:center;justify-content:space-between;}
+.pd-head .nm{font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.2;}
+.pd-head .tg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;} .pd-head .tg span{font-size:12px;padding:3px 10px;border-radius:20px;background:var(--raise);border:1px solid var(--line2);color:var(--text);} .pd-head .tg .mono{font-variant-numeric:tabular-nums;color:var(--muted);}
+.pd-head .meta{margin:0;display:flex;flex-wrap:wrap;gap:12px 28px;} .pd-head .meta dt{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;} .pd-head .meta dd{margin:0;font-size:13.5px;color:var(--ink);font-weight:600;}
+
+/* definition list (supplier information) */
+.pd-dl{margin:0;display:grid;gap:0;} .pd-dl > div{display:grid;grid-template-columns:130px minmax(0,1fr);gap:12px;padding:9px 2px;border-bottom:1px solid var(--line2);align-items:center;} .pd-dl > div:last-child{border-bottom:0;}
+.pd-dl dt{font-size:12px;color:var(--muted);} .pd-dl dd{margin:0;font-size:13px;color:var(--ink);line-height:1.4;}
+.pd-notes{margin:0;padding-left:18px;display:grid;gap:8px;font-size:13px;color:var(--text);line-height:1.5;} .pd-notes b{color:var(--ink);}
+.pd-conc2 .lg .o{grid-template-columns:10px minmax(0,1fr) auto;} .pd-conc2 .lg .o small{color:var(--muted);font-size:11px;margin-left:4px;}
+
+/* price analysis */
+.pd-psel{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:12.5px;color:var(--muted);} .pd-psel label{display:inline-flex;align-items:center;gap:8px;} .pd-psel select{border:1px solid var(--line);border-radius:9px;padding:6px 10px;background:var(--panel);color:var(--ink);font-size:12.5px;max-width:360px;}
+.pd-psel a{display:inline-flex;align-items:center;gap:6px;color:var(--brand);font-weight:650;} .pd-psel svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+.pd-hist{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;align-items:end;height:190px;margin-bottom:8px;} .pd-hist .c{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;min-width:0;}
+.pd-hist .c b{font-size:12.5px;color:var(--ink);} .pd-hist .bar{display:block;width:70%;min-height:3px;border-radius:5px 5px 0 0;background:var(--info);} .pd-hist .bar.bad{background:var(--red);} .pd-hist .bar.good{background:var(--ok);} .pd-hist em{font-style:normal;font-size:10.5px;color:var(--muted);white-space:nowrap;}
+.pd-vb .h,.pd-vb .r{grid-template-columns:minmax(80px,1.2fr) minmax(40px,1fr) 54px 62px;} .pd-vb .bar i{background:linear-gradient(90deg,color-mix(in srgb,var(--red) 40%,var(--panel)),var(--red));} .pd-vb .bar i.neg{background:var(--ok);}
+.pd-vb .r[data-act]{cursor:pointer;}
+.pd-pa{min-width:700px;} .pd-pa .h,.pd-pa .r{grid-template-columns:20px minmax(190px,1.8fr) minmax(80px,1fr) 90px 90px 70px 100px;} .pd-pa .s{color:var(--text);font-weight:500;}
+.pd-t .r[data-act]{cursor:pointer;}
+.pd-fbar .pd-f select{cursor:pointer;}
+
+.pd-kpi .lb.wrap{white-space:normal;line-height:1.2;}
+.pd-pa .r .s{text-align:left;}

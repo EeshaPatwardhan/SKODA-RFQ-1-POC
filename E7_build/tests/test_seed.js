@@ -1,0 +1,16 @@
+const fs=require("fs"), vm=require("vm");
+globalThis.__POC__=JSON.parse(fs.readFileSync(__dirname+"/../poc_data.json","utf8"));
+vm.runInThisContext(fs.readFileSync(__dirname+"/../src/poc_core.js","utf8")+"\n;globalThis.PocCore=PocCore;");
+vm.runInThisContext(fs.readFileSync(__dirname+"/../src/e7_seed.js","utf8")+"\n;globalThis.PocSeed=PocSeed;");
+const S=PocSeed;
+console.log(S.projects().map(p=>p.code+":"+p.brand).join(" "));
+const su=S.suppliers(); console.log(su.length, su.slice(0,3).map(s=>s.name+"|"+s.duns+"|"+s.riskRating+"|"+s.commodity).join("  "), "risk:",su.map(s=>s.riskRating[0]).join(""));
+const pa=S.parts(); console.log(pa.length, pa.slice(0,4).map(p=>p.number+" "+p.designation+" "+p.type+" "+p.commodity+" "+p.status).join(" | "));
+const types={}; pa.forEach(p=>types[p.type]=(types[p.type]||0)+1); console.log(types);
+const c=S.commodities(); console.log(c.map(x=>x.code+" "+x.history.map(h=>h.value).join("/")).join("\n"));
+console.log(S.fx().map(f=>f.currency+" "+f.history.map(h=>h.value).join("/")).join("\n"));
+console.log(S.eklTargets().map(e=>e.part+" "+e.history.map(h=>h.value)).join(" ; "));
+S.HEROES.slice(0,8).forEach((p,i)=>{ const sp=S.cbdSpec(p,i); const steel=S.kgInr(PocCore.macro.steel[35],35), alu=S.kgInr(PocCore.macro.aluminium[35],35), cu=S.kgInr(PocCore.macro.copper[35],35);
+ const raw=sp.weights.steel.net*steel+sp.weights.aluminium.net*alu+sp.weights.copper.net*cu; const imp=sp.importContent.value*sp.importContent.fxRate;
+ console.log(p.name.padEnd(24),"cur",Math.round(p.cur),"kg",p.kg,"raw",Math.round(raw),"imp",Math.round(imp),"rest",Math.round(p.cur-raw-imp), "amort",sp.dd.amortPerCar); });
+console.log(S.priceVersions(S.HEROES[0]));

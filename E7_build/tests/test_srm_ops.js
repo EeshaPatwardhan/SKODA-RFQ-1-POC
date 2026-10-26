@@ -1,0 +1,20 @@
+// Calibration + invariants for SrmData.ops (v8_srm_ops_data.js)
+const fs=require("fs"), vm=require("vm");
+globalThis.__POC__=JSON.parse(fs.readFileSync(__dirname+"/../poc_data.json","utf8"));
+vm.runInThisContext(fs.readFileSync(__dirname+"/../src/poc_core.js","utf8")+"\n;globalThis.PocCore=PocCore;");
+const S=require("../src/v8_srm_data.js"), O=require("../src/v8_srm_ops_data.js"), P=PocCore;
+const SOP={TGN:"2027-03-01",KUS:"2027-06-15",KDQ:"2027-09-01",KYL:"2028-01-10",SLV:"2027-11-20",VRT:"2028-03-05"};
+const m=S.build({today:"2026-07-29",parts:P.PARTS,vendors:P.VENDS,programmes:P.PROGS.map(p=>({code:p.code,name:p.name,sop:SOP[p.code]}))});
+const ev=S.evaluate(m); let fail=0; const ok=(c,t)=>{ if(!c){fail++; console.log("FAIL",t);} else console.log("ok  ",t); };
+const ppl=ev.map(e=>O.people(m,e)); const gaps=ppl.filter(p=>O.missing(p).length).length;
+console.log("parts with a missing assignment",gaps,"of",ppl.length);
+const tools=ev.flatMap(e=>O.toolRecords(m,e)); const tc={}; tools.forEach(t=>{ tc[t.st]=(tc[t.st]||0)+1; });
+console.log("tools",tools.length,JSON.stringify(tc),"capex L",Math.round(tools.reduce((s,t)=>s+t.capexL,0)),"spent L",Math.round(tools.reduce((s,t)=>s+t.spentL,0)));
+const am=O.amendments(m,ev); const ac={}; am.forEach(a=>{ ac[a.status]=(ac[a.status]||0)+1; }); console.log("amendments",am.length,JSON.stringify(ac));
+const rg=ev.map(e=>O.ryg(m,e)).filter(Boolean); const oc={G:0,Y:0,R:0}; rg.forEach(r=>oc[r.overall]++); console.log("ryg overall",JSON.stringify(oc),"avg score",(rg.reduce((s,r)=>s+r.score,0)/rg.length).toFixed(0));
+O.DIMS.forEach((d,i)=>{ const c={G:0,Y:0,R:0}; rg.forEach(r=>c[r.dims[i].c]++); console.log(" ",d.label,JSON.stringify(c)); });
+const al=O.alerts(m,ev); const lc={}; al.forEach(a=>{ lc[a.level]=(lc[a.level]||0)+1; }); const ec={}; al.forEach(a=>{ ec[a.esc||"none"]=(ec[a.esc||"none"]||0)+1; }); console.log("alerts",al.length,JSON.stringify(lc),JSON.stringify(ec));
+ok(tools.length>200,"tools exist"); ok(am.every(a=>a.oldT<=a.newT),"amendments: old date not after new date");
+ok(oc.G>0&&oc.Y>0&&oc.R>0,"all three RYG states occur"); ok(oc.R/rg.length<.6,"red share plausible "+(oc.R/rg.length*100).toFixed(0)+"%");
+ok(al.length>20&&al.length<400,"alert volume plausible "+al.length); ok(tools.every(t=>t.pct>=0&&t.pct<=100),"tool % in range");
+process.exit(fail?1:0);

@@ -1,0 +1,882 @@
+{
+  "asOf": "2026-10-22T13:24:31+00:00",
+  "selected": [
+    "fx_usdinr_ret_lag3",
+    "month_sin",
+    "fx_usdinr_ret_lag4",
+    "fx_usdinr_ret_3m",
+    "cmd_matched_ret_lag2",
+    "cmd_aluminium_ret_lag3_x_mat",
+    "fx_eurinr_ret_lag2",
+    "fx_eurinr_ret_1m",
+    "fx_eurinr_ret_3m",
+    "month_cos",
+    "chokepoint_lag0",
+    "material",
+    "geo_event_chokepoint_x_import",
+    "cmd_matched_ret_lag2_x_mat",
+    "hier_category_logprice",
+    "category_code",
+    "geo_event_conflict_decay",
+    "fx_eurinr_ret_lag3",
+    "macro_mom_pct",
+    "macro_yoy_pct",
+    "cmd_steel_ret_lag3_x_mat",
+    "price_vs_expanding_mean",
+    "fx_usdinr_ret_lag3_x_import",
+    "fx_usdinr_ret_lag4_x_import",
+    "cmd_steel_ret_lag2_x_mat",
+    "fx_eurinr_ret_lag4",
+    "fx_eurinr_ret_lag4_x_import",
+    "material_intensity",
+    "freight_ret_lag3_x_import",
+    "fx_usdinr_ret_lag2",
+    "fx_eurinr_ret_lag3_x_import",
+    "fx_usdinr_ret_lag2_x_import",
+    "fx_usdinr_ret_lag2_x_content",
+    "fx_eurinr_ret_lag1_x_import",
+    "fx_usdinr_ret_1m",
+    "fx_eurinr_ret_lag2_x_import",
+    "fx_usdinr_ret_lag1_x_import",
+    "freight_ret_lag2_x_import",
+    "price_yoy_pct",
+    "price_lag_12",
+    "price_mom_pct",
+    "fx_usdinr_ret_lag1_x_content",
+    "hier_project_category_logprice",
+    "fx_usdinr_ret_lag4_x_content",
+    "hier_vendor_logprice",
+    "freight_ret_1m",
+    "price_lag_6",
+    "fx_eurinr_ret_lag3_x_content",
+    "fx_eurinr_ret_lag2_x_content",
+    "price_roll_std_3",
+    "fx_eurinr_ret_lag1_x_content",
+    "fx_usdinr_ret_lag1",
+    "fx_usdinr_ret_lag3_x_content",
+    "fx_eurinr_ret_lag4_x_content",
+    "price_lag_3",
+    "hier_project_vendor_logprice",
+    "price_roll_std_6",
+    "oem",
+    "hier_part_vs_category",
+    "fx_eurinr_ret_lag1",
+    "hier_part_vs_vendor",
+    "price_lag_2",
+    "price_lag_1",
+    "weight_kg",
+    "hier_project_logprice",
+    "annual_part_volume",
+    "complexity_tier",
+    "segment"
+  ],
+  "rejected": [
+    "project_code",
+    "project_volume",
+    "project_localisation",
+    "vendor_code",
+    "vendor_origin",
+    "vendor_import_dependency",
+    "vendor_reprice_months",
+    "cmd_steel_ret_1m",
+    "cmd_aluminium_ret_lag2_x_mat",
+    "cmd_copper_ret_lag2_x_mat",
+    "cmd_copper_ret_lag3_x_mat",
+    "cmd_energy_ret_lag2_x_mat",
+    "cmd_energy_ret_lag3_x_mat",
+    "gpr_z_lag0",
+    "gpr_z_lag0_x_import",
+    "gpr_z_lag1",
+    "chokepoint_lag0_x_import",
+    "chokepoint_lag1_x_import",
+    "geo_event_tariff",
+    "geo_event_tariff_decay",
+    "geo_event_chokepoint",
+    "geo_event_chokepoint_decay",
+    "geo_event_any",
+    "geo_event_conflict_decay_x_import",
+    "geo_event_tariff_x_import",
+    "geo_event_tariff_decay_x_import",
+    "geo_event_chokepoint_decay_x_import"
+  ],
+  "scores": {
+    "project_code": {
+      "gain": 0.004054,
+      "rank": 86,
+      "group": "project",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "oem": {
+      "gain": 0.004649,
+      "rank": 77,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "segment": {
+      "gain": 0.003875,
+      "rank": 89,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "project_volume": {
+      "gain": 0.003703,
+      "rank": 90,
+      "group": "project",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "project_localisation": {
+      "gain": 0.002036,
+      "rank": 91,
+      "group": "project",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "vendor_code": {
+      "gain": 0.008466,
+      "rank": 41,
+      "group": "vendor_exposure",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "vendor_origin": {
+      "gain": 0.0,
+      "rank": 92,
+      "group": "vendor_exposure",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "vendor_import_dependency": {
+      "gain": 0.004885,
+      "rank": 71,
+      "group": "vendor_exposure",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "vendor_reprice_months": {
+      "gain": 0.005289,
+      "rank": 65,
+      "group": "vendor_exposure",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "category_code": {
+      "gain": 0.018607,
+      "rank": 16,
+      "group": "category",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "material": {
+      "gain": 0.021093,
+      "rank": 12,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "complexity_tier": {
+      "gain": 0.003877,
+      "rank": 88,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "annual_part_volume": {
+      "gain": 0.004155,
+      "rank": 85,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "weight_kg": {
+      "gain": 0.004383,
+      "rank": 83,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "price_lag_1": {
+      "gain": 0.004402,
+      "rank": 82,
+      "group": "price_lags",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "price_lag_2": {
+      "gain": 0.004403,
+      "rank": 81,
+      "group": "price_lags",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "price_lag_3": {
+      "gain": 0.004775,
+      "rank": 74,
+      "group": "price_lags",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "price_lag_6": {
+      "gain": 0.005354,
+      "rank": 64,
+      "group": "price_lags",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "price_lag_12": {
+      "gain": 0.006115,
+      "rank": 57,
+      "group": "price_lags",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "price_roll_std_3": {
+      "gain": 0.005147,
+      "rank": 68,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "price_roll_std_6": {
+      "gain": 0.004662,
+      "rank": 76,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "price_mom_pct": {
+      "gain": 0.005979,
+      "rank": 58,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "price_yoy_pct": {
+      "gain": 0.006678,
+      "rank": 54,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "price_vs_expanding_mean": {
+      "gain": 0.01484,
+      "rank": 22,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "month_sin": {
+      "gain": 0.036849,
+      "rank": 2,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "month_cos": {
+      "gain": 0.023421,
+      "rank": 10,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "macro_mom_pct": {
+      "gain": 0.016509,
+      "rank": 19,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "macro_yoy_pct": {
+      "gain": 0.015372,
+      "rank": 20,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "fx_eurinr_ret_1m": {
+      "gain": 0.024362,
+      "rank": 8,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_3m": {
+      "gain": 0.023723,
+      "rank": 9,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag1": {
+      "gain": 0.004562,
+      "rank": 79,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag1_x_import": {
+      "gain": 0.007431,
+      "rank": 47,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag1_x_content": {
+      "gain": 0.004933,
+      "rank": 69,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag2": {
+      "gain": 0.026158,
+      "rank": 7,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag2_x_import": {
+      "gain": 0.007278,
+      "rank": 49,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag2_x_content": {
+      "gain": 0.005184,
+      "rank": 67,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag3": {
+      "gain": 0.016698,
+      "rank": 18,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag3_x_import": {
+      "gain": 0.007803,
+      "rank": 44,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag3_x_content": {
+      "gain": 0.00523,
+      "rank": 66,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag4": {
+      "gain": 0.012471,
+      "rank": 28,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag4_x_import": {
+      "gain": 0.011853,
+      "rank": 30,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_eurinr_ret_lag4_x_content": {
+      "gain": 0.0048,
+      "rank": 73,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_1m": {
+      "gain": 0.00732,
+      "rank": 48,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_3m": {
+      "gain": 0.029229,
+      "rank": 4,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag1": {
+      "gain": 0.004928,
+      "rank": 70,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag1_x_import": {
+      "gain": 0.006907,
+      "rank": 52,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag1_x_content": {
+      "gain": 0.005847,
+      "rank": 59,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag2": {
+      "gain": 0.007953,
+      "rank": 43,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag2_x_import": {
+      "gain": 0.007466,
+      "rank": 45,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag2_x_content": {
+      "gain": 0.007453,
+      "rank": 46,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag3": {
+      "gain": 0.040394,
+      "rank": 1,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag3_x_import": {
+      "gain": 0.014057,
+      "rank": 23,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag3_x_content": {
+      "gain": 0.004831,
+      "rank": 72,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag4": {
+      "gain": 0.033217,
+      "rank": 3,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag4_x_import": {
+      "gain": 0.013858,
+      "rank": 24,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "fx_usdinr_ret_lag4_x_content": {
+      "gain": 0.005777,
+      "rank": 61,
+      "group": "fx",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "material_intensity": {
+      "gain": 0.00892,
+      "rank": 39,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "cmd_steel_ret_1m": {
+      "gain": 0.006544,
+      "rank": 56,
+      "group": "commodities",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "cmd_steel_ret_lag2_x_mat": {
+      "gain": 0.013412,
+      "rank": 25,
+      "group": "commodities",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "cmd_steel_ret_lag3_x_mat": {
+      "gain": 0.014988,
+      "rank": 21,
+      "group": "commodities",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "cmd_aluminium_ret_lag2_x_mat": {
+      "gain": 0.011414,
+      "rank": 32,
+      "group": "commodities",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "cmd_aluminium_ret_lag3_x_mat": {
+      "gain": 0.027487,
+      "rank": 6,
+      "group": "commodities",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "cmd_copper_ret_lag2_x_mat": {
+      "gain": 0.01328,
+      "rank": 27,
+      "group": "commodities",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "cmd_copper_ret_lag3_x_mat": {
+      "gain": 0.010774,
+      "rank": 34,
+      "group": "commodities",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "cmd_energy_ret_lag2_x_mat": {
+      "gain": 0.011467,
+      "rank": 31,
+      "group": "commodities",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "cmd_energy_ret_lag3_x_mat": {
+      "gain": 0.008158,
+      "rank": 42,
+      "group": "commodities",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "cmd_matched_ret_lag2": {
+      "gain": 0.028221,
+      "rank": 5,
+      "group": "cmd_matched",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "cmd_matched_ret_lag2_x_mat": {
+      "gain": 0.020475,
+      "rank": 14,
+      "group": "cmd_matched",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "freight_ret_1m": {
+      "gain": 0.005419,
+      "rank": 63,
+      "group": "freight",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "freight_ret_lag2_x_import": {
+      "gain": 0.006881,
+      "rank": 53,
+      "group": "freight",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "freight_ret_lag3_x_import": {
+      "gain": 0.008467,
+      "rank": 40,
+      "group": "freight",
+      "alwaysKeep": true,
+      "selected": true
+    },
+    "gpr_z_lag0": {
+      "gain": 0.007169,
+      "rank": 50,
+      "group": "gpr",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "gpr_z_lag0_x_import": {
+      "gain": 0.010229,
+      "rank": 36,
+      "group": "gpr",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "gpr_z_lag1": {
+      "gain": 0.006966,
+      "rank": 51,
+      "group": "gpr",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "chokepoint_lag0": {
+      "gain": 0.021418,
+      "rank": 11,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "chokepoint_lag0_x_import": {
+      "gain": 0.00659,
+      "rank": 55,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "chokepoint_lag1_x_import": {
+      "gain": 0.012391,
+      "rank": 29,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "geo_event_conflict_decay": {
+      "gain": 0.016889,
+      "rank": 17,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "geo_event_tariff": {
+      "gain": 0.0,
+      "rank": 93,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "geo_event_tariff_decay": {
+      "gain": 0.013295,
+      "rank": 26,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "geo_event_chokepoint": {
+      "gain": 0.0,
+      "rank": 94,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "geo_event_chokepoint_decay": {
+      "gain": 0.009797,
+      "rank": 37,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "geo_event_any": {
+      "gain": 0.0,
+      "rank": 95,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "geo_event_conflict_decay_x_import": {
+      "gain": 0.010342,
+      "rank": 35,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "geo_event_tariff_x_import": {
+      "gain": 0.011316,
+      "rank": 33,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "geo_event_tariff_decay_x_import": {
+      "gain": 0.009048,
+      "rank": 38,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "geo_event_chokepoint_x_import": {
+      "gain": 0.020581,
+      "rank": 13,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "geo_event_chokepoint_decay_x_import": {
+      "gain": 0.003972,
+      "rank": 87,
+      "group": "geo_events",
+      "alwaysKeep": false,
+      "selected": false
+    },
+    "hier_project_logprice": {
+      "gain": 0.004306,
+      "rank": 84,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "hier_vendor_logprice": {
+      "gain": 0.005731,
+      "rank": 62,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "hier_category_logprice": {
+      "gain": 0.019122,
+      "rank": 15,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "hier_project_category_logprice": {
+      "gain": 0.005829,
+      "rank": 60,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "hier_project_vendor_logprice": {
+      "gain": 0.004684,
+      "rank": 75,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "hier_part_vs_category": {
+      "gain": 0.004564,
+      "rank": 78,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    },
+    "hier_part_vs_vendor": {
+      "gain": 0.004555,
+      "rank": 80,
+      "group": "other",
+      "alwaysKeep": false,
+      "selected": true
+    }
+  },
+  "groups": {
+    "project": {
+      "kept": false,
+      "reason": "below_threshold",
+      "ablationLiftPct": -0.0481,
+      "nFeatures": 3
+    },
+    "other": {
+      "kept": true,
+      "reason": "ablation",
+      "ablationLiftPct": 0.1285,
+      "nFeatures": 23
+    },
+    "vendor_exposure": {
+      "kept": false,
+      "reason": "below_threshold",
+      "ablationLiftPct": -0.0677,
+      "nFeatures": 4
+    },
+    "category": {
+      "kept": true,
+      "reason": "already_selected",
+      "ablationLiftPct": null,
+      "nFeatures": 1
+    },
+    "price_lags": {
+      "kept": true,
+      "reason": "already_selected",
+      "ablationLiftPct": null,
+      "nFeatures": 5
+    },
+    "fx": {
+      "kept": true,
+      "reason": "already_selected",
+      "ablationLiftPct": null,
+      "nFeatures": 28
+    },
+    "commodities": {
+      "kept": false,
+      "reason": "below_threshold",
+      "ablationLiftPct": -0.0804,
+      "nFeatures": 9
+    },
+    "cmd_matched": {
+      "kept": true,
+      "reason": "already_selected",
+      "ablationLiftPct": null,
+      "nFeatures": 2
+    },
+    "freight": {
+      "kept": true,
+      "reason": "already_selected",
+      "ablationLiftPct": null,
+      "nFeatures": 3
+    },
+    "gpr": {
+      "kept": false,
+      "reason": "below_threshold",
+      "ablationLiftPct": -0.0474,
+      "nFeatures": 3
+    },
+    "geo_events": {
+      "kept": false,
+      "reason": "below_threshold",
+      "ablationLiftPct": -0.0754,
+      "nFeatures": 14
+    }
+  },
+  "alwaysKept": [
+    "price_lag_1",
+    "price_lag_2",
+    "price_lag_3",
+    "price_lag_6",
+    "price_lag_12",
+    "fx_eurinr_ret_1m",
+    "fx_eurinr_ret_3m",
+    "fx_eurinr_ret_lag1",
+    "fx_eurinr_ret_lag1_x_import",
+    "fx_eurinr_ret_lag1_x_content",
+    "fx_eurinr_ret_lag2",
+    "fx_eurinr_ret_lag2_x_import",
+    "fx_eurinr_ret_lag2_x_content",
+    "fx_eurinr_ret_lag3",
+    "fx_eurinr_ret_lag3_x_import",
+    "fx_eurinr_ret_lag3_x_content",
+    "fx_eurinr_ret_lag4",
+    "fx_eurinr_ret_lag4_x_import",
+    "fx_eurinr_ret_lag4_x_content",
+    "fx_usdinr_ret_1m",
+    "fx_usdinr_ret_3m",
+    "fx_usdinr_ret_lag1",
+    "fx_usdinr_ret_lag1_x_import",
+    "fx_usdinr_ret_lag1_x_content",
+    "fx_usdinr_ret_lag2",
+    "fx_usdinr_ret_lag2_x_import",
+    "fx_usdinr_ret_lag2_x_content",
+    "fx_usdinr_ret_lag3",
+    "fx_usdinr_ret_lag3_x_import",
+    "fx_usdinr_ret_lag3_x_content",
+    "fx_usdinr_ret_lag4",
+    "fx_usdinr_ret_lag4_x_import",
+    "fx_usdinr_ret_lag4_x_content",
+    "cmd_matched_ret_lag2",
+    "cmd_matched_ret_lag2_x_mat",
+    "freight_ret_1m",
+    "freight_ret_lag2_x_import",
+    "freight_ret_lag3_x_import"
+  ],
+  "baselineMape": 2.0431,
+  "nCandidates": 95,
+  "nSelected": 68,
+  "nRejected": 27,
+  "reason": "Kept top-25 by gain, always-keep prefixes, and groups whose ablation raised MAPE by \u22650.05 pp."
+}

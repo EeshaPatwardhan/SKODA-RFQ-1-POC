@@ -1,0 +1,65 @@
+{
+  "asOf": "2026-10-22T13:28:16+00:00",
+  "alert": true,
+  "mapeAlert": false,
+  "psiAlert": true,
+  "currentMape": 3.0006166227404507,
+  "priorMape": 3.0006166227404507,
+  "mapeDeltaPp": 0.0,
+  "maxPsi": 8.5721,
+  "psiThreshold": 0.25,
+  "mapeDriftAlertPp": 0.5,
+  "baselineMonths": [
+    "2026-01",
+    "2026-02",
+    "2026-03"
+  ],
+  "recentMonths": [
+    "2026-04",
+    "2026-05",
+    "2026-06"
+  ],
+  "topPsi": [
+    {
+      "feature": "fx_usdinr_ret_lag4",
+      "psi": 8.5721
+    },
+    {
+      "feature": "fx_eurinr_ret_1m",
+      "psi": 8.5721
+    },
+    {
+      "feature": "month_cos",
+      "psi": 8.5721
+    },
+    {
+      "feature": "fx_usdinr_ret_lag1_x_content",
+      "psi": 6.7483
+    },
+    {
+      "feature": "fx_eurinr_ret_lag3_x_import",
+      "psi": 6.6154
+    },
+    {
+      "feature": "macro_mom_pct",
+      "psi": 6.6014
+    },
+    {
+      "feature": "fx_usdinr_ret_lag2",
+      "psi": 6.6014
+    },
+    {
+      "feature": "cmd_matched_ret_lag2",
+      "psi": 6.4335
+    },
+    {
+      "feature": "fx_eurinr_ret_lag4_x_import",
+      "psi": 5.7736
+    },
+    {
+      "feature": "cmd_steel_ret_lag3_x_mat",
+      "psi": 4.9569
+    }
+  ],
+  "summary": "Drift alert: max PSI 8.57"
+}

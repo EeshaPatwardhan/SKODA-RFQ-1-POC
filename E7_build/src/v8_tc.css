@@ -1,0 +1,24 @@
+/* V8 · Technical Change */
+.tc-ctx{align-items:flex-end;margin-bottom:12px;} .tc-ctx select{min-width:340px;} .tc-ctx-chips{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-bottom:6px;}
+.tc-flow{display:flex;overflow-x:auto;padding:2px;margin-bottom:16px;background:var(--panel);border:1px solid var(--line2);border-radius:14px;}
+.tc-flow .sf{flex:1;min-width:92px;text-align:center;position:relative;padding:10px 6px 12px;font-size:11px;font-weight:600;color:var(--faint);}
+.tc-flow .sf::before{content:"";position:absolute;top:21px;left:-50%;width:100%;height:2px;background:var(--line);z-index:0;} .tc-flow .sf:first-child::before{display:none;}
+.tc-flow .sf .n{position:relative;z-index:1;display:flex;margin:0 auto 6px;width:22px;height:22px;border-radius:50%;background:var(--line2);color:var(--faint);align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.tc-flow .sf.done{color:var(--ok);} .tc-flow .sf.done .n{background:var(--ok);color:#fff;} .tc-flow .sf.done::before{background:var(--ok);}
+.tc-flow .sf.current{color:var(--brand);} .tc-flow .sf.current .n{background:var(--brand);color:var(--on-brand,#fff);box-shadow:0 0 0 4px color-mix(in srgb,var(--brand) 18%,transparent);}
+.tc-docs{display:grid;gap:8px;margin-top:12px;} .tc-doc{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line2);border-radius:12px;background:var(--raise);}
+.tc-doc .di{font-size:20px;flex:none;} .tc-doc .dn{flex:1;min-width:0;font-size:13px;color:var(--ink);} .tc-doc .dn div{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.tc-ai{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;letter-spacing:.02em;padding:2px 8px;border-radius:20px;white-space:nowrap;background:var(--brand-soft);color:var(--brand);} .tc-ai.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok);}
+.tc-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px;} .tc-field .lab{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px;} .tc-field .k{font-size:12px;font-weight:600;color:var(--muted);}
+.tc-field input,.tc-row input,.tc-num,.tc-impact textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:10px;font-size:13px;font-family:inherit;background:var(--panel);color:var(--ink);} .tc-field input.edited{border-color:var(--brand);}
+.tc-num{width:96px;text-align:right;padding:6px 8px;}
+.tc-actbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;} .tc-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;} .tc-row input{flex:1;min-width:160px;width:auto;}
+.tc-wait{text-align:center;padding:26px;color:var(--muted);font-size:13px;}
+.tc-kv{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13px;} .tc-kv:last-of-type{border-bottom:0;} .tc-kv span{color:var(--muted);flex:none;} .tc-kv b{font-weight:600;color:var(--ink);text-align:right;}
+.tc-impact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;} .tc-impact .panel{margin:0;} .tc-impact textarea{min-height:76px;resize:vertical;}
+.tc-meter{display:flex;gap:6px;align-items:center;margin-bottom:12px;} .tc-meter i{width:38px;height:8px;border-radius:4px;background:var(--line2);display:block;} .tc-meter i.on-low{background:var(--ok);} .tc-meter i.on-med{background:var(--c-amber);} .tc-meter i.on-high{background:var(--red);}
+.tc-meter b{margin-left:10px;font-weight:700;} .tc-meter b.low{color:var(--ok);} .tc-meter b.med{color:var(--c-amber);} .tc-meter b.high{color:var(--red);}
+.tc-sig{display:inline-block;margin-top:8px;border:1.5px dashed var(--line);border-radius:8px;padding:6px 12px;font-family:"Segoe Script","Brush Script MT",cursive;font-size:16px;color:var(--brand);background:var(--raise);}
+.tc-warn{border-left:4px solid var(--c-amber);margin-bottom:16px;} .tc-warn .panel-body{display:flex;align-items:center;gap:10px;}
+.tc-gate{border-color:var(--c-amber);} .tc-clar{max-height:220px;overflow:auto;display:grid;gap:6px;}
+@media (max-width:900px){ .tc-fields,.tc-impact{grid-template-columns:minmax(0,1fr);} .tc-ctx select{min-width:0;width:100%;} }

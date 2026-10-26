@@ -1,0 +1,15 @@
+const fs=require("fs"), vm=require("vm");
+globalThis.__POC__=JSON.parse(fs.readFileSync(__dirname+"/../poc_data.json","utf8"));
+vm.runInThisContext(fs.readFileSync(__dirname+"/../src/poc_core.js","utf8")+";globalThis.PocCore=PocCore;");
+const P=PocCore, p=P.PARTS[0]; let fail=0; const ok=(c,m)=>{ if(!c){fail++;console.log("FAIL",m);} else console.log("ok  ",m); };
+console.log(p.conf, p.reason&&p.reason.summary.slice(0,80), p.reason&&p.reason.drivers.length, p.mat);
+const w=P.walkSteps(P.PARTS,"bg_to_fc"); console.log(w.map(s=>s.id+":"+Math.round(s.value)).join(" "));
+const R=P.RAW; ok(Math.abs(w[0].value-P.cost(P.PARTS,p=>p.nom))<1,"walk budget = cost per vehicle at nomination");
+ok(Math.abs(w[w.length-1].value-P.cost(P.PARTS,p=>p.fcEnd))<1,"walk forecast = cost per vehicle at forecast");
+const mine=P.PARTS.slice().sort((a,b)=>Math.abs(b.chgH)-Math.abs(a.chgH)).slice(0,12).map(x=>x.id);
+console.log("topPartIds",R.topPartIds.slice(0,4),"mine",mine.slice(0,4));
+ok(P.PARTS.every(x=>x.reason),"every part has a reason"); ok(P.PARTS.filter(x=>x.conf.level==="high").length===56,"56 high-confidence parts");
+const t=P.meanTrack(P.PARTS); ok(Math.abs(t[0].actual-R.priceSeries[0].actual)<0.01,"mean tracker matches POC mean price "+t[0].actual.toFixed(2));
+ok(Math.abs(t[t.length-1].forecast-R.priceSeries[R.priceSeries.length-1].forecast)<0.5,"mean forecast matches POC "+t[t.length-1].forecast.toFixed(2)+" vs "+R.priceSeries.slice(-1)[0].forecast);
+ok(P.partsByBridge(P.PARTS,"fx","b2f").length>0,"parts by FX bridge");
+process.exit(fail?1:0);
