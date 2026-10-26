@@ -59,6 +59,14 @@ const qtyRaw=cbd=>cbd.qtyPerCar;
 const qty=cbd=>(+cbd.qtyPerCar)||1;     // same fallback the other roll-ups use (0 / blank → 1); validate() flags it
 const carCost=cbd=>partCost(cbd)*qty(cbd)+num((cbd.dd||{}).amortPerCar);
 
+/* the first level of the cost hierarchy, exactly as the CBD tree lists it: Material cost, Import content, then each top-level cost line
+   (a line's value includes its sub-lines, so nothing appears twice). Used by the Part Details donut so both screens read the same. */
+function groups(cbd){
+  const out=[{id:"mat",name:"Material cost",value:rawMaterial(cbd),inc:[]},{id:"imp",name:"Import content",value:importValue(cbd),inc:[]}];
+  structure(cbd).filter(r=>!r.parent).forEach(r=>out.push({id:r.n.id,name:r.n.name,value:r.subtotal,inc:r.children.map(c=>c.n.name)}));
+  return out.filter(g=>g.value>0);
+}
+
 /* the tree nodes that really make up the total (used by charts that list the components) */
 function contributing(cbd){
   const st=structure(cbd).filter(r=>r.contrib>0).map(r=>r.n);
@@ -288,6 +296,6 @@ function template(format,pn){
   return "part_number,qty_per_car,steel_net_kg,steel_gross_kg,import_value,import_currency,fx_rate,node:Casting,node:Casting>Machining,node:Surface treatment\n"+p.number+",2,2.9,3.4,0,EUR,,52,33,22\n";
 }
 
-window.CbdCore={rawLines,rawMaterial,importRate,importValue,structure,manualTotal,partCost,carCost,qty,contributing,supplierPrice,nominatedPrice,compare,validate,
+window.CbdCore={groups,rawLines,rawMaterial,importRate,importValue,structure,manualTotal,partCost,carCost,qty,contributing,supplierPrice,nominatedPrice,compare,validate,
   fxMaster,planUpload,apply,template,parseCsv,FORMATS,money,pctTxt,num,given,r2,LABEL,UNIT,KEYS};
 })();

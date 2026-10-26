@@ -1687,6 +1687,11 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
   .pd-inc .h,.pd-inc .r{grid-template-columns:14px minmax(0,1fr) 56px 50px 48px;} .pd-top .h,.pd-top .r{grid-template-columns:14px minmax(0,1fr) 30px 56px 38px;}
 }
 
+/* supplier concentration: no stray focus rectangle when a segment or a legend entry is clicked (keyboard focus stays visible) */
+.pd-conc2 .pd-seg,.pd-conc2 .lg button{-webkit-tap-highlight-color:transparent;}
+.pd-conc2 .pd-seg:focus,.pd-conc2 .pd-seg:focus-visible,.pd-conc2 .pd-seg:active,.pd-conc2 .lg button:focus:not(:focus-visible),.pd-conc2 .lg button:active{outline:0;box-shadow:none;}
+.pd-conc2 .pd-seg:focus-visible{filter:brightness(1.18);} .pd-conc2 .lg button:focus-visible{outline:2px solid var(--focus);outline-offset:-2px;}
+
 
 /* ===== V8 additions: v8_proc_detail.css ===== */
 /* V8 · Procurement drill-downs — Part Details, Supplier Details, Price Analysis (reuses the .pd-* dashboard styles) */
@@ -1755,7 +1760,7 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 /* dashboard filters: a single clean focus ring on the box, none on the inner select */
 #content .pd-sel select,#content .pd-sel select:focus,#content .pd-sel select:focus-visible{padding:0;min-height:0;border:0;border-radius:0;background:none;box-shadow:none;outline:0;}
 #content .pd-sel:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 14%,transparent);}
-
+.pd-conc2.pd-cb .lg .o .pd-inc{font-size:10.5px;color:var(--muted);margin-left:4px;font-weight:500;}
 
 
 /* ===== V8 additions: v8_art.css ===== */
@@ -5218,15 +5223,14 @@ function buildCbdTree(){
   row({html:line({id:"D-IMP-V",name:"Import content",tag:tagDer,basis:icv>0?`${fmt(icv)} ${cbdEsc(ic.currency||"INR")} × ${(ic.currency||"INR")==="INR"?1:fmt(K.num(ic.fxRate))} INR/${cbdEsc(ic.currency||"INR")}`:"none entered",cost:fmt(impTot),sh:share(impTot),cls:"grp"})});
   // manual cost lines (hierarchy from the node levels)
   const chain=x=>x.parent?chain(x.parent).concat("M-"+cbdEsc(x.parent.n.id)):[];
-  row({html:line({id:"G-MAN",name:"Manual cost lines",tag:tagMan,basis:st.length?"each counts once":"none entered yet",cost:fmt(manTot),sh:share(manTot),has:st.length>0,cls:"grp"})});
   st.forEach(r=>{
-    const anc=["G-MAN"].concat(chain(r)).join("|");
+    const anc=chain(r).join("|");
     const id="M-"+cbdEsc(r.n.id), kids=r.children.length>0, inc=r.excluded;
     const tot=r.n.mode==="total", own=K.num(r.n.cost);
     let basis = inc?`<span class="cbd-inc">included in parent</span>`: tot?`includes its sub-nodes`: kids?`own ${fmt(own)} + sub-nodes ${fmt(r.subtotal-own)}`:`entered cost`;
     const act = canWrite?`<button class="btn btn-sm" data-edit="${cbdEsc(r.n.id)}">Edit</button> <button class="btn btn-sm" data-del="${cbdEsc(r.n.id)}" aria-label="Delete">✕</button>`:"";
-    row({anc,html:line({id,anc,depth:1+chain(r).length,has:kids,name:cbdEsc(r.n.name)+(r.orphan||r.jump?` <span class="cbd-tag warn" title="Level does not follow from the node above">level</span>`:""),
-      tag:tot?`<span class="cbd-tag tot" title="The cost entered already includes the sub-nodes; they are not added again">total</span>`:"",basis,cost:inc?`<span class="cbd-mut">${fmt(own)}</span>`:fmt(r.subtotal),sh:inc?"":share(r.subtotal),act})});
+    row({anc,html:line({id,anc,depth:chain(r).length,has:kids,name:cbdEsc(r.n.name)+(r.orphan||r.jump?` <span class="cbd-tag warn" title="Level does not follow from the node above">level</span>`:""),
+      tag:tagMan+(tot?`<span class="cbd-tag tot" title="The cost entered already includes the sub-nodes; they are not added again">total</span>`:""),basis,cost:inc?`<span class="cbd-mut">${fmt(own)}</span>`:fmt(r.subtotal),sh:inc?"":share(r.subtotal),act})});
   });
   const tbody = document.createElement("div"); tbody.className="panel-body no-pad";
   tbody.innerHTML = `<table class="mtable cbd-tree"><thead><tr><th>Cost element</th><th>Basis</th><th class="r">₹ / part</th><th class="r">Share</th><th></th></tr></thead>
@@ -5268,11 +5272,11 @@ function buildCbdTree(){
   const applyCollapse=()=>{
     tbody.querySelectorAll("tr[data-anc]").forEach(tr=>{ const a=tr.dataset.anc?tr.dataset.anc.split("|"):[]; tr.hidden=a.some(id=>CBD_COLLAPSED.has(id)); });
     tbody.querySelectorAll("[data-tg]").forEach(b=>b.classList.toggle("shut",CBD_COLLAPSED.has(b.dataset.tg)));
-    const allIds=[...tbody.querySelectorAll("[data-tg]")].map(b=>b.dataset.tg), allShut=allIds.length&&allIds.every(id=>CBD_COLLAPSED.has(id));
+    const shown=[...tbody.querySelectorAll("tr:not([hidden]) [data-tg]")].map(b=>b.dataset.tg), allShut=shown.length&&shown.every(id=>CBD_COLLAPSED.has(id));   // judged on the groups you can see, so the label matches what is on screen
     const cb=treePanel.querySelector("#cbd-collapse"); if(cb) cb.textContent=allShut?"Expand all":"Collapse all";
   };
   tbody.addEventListener("click",e=>{ const tg=e.target.closest("[data-tg]"); if(tg){ const id=tg.dataset.tg; CBD_COLLAPSED.has(id)?CBD_COLLAPSED.delete(id):CBD_COLLAPSED.add(id); applyCollapse(); } });
-  treePanel.querySelector("#cbd-collapse").onclick=()=>{ const ids=[...tbody.querySelectorAll("[data-tg]")].map(b=>b.dataset.tg); const allShut=ids.length&&ids.every(id=>CBD_COLLAPSED.has(id)); ids.forEach(id=>allShut?CBD_COLLAPSED.delete(id):CBD_COLLAPSED.add(id)); applyCollapse(); };
+  treePanel.querySelector("#cbd-collapse").onclick=()=>{ const ids=[...tbody.querySelectorAll("[data-tg]")].map(b=>b.dataset.tg); const vis=[...tbody.querySelectorAll("tr:not([hidden]) [data-tg]")].map(b=>b.dataset.tg); const allShut=vis.length&&vis.every(id=>CBD_COLLAPSED.has(id)); ids.forEach(id=>allShut?CBD_COLLAPSED.delete(id):CBD_COLLAPSED.add(id)); applyCollapse(); };
   applyCollapse();
 
   // wire actions
@@ -9123,6 +9127,14 @@ const qtyRaw=cbd=>cbd.qtyPerCar;
 const qty=cbd=>(+cbd.qtyPerCar)||1;     // same fallback the other roll-ups use (0 / blank → 1); validate() flags it
 const carCost=cbd=>partCost(cbd)*qty(cbd)+num((cbd.dd||{}).amortPerCar);
 
+/* the first level of the cost hierarchy, exactly as the CBD tree lists it: Material cost, Import content, then each top-level cost line
+   (a line's value includes its sub-lines, so nothing appears twice). Used by the Part Details donut so both screens read the same. */
+function groups(cbd){
+  const out=[{id:"mat",name:"Material cost",value:rawMaterial(cbd),inc:[]},{id:"imp",name:"Import content",value:importValue(cbd),inc:[]}];
+  structure(cbd).filter(r=>!r.parent).forEach(r=>out.push({id:r.n.id,name:r.n.name,value:r.subtotal,inc:r.children.map(c=>c.n.name)}));
+  return out.filter(g=>g.value>0);
+}
+
 /* the tree nodes that really make up the total (used by charts that list the components) */
 function contributing(cbd){
   const st=structure(cbd).filter(r=>r.contrib>0).map(r=>r.n);
@@ -9352,7 +9364,7 @@ function template(format,pn){
   return "part_number,qty_per_car,steel_net_kg,steel_gross_kg,import_value,import_currency,fx_rate,node:Casting,node:Casting>Machining,node:Surface treatment\n"+p.number+",2,2.9,3.4,0,EUR,,52,33,22\n";
 }
 
-window.CbdCore={rawLines,rawMaterial,importRate,importValue,structure,manualTotal,partCost,carCost,qty,contributing,supplierPrice,nominatedPrice,compare,validate,
+window.CbdCore={groups,rawLines,rawMaterial,importRate,importValue,structure,manualTotal,partCost,carCost,qty,contributing,supplierPrice,nominatedPrice,compare,validate,
   fxMaster,planUpload,apply,template,parseCsv,FORMATS,money,pctTxt,num,given,r2,LABEL,UNIT,KEYS};
 })();
 
@@ -11595,14 +11607,14 @@ function priceDetailsPanel(p){
 function costBreakdownPanel(p){
   const cbd=DATA.cbds[p.id]; if(!cbd||!A()) return U.panel(ptitle("Cost breakdown","Cost components of the current piece price, from the part's cost breakdown (CBD)."),empty("No cost breakdown has been built for this part."));
   try{ A().sync(cbd); }catch(e){}
-  const nodes=window.CbdCore?CbdCore.contributing(cbd):cbd.tree.filter(n=>+n.cost>0), tot=sum(nodes,n=>+n.cost)||1, pal=["#0a6a4e","#2f8f6e","#5bb08f","#8fcdb3","#c3e5d4","#9db7ad"];
-  const slices=nodes.map((n,i)=>({label:n.name.replace(/\s*\(.*\)$/,""),value:+n.cost,color:pal[i%pal.length]}));
+  const gs=window.CbdCore?CbdCore.groups(cbd):cbd.tree.filter(n=>+n.cost>0).map(n=>({name:n.name.replace(/\s*\(.*\)$/,""),value:+n.cost,inc:[]})), tot=sum(gs,g=>g.value)||1, pal=["#0a6a4e","#2f8f6e","#5bb08f","#8fcdb3","#c3e5d4","#9db7ad"];
+  const slices=gs.map((g,i)=>({label:g.name,value:g.value,color:pal[i%pal.length],inc:g.inc}));
   const donut=C.donut(slices,{size:150,center:inr(tot),centerSub:"per part",aria:"Cost breakdown"}).replace(/<ul class="pc-dl">[\s\S]*?<\/ul>/,"");
   const gap=p.cur-tot, gp=p.cur?gap/p.cur*100:0, over=gap<0;
   const gapTip=over?"The calculated breakdown is above the supplier's piece price. That usually means two cost lines overlap, so check the cost breakdown for double counting."
     :"The breakdown is calculated from net weight × commodity price, import content × FX and the cost lines entered for this part. The piece price is what the supplier charges today. The difference is price that no cost line explains, such as supplier margin and overheads, or cost lines that are not entered yet.";
   return U.panel(ptitle("Cost breakdown (current price)","Components of the cost breakdown: raw material (weights × commodity price), import content (× FX) and the cost lines entered for this part. It is a calculation, not the price: the supplier's piece price is shown below for comparison."),
-    `<div class="pd-conc2 pd-cb"><div class="dn">${donut}</div><div class="lg">${slices.map(s=>`<div class="o"><i style="background:${s.color}"></i><span title="${esc(s.label)}">${esc(s.label)}</span><em>${inr(s.value)}</em><b>${Math.round(s.value/tot*100)}%</b></div>`).join("")}</div></div>`+
+    `<div class="pd-conc2 pd-cb"><div class="dn">${donut}</div><div class="lg">${slices.map(s=>`<div class="o"><i style="background:${s.color}"></i><span title="${esc(s.label)}${s.inc&&s.inc.length?" — includes "+esc(s.inc.join(", ")):""}">${esc(s.label)}${s.inc&&s.inc.length?` <small class="pd-inc">incl. ${s.inc.length} sub-line${s.inc.length>1?"s":""}</small>`:""}</span><em>${inr(s.value)}</em><b>${Math.round(s.value/tot*100)}%</b></div>`).join("")}</div></div>`+
     `<div class="pd-cbn"><div><span>Cost breakdown <small>calculated</small></span><b>${inr(tot)}</b></div><div><span>Piece price <small>supplier, current</small></span><b>${inr(p.cur)}</b></div><div class="g ${over?"bad":""}"><span>${over?"Breakdown above price":"Not explained by the breakdown"} ${info(gapTip)}</span><b>${over?"+":""}${inr(Math.abs(gap))} <small>${Math.abs(gp).toFixed(1)}% of price</small></b></div></div>`);
 }
 function decisionsFor(match){

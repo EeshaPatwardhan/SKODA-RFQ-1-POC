@@ -63,3 +63,8 @@
   .pd-dec .h,.pd-dec .r{grid-template-columns:14px minmax(0,1fr) minmax(0,1fr) 78px;} .pd-dec .h > :nth-child(4),.pd-dec .r > :nth-child(4){display:none;}
   .pd-inc .h,.pd-inc .r{grid-template-columns:14px minmax(0,1fr) 56px 50px 48px;} .pd-top .h,.pd-top .r{grid-template-columns:14px minmax(0,1fr) 30px 56px 38px;}
 }
+
+/* supplier concentration: no stray focus rectangle when a segment or a legend entry is clicked (keyboard focus stays visible) */
+.pd-conc2 .pd-seg,.pd-conc2 .lg button{-webkit-tap-highlight-color:transparent;}
+.pd-conc2 .pd-seg:focus,.pd-conc2 .pd-seg:focus-visible,.pd-conc2 .pd-seg:active,.pd-conc2 .lg button:focus:not(:focus-visible),.pd-conc2 .lg button:active{outline:0;box-shadow:none;}
+.pd-conc2 .pd-seg:focus-visible{filter:brightness(1.18);} .pd-conc2 .lg button:focus-visible{outline:2px solid var(--focus);outline-offset:-2px;}

@@ -135,14 +135,14 @@ function priceDetailsPanel(p){
 function costBreakdownPanel(p){
   const cbd=DATA.cbds[p.id]; if(!cbd||!A()) return U.panel(ptitle("Cost breakdown","Cost components of the current piece price, from the part's cost breakdown (CBD)."),empty("No cost breakdown has been built for this part."));
   try{ A().sync(cbd); }catch(e){}
-  const nodes=window.CbdCore?CbdCore.contributing(cbd):cbd.tree.filter(n=>+n.cost>0), tot=sum(nodes,n=>+n.cost)||1, pal=["#0a6a4e","#2f8f6e","#5bb08f","#8fcdb3","#c3e5d4","#9db7ad"];
-  const slices=nodes.map((n,i)=>({label:n.name.replace(/\s*\(.*\)$/,""),value:+n.cost,color:pal[i%pal.length]}));
+  const gs=window.CbdCore?CbdCore.groups(cbd):cbd.tree.filter(n=>+n.cost>0).map(n=>({name:n.name.replace(/\s*\(.*\)$/,""),value:+n.cost,inc:[]})), tot=sum(gs,g=>g.value)||1, pal=["#0a6a4e","#2f8f6e","#5bb08f","#8fcdb3","#c3e5d4","#9db7ad"];
+  const slices=gs.map((g,i)=>({label:g.name,value:g.value,color:pal[i%pal.length],inc:g.inc}));
   const donut=C.donut(slices,{size:150,center:inr(tot),centerSub:"per part",aria:"Cost breakdown"}).replace(/<ul class="pc-dl">[\s\S]*?<\/ul>/,"");
   const gap=p.cur-tot, gp=p.cur?gap/p.cur*100:0, over=gap<0;
   const gapTip=over?"The calculated breakdown is above the supplier's piece price. That usually means two cost lines overlap, so check the cost breakdown for double counting."
     :"The breakdown is calculated from net weight × commodity price, import content × FX and the cost lines entered for this part. The piece price is what the supplier charges today. The difference is price that no cost line explains, such as supplier margin and overheads, or cost lines that are not entered yet.";
   return U.panel(ptitle("Cost breakdown (current price)","Components of the cost breakdown: raw material (weights × commodity price), import content (× FX) and the cost lines entered for this part. It is a calculation, not the price: the supplier's piece price is shown below for comparison."),
-    `<div class="pd-conc2 pd-cb"><div class="dn">${donut}</div><div class="lg">${slices.map(s=>`<div class="o"><i style="background:${s.color}"></i><span title="${esc(s.label)}">${esc(s.label)}</span><em>${inr(s.value)}</em><b>${Math.round(s.value/tot*100)}%</b></div>`).join("")}</div></div>`+
+    `<div class="pd-conc2 pd-cb"><div class="dn">${donut}</div><div class="lg">${slices.map(s=>`<div class="o"><i style="background:${s.color}"></i><span title="${esc(s.label)}${s.inc&&s.inc.length?" — includes "+esc(s.inc.join(", ")):""}">${esc(s.label)}${s.inc&&s.inc.length?` <small class="pd-inc">incl. ${s.inc.length} sub-line${s.inc.length>1?"s":""}</small>`:""}</span><em>${inr(s.value)}</em><b>${Math.round(s.value/tot*100)}%</b></div>`).join("")}</div></div>`+
     `<div class="pd-cbn"><div><span>Cost breakdown <small>calculated</small></span><b>${inr(tot)}</b></div><div><span>Piece price <small>supplier, current</small></span><b>${inr(p.cur)}</b></div><div class="g ${over?"bad":""}"><span>${over?"Breakdown above price":"Not explained by the breakdown"} ${info(gapTip)}</span><b>${over?"+":""}${inr(Math.abs(gap))} <small>${Math.abs(gp).toFixed(1)}% of price</small></b></div></div>`);
 }
 function decisionsFor(match){

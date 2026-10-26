@@ -87,15 +87,14 @@ function buildCbdTree(){
   row({html:line({id:"D-IMP-V",name:"Import content",tag:tagDer,basis:icv>0?`${fmt(icv)} ${cbdEsc(ic.currency||"INR")} × ${(ic.currency||"INR")==="INR"?1:fmt(K.num(ic.fxRate))} INR/${cbdEsc(ic.currency||"INR")}`:"none entered",cost:fmt(impTot),sh:share(impTot),cls:"grp"})});
   // manual cost lines (hierarchy from the node levels)
   const chain=x=>x.parent?chain(x.parent).concat("M-"+cbdEsc(x.parent.n.id)):[];
-  row({html:line({id:"G-MAN",name:"Manual cost lines",tag:tagMan,basis:st.length?"each counts once":"none entered yet",cost:fmt(manTot),sh:share(manTot),has:st.length>0,cls:"grp"})});
   st.forEach(r=>{
-    const anc=["G-MAN"].concat(chain(r)).join("|");
+    const anc=chain(r).join("|");
     const id="M-"+cbdEsc(r.n.id), kids=r.children.length>0, inc=r.excluded;
     const tot=r.n.mode==="total", own=K.num(r.n.cost);
     let basis = inc?`<span class="cbd-inc">included in parent</span>`: tot?`includes its sub-nodes`: kids?`own ${fmt(own)} + sub-nodes ${fmt(r.subtotal-own)}`:`entered cost`;
     const act = canWrite?`<button class="btn btn-sm" data-edit="${cbdEsc(r.n.id)}">Edit</button> <button class="btn btn-sm" data-del="${cbdEsc(r.n.id)}" aria-label="Delete">✕</button>`:"";
-    row({anc,html:line({id,anc,depth:1+chain(r).length,has:kids,name:cbdEsc(r.n.name)+(r.orphan||r.jump?` <span class="cbd-tag warn" title="Level does not follow from the node above">level</span>`:""),
-      tag:tot?`<span class="cbd-tag tot" title="The cost entered already includes the sub-nodes; they are not added again">total</span>`:"",basis,cost:inc?`<span class="cbd-mut">${fmt(own)}</span>`:fmt(r.subtotal),sh:inc?"":share(r.subtotal),act})});
+    row({anc,html:line({id,anc,depth:chain(r).length,has:kids,name:cbdEsc(r.n.name)+(r.orphan||r.jump?` <span class="cbd-tag warn" title="Level does not follow from the node above">level</span>`:""),
+      tag:tagMan+(tot?`<span class="cbd-tag tot" title="The cost entered already includes the sub-nodes; they are not added again">total</span>`:""),basis,cost:inc?`<span class="cbd-mut">${fmt(own)}</span>`:fmt(r.subtotal),sh:inc?"":share(r.subtotal),act})});
   });
   const tbody = document.createElement("div"); tbody.className="panel-body no-pad";
   tbody.innerHTML = `<table class="mtable cbd-tree"><thead><tr><th>Cost element</th><th>Basis</th><th class="r">₹ / part</th><th class="r">Share</th><th></th></tr></thead>
@@ -137,11 +136,11 @@ function buildCbdTree(){
   const applyCollapse=()=>{
     tbody.querySelectorAll("tr[data-anc]").forEach(tr=>{ const a=tr.dataset.anc?tr.dataset.anc.split("|"):[]; tr.hidden=a.some(id=>CBD_COLLAPSED.has(id)); });
     tbody.querySelectorAll("[data-tg]").forEach(b=>b.classList.toggle("shut",CBD_COLLAPSED.has(b.dataset.tg)));
-    const allIds=[...tbody.querySelectorAll("[data-tg]")].map(b=>b.dataset.tg), allShut=allIds.length&&allIds.every(id=>CBD_COLLAPSED.has(id));
+    const shown=[...tbody.querySelectorAll("tr:not([hidden]) [data-tg]")].map(b=>b.dataset.tg), allShut=shown.length&&shown.every(id=>CBD_COLLAPSED.has(id));   // judged on the groups you can see, so the label matches what is on screen
     const cb=treePanel.querySelector("#cbd-collapse"); if(cb) cb.textContent=allShut?"Expand all":"Collapse all";
   };
   tbody.addEventListener("click",e=>{ const tg=e.target.closest("[data-tg]"); if(tg){ const id=tg.dataset.tg; CBD_COLLAPSED.has(id)?CBD_COLLAPSED.delete(id):CBD_COLLAPSED.add(id); applyCollapse(); } });
-  treePanel.querySelector("#cbd-collapse").onclick=()=>{ const ids=[...tbody.querySelectorAll("[data-tg]")].map(b=>b.dataset.tg); const allShut=ids.length&&ids.every(id=>CBD_COLLAPSED.has(id)); ids.forEach(id=>allShut?CBD_COLLAPSED.delete(id):CBD_COLLAPSED.add(id)); applyCollapse(); };
+  treePanel.querySelector("#cbd-collapse").onclick=()=>{ const ids=[...tbody.querySelectorAll("[data-tg]")].map(b=>b.dataset.tg); const vis=[...tbody.querySelectorAll("tr:not([hidden]) [data-tg]")].map(b=>b.dataset.tg); const allShut=vis.length&&vis.every(id=>CBD_COLLAPSED.has(id)); ids.forEach(id=>allShut?CBD_COLLAPSED.delete(id):CBD_COLLAPSED.add(id)); applyCollapse(); };
   applyCollapse();
 
   // wire actions
