@@ -253,12 +253,21 @@ kbd{font:inherit;font-size:11px;border:1px solid var(--line);border-bottom-width
   #app-shell.rail:not(.peek) #sidebar .um-card{justify-content:center;padding:6px 0;background:none;border-color:transparent;}
   #app-shell.rail:not(.peek) #sidebar .um-card .who,#app-shell.rail:not(.peek) #sidebar .um-card .chev{display:none;}
 }
-/* ---- flyout: the sub-sections and screens of one module, beside the collapsed rail ---- */
-.fly{position:fixed;left:calc(var(--rail-w) + var(--sb-gap)*2);width:280px;max-height:calc(100vh - 24px);display:flex;flex-direction:column;background:var(--emerald);border:1px solid rgba(255,255,255,.1);border-radius:14px;box-shadow:var(--shadow-md);z-index:75;overflow:hidden;animation:pop .16s var(--ease);}
-.fly-h{display:flex;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.08);flex:none;}
-.fly-h .mi{background:none;color:var(--electric);width:20px;height:20px;border-radius:0;}
-.fly-body{overflow:auto;padding:6px 8px 12px;}
+/* ---- module panel: the screens of one module, floating beside the rail in the sidebar's colour; fades in / out; sub-sections are dropdowns ---- */
+.fly{position:fixed;left:calc(var(--rail-w) + var(--sb-gap)*2);width:288px;max-width:92vw;max-height:calc(100vh - 24px);display:flex;flex-direction:column;background:var(--emerald);color:var(--side-t);border:1px solid rgba(255,255,255,.07);border-radius:18px;box-shadow:0 22px 44px -18px rgba(6,28,21,.5),0 4px 12px rgba(6,28,21,.14);z-index:75;overflow:hidden;animation:flyFade .2s ease both;transition:opacity .16s ease;}
+.fly.out{opacity:0;pointer-events:none;animation:none;}
+@keyframes flyFade{from{opacity:0;}to{opacity:1;}}
+.fly-h{display:flex;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08);flex:none;}
+.fly-h .mi{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);color:var(--electric);display:grid;place-items:center;flex:none;}
+.fly-h .mi svg.i{width:18px;height:18px;}
+.fly-h .who{min-width:0;}
+.fly-h b{display:block;color:#fff;font-size:14.5px;font-weight:700;line-height:1.25;}
+.fly-h small{display:block;color:var(--side-m);font-size:12.5px;margin-top:1px;}
+.fly-body{overflow:auto;padding:6px 8px 10px;scrollbar-color:rgba(255,255,255,.18) transparent;}
 .fly-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border:2px solid transparent;background-clip:padding-box;}
+.fly .sgrp-h{padding:0 12px;min-height:42px;font-size:13.5px;}
+.fly .nav-item,.fly .sgrp .nav-item{min-height:38px;padding:0 12px 0 14px;gap:12px;}
+@media (prefers-reduced-motion:reduce){.fly{animation:none;transition:none;}}
 /* ---- hover tooltip (collapsed rail) ---- */
 #tip{position:fixed;z-index:300;pointer-events:none;background:#06231B;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:7px 11px;box-shadow:var(--shadow-md);opacity:0;transform:translateX(-4px);transition:opacity .12s,transform .12s;max-width:260px;}
 #tip.on{opacity:1;transform:none;}
@@ -422,7 +431,7 @@ kbd{font:inherit;font-size:11px;border:1px solid var(--line);border-bottom-width
 #content{
   flex:1;overflow-y:auto;min-width:0;padding:28px max(24px,calc((100% - 1560px)/2)) 80px;
 }
-#content.enter>*{animation:rise .32s var(--ease) both;}
+#content.enter>*{animation:none;}   /* no entrance animation: pages swap without a refresh-like flash */
 #content.enter>*:nth-child(2){animation-delay:.03s;} #content.enter>*:nth-child(3){animation-delay:.06s;}
 #content.enter>*:nth-child(4){animation-delay:.09s;} #content.enter>*:nth-child(5){animation-delay:.12s;}
 @keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
@@ -2568,37 +2577,11 @@ const Shell = {
     const t=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";
     this.applyTheme(t); this.store("ais-theme",t);
   },
-  /* Floating sidebar: an icon rail that grows over the page while it is hovered or has keyboard focus, and
-     shrinks back shortly after the pointer leaves. It stays open while one of its panels (profile / notifications) is open. */
+  /* Floating sidebar: always a compact icon rail (it no longer expands on hover). Modules, notifications and the
+     profile open as panels beside it. */
   initSidebar(){
-    const sh=document.getElementById("app-shell"), sb=document.getElementById("sidebar"); if(!sb) return;
-    const desk=()=>window.matchMedia("(min-width:961px)").matches;
-    let hovered=false, openT=0, closeT=0, endT=0;
-    const held=()=>{
-      const np=document.getElementById("notif-panel"), um=document.getElementById("um-pop");
-      return !!((np&&np.classList.contains("show"))||(um&&!um.hidden));
-    };
-    const open=()=>{
-      clearTimeout(closeT); clearTimeout(endT);
-      if(!desk()) return;
-      sh.classList.remove("closing");
-      if(!sh.classList.contains("peek")){ sh.classList.add("peek"); try{ Flyout.close(); Tip.hide(); }catch(_){} }
-    };
-    const close=()=>{
-      if(!sh.classList.contains("peek")||sh.classList.contains("closing")) return;
-      sh.classList.add("closing");
-      endT=setTimeout(()=>{ sh.classList.remove("peek","closing"); }, 300);   // after the width animation has finished
-    };
-    const sync=()=>{ if(hovered || held() || sb.querySelector(":focus-visible")){ open(); } else { close(); } };
-    sb.addEventListener("mouseenter",()=>{ hovered=true; clearTimeout(closeT); clearTimeout(openT); openT=setTimeout(sync,70); });
-    sb.addEventListener("mouseleave",()=>{ hovered=false; clearTimeout(openT); clearTimeout(closeT); closeT=setTimeout(sync,140); });
-    sb.addEventListener("focusin",()=>setTimeout(sync,0));
-    sb.addEventListener("focusout",()=>setTimeout(sync,0));
-    // panels opened from the sidebar keep it open; re-check when they close
-    document.addEventListener("click",()=>setTimeout(sync,0),true);
-    document.addEventListener("keydown",e=>{ if(e.key==="Escape") setTimeout(sync,0); });
-    window.addEventListener("resize",()=>{ if(!desk()) sh.classList.remove("peek","closing"); });
-    this.syncSidebar=sync;
+    const sh=document.getElementById("app-shell"); if(sh) sh.classList.remove("peek","closing");
+    this.syncSidebar=()=>{};
   },
   init(){
     let t=this.load("ais-theme");
@@ -2803,24 +2786,38 @@ const Auth = {
 };
 document.addEventListener("DOMContentLoaded",()=>{ Auth.init(); });
 
-/* ---------- collapsed rail: click a module to see its screens in a flyout ---------- */
+/* ---------- collapsed rail: hover (or click) a module to see its screens in a floating panel ---------- */
 const Flyout = {
-  el:null, mod:null,
-  close(){
-    if(this.el) this.el.remove();
-    this.el = null; this.mod = null;
+  el:null, mod:null, pinned:false, _t:0,
+  close(instant){
+    clearTimeout(this._t);
+    const f = this.el;
+    if(f){ if(instant===true){ f.remove(); } else { f.classList.add("out"); setTimeout(()=>f.remove(), 180); } }   // fade out, then remove
+    this.el = null; this.mod = null; this.pinned = false;
     document.querySelectorAll(".mod-h.flyopen").forEach(b=>b.classList.remove("flyopen"));
   },
-  toggle(modId, anchor){
-    if(this.mod===modId){ this.close(); return; }
-    this.close(); Tip.hide();
+  // hover: open after a short delay; leaving the icon or the panel closes it after a short grace period (unless pinned by a click)
+  hover(modId, anchor){ clearTimeout(this._t); if(this.mod===modId) return; this._t = setTimeout(()=>this.open(modId, anchor), 90); },
+  leave(){ clearTimeout(this._t); if(this.pinned) return; this._t = setTimeout(()=>this.close(), 260); },
+  keep(){ clearTimeout(this._t); },
+  toggle(modId, anchor){   // click: pin the panel open; click again to close
+    clearTimeout(this._t);
+    if(this.mod===modId){ if(this.pinned) this.close(); else this.pinned = true; return; }
+    this.open(modId, anchor); this.pinned = true;
+  },
+  open(modId, anchor){
+    this.close(true); Tip.hide();   // switching modules: replace at once, the new panel fades in
+    try{ const np=document.getElementById("notif-panel"); if(np) np.classList.remove("show"); UserMenu.close(); }catch(_){}
     const m = MODULES.find(x=>x.id===modId); const meta = Shell.MOD[modId] || {};
     const f = document.createElement("div"); f.className = "fly"; f.setAttribute("role","menu");
-    f.innerHTML = '<div class="fly-h"><span class="mi">'+Icons.svg(meta.ic||"layers")+'</span><span><b>'+m.label+'</b></span></div>';
+    const n = Nav.tree(modId).reduce((c,g)=>c+g.items.length,0);
+    f.innerHTML = '<div class="fly-h"><span class="mi">'+Icons.svg(meta.ic||"layers")+'</span><span class="who"><b>'+m.label+'</b><small>'+n+' screens</small></span></div>';
     f.appendChild(Nav.groupsEl(modId, true));
+    f.addEventListener("mouseenter", ()=>this.keep());
+    f.addEventListener("mouseleave", ()=>this.leave());
     document.getElementById("app-shell").appendChild(f);
     const r = anchor.getBoundingClientRect(), h = f.offsetHeight;
-    const ft = Math.max(12, Math.min(r.top - 6, window.innerHeight - h - 12)); f.style.top = ft + "px"; f.style.maxHeight = (window.innerHeight - ft - 12) + "px";   // opened sub-groups scroll inside the flyout instead of running off the screen
+    const ft = Math.max(12, Math.min(r.top - 6, window.innerHeight - h - 12)); f.style.top = ft + "px"; f.style.maxHeight = (window.innerHeight - ft - 12) + "px";   // long lists scroll inside the panel instead of running off the screen
     anchor.classList.add("flyopen"); this.el = f; this.mod = modId;
   }
 };
@@ -2844,7 +2841,7 @@ const Tip = {
 };
 document.addEventListener("mouseover", e=>{
   const t = e.target.closest && e.target.closest("#sidebar [data-tip]");
-  if(t && Nav.isRail() && !Flyout.el) Tip.show(t); else Tip.hide();
+  if(t && Nav.isRail() && !Flyout.el && !t.classList.contains("mod-h")) Tip.show(t); else Tip.hide();
 });
 document.addEventListener("mouseleave", ()=>Tip.hide());
 
@@ -4174,6 +4171,8 @@ const Nav = {
         if(this.isRail()){ Flyout.toggle(m.id, h); return; }
         this.toggleMod(m.id);
       };
+      h.onmouseenter = ()=>{ if(this.isRail()) Flyout.hover(m.id, h); };
+      h.onmouseleave = ()=>{ if(this.isRail()) Flyout.leave(); };
       box.appendChild(h);
       box.appendChild(this.cx(this.groupsEl(m.id, false)));
       el.appendChild(box);
@@ -4207,7 +4206,7 @@ const UI = {
   toggleNotifPanel(){
     const p = document.getElementById("notif-panel");
     if(p.classList.contains("show")){ p.classList.remove("show"); return; }
-    try{ UserMenu.close(); }catch(_){}
+    try{ UserMenu.close(); Flyout.close(); }catch(_){}
     Notif.render();
     p.classList.add("show");
   }
