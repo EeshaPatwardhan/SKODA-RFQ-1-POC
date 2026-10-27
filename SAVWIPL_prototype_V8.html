@@ -1492,18 +1492,16 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .ov-page .page-header p.sub{font-size:12.5px;max-width:78ch;margin:0;}
 .ov-page .pd-fbar{padding:12px 16px;margin-bottom:12px;}
 .ov-page .pd-kw{margin-bottom:12px;}
-.ov-page .pd-kpis.k6{gap:12px;}
-.ov-page .pd-kpis.k6 .pd-kpi{height:124px;padding:14px 16px;justify-content:space-between;}
-.ov-page .pd-kpis.k6 .ic{width:30px;height:30px;} .ov-page .pd-kpis.k6 .ic svg.i{width:16px;height:16px;}
-.ov-page .pd-kpis.k6 .vl{font-size:26px;} .ov-page .pd-kpis.k6 .vl.warn{color:var(--amber);}
-.ov-page .pd-kpis.k6 .lb{white-space:normal;line-height:1.2;overflow:visible;}
-.ov-page .pd-kpis.k6 .mid{min-height:34px;align-items:center;}
-.ov-page .pd-kpis.k6 .sb{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;overflow:hidden;min-height:2.6em;}
+.ov-page .pd-kpis.k5{gap:12px;grid-template-columns:repeat(5,minmax(0,1fr));}
+.ov-page .pd-kpis.k5 .pd-kpi{height:124px;padding:14px 16px;justify-content:space-between;}
+.ov-page .pd-kpis.k5 .ic{width:30px;height:30px;} .ov-page .pd-kpis.k5 .ic svg.i{width:16px;height:16px;}
+.ov-page .pd-kpis.k5 .vl{font-size:26px;} .ov-page .pd-kpis.k5 .vl.warn{color:var(--amber);}
+.ov-page .pd-kpis.k5 .lb{white-space:normal;line-height:1.2;overflow:visible;}
+.ov-page .pd-kpis.k5 .vl.txt{font-size:16px;line-height:1.25;white-space:normal;}
+.ov-page .pd-kpi .vl{max-width:100%;overflow:hidden;text-overflow:ellipsis;}
+.ov-page .pd-kpis.k5 .mid{min-height:34px;align-items:center;}
+.ov-page .pd-kpis.k5 .sb{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;overflow:hidden;min-height:2.6em;}
 .ov-page .pd-kpi .sb .bad{color:var(--red);font-weight:700;} .ov-page .pd-kpi .sb .warn{color:var(--amber);font-weight:700;} .ov-page .pd-kpi .sb .good{color:var(--ok);font-weight:700;}
-@container (max-width:1240px){ .ov-page .pd-kpis.k6{grid-template-columns:repeat(6,minmax(0,1fr));} }
-@container (max-width:1000px){ .ov-page .pd-kpis.k6{grid-template-columns:repeat(3,minmax(0,1fr));} }
-@container (max-width:620px){ .ov-page .pd-kpis.k6{grid-template-columns:repeat(2,minmax(0,1fr));} }
-@container (max-width:420px){ .ov-page .pd-kpis.k6{grid-template-columns:minmax(0,1fr);} }
 .ov-ch{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;padding:3px 7px;border-radius:8px;background:var(--raise);border:1px solid var(--line2);flex:none;}
 .ov-ch b{font-size:11.5px;font-variant-numeric:tabular-nums;} .ov-ch small{font-size:10px;color:var(--muted);font-weight:600;}
 .ov-ch.good b{color:var(--ok);} .ov-ch.bad b{color:var(--red);}
@@ -1529,25 +1527,28 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .ov-nil{font-size:12px;color:var(--muted);}
 .ov-note{margin:auto 16px 0;padding:8px 0 10px;border-top:1px solid var(--line2);font-size:11.5px;line-height:1.45;color:var(--muted);}
 
-/* Milestone health by project */
-.mh-h,.mh-r{display:grid;grid-template-columns:124px minmax(0,1fr) 64px 44px;gap:10px;align-items:center;}
-.mh-h{padding:7px 16px;background:var(--raise);border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);}
-.mh-h .r,.mh-r .pn{text-align:right;} .mh-h .c,.mh-r .ds{text-align:center;}
-.mh-r{width:100%;flex:1 1 0;min-height:46px;max-height:62px;border:0;border-bottom:1px solid var(--line2);background:none;padding:6px 16px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;}
+/* Milestone health by project: quiet — muted bar colours, small neutral tiles, no pill icons */
+.ov-page{--st-ok:var(--ok);--st-risk:var(--c-amber);--st-delayed:var(--red);}
+.mh-h,.mh-r{display:grid;grid-template-columns:116px minmax(0,1fr) 40px;gap:12px;align-items:center;}
+.mh-h{padding:6px 16px;background:var(--raise);border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.mh-h .r,.mh-r .pn{text-align:right;}
+.mh-r{width:100%;flex:1 1 0;min-height:40px;max-height:52px;margin:0;border:0;border-bottom:1px solid var(--line2);border-radius:0;box-shadow:none;background:none;padding:4px 16px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;}
 .mh-r:last-child{border-bottom:0;} .mh-r:hover{background:var(--raise);}
 .mh-r .pj{display:flex;align-items:center;gap:8px;min-width:0;}
-.mh-r .pj .tile{flex:none;width:26px;height:26px;border-radius:7px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;}
-.mh-r .pj .tile svg.i{width:15px;height:15px;}
-.mh-r .pj b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
-.mh-r .pj > svg.i{flex:none;width:13px;height:13px;color:var(--faint);margin-left:-2px;}
-.mh-r:hover .pj > svg.i{color:var(--brand);}
-.mh-r .ov-stk{height:22px;border-radius:6px;}
-.mh-r .ov-stk i{font-size:11px;}
-.mh-pill{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:54px;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;}
-.mh-pill svg.i{width:12px;height:12px;}
-.mh-pill.bad{background:var(--red-soft);color:var(--red);} .mh-pill.nil{background:var(--raise);color:var(--muted);}
-.mh-r .pn{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;}
-.mh-r .pn b{font-size:14px;font-variant-numeric:tabular-nums;} .mh-r .pn small{font-size:10.5px;color:var(--muted);}
+.mh-r .pj b{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+.mh-r .ov-stk{height:14px;border-radius:4px;gap:2px;background:none;}
+.mh-r .ov-stk i{border-radius:3px;font-size:10.5px;font-weight:600;color:var(--ink);}
+.mh-r .ov-stk i.ok{background:var(--st-ok);color:#fff;}
+.mh-r .ov-stk i.risk{background:var(--st-risk);color:#4a3500;}
+.mh-r .ov-stk i.delayed{background:var(--st-delayed);color:#fff;}
+.mh-r .pn b{font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;}
+.ov-og .ov-stk{height:14px;gap:2px;background:none;}
+.ov-og .ov-stk i{border-radius:3px;}
+.ov-og .ov-stk i.ok{background:var(--st-ok);}
+.ov-og .ov-stk i.risk{background:var(--st-risk);}
+.ov-og .ov-stk i.delayed{background:var(--st-delayed);}
+.ov-og-f i.risk{background:var(--st-risk);} .ov-og-f i.delayed{background:var(--st-delayed);}
+.ov-leg.mh i.ok{background:var(--st-ok);} .ov-leg.mh i.risk{background:var(--st-risk);} .ov-leg.mh i.delayed{background:var(--st-delayed);}
 .ov-stk{display:flex;height:16px;border-radius:5px;overflow:hidden;background:var(--line2);min-width:0;}
 .ov-stk i{display:flex;align-items:center;justify-content:center;height:100%;font-style:normal;font-size:10px;font-weight:700;color:#fff;min-width:2px;}
 .ov-stk i.risk{color:#4a3500;}
@@ -1667,9 +1668,14 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .ov-ask:hover{text-decoration:underline;}
 .pd-kpi:focus-visible,.mh-r:focus-visible,.ov-ms:focus-visible,.ov-tl-r .pj:focus-visible,.ov-in:focus-visible,.ov-tbl tr.ov-go:focus-visible,.ov-li:focus-visible,.ov-ask:focus-visible,.pd-reset:focus-visible{outline:2px solid var(--brand);outline-offset:-2px;}
 
+/* one row of five as long as it can fit: tighter cards first, wrapping only on narrow panes */
+@container (max-width:1100px){ .ov-page .pd-kpis.k5{gap:8px;} .ov-page .pd-kpis.k5 .pd-kpi{height:108px;padding:10px 12px;gap:4px;} .ov-page .pd-kpis.k5 .top{gap:7px;} .ov-page .pd-kpis.k5 .ic{width:24px;height:24px;} .ov-page .pd-kpis.k5 .ic svg.i{width:13px;height:13px;} .ov-page .pd-kpis.k5 .lb{font-size:12px;} .ov-page .pd-kpis.k5 .vl{font-size:22px;} .ov-page .pd-kpis.k5 .mid{min-height:28px;} .ov-page .pd-kpis.k5 .sb{font-size:11.5px;} }
+@container (max-width:760px){ .ov-page .pd-kpis.k5{grid-template-columns:repeat(3,minmax(0,1fr));} }
+@container (max-width:520px){ .ov-page .pd-kpis.k5{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@container (max-width:360px){ .ov-page .pd-kpis.k5{grid-template-columns:minmax(0,1fr);} }
 /* Narrow panels (container queries) and narrow screens */
-@container (max-width:470px){ .mh-h,.mh-r{grid-template-columns:104px minmax(0,1fr) 60px 40px;gap:8px;} .mh-pill{min-width:0;padding:3px 7px;} }
-@container (max-width:340px){ .mh-h,.mh-r{grid-template-columns:104px minmax(0,1fr) 40px;} .mh-h .c,.mh-r .ds{display:none;} .ov-sup th:nth-child(4){width:118px;} .ov-sup th:nth-child(5),.ov-sup th:nth-child(6){width:50px;} }
+@container (max-width:470px){ .mh-h,.mh-r{grid-template-columns:100px minmax(0,1fr) 34px;gap:8px;} }
+@container (max-width:340px){ .ov-sup th:nth-child(4){width:118px;} .ov-sup th:nth-child(5),.ov-sup th:nth-child(6){width:50px;} }
 @media (max-width:900px){ .ov-row.two{grid-template-columns:minmax(0,1fr);} }
 @media (max-width:560px){ .ov-tool-top{grid-template-columns:auto minmax(0,1fr);} .ov-tool-top .ov-ch{grid-column:1 / -1;align-items:flex-start;} }
 
@@ -2148,13 +2154,14 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 /* ===== V8 additions: v8_tcm.css ===== */
 /* V8 · Technical Change management dashboard (Overview, Change Impact, Approval Workflow, Implementation, Change Register) — builds on the Procurement dashboard cards (.pd-*) and v8_tc_dash.css */
 .tcm{container-type:inline-size;}
-.tcm .tcd-hr{gap:10px 14px;} .tcm .tcd-hr .pd-f{flex:0 1 168px;} .tcm .pd-reset{margin-left:0;padding:10px 4px;}
-.tcm .pd-kpi .lb{white-space:normal;line-height:1.2;} .tcm .pd-kpi .sb{white-space:normal;line-height:1.25;min-height:30px;font-size:11.5px;} .tcm .pd-kpi .sb.bad{color:var(--red);font-weight:600;}
-.tcm .pd-kpi .vl{overflow:hidden;text-overflow:ellipsis;max-width:100%;}
-.pd-kpis.k8{grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;} .pd-kpis.k6{grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;}
-.pd-kpis.k8 .pd-kpi,.pd-kpis.k6 .pd-kpi{padding:13px 13px;} .pd-kpis.k8 .vl,.pd-kpis.k6 .vl{font-size:21px;} .pd-kpis.k8 .ic,.pd-kpis.k6 .ic{width:32px;height:32px;} .pd-kpis.k8 .ic svg.i,.pd-kpis.k6 .ic svg.i{width:16px;height:16px;}
-@container (max-width:1059px){ .pd-kpis.k8{grid-template-columns:repeat(4,minmax(0,1fr));} .pd-kpis.k6{grid-template-columns:repeat(3,minmax(0,1fr));} }
-@container (max-width:620px){ .pd-kpis.k8,.pd-kpis.k6{grid-template-columns:repeat(2,minmax(0,1fr));} }
+/* header, filter bar and KPI cards follow the Procurement dashboard (.pd-fbar, .pd-kpis k5): fixed-height cards, 2-line context slot, icon-only reset */
+.tcm .pd-kpis{gap:12px;} .tcm .pd-kpis .pd-kpi{height:132px;justify-content:space-between;} .tcm .pd-kpis .mid{min-height:36px;align-items:center;}
+.tcm .pd-kpis .sb{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;overflow:hidden;min-height:2.6em;line-height:1.3;} .tcm .pd-kpi .sb.bad{color:var(--red);font-weight:600;}
+.tcm .pd-kpi .vl{overflow:hidden;text-overflow:ellipsis;max-width:100%;} .tcm .pd-kpi .vl.txt{font-size:19px;}
+.tcm .pd-kpis.k6{grid-template-columns:repeat(6,minmax(0,1fr));}
+@container (max-width:1240px){ .tcm .pd-kpis.k6{grid-template-columns:repeat(3,minmax(0,1fr));} }
+@container (max-width:900px){ .tcm .pd-kpis.k5{grid-template-columns:repeat(3,minmax(0,1fr));} .tcm .pd-kpis.k6{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@container (max-width:620px){ .tcm .pd-kpis.k5,.tcm .pd-kpis.k6{grid-template-columns:repeat(2,minmax(0,1fr));} }
 
 /* panel grids (the page is the container) */
 .tcm-g{display:grid;gap:16px;margin-bottom:16px;grid-template-columns:minmax(0,1fr);}
@@ -2216,11 +2223,36 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .tcm-impl{--mw:900px;} .tcm-impl .h,.tcm-impl .r{grid-template-columns:minmax(160px,1.8fr) 72px 92px 78px 80px 72px minmax(110px,1fr) 104px;}
 @container (max-width:720px){ .tcm-hi .h > :nth-child(4),.tcm-hi .r > :nth-child(4){display:none;} .tcm-hi{--mw:700px;} .tcm-hi .h,.tcm-hi .r{grid-template-columns:18px minmax(150px,1.7fr) 74px 84px minmax(150px,1.5fr) 104px;} }
 
-/* insights */
-.tcm-ins{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;} .tcm-ins .it{display:flex;flex-direction:column;gap:7px;border:1px solid var(--line2);border-radius:12px;padding:13px 15px;background:var(--raise);}
-.tcm-ins .hd{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:13px;} .tcm-ins .no{width:22px;height:22px;border-radius:50%;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font-size:12px;font-weight:700;flex:none;}
-.tcm-ins p{margin:0;font-size:12.5px;line-height:1.45;color:var(--text);} .tcm-ins p.is{color:var(--ink);font-weight:600;} .tcm-ins em{display:block;font-style:normal;font-weight:700;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:1px;}
-.tcm-ins a{margin-top:auto;display:inline-flex;align-items:center;gap:5px;color:var(--brand);font-weight:650;font-size:12.5px;} .tcm-ins a:hover{text-decoration:underline;} .tcm-ins a svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+/* insights: six tinted cards (headline figures + action strip) and a detail pop-up */
+.c1{--ic:var(--red);} .c2{--ic:var(--c-amber);} .c3{--ic:var(--info);} .c4{--ic:#6d4fd3;} .c5{--ic:var(--ok);} .c6{--ic:#e0651a;}
+.tcm-ins{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+@container (max-width:1100px){ .tcm-ins{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@container (max-width:620px){ .tcm-ins{grid-template-columns:minmax(0,1fr);} }
+.tcm-ins .it{display:flex;flex-direction:column;gap:12px;padding:15px 16px 14px;text-align:left;font:inherit;color:var(--text);cursor:pointer;border-radius:16px;border:1px solid color-mix(in srgb,var(--ic) 22%,var(--line2));background:linear-gradient(135deg,color-mix(in srgb,var(--ic) 9%,var(--panel)),color-mix(in srgb,var(--ic) 2%,var(--panel)) 75%);transition:border-color .15s,box-shadow .15s,transform .15s;}
+.tcm-ins .it:hover{border-color:color-mix(in srgb,var(--ic) 55%,var(--line2));box-shadow:0 8px 22px -14px color-mix(in srgb,var(--ic) 60%,transparent);transform:translateY(-1px);} .tcm-ins .it:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+.tcm-ins .no,.tcm-md .no{width:26px;height:26px;border-radius:50%;background:var(--ic);color:#fff;display:grid;place-items:center;font-size:12.5px;font-weight:700;flex:none;}
+.tcm-ins .hd{display:flex;align-items:center;gap:10px;color:var(--ink);font-size:15px;font-weight:700;}
+.tcm-ins .bd,.tcm-md .bd{display:flex;align-items:center;gap:14px;min-height:64px;}
+.tcm-ins .ico,.tcm-md .ico{flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--ic) 14%,var(--panel));color:var(--ic);} .tcm-ins .ico svg.i,.tcm-md .ico svg.i{width:24px;height:24px;}
+.tcm-ins .ms,.tcm-md .ms{flex:1;min-width:0;display:flex;align-items:center;gap:0;flex-wrap:wrap;}
+.tcm-ins .m,.tcm-md .m{display:flex;align-items:center;gap:8px;padding:0 14px;border-left:1px solid color-mix(in srgb,var(--ic) 20%,var(--line2));min-width:0;} .tcm-ins .m:first-child,.tcm-md .m:first-child{border-left:0;padding-left:0;}
+.tcm-ins .m > b,.tcm-md .m > b{font-size:30px;line-height:1;font-weight:700;color:var(--ic);letter-spacing:-.01em;white-space:nowrap;} .tcm-ins .m > b small,.tcm-md .m > b small{font-size:14px;font-weight:600;margin-left:3px;}
+.tcm-ins .m > span,.tcm-md .m > span{display:flex;flex-direction:column;font-size:12.5px;color:var(--ink);line-height:1.25;} .tcm-ins .m > span small,.tcm-md .m > span small{font-size:11px;color:var(--muted);margin-top:1px;}
+.tcm-ins .it:has(.m:nth-child(3)) .m > b{font-size:22px;} .tcm-ins .it:has(.m:nth-child(3)) .m{padding:0 9px;}
+.tcm-ins .ln{list-style:none;margin:0 0 0 14px;padding:0 0 0 14px;border-left:1px solid color-mix(in srgb,var(--ic) 20%,var(--line2));font-size:12px;color:var(--muted);display:grid;gap:2px;}
+.tcm-ins .ac{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding:11px 14px;border-radius:12px;background:color-mix(in srgb,var(--ic) 11%,var(--panel));font-size:13px;color:var(--ink);} .tcm-ins .ac svg{flex:none;width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+
+.tcm-mb{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;padding:20px;background:rgba(6,22,17,.5);backdrop-filter:blur(2px);animation:tcmfade .18s;}
+@keyframes tcmfade{from{opacity:0}to{opacity:1}}
+.tcm-md{width:min(820px,100%);max-height:calc(100vh - 40px);display:flex;flex-direction:column;border-radius:18px;background:var(--panel);color:var(--text);border:1px solid var(--line);box-shadow:var(--shadow-md);overflow:hidden;}
+.tcm-md .mh{display:flex;align-items:center;gap:14px;padding:18px 22px;background:linear-gradient(135deg,color-mix(in srgb,var(--ic) 12%,var(--panel)),var(--panel) 80%);border-bottom:1px solid var(--line2);} .tcm-md .mh h3{margin:0;font-size:19px;color:var(--ink);} .tcm-md .mh small{display:block;font-size:12px;color:var(--muted);margin-top:2px;} .tcm-md .mh > div{flex:1;min-width:0;}
+.tcm-md .mx{flex:none;width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--raise);color:var(--muted);display:grid;place-items:center;cursor:pointer;} .tcm-md .mx:hover{color:var(--ink);border-color:var(--brand);} .tcm-md .mx svg{width:16px;height:16px;}
+.tcm-md .mbody{padding:18px 22px;overflow:auto;display:grid;gap:16px;} .tcm-md .bd{padding:4px 0;}
+.tcm-md .sec em,.tcm-md .ac em{display:block;font-style:normal;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:5px;} .tcm-md .sec p,.tcm-md .ac p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink);}
+.tcm-md .ac.big{padding:13px 16px;border-radius:12px;background:color-mix(in srgb,var(--ic) 11%,var(--panel));border:1px solid color-mix(in srgb,var(--ic) 25%,var(--line2));}
+.tcm-md .mt{--mw:640px;} .tcm-md .mt .h,.tcm-md .mt .r{grid-template-columns:minmax(170px,2fr) 76px minmax(110px,1.1fr) minmax(120px,1.2fr) 86px;}
+.tcm-md .mf{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid var(--line2);background:var(--raise);}
+
 
 /* change detail */
 .tcm-kv .kv{display:grid;grid-template-columns:140px minmax(0,1fr);gap:8px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:12.5px;} .tcm-kv .kv:last-child{border-bottom:0;} .tcm-kv .kv span{color:var(--muted);} .tcm-kv .kv b{color:var(--ink);font-weight:600;}
@@ -2230,6 +2262,71 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .tcm-fin .n small{white-space:normal !important;}
 #tcm-reg td:first-child b{white-space:nowrap;} #tcm-reg .ft-t td{padding-top:9px;padding-bottom:9px;}
 .tcm-flow .stg:last-child{margin-right:0;}
+/* approval flow inside a half-width panel */
+@container (max-width:700px){ .tcm-flow .stg{min-width:62px;padding:9px 13px 8px 18px;margin-right:-6px;} .tcm-flow .nm{font-size:10.5px;min-height:26px;} .tcm-flow .ct{font-size:22px;} .tcm-flow .av,.tcm-flow .ov{font-size:9.5px;} .tcm-flow-sum{font-size:11.5px;} }
+/* status donut */
+.tcm-ds{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 22px;flex:1;} .tcm-ds .dn{flex:0 0 232px;width:232px;} .tcm-ds .lg{flex:1 1 190px;max-width:260px;min-width:0;}
+.tcm-dn{font-size:34px;font-weight:700;fill:var(--ink);} .tcm-arc{cursor:pointer;} .tcm-arc:hover{opacity:.82;} .tcm-arc:focus{outline:0;} .tcm-arc:focus-visible{stroke-width:34;}
+.tcm .tcd-status .o[data-act]{cursor:pointer;border-radius:8px;} .tcm .tcd-status .o[data-act]:hover,.tcm .tcd-status .o.on{background:var(--raise);} .tcm .tcd-status .o.on span{font-weight:700;color:var(--ink);}
+.tcm .tcd-status .o{grid-template-columns:10px minmax(0,1fr) auto 40px;padding:6px 6px;}
+/* one table, two tabs */
+.tcm-chg{--mw:980px;} .tcm-chg .h,.tcm-chg .r{grid-template-columns:18px minmax(170px,2fr) 72px 108px minmax(120px,1.1fr) 88px 104px 70px minmax(82px,.8fr) 76px;} .tcm-chg .pq{cursor:help;}
+.tcm-chg .st{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;} .tcm-chg .st b{font-size:12px;font-weight:600;color:var(--ink);} 
+.tcm-chg .v{text-align:right;} .tcm-chg .h > :nth-child(6),.tcm-chg .h > :nth-child(8){text-align:right;}
+.tcm .panel-header .fc-seg .count-pill{margin-left:4px;}
+
+@container (max-width:520px){ .tcm-ds .dn{flex-basis:200px;width:200px;} }
+/* production-risk card */
+.tcm-tip{position:fixed;z-index:9999;width:360px;max-width:calc(100vw - 16px);padding:14px 16px;border-radius:14px;background:var(--panel);color:var(--text);border:1px solid var(--line);box-shadow:var(--shadow-md);font-size:12.5px;line-height:1.4;pointer-events:none;}
+.tcm-tip .hd{display:flex;flex-direction:column;gap:1px;margin-bottom:10px;} .tcm-tip .hd b{color:var(--ink);font-size:13.5px;} .tcm-tip .hd span{color:var(--muted);font-size:12px;}
+.tcm-tip .sm{display:flex;align-items:center;gap:10px;margin-bottom:8px;} .tcm-tip .sm > span:last-child{color:var(--muted);font-size:12px;}
+.tcm-tip ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line2);} .tcm-tip li{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--line2);color:var(--muted);}
+.tcm-tip li i{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-style:normal;font-weight:800;margin-top:1px;background:var(--ok-soft);color:var(--ok);} .tcm-tip li.hit{color:var(--ink);font-weight:600;} .tcm-tip li.hit i{background:var(--red-soft);color:var(--red);}
+.tcm-tip .dp{display:flex;flex-direction:column;gap:3px;margin-top:9px;} .tcm-tip .dp em{font-style:normal;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);} .tcm-tip .dp span{color:var(--ink);}
+.tcm-tip .ft{margin-top:10px;font-size:11px;color:var(--faint);} .tcm-tip .mu{margin:0;color:var(--muted);}
+.tcm-md .mt .s{text-align:left;font-size:12px;} .tcm-md .mt .h span:not(.ra){text-align:left;} .tcm-md .mt .r{cursor:pointer;} .tcm-md .mt .n small{white-space:normal;}
+
+.tcm-ins .ms,.tcm-md .ms{flex-wrap:nowrap;} .tcm-ins .m,.tcm-md .m{flex:0 1 auto;} .tcm-ins .ico{width:46px;height:46px;} .tcm-ins .ico svg.i{width:22px;height:22px;}
+.tcm-ins .m.col,.tcm-md .m.col{flex-direction:column;align-items:flex-start;gap:4px;padding:0 12px;} .tcm-ins .m.col > b,.tcm-md .m.col > b{font-size:19px;} .tcm-ins .m.col > b small,.tcm-md .m.col > b small{font-size:12px;} .tcm-ins .m.col > span{font-size:11.5px;} .tcm-md .m.col > b{font-size:24px;}
+.tcm-ins .it:has(.m:nth-child(3)) .m.col > b{font-size:19px;}
+
+/* insight cards: figures can never overlap — equal columns, wrapping text, size follows the card width, icon and divider drop out when the card is narrow */
+.tcm-ins .it{container-type:inline-size;}
+.tcm-ins .ms{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);align-items:center;gap:0;}
+.tcm-ins .m{min-width:0;flex:unset;padding:0 10px;} .tcm-ins .m:first-child{padding-left:0;}
+.tcm-ins .m > b{font-size:clamp(20px,7cqw,30px);} .tcm-ins .m.col > b{font-size:clamp(15px,4.6cqw,20px);} .tcm-ins .it:has(.m:nth-child(3)) .m > b{font-size:clamp(15px,4.6cqw,20px);}
+.tcm-ins .m > span{min-width:0;overflow-wrap:anywhere;} .tcm-ins .m.col{padding:0 8px;} .tcm-ins .m.col:first-child{padding-left:0;}
+.tcm-ins .ln{min-width:0;margin-left:10px;padding-left:12px;overflow-wrap:anywhere;}
+@container (max-width:375px){ .tcm-ins .ico{display:none;} .tcm-ins .m:not(.col){flex-direction:column;align-items:flex-start;gap:3px;} }
+@container (max-width:330px){ .tcm-ins .ms{grid-auto-flow:row;gap:10px;} .tcm-ins .m,.tcm-ins .m.col{padding:0;border-left:0;} .tcm-ins .ln{margin:0;padding:0;border-left:0;display:flex;flex-wrap:wrap;gap:2px 12px;} }
+#tcm-reg .ft-sum{display:none;} #tcm-reg .ft-bar:not(:has(.ft-chip)){display:none;} #tcm-reg .ft-t{table-layout:fixed;width:100%;}
+/* insight cards, compact: icon + two headline figures (value over label) + the action line; detail lives in the pop-up */
+.tcm-ins .it{gap:10px;padding:13px 14px;}
+.tcm-ins .bd{min-height:0;gap:12px;}
+.tcm-ins .ms{grid-auto-flow:column;gap:0;}
+.tcm-ins .m,.tcm-ins .m.col{flex-direction:column;align-items:flex-start;gap:2px;padding:0 12px;border-left:1px solid color-mix(in srgb,var(--ic) 20%,var(--line2));} .tcm-ins .m:first-child,.tcm-ins .m.col:first-child{padding-left:0;border-left:0;}
+.tcm-ins .m > b,.tcm-ins .m.col > b,.tcm-ins .it:has(.m:nth-child(3)) .m > b{font-size:clamp(20px,6.4cqw,27px);}
+.tcm-ins .m > span{font-size:12px;line-height:1.25;} .tcm-ins .m > span small{display:none;}
+.tcm-ins .ln{display:none;}
+.tcm-ins .ac{padding:9px 12px;font-size:12.5px;}
+@container (max-width:375px){ .tcm-ins .ico{display:none;} }
+@container (max-width:330px){ .tcm-ins .ms{grid-auto-flow:column;gap:0;} .tcm-ins .m,.tcm-ins .m.col{padding:0 8px;border-left:1px solid color-mix(in srgb,var(--ic) 20%,var(--line2));} .tcm-ins .m:first-child{padding-left:0;border-left:0;} }
+
+/* change detail page */
+.tcm .pd-kpis.k4{grid-template-columns:repeat(4,minmax(0,1fr));}
+@container (max-width:900px){ .tcm .pd-kpis.k4{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@container (max-width:460px){ .tcm .pd-kpis.k4{grid-template-columns:minmax(0,1fr);} }
+.tcm-dh{padding:12px 16px;background:var(--panel);border:1px solid var(--line);border-radius:16px;} .tcm-dh .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex:1;min-width:0;}
+.tcm-det .tcm-flow-sum .od{color:var(--red);font-weight:700;}
+.tcm-flow.detail .stg .ct{font-size:20px;} .tcm-flow.detail .stg .av{font-size:10px;}
+.tcm-kvg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 20px;} .tcm-kvg .f{display:flex;flex-direction:column;gap:3px;min-width:0;} .tcm-kvg .f.wide{grid-column:1/-1;}
+.tcm-kvg .f > span{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);} .tcm-kvg .f > b{font-size:13.5px;font-weight:600;color:var(--ink);overflow-wrap:anywhere;}
+.tcm-tl{list-style:none;margin:0;padding:0 0 0 4px;position:relative;} .tcm-tl::before{content:"";position:absolute;left:10px;top:12px;bottom:12px;width:2px;background:var(--line2);}
+.tcm-tl li{position:relative;display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:12px;align-items:start;padding:9px 0;} .tcm-tl li i{width:14px;height:14px;border-radius:50%;margin-top:2px;background:var(--panel);border:2px solid var(--line);z-index:1;}
+.tcm-tl li b{display:block;font-size:13px;color:var(--ink);} .tcm-tl li small{display:block;font-size:11.5px;color:var(--muted);margin-top:1px;} .tcm-tl li > span{font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap;}
+.tcm-tl li.past i{background:var(--c-anchor);border-color:var(--c-anchor);} .tcm-tl li.od i{border-color:var(--red);background:var(--red-soft);} .tcm-tl li.od > span,.tcm-tl li.od small{color:var(--red);} .tcm-tl li.warn i{border-color:var(--c-amber);background:var(--amber-soft);}
+.tcm-tl li.today{padding:3px 0;} .tcm-tl li.today i{border:2px dashed var(--brand);background:var(--brand-soft);} .tcm-tl li.today b,.tcm-tl li.today > span,.tcm-tl li.today small{color:var(--brand);}
+.tcm-dep{margin-top:14px;padding-top:12px;border-top:1px solid var(--line2);display:flex;flex-wrap:wrap;gap:8px;align-items:center;} .tcm-dep em{flex-basis:100%;font-style:normal;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
 
 
 /* ===== V8 additions: v8_home.css ===== */
@@ -11022,10 +11119,18 @@ function filterBar(m){
     `<span class="v8-asof" title="Dates and statuses are evaluated as of this date">As of <b>${fmtDate(m.today)}</b> · ${weekLabel(m.today)}</span>`;
   bindFilters(d); return d;
 }
-function page(title,sub){ const w=document.createElement("div"); w.className="v8-page"; w.appendChild(U.header(title,sub)); w.appendChild(filterBar(model())); return w; }
+function srmMeta(m){
+  const d=document.createElement("div"); d.className="pd-meta";
+  d.innerHTML=`<span title="Statuses are evaluated as of this date">Data as of <b>${fmtDate(m.today)}</b></span><span class="pd-ill" title="Milestone commitments, tool plans and owner names are generated for this prototype. Parts, projects, suppliers and SOP dates are platform data.">Illustrative data</span>`;
+  return d;
+}
+function page(title,sub){ const w=document.createElement("div"), m=model(), hd=U.header(title,sub); w.className="v8-page v8-board ov-page"; hd.appendChild(srmMeta(m)); w.appendChild(hd); w.appendChild(overviewFilters(m)); return w; }
 const add=(w,html)=>{ const e=U.el(html); w.appendChild(e); return e; };
 const kpiRow=(w,cards)=>add(w,`<div class="v8-kpis">${cards.join("")}</div>`);
 const kcard=(label,value,sub,o)=>{ o=o||{}; return `<div class="kpi-card v8-kpi${o.act?" kpi-link":""}" ${o.act?`data-act="${o.act}" role="button" tabindex="0"`:""}><div class="kpi-label">${label}</div><div class="v8-kv"><div class="kpi-value">${value}</div>${o.ring!=null?V.ring(o.ring):""}</div><div class="v8-ks">${sub||""}</div></div>`; };
+/* SRM KPI card + row (same markup as the Procurement dashboard): icon, label, value, one line of context. Five per screen. */
+const scard=(icon,label,value,sub,o)=>{ o=o||{}; return ovKpi({icon,label,value,sub,tone:o.tone,act:o.act,tip:o.tip}); };
+const skpis=(w,cards)=>add(w,`<div class="pd-kw"><div class="pd-kpis k5">${cards.join("")}</div></div>`);
 const delta=(a,b,unit,good)=>{ if(a==null||b==null) return ""; const d=a-b; if(Math.abs(d)<0.05) return `<span class="v8-flat">no change vs last week</span>`; const up=d>0, ok=good==="up"?up:!up; return `<span class="${ok?"v8-good":"v8-bad"}">${up?"▲":"▼"} ${Math.abs(d)<10?Math.abs(d).toFixed(1):Math.round(Math.abs(d))}${unit} vs last week</span>`; };
 
 /* ------------------------------------------------------------ project milestone status (facelift parts of each project) */
@@ -11152,7 +11257,7 @@ function openSrmPart(id){
 
 /* ------------------------------------------------------------ 1 · Overview — management board (KPIs, stacked milestone health, tables, timeline) */
 const ovInfo=t=>`<span class="ov-i" title="${esc(t)}">${Icons.svg("info")}</span>`;
-const ovLeg=`<div class="ov-leg"><span><i class="ok"></i>On track</span><span><i class="risk"></i>At risk</span><span><i class="delayed"></i>Delayed</span></div>`;
+const ovLeg=`<div class="ov-leg mh"><span><i class="ok"></i>On track</span><span><i class="risk"></i>At risk</span><span><i class="delayed"></i>Delayed</span></div>`;
 function ovDelta(a,b,good,unit){
   if(a==null||b==null||isNaN(a)||isNaN(b)) return "";
   const d=a-b; if(Math.abs(d)<0.05) return "";
@@ -11208,10 +11313,9 @@ function milestoneHealth(m,ev){
     const tip=`${short(r.p.name)} · ${r.n} started of ${r.all} · On track ${r.c.ok} · At risk ${r.c.risk} · Delayed ${r.c.delayed} · Not started ${r.ns}`;
     const pc=share100(KS.map(k=>r.c[k]));
     const bar=!r.n?`<span class="ov-nil">No started parts</span>`:`<span class="ov-stk">${KS.map((k,i)=>{ const c=r.c[k]; if(!c) return ""; const w=c/r.n*100; return `<i class="${k}" style="width:${w.toFixed(2)}%" title="${esc(V.LABEL[k]+": "+c+" parts")}">${w>=12?pc[i]+"%":""}</i>`; }).join("")}</span>`;
-    const ds=!r.n?`<span class="mh-pill nil">—</span>`:r.c.delayed?`<span class="mh-pill bad">${Icons.svg("alert")}${pc[2]}%</span>`:`<span class="mh-pill nil">0%</span>`;
-    return `<button type="button" class="mh-r" data-act="sfg:project=${esc(r.p.code)}|srm-status-dash" title="${esc(tip)} · Open status tracking"><span class="pj"><span class="tile">${Icons.svg("car")}</span><b>${esc(short(r.p.name))}</b>${Icons.svg("chevron-right")}</span>${bar}<span class="ds">${ds}</span><span class="pn" title="${esc(r.n+" started · "+r.ns+" not started")}"><b>${r.n}</b><small>parts</small></span></button>`;
+    return `<button type="button" class="mh-r" data-act="sfg:project=${esc(r.p.code)}|srm-status-dash" title="${esc(tip)} · Open status tracking"><span class="pj"><b>${esc(short(r.p.name))}</b></span>${bar}<span class="pn" title="${esc(r.n+" started · "+r.ns+" not started")}"><b>${r.n}</b></span></button>`;
   }).join("");
-  return `<div class="mh-h"><span>Project</span><span>Status distribution</span><span class="c">Delayed share</span><span class="r">Parts</span></div>${body}`;
+  return `<div class="mh-h"><span>Project</span><span>Status distribution</span><span class="r">Parts</span></div>${body}`;
 }
 function supplierTable(sup){
   const ranked=sup.filter(x=>x.started>=5&&x.readiness!=null).sort((a,b)=>a.readiness-b.readiness||b.counts.delayed-a.counts.delayed||a.name.localeCompare(b.name));
@@ -11297,17 +11401,14 @@ function buildOverview(){
   const {m,ev,ev7,sm,sm7}=ctx(), w=document.createElement("div"); w.className="v8-page v8-board ov-page";
   const hd=U.header("Overview","Supplier readiness, milestone health and the risks that can affect upcoming SOP dates. Every figure follows the filters.");
   const h1=hd.querySelector("h1"); if(h1) h1.textContent="Supplier Readiness Management (SRM) – Overview";
-  const meta=document.createElement("div"); meta.className="pd-meta";
-  meta.innerHTML=`<span title="Statuses are evaluated as of this date">Data as of <b>${fmtDate(m.today)}</b></span><span class="pd-ill" title="Milestone commitments, tool plans and owner names are generated for this prototype. Parts, projects, suppliers and SOP dates are platform data.">Illustrative data</span>`;
-  hd.appendChild(meta);
+  hd.appendChild(srmMeta(m));
   w.appendChild(hd); w.appendChild(overviewFilters(m));
   const sup=suppliers(m,ev), pm=progMilestones(m,ev), mc=msCounts(pm), weak=sup.filter(x=>x.started>=5&&x.readiness!=null&&x.readiness<60).length;
   const hz=sixMonths(m.today), risks=riskTable(m,ev,hz.end), acts=actionTable(m,ev), gates=mc.risk+mc.delayed;
-  add(w,`<div class="pd-kw"><div class="pd-kpis k6">${[
+  add(w,`<div class="pd-kw"><div class="pd-kpis k5">${[
     ovKpi({icon:"users",label:"Suppliers in scope",value:nf(sm.suppliers,0),sub:weak?`<span class="bad">${weak} below 60% readiness</span>`:`<span class="good">None below 60% readiness</span>`,act:"sgo:srm-performance-dash",tip:"Suppliers with parts in the current filter. Below 60% counts only suppliers with at least 5 started parts."}),
     ovKpi({icon:"package",label:"Parts in scope",value:nf(sm.n,0),sub:`${nf(sm.started,0)} started · ${nf(sm.counts.notstarted,0)} not started`,act:"sgo:srm-tooling-dash",tip:"Parts in the current filter. Not started means nomination is not yet due."}),
     ovKpi({icon:"target",label:"Overall supplier readiness",value:pct0(sm.readiness),tone:bandCls(sm.readiness),sub:"Average of started parts",tip:"100% means the next commitment is on or ahead of the required date. 0% means 40 or more days late."}),
-    ovKpi({icon:"wrench",label:"Tooling readiness",value:pct0(sm.toolReadiness),tone:bandCls(sm.toolReadiness),sub:`${nf(sm.toolN,0)} parts · ${nf(sm.toolSum,0)} tools`,act:"sgo:srm-tooling-dash",tip:"Average plan attainment of parts whose tools have started."}),
     ovKpi({icon:"alert",label:"Milestones at risk",value:nf(gates,0),tone:mc.delayed?"bad":mc.risk?"warn":"good",sub:`<span class="bad">${mc.delayed} delayed</span> · <span class="warn">${mc.risk} at risk</span>`,act:"sgo:srm-status-dash",tip:"Project facelift gates still ahead of today. A gate is delayed when at least 20% of its facelift parts are more than 30 days late, and at risk at the model's lower share. On-track gates are not in this count."}),
     ovKpi({icon:"clipboard-check",label:"Open actions",value:nf(sm.actions,0),tone:sm.counts.delayed?"bad":sm.counts.risk?"warn":"",sub:`<span class="bad">${sm.counts.delayed} delayed</span> · <span class="warn">${sm.counts.risk} at risk</span>`,act:"sgo:srm-tooling-dash",tip:"Started parts that are at risk or delayed. One action per part."})
   ].join("")}</div></div>`);
@@ -11317,18 +11418,16 @@ function buildOverview(){
   r1.appendChild(pSup); ovPaginate(pSup,"tbody tr",7,"suppliers");
   const r2=add(w,`<div class="ov-row two"></div>`);
   r2.appendChild(U.el(U.panel("Readiness by stage "+ovInfo("How many parts are at each readiness stage today. This is not a cumulative count of parts that have passed the stage."),stageBars(ev),{noPad:true,sub:"Share of parts in scope"})));
-  r2.appendChild(U.el(U.panel("Tooling readiness "+ovInfo("The percentage is the average plan attainment of parts whose tools have started. The rows are part counts by tooling status."),toolingBody(sm,sm7),{noPad:true,sub:"Against plan"})));
-  const r3=add(w,`<div class="ov-row one"></div>`);
-  r3.appendChild(U.el(U.panel("Upcoming key milestones "+ovInfo("Project facelift gates whose required date falls in the next six calendar months. Colour uses the existing gate rule. Click a gate to open it on status tracking."),timeline(m,pm),{noPad:true,sub:"Next 6 months · facelift gates"})));
-  const r4=add(w,`<div class="ov-row two"></div>`);
+  r2.appendChild(U.el(U.panel("Readiness by origin "+ovInfo("Domestic or international, from the supplier master. A map is not shown: every supplier country on the master is India, and plant names are illustrative."),originPanel(m,ev,ev7),{noPad:true,sub:"Weaker origin first"})));
+  const r3=add(w,`<div class="ov-row two"></div>`);
   const pRisk=U.el(U.panel("Top risks to production readiness "+ovInfo("Delayed parts first, then the earliest part SOP. Impact is High for delayed and Medium for at risk — the same split as open actions. It is not a separate production-loss estimate."),risks.html,{noPad:true,sub:risks.n?`Top ${risks.shown} of ${risks.n} · delayed first, then earliest SOP`:"No delayed or at-risk parts",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`}));
-  r4.appendChild(pRisk); ovPaginate(pRisk,".ov-lis > .ov-li",5);
+  r3.appendChild(pRisk); ovPaginate(pRisk,".ov-lis > .ov-li",5);
   const pAct=U.el(U.panel("Open actions — highest priority "+ovInfo("One row per part. Delayed first, then the nearest next milestone. The action text is that milestone's standard next step."),acts.html,{noPad:true,sub:acts.n?`Top ${acts.shown} of ${acts.n} · delayed first`:"Nothing open",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`}));
-  r4.appendChild(pAct); ovPaginate(pAct,".ov-lis > .ov-li",5);
-  const r5=add(w,`<div class="ov-row two"></div>`);
-  r5.appendChild(U.el(U.panel("Readiness by origin "+ovInfo("Domestic or international, from the supplier master. A map is not shown: every supplier country on the master is India, and plant names are illustrative."),originPanel(m,ev,ev7),{noPad:true,sub:"Weaker origin first"})));
+  r3.appendChild(pAct); ovPaginate(pAct,".ov-lis > .ov-li",5);
+  const r4=add(w,`<div class="ov-row two"></div>`);
+  r4.appendChild(U.el(U.panel("Upcoming key milestones "+ovInfo("Project facelift gates whose required date falls in the next six calendar months. Colour uses the existing gate rule. Click a gate to open it on status tracking."),timeline(m,pm),{noPad:true,sub:"Next 6 months · facelift gates"})));
   const pIns=U.el(U.panel("Key insights "+ovInfo("Existing rules only: the largest cluster missing a milestone, suppliers under 60% readiness, tooling behind plan, the project with the highest delayed share, and at-risk parts whose price forecast rises more than 5%."),insightPanel(insights(m,ev,sm,sup)),{noPad:true,sub:"Recommendations · click a card to open the view"}));
-  r5.appendChild(pIns); ovPaginate(pIns,".ov-ins > .ov-in",3);
+  r4.appendChild(pIns); ovPaginate(pIns,".ov-ins > .ov-in",3);
   U.wire(w); return w;
 }
 
@@ -11370,13 +11469,12 @@ function buildParts(){
   const {m,ev,sm}=ctx(), w=page("Part Readiness","Tooling and part readiness by vertical, supplier and stage — pick a part for its commitments."), sup=suppliers(m,ev);
   /* the two scope panels always show every vertical (the Vertical filter would leave one row); project and supplier filters still apply */
   const evScope=S.scope(m,{project:F.project,supplier:F.supplier}), smScope=S.summary(evScope);
-  kpiRow(w,[
-    kcard("Parts in scope",nf(sm.n,0),`${sm.suppliers} suppliers`),
-    kcard("On track",sm.counts.ok,`<span class="v8-dot ok"></span>${sm.started?Math.round(sm.counts.ok/sm.started*100):0}% of started parts`),
-    kcard("At risk",sm.counts.risk,`<span class="v8-dot risk"></span>${S.TH.risk}–${S.TH.delayed} days late`),
-    kcard("Delayed",sm.counts.delayed,`<span class="v8-dot delayed"></span>more than ${S.TH.delayed} days late`),
-    kcard("Not started",sm.counts.notstarted,"nomination not yet due"),
-    kcard("Tooling readiness",pct0(sm.toolReadiness),`${sm.toolN} parts with tooling · ${sm.toolSum} tools`,{ring:sm.toolReadiness})]);
+  skpis(w,[
+    scard("package","Parts in scope",nf(sm.n,0),`${sm.suppliers} suppliers · ${nf(sm.counts.notstarted,0)} not started`),
+    scard("check-circle","On track",sm.counts.ok,`${sm.started?Math.round(sm.counts.ok/sm.started*100):0}% of started parts`),
+    scard("alert","At risk",sm.counts.risk,`${S.TH.risk}–${S.TH.delayed} days late`,{tone:sm.counts.risk?"warn":""}),
+    scard("clock","Delayed",sm.counts.delayed,`more than ${S.TH.delayed} days late`,{tone:sm.counts.delayed?"bad":""}),
+    scard("wrench","Tooling readiness",pct0(sm.toolReadiness),`${sm.toolN} parts with tooling · ${sm.toolSum} tools`,{tone:bandCls(sm.toolReadiness)})]);
   const g1=add(w,`<div class="v8-g v8-g21"></div>`);
   const famRows=S.FAMILIES.map(f=>{ const l=evScope.filter(e=>e.pt.family===f), s=S.summary(l); return {f,s}; }).filter(r=>r.s.n);
   g1.appendChild(U.el(U.panel("Scope parts overview",U.table(["Vertical","Parts","On track","At risk","Delayed","Not started","Readiness"],famRows.map(r=>`<tr><td><b>${esc(r.f)}</b></td><td>${r.s.n}</td><td>${r.s.counts.ok}</td><td>${r.s.counts.risk}</td><td>${r.s.counts.delayed}</td><td>${r.s.counts.notstarted}</td><td class="v8-rcell">${readBar(r.s.readiness)}</td></tr>`).join("")+`<tr class="v8-tot"><td><b>Total</b></td><td>${smScope.n}</td><td>${smScope.counts.ok}</td><td>${smScope.counts.risk}</td><td>${smScope.counts.delayed}</td><td>${smScope.counts.notstarted}</td><td class="v8-rcell">${readBar(smScope.readiness)}</td></tr>`),{noPad:true,sub:"All verticals (the Vertical filter does not apply here) · readiness = average of the started parts"})));
@@ -11396,13 +11494,12 @@ function buildStatus(){
   const {m,ev,sm}=ctx(), w=page("Status Tracking","Milestone chain per project — required date versus what suppliers have committed."), pm=progMilestones(m,ev), mc=msCounts(pm);
   const started=ev.filter(e=>e.started), nextSlip=started.length?started.reduce((s,e)=>s+(e.next?e.next.dm:0),0)/started.length:null;
   const upcoming=[]; pm.forEach(x=>x.ms.forEach(k=>{ if(k.future) upcoming.push({x,k}); })); upcoming.sort((a,b)=>a.k.R-b.k.R);
-  kpiRow(w,[
-    kcard("Projects",pm.length,"facelift milestone chains"),
-    kcard("Milestones ahead",upcoming.length,`next: ${upcoming[0]?esc(upcoming[0].k.id)+" · "+esc(short(upcoming[0].x.p.name))+" · "+fmtDate(upcoming[0].k.R):"—"}`),
-    kcard("On track",mc.ok,`<span class="v8-dot ok"></span>supplier commitments in time`),
-    kcard("At risk",mc.risk,`<span class="v8-dot risk"></span>some parts forecast late`),
-    kcard("Delayed",mc.delayed,`<span class="v8-dot delayed"></span>20%+ of parts late`),
-    kcard("Avg slip at next milestone",nextSlip==null?"—":(nextSlip>0?"+":"")+Math.round(nextSlip)+" d",`over ${started.length} started parts`)]);
+  skpis(w,[
+    scard("calendar","Milestones ahead",upcoming.length,`next: ${upcoming[0]?esc(upcoming[0].k.id)+" · "+esc(short(upcoming[0].x.p.name))+" · "+fmtDate(upcoming[0].k.R):"—"}`),
+    scard("check-circle","On track",mc.ok,"supplier commitments in time"),
+    scard("alert","At risk",mc.risk,"some parts forecast late",{tone:mc.risk?"warn":""}),
+    scard("clock","Delayed",mc.delayed,"20%+ of parts late",{tone:mc.delayed?"bad":""}),
+    scard("activity","Avg slip at next milestone",nextSlip==null?"—":(nextSlip>0?"+":"")+Math.round(nextSlip)+" d",`over ${started.length} started parts`)]);
   add(w,U.panel("Project timeline — plan vs forecast",V.gantt(ganttRows(pm,true),{today:m.today,rowH:50,width:980}),{sub:"Solid diamond = required date · hollow diamond = date the supplier commitments point to (shown when it slips more than 2 days)"}));
   w.lastChild.style.marginTop="16px";
   /* matrix */
@@ -11424,13 +11521,13 @@ function buildStatus(){
 function buildPerformance(){
   const {m,ev,sm}=ctx(), w=page("Supplier Performance","Readiness, delivery and quality per supplier — who is on track and who needs a conversation."), sup=suppliers(m,ev).filter(x=>x.n);
   const ravg=sup.filter(x=>x.readiness!=null), av=k=>sup.length?sup.reduce((s,x)=>s+x[k],0)/sup.length:null;
-  kpiRow(w,[
-    kcard("Suppliers",sup.length,`${sup.filter(x=>x.origin==="international").length} international`),
-    kcard("Avg readiness",pct0(ravg.length?ravg.reduce((s,x)=>s+x.readiness,0)/ravg.length:null),`${ravg.filter(x=>x.readiness>=80).length} suppliers at 80%+`,{ring:ravg.length?ravg.reduce((s,x)=>s+x.readiness,0)/ravg.length:null}),
-    kcard("Avg delivery",pct0(av("delivery")),"on-time delivery, last 6 months",{ring:av("delivery")}),
-    kcard("Avg quality",pct0(av("quality")),"quality performance, last 6 months",{ring:av("quality")}),
-    kcard("Below 60% readiness",ravg.filter(x=>x.readiness<60).length,`<span class="v8-bad">${ravg.filter(x=>x.readiness<60).map(x=>x.name).slice(0,2).join(", ")||"none"}</span>`),
-    kcard("Delayed parts",sm.counts.delayed,`${sm.counts.risk} more at risk`)]);
+  const avgR=ravg.length?ravg.reduce((s,x)=>s+x.readiness,0)/ravg.length:null, low60=ravg.filter(x=>x.readiness<60);
+  skpis(w,[
+    scard("building","Suppliers",sup.length,`${sup.filter(x=>x.origin==="international").length} international`),
+    scard("target","Avg readiness",pct0(avgR),`${ravg.filter(x=>x.readiness>=80).length} suppliers at 80%+`,{tone:bandCls(avgR)}),
+    scard("clock","Avg delivery",pct0(av("delivery")),"on-time delivery, last 6 months"),
+    scard("shield","Avg quality",pct0(av("quality")),"quality performance, last 6 months"),
+    scard("alert","Below 60% readiness",low60.length,`<span class="bad">${esc(low60.map(x=>x.name).slice(0,2).join(", ")||"none")}</span>`,{tone:low60.length?"bad":""})]);
   const g=add(w,`<div class="v8-g v8-g2"></div>`);
   const low=ravg.slice().sort((a,b)=>a.readiness-b.readiness).slice(0,5).map(x=>x.name);
   g.appendChild(U.el(U.panel("Delivery vs quality",V.scatter(sup.map(x=>({x:x.delivery,y:x.quality,r:x.n,color:x.readiness==null?V.COL.notstarted:V.band(x.readiness),label:x.name,showLabel:low.includes(x.name),click:`sfg:supplier=${x.name}|srm-tooling-dash`,title:`${x.name}\nDelivery ${x.delivery}% · Quality ${x.quality}%\nReadiness ${x.readiness==null?"n/a":Math.round(x.readiness)+"%"} · ${x.n} parts`})),{xLabel:"Delivery performance %",yLabel:"Quality performance %"})+`<div class="v8-legend"><span><i style="background:${V.COL.ok}"></i>Readiness 80%+</span><span><i style="background:${V.COL.risk}"></i>60–79%</span><span><i style="background:${V.COL.delayed}"></i>&lt;60%</span><span>Bubble size = parts</span></div>`,{sub:"Click a bubble to open that supplier's parts"})));
@@ -11477,7 +11574,7 @@ Object.assign(SCREENS.srm,{"srm-overview":buildOverview,"srm-tooling-dash":build
   };
 })();
 
-window.V8Srm={model,F,page,add,kpiRow,kcard,chip,short,fmtDate,suppliers,openSrmPart,pct0,readBar,delta,weekLabel,filterBar,chipCls};
+window.V8Srm={scard,skpis,toolingBody,model,F,page,add,kpiRow,kcard,chip,short,fmtDate,suppliers,openSrmPart,pct0,readBar,delta,weekLabel,filterBar,chipCls};
 })();
 
 </script>
@@ -11518,9 +11615,9 @@ function buildAssign(){
   const {m,ev,sm}=context(), w=K.page("Part Assignment","Who is responsible for each part's readiness — KTM expert, buyer, SRM engineer, QE, logistics and tool owner.");
   const rows=ev.map(e=>({e,p:O.people(m,e)})), gaps=rows.filter(r=>O.missing(r.p).length), mon=rows.filter(r=>O.monitoring(r.e));
   const owners={}; rows.forEach(r=>{ owners[r.p.srm]=(owners[r.p.srm]||0)+1; });
-  K.kpiRow(w,[K.kcard("Parts tracked",sm.n,`${new Set(rows.map(r=>r.e.pt.prog)).size} projects`),K.kcard("Monitoring active",mon.length,`${sm.n-mon.length} not yet started`),
-    K.kcard("Fully staffed",rows.length-gaps.length,`${rows.length?Math.round((rows.length-gaps.length)/rows.length*100):0}% of parts`),K.kcard("With gaps",gaps.length,gaps.length?`<span class="v8-bad">a role is unassigned</span>`:`<span class="v8-good">all roles assigned</span>`),
-    K.kcard("SRM engineers",Object.keys(owners).length,`avg ${Object.keys(owners).length?Math.round(rows.length/Object.keys(owners).length):0} parts each`),K.kcard("Fakum / colour variants",rows.filter(r=>r.e.pt.tier==="C").length,"tracked against a base part")]);
+  K.skpis(w,[K.scard("package","Parts tracked",sm.n,`${new Set(rows.map(r=>r.e.pt.prog)).size} projects`),K.scard("activity","Monitoring active",mon.length,`${sm.n-mon.length} not yet started`),
+    K.scard("check-circle","Fully staffed",rows.length-gaps.length,`${rows.length?Math.round((rows.length-gaps.length)/rows.length*100):0}% of parts`),K.scard("alert","With gaps",gaps.length,gaps.length?`<span class="bad">a role is unassigned</span>`:`<span class="good">all roles assigned</span>`,{tone:gaps.length?"bad":""}),
+    K.scard("users","SRM engineers",Object.keys(owners).length,`avg ${Object.keys(owners).length?Math.round(rows.length/Object.keys(owners).length):0} parts each`)]);
   const g=add(w,`<div class="v8-g v8-g2"></div>`);
   const own=Object.entries(owners).sort((a,b)=>b[1]-a[1]), avgOwn=own.length?Math.round(rows.length/own.length):0;
   g.appendChild(fill(U.panel("Workload by SRM engineer",sumLine(`<b>${own.length}</b> engineers`,`average <b>${avgOwn}</b> parts each`)+rank(own.map(([n,c])=>({label:n,sub:`${rows.length?Math.round(c/rows.length*100):0}% of parts`,value:c,color:c>avgOwn*1.15?V.COL.risk:V.COL.info})),{av:true})+`<div class="ops-key"><span><i style="background:${V.COL.info}"></i>Around the average</span><span><i style="background:${V.COL.risk}"></i>More than 15% above average</span></div>`,{sub:"Parts per engineer in this selection"})));
@@ -11560,18 +11657,21 @@ function buildTools(){
   const act=tools.filter(t=>t.st!=="notstarted"), avg=act.length?act.reduce((s,t)=>s+t.pct,0)/act.length:null;
   const cap=tools.reduce((s,t)=>s+t.capexL,0), sp=tools.reduce((s,t)=>s+t.spentL,0);
   const trials=tools.filter(t=>t.st!=="done"&&t.st!=="notstarted"&&t.trial>=m.today&&t.trial<=m.today+60*DAY).sort((a,b)=>a.trial-b.trial);
-  K.kpiRow(w,[K.kcard("Tools tracked",tools.length,`${new Set(tools.map(t=>t.part.pt.id)).size} parts need tooling`),K.kcard("Avg completion",K.pct0(avg),"tools in progress",{ring:avg}),
-    K.kcard("Approved",c.done,`<span class="v8-dot ok"></span>trial passed, shipped`),K.kcard("At risk / delayed",c.risk+c.delayed,`<span class="v8-dot risk"></span>${c.risk} at risk <span class="v8-dot delayed"></span>${c.delayed} delayed`),
-    K.kcard("Trials in 60 days",trials.length,trials[0]?"next "+esc(fmtDate(trials[0].trial)):"none scheduled"),K.kcard("Tooling investment",crore(cap),`${cap?Math.round(sp/cap*100):0}% spent (${crore(sp)})`)]);
+  K.skpis(w,[K.scard("wrench","Tools tracked",tools.length,`${new Set(tools.map(t=>t.part.pt.id)).size} parts need tooling`),K.scard("gauge","Avg completion",K.pct0(avg),"tools in progress"),
+    K.scard("check-circle","Approved",c.done,"trial passed, shipped"),K.scard("alert","At risk / delayed",c.risk+c.delayed,`<span class="warn">${c.risk} at risk</span> · <span class="bad">${c.delayed} delayed</span>`,{tone:c.delayed?"bad":c.risk?"warn":""}),
+    K.scard("coins","Tooling investment",crore(cap),`${cap?Math.round(sp/cap*100):0}% spent (${crore(sp)})`)]);
   const g=add(w,`<div class="v8-g v8-g2"></div>`);
   const prog=m.programmes.filter(p=>!K.F.project||p.code===K.F.project);
+  const sm7=S.summary(S.scope(m,K.F,m.today-7*DAY));
+  g.appendChild(fill(U.panel("Tooling readiness",K.toolingBody(context().sm,sm7),{noPad:true,sub:"Plan attainment of tools that have started"})));
   g.appendChild(fill(U.panel("Tool status by project",V.stacked(prog.map(p=>{ const cc={ok:0,risk:0,delayed:0,notstarted:0}; tools.filter(t=>t.part.pt.prog===p.code).forEach(t=>{ cc[t.st==="done"?"ok":t.st]++; }); return {label:K.short(p.name),counts:cc}; })),{sub:"Approved tools count as on track"})));
-  const cx=prog.map(p=>{ const l=tools.filter(t=>t.part.pt.prog===p.code); return {p,cap:l.reduce((s,t)=>s+t.capexL,0),sp:l.reduce((s,t)=>s+t.spentL,0)}; }), mx=Math.max(1,...cx.map(x=>x.cap));
-  g.appendChild(fill(U.panel("Tooling investment — committed vs spent",`<div class="v8-cx">${cx.map(x=>`<div class="r"><div class="lb">${esc(K.short(x.p.name))}</div><div class="tr" style="width:${x.cap/mx*100}%"><i style="width:${x.cap?x.sp/x.cap*100:0}%"></i></div><div class="vl">${crore(x.sp)} <span>of ${crore(x.cap)}</span></div></div>`).join("")}</div><div class="v8-legend"><span><i style="background:var(--brand)"></i>Spent (CAPEX × completion)</span><span><i style="background:var(--line2)"></i>Committed</span></div>`,{sub:"Generated CAPEX per tool; spend follows completion %"})));
   const g2=add(w,`<div class="v8-g v8-g2"></div>`);
+  const cx=prog.map(p=>{ const l=tools.filter(t=>t.part.pt.prog===p.code); return {p,cap:l.reduce((s,t)=>s+t.capexL,0),sp:l.reduce((s,t)=>s+t.spentL,0)}; }), mx=Math.max(1,...cx.map(x=>x.cap));
+  g2.appendChild(fill(U.panel("Tooling investment — committed vs spent",`<div class="v8-cx">${cx.map(x=>`<div class="r"><div class="lb">${esc(K.short(x.p.name))}</div><div class="tr" style="width:${x.cap/mx*100}%"><i style="width:${x.cap?x.sp/x.cap*100:0}%"></i></div><div class="vl">${crore(x.sp)} <span>of ${crore(x.cap)}</span></div></div>`).join("")}</div><div class="v8-legend"><span><i style="background:var(--brand)"></i>Spent (CAPEX × completion)</span><span><i style="background:var(--line2)"></i>Committed</span></div>`,{sub:"Generated CAPEX per tool; spend follows completion %"})));
   const stages=["Toolmaker — design","Toolmaker — build","Supplier plant — trial","Series plant","Not yet released"], stN=stages.map(s=>tools.filter(t=>t.location===s).length);
   g2.appendChild(fill(U.panel("Where the tools are",rank(stages.map((s,i)=>({label:s,sub:`${tools.length?Math.round(stN[i]/tools.length*100):0}% of tools`,value:stN[i],color:s==="Series plant"?V.COL.ok:s==="Not yet released"?V.COL.notstarted:V.COL.info}))),{sub:"Where each tool is today"})));
-  g2.appendChild(fill(U.panel("Trials in the next 60 days",trials.length?`<div class="ops-tbl">`+U.table(["Tool","Part","Trial"],trials.slice(0,5).map(t=>`<tr class="v8-row" data-act="srmpart:${esc(t.part.pt.id)}" role="button" tabindex="0"><td>${esc(t.no)}</td><td>${esc(t.part.pt.name)}<small class="v8-sm">${esc(K.short(t.part.pt.progName))}</small></td><td>${esc(fmtDate(t.trial))}</td></tr>`).join(""))+`</div>`+(trials.length>5?`<div class="ops-more">Next 5 of ${trials.length} — the rest are in the tool register below</div>`:""):`<div class="mut small">No trial is due in the next 60 days.</div>`,{noPad:true,sub:"Nearest first · click a row for the part"})));
+  const g3=add(w,`<div class="v8-g"></div>`);
+  g3.appendChild(fill(U.panel("Trials in the next 60 days",trials.length?`<div class="ops-tbl">`+U.table(["Tool","Part","Trial"],trials.slice(0,5).map(t=>`<tr class="v8-row" data-act="srmpart:${esc(t.part.pt.id)}" role="button" tabindex="0"><td>${esc(t.no)}</td><td>${esc(t.part.pt.name)}<small class="v8-sm">${esc(K.short(t.part.pt.progName))}</small></td><td>${esc(fmtDate(t.trial))}</td></tr>`).join(""))+`</div>`+(trials.length>5?`<div class="ops-more">Next 5 of ${trials.length} — the rest are in the tool register below</div>`:""):`<div class="mut small">No trial is due in the next 60 days.</div>`,{noPad:true,sub:"Nearest first · click a row for the part"})));
   let list=tools; if(ST.tv==="risk") list=tools.filter(t=>t.st==="risk"); else if(ST.tv==="delayed") list=tools.filter(t=>t.st==="delayed"); else if(ST.tv==="done") list=tools.filter(t=>t.st==="done");
   const order={delayed:0,risk:1,ok:2,notstarted:3,done:4}; list=list.slice().sort((a,b)=>order[a.st]-order[b.st]||a.trial-b.trial);
   const tchip=t=>t.st==="done"?chip("ok","Approved"):chip(t.st), band=p=>p>=100?"100%":p>=75?"75–99%":p>=50?"50–74%":p>=25?"25–49%":"Under 25%";
@@ -11592,8 +11692,8 @@ function buildMilestones(){
   const started=ev.filter(e=>e.started), cur=started.filter(e=>e.milestones[mi].future);
   const due30=started.reduce((n,e)=>n+e.milestones.filter(k=>k.future&&k.R<=m.today+30*DAY).length,0), pend=am.filter(a=>a.status==="pending").length;
   const slip=cur.length?cur.reduce((s,e)=>s+e.milestones[mi].dm,0)/cur.length:null;
-  K.kpiRow(w,[K.kcard("Parts tracked",started.length,`${ev.length-started.length} not started`),K.kcard("Milestone dates due in 30 days",due30,"across all parts"),K.kcard("Amendments awaiting approval",pend,pend?`<span class="v8-bad">Supervisor / Commodity Lead</span>`:"nothing pending",{act:null}),
-    K.kcard("Amendments approved",am.filter(a=>a.status==="approved").length,"history kept, struck through"),K.kcard(MS[mi].id+" — avg slip",slip==null?"—":(slip>0?"+":"")+Math.round(slip)+" d",`${cur.length} parts with it ahead`),K.kcard(MS[mi].id+" — parts late",cur.filter(e=>e.milestones[mi].st!=="ok").length,`of ${cur.length}`)]);
+  K.skpis(w,[K.scard("package","Parts tracked",started.length,`${ev.length-started.length} not started`),K.scard("calendar","Milestone dates due in 30 days",due30,"across all parts"),K.scard("clipboard-check","Amendments awaiting approval",pend,pend?`<span class="warn">Supervisor / Commodity Lead</span>`:"nothing pending",{tone:pend?"warn":""}),
+    K.scard("activity",MS[mi].id+" — avg slip",slip==null?"—":(slip>0?"+":"")+Math.round(slip)+" d",`${cur.length} parts with it ahead`),K.scard("alert",MS[mi].id+" — parts late",cur.filter(e=>e.milestones[mi].st!=="ok").length,`of ${cur.length}`)]);
   const picker=seg(MS.map((d,i)=>[i,d.id]),mi,"ms");
   const amOf={}; am.forEach(a=>{ amOf[a.key]=a; });
   let rows=cur.slice().sort((a,b)=>S.RANK[b.milestones[mi].st]-S.RANK[a.milestones[mi].st]||a.milestones[mi].R-b.milestones[mi].R);
@@ -11625,8 +11725,8 @@ function buildRyg(){
   const {m,ev}=context(), w=K.page("Readiness (R / Y / G)","Seven readiness dimensions per part, rolled up to one traffic light."), rows=ev.map(e=>({e,r:O.ryg(m,e)})).filter(x=>x.r);
   const oc={G:0,Y:0,R:0}; rows.forEach(x=>oc[x.r.overall]++);
   const dimAvg=O.DIMS.map((d,i)=>({d,avg:rows.length?rows.reduce((s,x)=>s+x.r.dims[i].score,0)/rows.length:null})), weak=dimAvg.filter(x=>x.avg!=null).sort((a,b)=>a.avg-b.avg)[0];
-  K.kpiRow(w,[K.kcard("Parts assessed",rows.length,`${ev.length-rows.length} not started`),K.kcard("Green",oc.G,`<span class="v8-dot ok"></span>${rows.length?Math.round(oc.G/rows.length*100):0}% of parts`),K.kcard("Yellow",oc.Y,`<span class="v8-dot risk"></span>3 or more yellow dimensions`),
-    K.kcard("Red",oc.R,`<span class="v8-dot delayed"></span>at least one red dimension`),K.kcard("Avg readiness score",rows.length?Math.round(rows.reduce((s,x)=>s+x.r.score,0)/rows.length):"—","mean of the 7 dimensions"),K.kcard("Weakest dimension",weak?esc(weak.d.label):"—",weak?`avg score ${Math.round(weak.avg)}`:"")]);
+  K.skpis(w,[K.scard("check-circle","Green",oc.G,`${rows.length?Math.round(oc.G/rows.length*100):0}% of ${rows.length} parts assessed`,{tone:"good"}),K.scard("clock","Yellow",oc.Y,"3 or more yellow dimensions",{tone:oc.Y?"warn":""}),
+    K.scard("alert","Red",oc.R,"at least one red dimension",{tone:oc.R?"bad":""}),K.scard("gauge","Avg readiness score",rows.length?Math.round(rows.reduce((s,x)=>s+x.r.score,0)/rows.length):"—","mean of the 7 dimensions"),K.scard("layers","Weakest dimension",weak?esc(weak.d.label):"—",weak?`avg score ${Math.round(weak.avg)}`:"",{tone:"txt"})]);
   const g=add(w,`<div class="v8-g v8-g2"></div>`);
   g.appendChild(U.el(U.panel("Status by dimension",V.stacked(O.DIMS.map((d,i)=>({label:d.label,counts:{ok:rows.filter(x=>x.r.dims[i].c==="G").length,risk:rows.filter(x=>x.r.dims[i].c==="Y").length,delayed:rows.filter(x=>x.r.dims[i].c==="R").length}})),{keys:["ok","risk","delayed"],legend:false})+`<div class="v8-legend"><span><i style="background:${V.COL.ok}"></i>Green</span><span><i style="background:${V.COL.risk}"></i>Yellow</span><span><i style="background:${V.COL.delayed}"></i>Red</span></div>`,{sub:"Parts in each state, per dimension"})));
   const hl={lo:25,hi:50,legend:`<span><i style="background:rgba(46,158,107,.55)"></i>Score 75+</span><span><i style="background:rgba(240,160,48,.62)"></i>50–74</span><span><i style="background:rgba(217,72,59,.62)"></i>Below 50</span>`};
@@ -11644,7 +11744,8 @@ function buildRyg(){
 function buildAlerts(){
   const {m,ev}=context(), w=K.page("Alerts & Escalations","Automatic alerts 6, 4 and 2 weeks before a milestone and when it is overdue — with the escalation ladder."), all=O.alerts(m,ev);
   const lv={overdue:0,"2W":0,"4W":0,"6W":0}; all.forEach(a=>lv[a.level]++); const escd=all.filter(a=>a.esc);
-  K.kpiRow(w,[K.kcard("Open alerts",all.length,`${new Set(all.map(a=>a.e.pt.id)).size} parts`),K.kcard("Overdue",lv.overdue,`<span class="v8-bad">milestone date passed</span>`),K.kcard("Within 2 weeks",lv["2W"],"final reminder window"),K.kcard("Within 4 weeks",lv["4W"],"second reminder"),K.kcard("Within 6 weeks",lv["6W"],"first weekly reminder"),K.kcard("Escalated",escd.length,`${escd.filter(a=>a.esc==="Management").length} at management level`)]);
+  K.skpis(w,[K.scard("bell","Open alerts",all.length,`${new Set(all.map(a=>a.e.pt.id)).size} parts`),K.scard("alert","Overdue",lv.overdue,"milestone date passed",{tone:lv.overdue?"bad":""}),K.scard("clock","Within 2 weeks",lv["2W"],"final reminder window"),K.scard("calendar","Within 4 weeks",lv["4W"],"second reminder"),
+    K.scard("trend-up","Escalated",escd.length,`${escd.filter(a=>a.esc==="Management").length} at management level`,{tone:escd.length?"warn":""})]);
   const g=add(w,`<div class="v8-g v8-g3"></div>`), LCOL={overdue:V.COL.delayed,"2W":V.COL.risk,"4W":V.COL.info,"6W":V.COL.notstarted};
   g.appendChild(U.el(U.panel("Alerts by cadence",C.bars({fmt:v=>v,items:[["overdue","Overdue"],["2W","2 weeks"],["4W","4 weeks"],["6W","6 weeks"]].map(([k,l])=>({label:l,value:lv[k],color:LCOL[k],onclick:"ops:al="+k}))}),{sub:"Click a bar to filter the list"})));
   const rung=[["SRM engineer (reminders)",all.filter(a=>!a.esc).length],["Supervisor",all.filter(a=>a.esc==="Supervisor").length],["Head of SRM",all.filter(a=>a.esc==="Head of SRM").length],["Management",all.filter(a=>a.esc==="Management").length]];
@@ -12935,7 +13036,7 @@ const prodOf=rows=>{ const proj=DATA.projects.filter(p=>p.sop&&p.sop<=T0).map(p=
 const impactNote="Annualised recurring change in piece cost = piece-price change × quantity per car × annual volume of the project. One-time tooling cost is kept apart and is not part of the net figure.";
 
 /* ------------------------------------------------------------ shared markup */
-const kpi=o=>`<div class="pd-kpi${o.act?" kpi-link":""}"${o.act?` data-act="${o.act}" role="button" tabindex="0"`:""} title="${esc(o.tip||"")}"><div class="top"><span class="ic ${o.ict||""}">${Icons.svg(o.icon)}</span><span class="lb">${o.label}</span></div><div class="mid"><span class="vl ${o.tone||""}">${o.value}</span></div><div class="sb ${o.stone||""}" title="${esc(String(o.sub||"").replace(/<[^>]*>/g,""))}">${o.sub||""}</div></div>`;
+const kpi=o=>`<div class="pd-kpi${o.act?" kpi-link":""}"${o.act?` data-act="${o.act}" role="button" tabindex="0"`:""} title="${esc(o.tip||"")}"><div class="top"><span class="ic">${Icons.svg(o.icon)}</span><span class="lb">${o.label}</span></div><div class="mid"><span class="vl ${o.tone||""}">${o.value}</span></div><div class="sb ${o.stone||""}" title="${esc(String(o.sub||"").replace(/<[^>]*>/g,""))}">${o.sub||""}</div></div>`;
 const tip=t=>`<span class="pd-i" title="${esc(t)}">${Icons.svg("info")}</span>`;
 const panel=(title,t,body,o)=>U.panel(`${title}${t?tip(t):""}`,body,o);
 const empty=t=>`<div class="pd-empty">${t}</div>`;
@@ -12951,25 +13052,27 @@ const pctTxt=v=>v==null?"—":(v>0?"+":v<0?"−":"")+Math.abs(v).toFixed(1)+"%";
 function shell(title,sub){
   const w=document.createElement("div"); w.className="v8-page v8-board tc-page tcd tcm";
   const hd=U.header(title,sub), all=register();
-  const opt=(arr,cur,all0,fmt)=>`<option value="">${all0}</option>`+arr.map(v=>`<option value="${esc(v)}"${v===cur?" selected":""}>${esc(fmt?fmt(v):v)}</option>`).join("");
-  const years=[...new Set(all.map(r=>r.year).filter(Boolean))].sort(), codes=[...new Set(DATA.projects.map(p=>p.code))];
-  const sel=(k,label,ic,html)=>`<label class="pd-f"><span>${label}</span><span class="pd-sel">${Icons.svg(ic)}<select data-f="${k}">${html}</select></span></label>`;
-  const hr=document.createElement("div"); hr.className="tcd-hr tcm-hr";
-  hr.innerHTML=sel("project","Project","car",opt(codes,F.project,"All projects",carName))+sel("type","Change type","layers",opt(CATS.filter(c=>all.some(r=>r.category===c)),F.type,"All types"))+sel("status","Status","flag",opt(LIFE,F.status,"All statuses"))+sel("year","Implementation year","calendar",opt(years,F.year,"All years"))+
-    `<button type="button" class="pd-reset" data-act="tcm:reset" title="Clear all filters">${Icons.svg("refresh")}Reset</button>
-    <div class="tcd-meta"><span>Data as of <b>${esc(fmtDate(T0))}</b></span><span class="pd-ill">Illustrative prototype data</span></div>`;
-  hr.addEventListener("change",e=>{ const k=e.target.dataset&&e.target.dataset.f; if(k){ F[k]=e.target.value; Router.render(); } });
-  hd.appendChild(hr); w.appendChild(hd); return w;
+  const meta=document.createElement("div"); meta.className="pd-meta"; meta.innerHTML=`<span>Data as of <b>${esc(fmtDate(T0))}</b></span><span class="pd-ill">Illustrative prototype data</span>`; hd.appendChild(meta);
+  const years=[...new Set(all.map(r=>r.year).filter(Boolean))].sort(), codes=[...new Set(DATA.projects.map(p=>p.code))].sort((a,b)=>carName(a).localeCompare(carName(b))), types=CATS.filter(c=>all.some(r=>r.category===c));
+  const sel=(k,label,ic,all0,arr,fmt)=>`<label class="pd-f"><span>${label}</span><span class="pd-sel">${Icons.svg(ic)}<select data-f="${k}"><option value="">${all0} (${arr.length})</option>${arr.map(v=>`<option value="${esc(v)}"${v===F[k]?" selected":""}>${esc(fmt?fmt(v):v)}</option>`).join("")}</select></span></label>`;
+  const bar=document.createElement("div"); bar.className="pd-fbar";
+  const pic=F.project&&window.V8Art?window.V8Art.car(F.project):"";
+  bar.innerHTML=`<div class="pd-carbox solo">${pic||(window.V8Art&&window.V8Art.lineup())||'<span class="va-car" aria-hidden="true"></span>'}</div>`+   // an empty frame of the same size keeps the filters in place when no project is picked
+    sel("project","Project","car","All projects",codes,carName)+sel("type","Change type","layers","All types",types)+sel("status","Status","flag","All statuses",LIFE)+sel("year","Implementation year","calendar","All years",years)+
+    `<button type="button" class="pd-reset" data-act="tcm:reset" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`;
+  bar.addEventListener("change",e=>{ const k=e.target.dataset&&e.target.dataset.f; if(k){ F[k]=e.target.value; Router.render(); } });
+  w.appendChild(hd); w.appendChild(bar); return w;
 }
 const add=(w,html)=>{ const e=U.el(html); w.appendChild(e); return e; };
 function grid(w,cls,panels){ const g=add(w,`<div class="tcm-g ${cls}"></div>`); panels.forEach(p=>{ if(typeof p==="string") g.appendChild(U.el(p)); else g.appendChild(p); }); return g; }
 const foot=(w,all)=>add(w,`<div class="tcm-foot"><b>Prototype data.</b> ${all.length} changes: ${DATA.changes.length} come from the live Technical Change workflow (status follows the workflow), ${all.length-DATA.changes.length} are generated register records. Dates, owners, categories, piece-price changes and tooling costs are illustrative; parts, suppliers, volumes, prices and SOP dates come from the platform. ${esc(impactNote)}</div>`);
 
 /* ------------------------------------------------------------ charts */
-function statusCols(rows){
-  const order=["Open","Pending approval","Approved","Implemented"], v=order.map(l=>cnt(rows,l)), mx=Math.max(1,...v), W=300,H=214,base=160,top=30,bw=52,gap=(W-4*bw)/5;
-  return `<svg class="tcm-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Changes by status: ${order.map((l,i)=>l+" "+v[i]).join(", ")}"><line x1="8" x2="${W-8}" y1="${base}" y2="${base}" stroke="var(--line)"/>${order.map((l,i)=>{ const x=gap+i*(bw+gap), hh=v[i]?Math.max(4,v[i]/mx*(base-top)):0, y=base-hh, words=l.split(" ");
-    return `<g class="tcm-col" data-act="tcm:life=${esc(l)}" role="button" tabindex="0"><title>${esc(l)}: ${v[i]} (${pc(v[i],rows.length)}% of ${rows.length}) — click to filter</title><rect x="${x}" y="${y}" width="${bw}" height="${hh}" rx="4" fill="${LCOL[l]}"/><text x="${x+bw/2}" y="${y-7}" text-anchor="middle" class="tcm-n">${v[i]}</text>${words.map((wd,k)=>`<text x="${x+bw/2}" y="${base+17+k*14}" text-anchor="middle" class="tcm-l">${esc(wd)}</text>`).join("")}</g>`; }).join("")}</svg>`;
+function statusDonut(rows){
+  const n=rows.length, list=LIFE.map(l=>({l,v:cnt(rows,l)})).filter(x=>x.v), R=71, C=2*Math.PI*R; let off=0;
+  const arcs=list.map(x=>{ const len=x.v/n*C, a=`<circle class="tcm-arc" cx="100" cy="100" r="${R}" fill="none" stroke="${LCOL[x.l]}" stroke-width="30" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 100 100)" data-act="tcm:life=${esc(x.l)}" role="button" tabindex="0"><title>${esc(x.l)}: ${x.v} (${pc(x.v,n)}%) — click to filter</title></circle>`; off+=len; return a; }).join("");
+  return `<div class="tcd-status tcm-ds"><div class="dn"><svg viewBox="0 0 200 200" class="tcm-svg" role="img" aria-label="Changes by status: ${list.map(x=>x.l+" "+x.v).join(", ")}"><circle cx="100" cy="100" r="${R}" fill="none" stroke="var(--line2)" stroke-width="30"/>${arcs}<text x="100" y="106" text-anchor="middle" class="tcm-dn">${n}</text><text x="100" y="126" text-anchor="middle" class="tcm-l">Total changes</text></svg></div>
+    <div class="lg">${LIFE.map(l=>{ const v=cnt(rows,l); return `<div class="o${F.status===l?" on":""}" data-act="tcm:life=${esc(l)}" role="button" tabindex="0" title="${esc(l)}: ${v} — click to filter"><i style="background:${LCOL[l]}"></i><span>${esc(l)}</span><b>${v}</b><em>${pc(v,n)}%</em></div>`; }).join("")}</div></div>`;
 }
 function waterfall(f){
   const W=320,H=218,base=176,top=34,bw=64,x0=[26,128,230], sav=f.sav, cost=f.cost, net=f.net, mx=Math.max(sav,cost,Math.abs(net),1), k=(base-top)/mx;
@@ -13025,59 +13128,84 @@ function approvalFlow(st,rows,big){
 }
 
 /* ------------------------------------------------------------ rule-based insights */
+/* Each insight: key, icon, up to three headline figures, a one-line action, the full text (issue / why / action) and the changes behind it (shown in the pop-up) */
 function insights(rows){
-  const out=[], st=approvalStats(rows), f=fin(rows), sl=st.filter(s=>s.n>=2).sort((a,b)=>b.avg-a.avg)[0];
-  if(sl) out.push({k:"Approval",issue:`${sl.a} approval is the slowest step: ${sl.n} changes waiting, ${sl.avg.toFixed(1)} days on average against a ${AP_SLA}-day target (${sl.over} overdue).`,why:"A change cannot be implemented, and its saving cannot start, until every approval step has cleared. This step holds the longest queue.",act:`Ask ${roleLabel(sl.role)} to clear the queue first, or agree a delegate for this step.`,go:"tcm:go=tc-approval",lab:"Approval Workflow"});
+  const out=[], st=approvalStats(rows), f=fin(rows), sl=st.filter(s=>s.n>=2).sort((a,b)=>b.avg-a.avg)[0], plural=(n,a,b)=>n===1?a:b;
+  const sav=l=>l.reduce((s,r)=>s+(r.ann<0?-r.ann:0),0);
+  if(sl){ const l=rows.filter(r=>r.life==="Pending approval"&&r.apStep===sl.i).sort((a,b)=>b.overdue-a.overdue||dayDiff(b.stageSince,T0)-dayDiff(a.stageSince,T0));
+    out.push({k:"Approval",title:"Approval",icon:"clock",
+      m:[{v:sl.n,l:"changes waiting",s:`${sl.avg.toFixed(1)} days on average`},{v:sl.over,l:"overdue",s:`vs ${AP_SLA}-day target`}],short:`Clear the ${sl.a.toLowerCase()} approval queue or delegate.`,
+      issue:`${sl.a} approval is the slowest step: ${sl.n} changes waiting, ${sl.avg.toFixed(1)} days on average against a ${AP_SLA}-day target (${sl.over} overdue).`,why:"A change cannot be implemented, and its saving cannot start, until every approval step has cleared. This step holds the longest queue.",act:`Ask ${roleLabel(sl.role)} to clear the ${sl.a} queue first, or agree a delegate for this step.`,
+      list:l,col:{h:"Waiting",f:r=>dayDiff(r.stageSince,T0)+" days"+(r.overdue?` · ${r.overdue} over`:"")},go:"tcm:go=tc-approval",lab:"Approval Workflow"}); }
   const awaiting=rows.filter(r=>(r.life==="Pending approval"||r.life==="Returned for rework")&&r.ann!=null&&r.ann<0).sort((a,b)=>a.ann-b.ann);
-  if(awaiting.length) out.push({k:"Decisions",issue:`${awaiting.length} change${awaiting.length===1?"":"s"} with ${money(awaiting.reduce((s,r)=>s-r.ann,0))}/yr of savings ${awaiting.length===1?"is":"are"} waiting for a decision; ${awaiting.filter(r=>r.overdue>0).length} past the target date.`,why:"Savings only start after approval and implementation, so each day of waiting is a day of savings not realised.",act:`Decide ${awaiting.slice(0,2).map(r=>r.wf).join(" and ")} first — the largest savings waiting.`,go:"tcm:go=tc-approval",lab:"Approval Workflow"});
-  const late=rows.filter(r=>r.life==="Approved"&&r.impl&&r.impl.s==="Delayed");
-  if(late.length) out.push({k:"Implementation",issue:`${late.length} approved change${late.length===1?" is":"s are"} past the planned implementation date ${late.reduce((s,r)=>s+(r.ann<0?-r.ann:0),0)?` (${money(late.reduce((s,r)=>s+(r.ann<0?-r.ann:0),0))}/yr of savings not yet in effect)`:""}.`,why:"Approval alone does not change the price paid: price, BOM, purchase order and drawing must be updated.",act:"Confirm tooling, purchase-order and drawing release with the buyer and SRM; re-plan the dates that cannot be met.",go:"tcm:go=tc-impl",lab:"Implementation"});
+  if(awaiting.length) out.push({k:"Decisions",title:"Decisions",icon:"file",
+    m:[{v:awaiting.length,l:plural(awaiting.length,"change pending decision","changes pending decision"),s:`${money(sav(awaiting))}/yr potential savings`},{v:awaiting.filter(r=>r.overdue>0).length,l:"past",s:"target date"}],short:`Prioritise ${awaiting.slice(0,2).map(r=>r.wf).join(" and ")}.`,
+    issue:`${awaiting.length} change${plural(awaiting.length,"","s")} with ${money(sav(awaiting))}/yr of savings ${plural(awaiting.length,"is","are")} waiting for a decision; ${awaiting.filter(r=>r.overdue>0).length} past the target date.`,why:"Savings only start after approval and implementation, so each day of waiting is a day of savings not realised.",act:`Decide ${awaiting.slice(0,2).map(r=>r.wf).join(" and ")} first — the largest savings waiting.`,
+    list:awaiting,col:{h:"Waiting at",f:r=>r.life==="Pending approval"?AP[r.apStep]:"Rework · "+AP[r.apStep]},go:"tcm:go=tc-approval",lab:"Approval Workflow"});
+  const late=rows.filter(r=>r.life==="Approved"&&r.impl&&r.impl.s==="Delayed").sort((a,b)=>b.impl.d-a.impl.d);
+  if(late.length) out.push({k:"Implementation",title:"Implementation",icon:"settings",
+    m:[{v:late.length,l:plural(late.length,"approved change delayed","approved changes delayed"),s:sav(late)?`${money(sav(late))}/yr savings not in effect`:"planned date passed"}],short:"Confirm tooling, PO and drawing release with buyer and SRM.",
+    issue:`${late.length} approved change${plural(late.length,"","s")} ${plural(late.length,"is","are")} past the planned implementation date${sav(late)?` (${money(sav(late))}/yr of savings not yet in effect)`:""}.`,why:"Approval alone does not change the price paid: price, BOM, purchase order and drawing must be updated.",act:"Confirm tooling, purchase-order and drawing release with the buyer and SRM; re-plan the dates that cannot be met.",
+    list:late,col:{h:"Planned",f:r=>D(r.plannedImpl)+` · ${r.impl.d} d late`},go:"tcm:go=tc-impl",lab:"Implementation"});
   const ns=nextSop(); if(ns){ const l=rows.filter(r=>r.active&&r.project===ns.code), m=l.filter(r=>r.sopCrit);
-    if(l.length) out.push({k:"SOP",issue:`${ns.name} SOP is in ${dayDiff(T0,ns.sop)} days (${fmtDate(ns.sop)}): ${l.length} change${l.length===1?" is":"s are"} still open, ${m.length} planned inside the ${SOP_BUFFER}-day window before SOP or later.`,why:"A change that lands next to SOP risks tooling, supplier-readiness and validation problems on the first vehicles.",act:m.length?`Bring forward or drop the ${m.length} late-planned change${m.length===1?"":"s"}, or freeze scope for this SOP.`:"No change is planned inside the pre-SOP window; keep the dates under review.",go:"tcm:go=change-register",lab:"Change Register"}); }
-  if(f.n) out.push({k:"Value",issue:`Approved and implemented changes give ${money(f.sav)}/yr savings against ${money(f.cost)}/yr additional cost: net ${sg(f.net)}/yr. ${sg(f.savI-f.costI)}/yr is in effect (implemented), ${sg(f.savA-f.costA)}/yr awaits implementation.`,why:"Approved benefits are only realised once implemented. Realised savings are not measured in the prototype.",act:"Track each implemented change against purchase-order prices to confirm the saving.",go:"tcm:go=tc-impact",lab:"Change Impact"});
+    if(l.length) out.push({k:"SOP",title:"SOP",icon:"calendar",
+      m:[{v:dayDiff(T0,ns.sop),l:"days to SOP",s:`${shortP(ns.code)} · ${D(ns.sop)}`},{v:l.length,l:plural(l.length,"change open","changes open"),s:`${m.length} planned in the ${SOP_BUFFER}-day window or later`}],short:m.length?`Bring forward or drop ${m.length} late-planned ${plural(m.length,"change","changes")}.`:"Keep the dates under review.",
+      issue:`${ns.name} SOP is in ${dayDiff(T0,ns.sop)} days (${fmtDate(ns.sop)}): ${l.length} change${plural(l.length," is","s are")} still open, ${m.length} planned inside the ${SOP_BUFFER}-day window before SOP or later.`,why:"A change that lands next to SOP risks tooling, supplier-readiness and validation problems on the first vehicles.",act:m.length?`Bring forward or drop the ${m.length} late-planned change${plural(m.length,"","s")}, or freeze scope for this SOP.`:"No change is planned inside the pre-SOP window; keep the dates under review.",
+      list:l.slice().sort((a,b)=>(b.sopCrit-a.sopCrit)||(a.plannedImpl<b.plannedImpl?-1:1)),col:{h:"Planned",f:r=>D(r.plannedImpl)+(r.sopCrit?" · late":"")},go:"tcm:go=change-register",lab:"Change Register"}); }
+  if(f.n) out.push({k:"Value",title:"Value",icon:"bar-chart",
+    m:[{v:money(f.sav),l:"savings / yr",s:"approved + implemented"},{v:money(f.cost),l:"additional cost / yr"},{v:sg(f.net),l:"net benefit / yr",s:`${sg(f.savI-f.costI)} in effect`}],short:"Track implementation to convert approved savings.",
+    issue:`Approved and implemented changes give ${money(f.sav)}/yr savings against ${money(f.cost)}/yr additional cost: net ${sg(f.net)}/yr. ${sg(f.savI-f.costI)}/yr is in effect (implemented), ${sg(f.savA-f.costA)}/yr awaits implementation.`,why:"Approved benefits are only realised once implemented. Realised savings are not measured in the prototype.",act:"Track each implemented change against purchase-order prices to confirm the saving.",
+    list:rows.filter(r=>(r.life==="Approved"||r.life==="Implemented")&&r.ann!=null).sort((a,b)=>Math.abs(b.ann)-Math.abs(a.ann)),col:{h:"Basis",f:r=>r.life==="Implemented"?"in effect":"awaiting implementation"},go:"tcm:go=tc-impact",lab:"Change Impact"});
   const dep=rows.filter(r=>r.active&&(r.deps.supplier||r.deps.validation||r.deps.tooling));
-  if(dep.length){ const tl=rows.filter(r=>r.active&&r.deps.tooling).reduce((s,r)=>s+r.oneTime,0);
-    out.push({k:"Dependencies",issue:`${dep.length} active change${dep.length===1?" has":"s have"} unresolved dependencies: supplier offer ${dep.filter(r=>r.deps.supplier).length}, validation ${dep.filter(r=>r.deps.validation).length}, tooling ${dep.filter(r=>r.deps.tooling).length}${tl?` (${U.cr(tl)} one-time tooling not yet released)`:""}.`,why:"Open supplier, validation or tooling items are the usual reason an approved change misses its implementation date.",act:"Coordinate supplier, SRM and plant on the changes with a tooling dependency first.",go:"tcm:go=change-register",lab:"Change Register"}); }
+  if(dep.length){ const tl=rows.filter(r=>r.active&&r.deps.tooling).reduce((s,r)=>s+r.oneTime,0), n=k=>dep.filter(r=>r.deps[k]).length;
+    out.push({k:"Dependencies",title:"Dependencies",icon:"puzzle",
+      m:[{v:dep.length,l:plural(dep.length,"change with","changes with")+" open dependencies"}],lines:[`Supplier offer: ${n("supplier")}`,`Validation: ${n("validation")}`,`Tooling: ${n("tooling")}${tl?` (${U.cr(tl)} one-time)`:""}`],short:"Resolve key dependencies and release tooling.",
+      issue:`${dep.length} active change${plural(dep.length,"","s")} ${plural(dep.length,"has","have")} unresolved dependencies: supplier offer ${n("supplier")}, validation ${n("validation")}, tooling ${n("tooling")}${tl?` (${U.cr(tl)} one-time tooling not yet released)`:""}.`,why:"Open supplier, validation or tooling items are the usual reason an approved change misses its implementation date.",act:"Coordinate supplier, SRM and plant on the changes with a tooling dependency first.",
+      list:dep.slice().sort((a,b)=>(+b.deps.tooling-+a.deps.tooling)||b.overdue-a.overdue),col:{h:"Open items",f:r=>[r.deps.supplier&&"supplier offer",r.deps.validation&&"validation",r.deps.tooling&&"tooling"].filter(Boolean).join(", ")},go:"tcm:go=change-register",lab:"Change Register"}); }
   return out;
 }
+const insCard=(x,i)=>{ const ms=x.k==="Value"?[x.m[0],x.m[2]]:x.m.slice(0,2);   // the card keeps to the headline figures; the pop-up has the rest
+  return `<button type="button" class="it c${i+1}" data-act="tcm:ins=${esc(x.k)}" title="Click for the details"><div class="hd"><span class="no">${i+1}</span><b>${esc(x.title)}</b></div>
+  <div class="bd"><span class="ico">${Icons.svg(x.icon)}</span><div class="ms">${ms.map(m=>`<div class="m"><b>${esc(String(m.v))}${m.u?`<small>${esc(m.u)}</small>`:""}</b><span>${esc(m.l)}</span></div>`).join("")}</div></div>
+  <div class="ac"><span>${esc(x.short)}</span>${Icons.svg("chevron-right")}</div></button>`; };
+/* pop-up with the detail behind an insight card */
+function insModal(x){
+  closeIns(); const i=Math.max(0,insights(view().rows).findIndex(y=>y.k===x.k)), bg=document.createElement("div"); bg.className="tcm-mb"; bg.id="tcm-ins-modal";
+  const rowsH=x.list.length?`<div class="pd-t mt"><div class="h"><span>Change</span><span>Project</span><span>Current stage</span><span>${esc(x.col.h)}</span><span class="ra">Impact / yr</span></div>${x.list.slice(0,8).map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)} — ${esc(r.desc)}</b><small>${esc(r.wf)}</small></span><span class="s">${esc(shortP(r.project))}</span><span class="s">${esc(r.stage)}</span><span class="s">${esc(x.col.f(r))}</span><span class="v ${r.ann==null?"":r.ann>0?"bad":"good"}">${r.ann==null?"not priced":sg(-r.ann)}</span></div>`).join("")}</div>${x.list.length>8?`<div class="tcd-note">Showing 8 of ${x.list.length} — the rest are in the Change Register.</div>`:""}`:`<div class="pd-empty">No change behind this insight.</div>`;
+  bg.innerHTML=`<div class="tcm-md c${i+1}" role="dialog" aria-modal="true" aria-label="${esc(x.title)} insight"><div class="mh"><span class="no">${i+1}</span><div><h3>${esc(x.title)}</h3><small>Rule-based insight · calculated from the change register, no AI model</small></div><button type="button" class="mx" aria-label="Close" data-close="1">${Icons.svg("x")}</button></div>
+    <div class="mbody"><div class="bd"><span class="ico">${Icons.svg(x.icon)}</span><div class="ms">${x.m.map(m=>`<div class="m${x.k==="Value"?" col":""}"><b>${esc(String(m.v))}${m.u?`<small>${esc(m.u)}</small>`:""}</b><span>${esc(m.l)}${m.s?`<small>${esc(m.s)}</small>`:""}</span></div>`).join("")}</div></div>
+    <div class="sec"><em>What the data shows</em><p>${esc(x.issue)}</p></div><div class="sec"><em>Why it matters</em><p>${esc(x.why)}</p></div><div class="ac big"><div><em>What management could do</em><p>${esc(x.act)}</p></div></div>
+    <div class="sec"><em>Changes behind this insight <span class="count-pill">${x.list.length}</span></em>${rowsH}</div></div>
+    <div class="mf"><button type="button" class="btn" data-close="1">Close</button><button type="button" class="btn btn-primary" data-go="${esc(x.go)}">Open ${esc(x.lab)}</button></div></div>`;
+  bg.addEventListener("click",e=>{ if(e.target===bg||e.target.closest("[data-close]")) closeIns(); else { const g=e.target.closest("[data-go]"); if(g){ closeIns(); PocUI.actions.tcm(g.dataset.go.slice(4)); } else { const r=e.target.closest("[data-act]"); if(r&&bg.contains(r)){ closeIns(); PocUI.actions.tcm(r.dataset.act.slice(4)); } } } });
+  document.body.appendChild(bg); document.addEventListener("keydown",insKey); const c=bg.querySelector("[data-close]"); if(c) c.focus();
+}
+function insKey(e){ if(e.key==="Escape") closeIns(); }
+function closeIns(){ const m=document.getElementById("tcm-ins-modal"); if(m) m.remove(); document.removeEventListener("keydown",insKey); }
 
 /* ------------------------------------------------------------ tables */
 const D=d=>d?fmtDate(d).replace(/ 20(\d\d)$/," $1"):"—";
-function highImpact(rows,n){
-  const l=rows.filter(r=>r.active&&r.ann!=null).sort((a,b)=>b.score-a.score||Math.abs(b.ann)-Math.abs(a.ann)).slice(0,n);
-  if(!l.length) return empty("No active change in this selection has a priced impact yet.");
-  return `<div class="pd-t tcm-hi"><div class="h"><span>#</span><span>Change</span><span>Project</span><span>Type</span><span class="ra">Impact / yr</span><span>Production &amp; quality</span><span class="ra">Status</span></div>${l.map((r,i)=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0" title="Open ${esc(r.wf)}"><span class="k">${i+1}</span><span class="n"><b>${esc(r.part)} — ${esc(r.desc)}</b><small>${esc(r.wf)}</small></span><span class="s">${esc(shortP(r.project))}</span><span class="s">${esc(r.category)}</span><span class="v ${r.ann>0?"bad":"good"}">${sg(-r.ann)}</span><span class="pq">${rkChip(r.rk.level)}<small>${esc(prodText(r))}</small></span><span class="ra">${stChip(r.life)}</span></div>`).join("")}</div>`;
-}
 const overdueList=rows=>rows.filter(r=>r.overdue>0).sort((a,b)=>({High:0,Medium:1,Low:2}[a.priority]-{High:0,Medium:1,Low:2}[b.priority])||b.overdue-a.overdue);
-function overdueTable(rows,n){
-  const all=overdueList(rows), l=n?all.slice(0,n):all;
-  if(!all.length) return empty("No change is past its due date. A change is only marked overdue when its due date is known.");
-  return `<div class="pd-t tcm-od"><div class="h"><span>#</span><span>Change</span><span>Project</span><span>Current stage</span><span class="ra">Days overdue</span><span>Owner</span><span class="ra">Priority</span></div>${l.map((r,i)=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="k">${i+1}</span><span class="n"><b>${esc(r.wf)}</b><small>${esc(r.part)}</small></span><span class="s">${esc(shortP(r.project))}</span><span class="s">${esc(r.kind)}</span><span class="v bad">${r.overdue}</span><span class="s">${esc(r.owner)}</span><span class="ra">${prChip(r.priority)}</span></div>`).join("")}</div>`;
+/* one set of columns for both tabs of the Overview table */
+function changeTable(list){
+  if(!list.length) return null;
+  return `<div class="pd-t tcm-chg"><div class="h"><span>#</span><span>Change</span><span>Project</span><span>Type</span><span>Current stage</span><span class="ra">Impact / yr</span><span title="Hover a risk label to see why">Production risk</span><span class="ra">Days overdue</span><span>Owner</span><span class="ra">Priority</span></div>${list.map((r,i)=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0" title="Open ${esc(r.wf)}"><span class="k">${i+1}</span><span class="n"><b>${esc(r.part)} — ${esc(r.desc)}</b><small>${esc(r.wf)}</small></span><span class="s">${esc(shortP(r.project))}</span><span class="s">${esc(r.category)}</span><span class="st"><b>${esc(r.stage)}</b>${stChip(r.life)}</span><span class="v ${r.ann==null?"":r.ann>0?"bad":"good"}">${r.ann==null?"not priced":sg(-r.ann)}</span><span class="pq" data-rk="${esc(r.id)}" tabindex="0">${rkChip(r.rk.level)}</span><span class="v ${r.overdue?"bad":""}">${r.overdue||"—"}</span><span class="s">${esc(r.owner)}</span><span class="ra">${prChip(r.priority)}</span></div>`).join("")}</div>`;
 }
+const hiList=rows=>rows.filter(r=>r.active&&r.ann!=null).sort((a,b)=>b.score-a.score||Math.abs(b.ann)-Math.abs(a.ann));
 
 /* ------------------------------------------------------------ 1 · Overview */
 function buildOverview(){
   const {all,rows}=view(), n=rows.length, w=shell("Technical Change Management","Driving value through engineered changes while ensuring quality, cost efficiency and production readiness.");
   const f=fin(rows), st=approvalStats(rows), pend=cnt(rows,"Pending approval"), od=rows.filter(r=>r.life==="Pending approval"&&r.overdue>0).length, prj=new Set(rows.map(r=>r.project)).size, live=rows.filter(r=>r.live).length;
-  const none="—", noFin=!f.n;
-  add(w,`<div class="pd-kw"><div class="pd-kpis k8">${[
-    kpi({icon:"file",label:"Total changes",value:n,sub:n?`${prj} project${prj===1?"":"s"} · ${live} in the live workflow`:"no change matches the filters",act:"tcm:go=change-register",tip:"Every change in the register that matches the filters."}),
-    kpi({icon:"clipboard",label:"Open changes",value:cnt(rows,"Open"),ict:"info",sub:pc(cnt(rows,"Open"),n)+"% of total",act:"tcm:kpi=Open",tip:"Created and being evaluated, validated, priced or analysed — not yet submitted for approval."}),
-    kpi({icon:"clock",label:"Pending approvals",value:pend,ict:"warn",sub:od?`${od} past the ${AP_SLA}-day target`:pc(pend,n)+"% of total",stone:od?"bad":"",act:"tcm:go=tc-approval",tip:`Submitted and waiting at one approval step. Each is counted once. Target: ${AP_SLA} days per step.`}),
-    kpi({icon:"check-circle",label:"Approved changes",value:cnt(rows,"Approved"),ict:"ok",sub:pc(cnt(rows,"Approved"),n)+"% of total · not yet implemented",act:"tcm:kpi=Approved",tip:"Approved and waiting for implementation. Implemented changes are counted separately."}),
-    kpi({icon:"settings",label:"Implemented",value:cnt(rows,"Implemented"),sub:pc(cnt(rows,"Implemented"),n)+"% of total",act:"tcm:go=tc-impl",tip:"Implementation finished and the change is closed."}),
-    kpi({icon:"trend-down",label:"Annualized savings",value:noFin?none:money(f.sav),tone:noFin?"":"good",sub:noFin?"no priced approved change":`from ${f.n} approved + implemented`,act:"tcm:go=tc-impact",tip:"Annualised recurring saving of approved and implemented changes that lower the piece price. "+impactNote}),
-    kpi({icon:"trend-up",label:"Annualized additional cost",value:noFin?none:money(f.cost),tone:noFin?"":"bad",sub:noFin?"no priced approved change":(f.oneTime?`+ ${U.cr(f.oneTime)} one-time tooling, not included`:"no one-time tooling"),act:"tcm:go=tc-impact",tip:"Annualised recurring cost of approved and implemented changes that raise the piece price."}),
-    kpi({icon:"coins",label:"Net financial impact",value:noFin?none:sg(f.net),tone:noFin?"":f.net>=0?"good":"bad",sub:noFin?"unavailable":`savings − additional cost · ${U.cr(f.savI-f.costI)} in effect`,act:"tcm:go=tc-impact",tip:"Savings minus additional cost: same scope (approved + implemented), same basis (annualised recurring, ₹). In effect = implemented only."})].join("")}</div></div>`);
+  const noFin=!f.n;
+  add(w,`<div class="pd-kw"><div class="pd-kpis k5">${[
+    kpi({icon:"file",label:"Total changes",value:n,sub:n?`${prj} project${prj===1?"":"s"} · ${live} in the live workflow`:"no change matches the filters",act:"tcm:go=change-register",tip:"Every change in the register that matches the filters. Click to open the Change Register."}),
+    kpi({icon:"clipboard",label:"Open changes",value:cnt(rows,"Open"),sub:pc(cnt(rows,"Open"),n)+"% of total · not yet submitted for approval",act:"tcm:kpi=Open",tip:"Created and being evaluated, validated, priced or analysed — not yet submitted for approval. Click to see them in the Change Register."}),
+    kpi({icon:"clock",label:"Pending approvals",value:pend,sub:od?`${od} past the ${AP_SLA}-day target`:pc(pend,n)+"% of total · none overdue",stone:od?"bad":"",act:"tcm:go=tc-approval",tip:`Submitted and waiting at one approval step. Each is counted once. Target: ${AP_SLA} days per step. Click to open Approval Workflow.`}),
+    kpi({icon:"check-circle",label:"Approved changes",value:cnt(rows,"Approved"),sub:pc(cnt(rows,"Approved"),n)+"% of total · not yet implemented",act:"tcm:kpi=Approved",tip:"Approved and waiting for implementation. Implemented changes are counted separately. Click to see them in the Change Register."}),
+    kpi({icon:"settings",label:"Implemented",value:cnt(rows,"Implemented"),sub:pc(cnt(rows,"Implemented"),n)+"% of total",act:"tcm:go=tc-impl",tip:"Implementation finished and the change is closed. Click to open Implementation."})].join("")}</div></div>`);
 
-  const pn=pend+cnt(rows,"Returned for rework")+cnt(rows,"Rejected");
-  const stBody=n?`<div class="tcm-chart">${statusCols(rows)}</div><div class="tcd-note">Each change has exactly one status. Not shown: ${cnt(rows,"Rejected")} rejected · ${cnt(rows,"Returned for rework")} returned for rework. Total ${n}.</div>`:empty("No change matches the filters.");
-  const finBody=noFin?empty("No approved or implemented change has a priced impact yet, so there is no financial impact to show."):`<div class="tcm-chart">${waterfall(f)}</div><div class="tcm-facts s"><div><span>In effect (implemented)</span><b>${sg(f.savI-f.costI)}</b></div><div><span>Approved, not yet implemented</span><b>${sg(f.savA-f.costA)}</b></div><div><span>Forecast, awaiting decision</span><b>${f.pipe.n?sg(f.pipe.net):"—"}</b></div></div><div class="tcd-note">₹ per year, recurring. Savings and cost are summed per change (a change that raises the price counts as cost). Forecast = open and pending changes with a priced MOD sheet; it is not part of the headline.</div>`;
-  grid(w,"g4",[
-    panel("Changes by status","Open, pending approval, approved and implemented are mutually exclusive: every change is in exactly one.",stBody),
-    panel("Changes by type","Change categories present in the register. Click a bar to filter the page.",n?typeBars(rows):empty("No change matches the filters.")),
-    panel("Financial impact overview","Approved and implemented changes only. "+impactNote,finBody),
-    panel("Changes by project","Status of every change per project. Click a project to filter the page.",n?projectStack(rows):empty("No change matches the filters."))]);
+  const stBody=n?`${statusDonut(rows)}<div class="tcd-note">Each change has exactly one status; the six statuses add up to ${n}.</div>`:empty("No change matches the filters.");
 
   /* production impact */
   const act=rows.filter(r=>r.active), lv=l=>act.filter(r=>r.rk.level===l).length, ns=nextSop(), prodN=prodOf(rows).length, anyProd=DATA.projects.some(p=>p.sop&&p.sop<=T0);
@@ -13087,15 +13215,17 @@ function buildOverview(){
     <div><span>Affecting in-production vehicles</span><b>${anyProd?prodN:"0"}</b><em>${anyProd?"projects past SOP":ns?`no project is in production yet · first SOP ${esc(shortP(ns.code))} ${esc(D(ns.sop))}`:"none recorded"}</em></div>
     <div><span>Need implementation before ${ns?esc(shortP(ns.code))+" SOP":"next SOP"}</span><b class="${nsRows.filter(r=>r.sopCrit).length?"bad":""}">${nsRows.length}</b><em>${nsRows.filter(r=>r.sopCrit).length} planned inside the ${SOP_BUFFER}-day window or later</em></div>
     <div><span>Unresolved supplier / validation / tooling</span><b class="${dep.length?"warn":""}">${dep.length}</b><em>${dep.filter(r=>r.deps.supplier).length} offer · ${dep.filter(r=>r.deps.validation).length} validation · ${dep.filter(r=>r.deps.tooling).length} tooling</em></div></div>`:empty("No active change in this selection.");
-  const stAp=approvalFlow(st,rows,false);
-  grid(w,"g12",[panel("Production impact","Risk is counted from indicators (price up, late milestone, high-risk supplier, inside the pre-SOP window, more than 7 days overdue): High = two or more, Medium = one. Never from the open status alone. In-production = project SOP date reached. Pre-SOP window = "+SOP_BUFFER+" days before the project's SOP.",prodBody),
-    panel("Approval workflow status","The module's approval chain. Counts are changes waiting at each step now (each counted once); average = days waiting so far; target "+AP_SLA+" days per step.",n?stAp:empty("No change matches the filters."))]);
-  add(w,panel("Implementation timeline","Planned implementation date of every approved or still-open change, per project (next 6 months). Delayed = planned date passed and not implemented; at risk = within 45 days and not yet approved, inside the pre-SOP window, or tooling due within 60 days.",gantt(rows,6),{style:"margin-bottom:16px"}));
-
-  grid(w,"g75",[panel("High-impact changes","Active changes ranked by an explicit score: production risk (High 2, Medium 1) + financial materiality (≥ ₹2 Cr/yr 2, ≥ ₹50 L/yr 1), maximum 4; ties by size of impact. Impact: + saving, − additional cost.",highImpact(rows,6)+link("tcm:go=change-register","View all in Change Register")),
-    panel("Overdue changes",`Past the due date of the current step: ${AP_SLA} days per approval step, evaluation stages 2–7 days, ${RETURN_SLA} days for rework, planned date for implementation. No date → not overdue.`,overdueTable(rows,6)+(overdueList(rows).length>6?link("tcm:od=1",`View all ${overdueList(rows).length} overdue`):""))]);
+  grid(w,"g4",[
+    panel("Changes by status","The six statuses are mutually exclusive: every change is in exactly one. Click a slice or a row to filter the page.",stBody),
+    panel("Changes by type","Change categories present in the register. Click a bar to filter the page.",n?typeBars(rows):empty("No change matches the filters.")),
+    panel("Changes by project","Status of every change per project. Click a project to filter the page.",n?projectStack(rows):empty("No change matches the filters.")),
+    panel("Production impact","Risk is counted from indicators (price up, late milestone, high-risk supplier, inside the pre-SOP window, more than 7 days overdue): High = two or more, Medium = one. Never from the open status alone. In-production = project SOP date reached. Pre-SOP window = "+SOP_BUFFER+" days before the project's SOP.",prodBody)]);
+  const hl=hiList(rows), ol=overdueList(rows), tab=UI.ovTab==="od"?"od":"hi", cur=tab==="od"?ol:hl, none=tab==="od"?"No change is past its due date. A change is only marked overdue when its due date is known.":"No active change in this selection has a priced impact yet.";
+  const segs=`<div class="fc-segs tight"><button type="button" class="fc-seg ${tab==="hi"?"on":""}" data-act="tcm:tab=hi">High-impact changes <span class="count-pill">${hl.length}</span></button><button type="button" class="fc-seg ${tab==="od"?"on":""}" data-act="tcm:tab=od">Overdue changes <span class="count-pill">${ol.length}</span></button></div>`;
+  const tip2=tab==="od"?`Past the due date of the current step: ${AP_SLA} days per approval step, evaluation stages 3–10 days, ${RETURN_SLA} days for rework, planned date for implementation. No date → not overdue. Ranked by priority, then days overdue.`:"Active changes ranked by an explicit score: production risk (High 2, Medium 1) + financial materiality (≥ ₹2 Cr/yr 2, ≥ ₹50 L/yr 1), maximum 4; ties by size of impact. Impact: + saving, − additional cost.";
+  grid(w,"g1",[U.panel("Changes needing attention"+tip(tip2),(changeTable(cur.slice(0,6))||empty(none))+(tab==="od"?(ol.length>6?link("tcm:od=1",`View all ${ol.length} overdue`):""):link("tcm:go=change-register","View all in Change Register")),{right:segs})]);
   const ins=insights(rows);
-  add(w,panel("Key insights & recommendations","Rule-based insights calculated from the register — no AI model. Each shows the issue, why it matters and what management could do.",ins.length?`<div class="tcm-ins">${ins.map((x,i)=>`<div class="it"><div class="hd"><span class="no">${i+1}</span><b>${esc(x.k)}</b></div><p class="is">${esc(x.issue)}</p><p><em>Why it matters</em> ${esc(x.why)}</p><p><em>Consider</em> ${esc(x.act)}</p><a href="#" data-act="${x.go}">${esc(x.lab)}${Icons.svg("chevron-right")}</a></div>`).join("")}</div>`:empty("Nothing needs management attention in this selection."),{style:"margin-bottom:16px"}));
+  add(w,panel("Key insights & recommendations","Rule-based insights calculated from the register — no AI model. Click a card for the issue, why it matters, what management could do and the changes behind it.",ins.length?`<div class="tcm-ins">${ins.map(insCard).join("")}</div>`:empty("Nothing needs management attention in this selection."),{style:"margin-bottom:16px"}));
   foot(w,all); U.wire(w); return w;
 }
 
@@ -13103,12 +13233,12 @@ function buildOverview(){
 function buildImpact(){
   const {all,rows}=view(), w=shell("Change Impact","Financial effect of technical changes: approved savings and additional cost, what is already in effect, and what is still forecast."), f=fin(rows), noFin=!f.n;
   add(w,`<div class="pd-kw"><div class="pd-kpis k6">${[
-    kpi({icon:"trend-down",label:"Annualized savings",value:noFin?"—":money(f.sav),tone:noFin?"":"good",sub:`${f.n} approved + implemented`,tip:impactNote}),
-    kpi({icon:"trend-up",label:"Annualized additional cost",value:noFin?"—":money(f.cost),tone:noFin?"":"bad",sub:"recurring, per year"}),
-    kpi({icon:"coins",label:"Net financial impact",value:noFin?"—":sg(f.net),tone:noFin?"":f.net>=0?"good":"bad",sub:"savings − additional cost"}),
-    kpi({icon:"settings",label:"In effect (implemented)",value:f.nI?sg(f.savI-f.costI):"—",tone:f.nI&&f.savI>=f.costI?"good":"",sub:`${f.nI} implemented change${f.nI===1?"":"s"}`,tip:"Run-rate of implemented changes. Realised-to-date savings need purchase-order actuals, which the prototype does not hold."}),
+    kpi({icon:"trend-down",label:"Annualized savings",value:noFin?"—":money(f.sav),tone:noFin?"":"good",sub:noFin?"no priced approved change":`from ${f.n} approved + implemented`,tip:impactNote}),
+    kpi({icon:"trend-up",label:"Additional cost",value:noFin?"—":money(f.cost),tone:noFin?"":"bad",sub:"annualised, recurring, per year",tip:"Annualised recurring cost of approved and implemented changes that raise the piece price."}),
+    kpi({icon:"coins",label:"Net impact",value:noFin?"—":sg(f.net),tone:noFin?"":f.net>=0?"good":"bad",sub:"savings − additional cost",tip:"Same scope (approved + implemented), same basis (annualised recurring, ₹)."}),
+    kpi({icon:"settings",label:"In effect",value:f.nI?sg(f.savI-f.costI):"—",tone:f.nI&&f.savI>=f.costI?"good":"",sub:`${f.nI} implemented change${f.nI===1?"":"s"}`,tip:"Run-rate of implemented changes. Realised-to-date savings need purchase-order actuals, which the prototype does not hold."}),
     kpi({icon:"wrench",label:"One-time tooling",value:f.oneTime?U.cr(f.oneTime):"—",sub:"approved + implemented, not in net",tip:"Supplier tooling modification cost quoted for approved and implemented changes. One-time, so kept apart from the annualised figures."}),
-    kpi({icon:"activity",label:"Forecast, not yet approved",value:f.pipe.n?sg(f.pipe.net):"—",sub:`${f.pipe.n} priced · ${f.pipeUnpriced} not yet priced`,tip:"Net annualised saving (+) or cost (−) of open, pending and returned changes that already have a priced MOD sheet. Not part of the headline."})].join("")}</div></div>`);
+    kpi({icon:"activity",label:"Forecast, not approved",value:f.pipe.n?sg(f.pipe.net):"—",sub:`${f.pipe.n} priced · ${f.pipeUnpriced} not yet priced`,tip:"Net annualised saving (+) or cost (−) of open, pending and returned changes that already have a priced MOD sheet. Not part of the headline."})].join("")}</div></div>`);
   const byP=[...new Set(rows.map(r=>r.project))].map(c=>({c,f:fin(rows.filter(r=>r.project===c))})).filter(x=>x.f.n||x.f.pipe.n).sort((a,b)=>b.f.net-a.f.net);
   const mx=Math.max(1,...byP.map(x=>Math.max(x.f.sav,x.f.cost)));
   const div=byP.length?`<div class="tcm-div">${byP.map(x=>`<div class="r"><span class="lb">${esc(shortP(x.c))}</span><span class="l"><i style="width:${x.f.cost/mx*100}%"></i></span><span class="rt"><i style="width:${x.f.sav/mx*100}%"></i></span><b class="${x.f.net>=0?"good":"bad"}">${sg(x.f.net)}</b></div>`).join("")}</div><div class="tcm-lg"><span><i style="background:var(--red)"></i>Additional cost</span><span><i style="background:var(--ok)"></i>Savings</span><span class="m">approved + implemented · net on the right</span></div>`:empty("No approved or implemented change with a priced impact for this selection.");
@@ -13131,11 +13261,11 @@ function buildApproval(){
   const {all,rows}=view(), w=shell("Approval Workflow","Where changes wait for a decision, how long they have waited, and which step is the bottleneck."), st=approvalStats(rows), pend=rows.filter(r=>r.life==="Pending approval"), bn=bottleneck(st);
   const waits=pend.map(r=>dayDiff(r.stageSince,T0)), avg=waits.length?waits.reduce((a,b)=>a+b,0)/waits.length:0, ov=pend.filter(r=>r.overdue>0).length;
   add(w,`<div class="pd-kw"><div class="pd-kpis k6">${[
-    kpi({icon:"clock",label:"Waiting for a decision",value:pend.length,ict:"warn",sub:"each counted once, at its current step"}),
-    kpi({icon:"alert",label:`Past the ${AP_SLA}-day target`,value:ov,tone:ov?"bad":"",sub:pend.length?pc(ov,pend.length)+"% of waiting":"none waiting"}),
-    kpi({icon:"gauge",label:"Average wait so far",value:pend.length?avg.toFixed(1)+" d":"—",sub:pend.length?`longest ${Math.max(...waits)} days`:"none waiting",tip:"Days since the change arrived at its current approval step. Completed decisions are not timed in the prototype."}),
-    kpi({icon:"flag",label:"Bottleneck step",value:bn?esc(bn.a):"—",sub:bn?`${bn.n} waiting · ${bn.over} overdue`:"no step has 2+ waiting",tip:"Step with the most overdue changes, then the longest average wait (at least two waiting)."}),
-    kpi({icon:"check-circle",label:"Approved",value:cnt(rows,"Approved")+cnt(rows,"Implemented"),ict:"ok",sub:"through all steps"}),
+    kpi({icon:"clock",label:"Waiting for decision",value:pend.length,sub:"each counted once, at its current step"}),
+    kpi({icon:"alert",label:`Past ${AP_SLA}-day target`,value:ov,tone:ov?"bad":"",sub:pend.length?pc(ov,pend.length)+"% of waiting":"none waiting"}),
+    kpi({icon:"gauge",label:"Average wait",value:pend.length?avg.toFixed(1)+" d":"—",sub:pend.length?`longest ${Math.max(...waits)} days`:"none waiting",tip:"Days since the change arrived at its current approval step. Completed decisions are not timed in the prototype."}),
+    kpi({icon:"flag",label:"Bottleneck step",value:bn?esc(bn.a):"—",tone:"txt",sub:bn?`${bn.n} waiting · ${bn.over} overdue`:"no step has 2+ waiting",tip:"Step with the most overdue changes, then the longest average wait (at least two waiting)."}),
+    kpi({icon:"check-circle",label:"Approved",value:cnt(rows,"Approved")+cnt(rows,"Implemented"),sub:"through all steps"}),
     kpi({icon:"x-circle",label:"Rejected / returned",value:cnt(rows,"Rejected")+cnt(rows,"Returned for rework"),tone:cnt(rows,"Rejected")+cnt(rows,"Returned for rework")?"bad":"",sub:`${cnt(rows,"Rejected")} rejected · ${cnt(rows,"Returned for rework")} returned for rework`})].join("")}</div></div>`);
   add(w,panel("Approval workflow status","The module's approval chain: Engineering → Quality → SRM → Finance → Commodity → Management → final confirmation by the AEKO Coordinator.",rows.length?approvalFlow(st,rows,true):empty("No change matches the filters."),{style:"margin-bottom:16px"}));
   const tb=`<div class="pd-t tcm-aps"><div class="h"><span>Step</span><span>Approver role</span><span class="ra">Waiting now</span><span class="ra">Avg wait</span><span class="ra">Longest</span><span class="ra">Overdue</span><span class="ra">Passed this step</span></div>${st.map(s=>`<div class="r${bn&&bn.i===s.i?" bn":""}"><span class="n"><b>${esc(s.a)}</b></span><span class="s">${esc(roleLabel(s.role))}</span><span class="v">${s.n}</span><span class="v">${s.n?s.avg.toFixed(1)+" d":"—"}</span><span class="v">${s.n?s.max+" d":"—"}</span><span class="v ${s.over?"bad":""}">${s.over||"—"}</span><span class="v">${s.passed}</span></div>`).join("")}</div><div class="tcd-note">“Passed this step” counts changes that were approved at this step: those now at a later step, approved, implemented, or rejected / returned at a later step. A change appears under “waiting now” once only.</div>`;
@@ -13154,12 +13284,12 @@ function buildImpl(){
   const {all,rows}=view(), w=shell("Implementation","Planned implementation dates, what is late or at risk, and what has been implemented."), act=rows.filter(r=>r.impl&&r.life!=="Implemented"&&r.life!=="Rejected"), s=x=>act.filter(r=>r.impl.s===x).length;
   const approved=rows.filter(r=>r.life==="Approved"), due30=act.filter(r=>r.impl.s!=="Delayed"&&r.impl.d<=30).length, done=rows.filter(r=>r.life==="Implemented"), lateDone=done.filter(r=>r.impl&&r.impl.d>0).length;
   add(w,`<div class="pd-kw"><div class="pd-kpis k6">${[
-    kpi({icon:"check-circle",label:"Approved, awaiting implementation",value:approved.length,ict:"ok",sub:"price, BOM, PO and drawing to update"}),
+    kpi({icon:"check-circle",label:"To implement",value:approved.length,sub:"price, BOM, PO and drawing to update"}),
     kpi({icon:"alert",label:"Delayed",value:s("Delayed"),tone:s("Delayed")?"bad":"",sub:"planned date passed, not implemented",tip:"Any change not yet implemented whose planned implementation date is earlier than today."}),
-    kpi({icon:"flag",label:"At risk",value:s("At risk"),ict:"warn",sub:"see the rule on the timeline",tip:"Planned within 45 days and not yet approved, or inside the "+SOP_BUFFER+"-day window before the project's SOP, or tooling due within 60 days."}),
-    kpi({icon:"calendar",label:"Due in the next 30 days",value:due30,sub:"planned dates, not delayed"}),
+    kpi({icon:"flag",label:"At risk",value:s("At risk"),sub:"see the rule on the timeline",tip:"Planned within 45 days and not yet approved, or inside the "+SOP_BUFFER+"-day window before the project's SOP, or tooling due within 60 days."}),
+    kpi({icon:"calendar",label:"Due in 30 days",value:due30,sub:"planned dates, not delayed"}),
     kpi({icon:"settings",label:"Implemented",value:done.length,sub:lateDone?`${lateDone} after the planned date`:"on or before the planned date"}),
-    kpi({icon:"wrench",label:"Tooling not yet released",value:rows.filter(r=>r.active&&r.deps.tooling).length,sub:"one-time tooling modification pending"})].join("")}</div></div>`);
+    kpi({icon:"wrench",label:"Tooling not released",value:rows.filter(r=>r.active&&r.deps.tooling).length,sub:"one-time tooling modification pending"})].join("")}</div></div>`);
   add(w,panel("Implementation timeline","Planned implementation date per change, next 12 months, with each project's SOP. Implemented changes in the window are shown in grey.",gantt(rows,12,{all:true,rh:48}),{style:"margin-bottom:16px"}));
   const lst=act.slice().sort((a,b)=>(a.impl.s==="Delayed"?-1:0)-(b.impl.s==="Delayed"?-1:0)||(a.plannedImpl<b.plannedImpl?-1:1));
   add(w,panel(`Implementation register <span class="count-pill">${lst.length}</span>`,"Changes with a planned implementation date that are not yet implemented: delayed first, then by date.",lst.length?`<div class="pd-t tcm-impl"><div class="h"><span>Change</span><span>Project</span><span>Status</span><span class="ra">Planned</span><span class="ra">Days</span><span class="ra">Project SOP</span><span>Open dependencies</span><span class="ra">Stage</span></div>${lst.slice(0,14).map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)} — ${esc(r.desc)}</b><small>${esc(r.wf)}</small></span><span class="s">${esc(shortP(r.project))}</span><span><span class="tcm-st" style="--c:${IMPLC[r.impl.s]}"><i></i>${r.impl.s}</span></span><span class="v">${esc(D(r.plannedImpl))}</span><span class="v ${r.impl.s==="Delayed"?"bad":""}">${r.impl.s==="Delayed"?r.impl.d+" late":r.impl.d+" to go"}</span><span class="s">${esc(D(r.sop))}</span><span class="s">${[r.deps.supplier&&"supplier offer",r.deps.validation&&"validation",r.deps.tooling&&"tooling"].filter(Boolean).join(", ")||"none"}</span><span class="ra">${stChip(r.life)}</span></div>`).join("")}</div>${lst.length>14?`<div class="tcd-note">${lst.length-14} more in the Change Register.</div>`:""}`:empty("No change with a planned implementation date is waiting to be implemented."),{noPad:false,style:"margin-bottom:16px"}));
@@ -13173,35 +13303,50 @@ function buildRegister(){
   const {all,rows}=view(), w=shell("Change Register","Every technical change with its status, stage, risk, financial impact and dates. Click a row for the change detail.");
   const list=UI.od?rows.filter(r=>r.overdue>0):rows;
   const ft=FTable.create({id:"tcm-reg",pageSize:10,sortable:true,rows:list,rowAct:r=>"tcm:open="+r.id,empty:"No change matches these filters.",columns:[
-    {key:"id",label:"Change ID",get:r=>r.wf,html:r=>`<b>${esc(r.wf)}</b><small class="v8-sm">${esc(r.form)}${r.live?" · live workflow":""}</small>`},
-    {key:"proj",label:"Project",get:r=>shortP(r.project)},
-    {key:"desc",label:"Description",get:r=>r.part+" — "+r.desc,html:r=>`<b>${esc(r.part)}</b><small class="v8-sm">${esc(r.desc)}</small>`},
-    {key:"cat",label:"Type",get:r=>r.category},
-    {key:"st",label:"Status",get:r=>r.life,order:r=>LIFE.indexOf(r.life),html:r=>stChip(r.life)},
-    {key:"stage",label:"Current stage",get:r=>r.stage},
-    {key:"risk",label:"Risk",get:r=>r.rk.level,order:r=>({High:0,Medium:1,Low:2,"—":3}[r.rk.level]),html:r=>rkChip(r.rk.level)},
-    {key:"pri",label:"Priority",get:r=>r.priority,order:r=>({High:0,Medium:1,Low:2,"—":3}[r.priority]),html:r=>prChip(r.priority)},
-    {key:"imp",label:"Impact / yr",get:r=>r.ann==null?"not priced":r.ann<0?"saving":"cost",order:r=>r.ann==null?1e12:r.ann,align:"r",html:r=>r.ann==null?'<span class="tcm-mute">not priced</span>':`<span class="${r.ann>0?"v8-bad":"v8-good"}">${sg(-r.ann)}</span>`},
-    {key:"plan",label:"Planned impl.",get:r=>r.plannedImpl?fmtDate(r.plannedImpl):"—",order:r=>r.plannedImpl||"9999",html:r=>esc(D(r.plannedImpl))},
-    {key:"od",label:"Days overdue",get:r=>r.overdue?"overdue":"—",order:r=>-r.overdue,align:"r",html:r=>r.overdue?`<b class="v8-bad">${r.overdue}</b>`:"—"},
-    {key:"own",label:"Owner",get:r=>r.owner}]});
-  const p=U.el(U.panel(`Change register <span class="count-pill">${list.length}</span>`,"",{noPad:true,sub:"Page filters above apply · sort or filter any column from its heading · impact = annualised recurring change in piece cost, + saving, − additional cost",right:`<div class="fc-segs tight"><button type="button" class="fc-seg ${UI.od?"":"on"}" data-act="tcm:od=0">All</button><button type="button" class="fc-seg ${UI.od?"on":""}" data-act="tcm:od=1">Overdue only</button></div>`}));
+    {key:"id",w:"14%",label:"Change ID",get:r=>r.wf,html:r=>`<b>${esc(r.wf)}</b><small class="v8-sm">${esc(r.form)}${r.live?" · live workflow":""}</small>`},
+    {key:"proj",w:"9%",label:"Project",get:r=>shortP(r.project)},
+    {key:"desc",w:"24%",label:"Description",get:r=>r.part+" — "+r.desc,html:r=>`<b>${esc(r.part)}</b><small class="v8-sm">${esc(r.desc)}</small>`},
+    {key:"cat",w:"12%",label:"Type",get:r=>r.category},
+    {key:"st",w:"12%",label:"Status",get:r=>r.life,order:r=>LIFE.indexOf(r.life),html:r=>stChip(r.life)},
+    {key:"pri",w:"8%",label:"Priority",get:r=>r.priority,order:r=>({High:0,Medium:1,Low:2,"—":3}[r.priority]),html:r=>prChip(r.priority)},
+    {key:"imp",w:"10%",label:"Impact / yr",get:r=>r.ann==null?"not priced":r.ann<0?"saving":"cost",order:r=>r.ann==null?1e12:r.ann,align:"r",html:r=>r.ann==null?'<span class="tcm-mute">not priced</span>':`<span class="${r.ann>0?"v8-bad":"v8-good"}">${sg(-r.ann)}</span>`},
+    {key:"od",w:"11%",label:"Days overdue",get:r=>r.overdue?"overdue":"—",order:r=>-r.overdue,align:"r",html:r=>r.overdue?`<b class="v8-bad">${r.overdue}</b>`:"—"}]});
+  const p=U.el(U.panel(`Change register <span class="count-pill">${list.length}</span>`,"",{noPad:true,right:`<div class="fc-segs tight"><button type="button" class="fc-seg ${UI.od?"":"on"}" data-act="tcm:od=0">All</button><button type="button" class="fc-seg ${UI.od?"on":""}" data-act="tcm:od=1">Overdue only</button></div>`}));
   p.querySelector(".panel-body").appendChild(ft); w.appendChild(p); add(w,`<div class="tcd-note" style="margin:10px 2px 16px">Priority score = production risk (High 2, Medium 1) + materiality (≥ ₹2 Cr/yr 2, ≥ ₹50 L/yr 1): 3–4 High, 2 Medium, 0–1 Low. Impact sign: + saving, − additional cost.</div>`);
   foot(w,all); U.wire(w); return w;
 }
 function buildDetail(){
-  const all=register(), r=all.find(x=>x.id===UI.sel)||all[0], w=document.createElement("div"); w.className="v8-page v8-board tc-page tcd tcm";
-  w.appendChild(U.header(r.wf+" — "+r.part,r.desc+" · "+carName(r.project)));
-  const kv=(k,v)=>`<div class="kv"><span>${k}</span><b>${v}</b></div>`;
-  add(w,`<div class="tcm-dh"><button type="button" class="btn btn-sm" data-act="tcm:go=change-register">${Icons.svg("undo")}Back to Change Register</button><span>${stChip(r.life)} ${rkChip(r.rk.level," risk")} ${prChip(r.priority," priority")} <span class="chip chip-gray"><span class="chip-dot"></span>${esc(r.category)}</span></span>${r.live?`<button type="button" class="btn btn-primary btn-sm" data-act="tc:open=${esc(r.live)}">Open in the change workflow</button>`:`<span class="tcm-mute">Generated register record — no workflow behind it</span>`}</div>`);
-  const steps=AP.map((a,i)=>{ const done=r.life==="Approved"||r.life==="Implemented"||(r.apStep!=null&&i<r.apStep)||(r.life==="Open"?false:false), cur=(r.life==="Pending approval"||r.life==="Returned for rework"||r.life==="Rejected")&&r.apStep===i; return `<div class="stg ${done?"done":cur?(r.life==="Rejected"?"rej":"cur"):""}"><div class="nm">${esc(a)}</div><div class="ct">${done?"✓":cur?(r.life==="Rejected"?"✕":"●"):"·"}</div><div class="av">${esc(roleLabel(AP_ROLE[a]))}</div></div>`; }).join("");
-  const a=r.ann;
-  grid(w,"g3",[
-    panel("Change","",`<div class="tcm-kv">${kv("Request",esc(r.form))}${kv("Type",esc(r.category))}${kv("Project",esc(carName(r.project)))}${kv("Part",esc(r.part)+" · "+esc(r.partNo))}${kv("Vertical",esc(r.vertical))}${kv("Supplier",esc(r.supplier))}${kv("Current stage",esc(r.stage))}${kv("Owner",esc(r.owner)+" · "+esc(roleLabel(r.ownerRole)))}</div>`),
-    panel("Financial impact","Annualised recurring change in piece cost. One-time cost is separate.",`<div class="tcm-kv">${kv("Piece price",pctTxt(r.pct))}${kv("Annualised impact",a==null?"not yet priced":`<span class="${a>0?"v8-bad":"v8-good"}">${money(a)}${a<0?" saving":" additional cost"} / yr</span>`)}${kv("One-time tooling",r.oneTime?U.cr(r.oneTime):"none")}${kv("Basis",r.life==="Implemented"?"in effect (implemented)":r.life==="Approved"?"approved, not yet in effect":r.life==="Rejected"?"rejected — no effect":"forecast, not approved")}</div><div class="tcd-note">${esc(impactNote)}</div>`),
-    panel("Dates","Due date = when the current step should be finished.",`<div class="tcm-kv">${kv("Raised",esc(fmtDate(r.raised)))}${kv("In current stage since",esc(fmtDate(r.stageSince)))}${kv("Due",r.due?esc(fmtDate(r.due))+(r.overdue?` <span class="v8-bad">· ${r.overdue} days overdue</span>`:""):"no date")}${kv("Planned implementation",r.plannedImpl?esc(fmtDate(r.plannedImpl))+(r.impl?` · ${esc(r.impl.s)}`:""):"none")}${r.implementedOn?kv("Implemented",esc(fmtDate(r.implementedOn))):""}${kv("Project SOP",r.sop?esc(fmtDate(r.sop))+(r.sop>T0?` · in ${dayDiff(T0,r.sop)} days`:" · in production"):"—")}</div>`)]);
-  grid(w,"g2",[panel("Risk and dependencies","Production risk: High = two or more of the five indicators below, Medium = one, Low = none. The first three are the module's own risk rule (price up more than 3%, milestone within 90 days with a late supplier commitment, high-risk supplier).",`<ul class="tcm-ul">${r.rk.factors.map(f=>`<li class="${f.hit?"hit":""}"><i></i>${esc(f.txt)}</li>`).join("")}<li class="${r.deps.supplier?"hit":""}"><i></i>Supplier offer ${r.deps.supplier?"outstanding":"not outstanding"}</li><li class="${r.deps.validation?"hit":""}"><i></i>Validation ${r.deps.validation?"not complete":"not an open item"}</li><li class="${r.deps.tooling?"hit":""}"><i></i>Tooling modification ${r.deps.tooling?"not yet released"+(r.oneTime?" ("+U.cr(r.oneTime)+")":""):(r.oneTime?"released":"not required")}</li></ul>`),
-    panel("Approval progress","Engineering → Quality → SRM → Finance → Commodity → Management → final confirmation.",`<div class="tcm-flow detail">${steps}</div>${r.tasks?`<div class="tcd-note">Implementation tasks: ${r.tasks.done} of ${r.tasks.total} done.</div>`:""}`)]);
+  const all=register(), r=all.find(x=>x.id===UI.sel)||all[0], w=document.createElement("div"); w.className="v8-page v8-board tc-page tcd tcm tcm-det";
+  const hd=U.header(r.wf+" — "+r.part,r.desc+" · "+carName(r.project));
+  const meta=document.createElement("div"); meta.className="pd-meta"; meta.innerHTML=`<span>Data as of <b>${esc(fmtDate(T0))}</b></span><span class="pd-ill">Illustrative prototype data</span>`; hd.appendChild(meta); w.appendChild(hd);
+  /* action bar */
+  add(w,`<div class="tcm-dh"><button type="button" class="btn btn-sm" data-act="tcm:go=change-register">${Icons.svg("undo")}Back to Change Register</button><span class="chips">${stChip(r.life)}${r.active?rkChip(r.rk.level," risk"):""}${r.active?prChip(r.priority," priority"):""}<span class="chip chip-gray"><span class="chip-dot"></span>${esc(r.category)}</span><span class="chip chip-gray"><span class="chip-dot"></span>${esc(r.form)}</span></span>${r.live?`<button type="button" class="btn btn-primary btn-sm" data-act="tc:open=${esc(r.live)}">Open in the change workflow</button>`:`<span class="tcm-mute">Generated register record — no workflow behind it</span>`}</div>`);
+  /* headline figures */
+  const a=r.ann, hits=r.rk.factors.filter(f=>f.hit).length;
+  add(w,`<div class="pd-kw"><div class="pd-kpis k4">${[
+    kpi({icon:a==null||a<0?"trend-down":"trend-up",label:"Annualised impact",value:a==null?"—":money(a),tone:a==null?"":a<0?"good":"bad",sub:a==null?"not yet priced — no priced MOD sheet":a<0?"saving per year (recurring)":"additional cost per year (recurring)",tip:impactNote}),
+    kpi({icon:"scale",label:"Piece price",value:pctTxt(r.pct),tone:r.pct==null?"":r.pct<0?"good":r.pct>0?"bad":"",sub:r.pct==null?"not yet priced":r.oneTime?`one-time tooling ${U.cr(r.oneTime)} (not in the annual figure)`:"no one-time tooling",tip:"Change of the piece price against today's price."}),
+    kpi({icon:"calendar",label:"Planned implementation",value:r.plannedImpl?esc(D(r.plannedImpl)):"—",tone:"txt",sub:r.impl?(r.impl.s==="Implemented"?"implemented "+D(r.implementedOn):r.impl.s==="Delayed"?`Delayed · ${r.impl.d} days late`:`${r.impl.s} · in ${r.impl.d} days`):"no planned date",stone:r.impl&&r.impl.s==="Delayed"?"bad":""}),
+    kpi({icon:"shield",label:"Production risk",value:r.active?esc(r.rk.level):"Closed",tone:r.active?(r.rk.level==="High"?"bad":""):"",sub:r.active?`${hits} of ${r.rk.factors.length} indicators flagged`:"no risk counted for a closed change",tip:"High = two or more of the five indicators, Medium = one, Low = none."})].join("")}</div></div>`);
+  /* where the change is */
+  const steps=AP.map((s,i)=>{ const done=r.life==="Approved"||r.life==="Implemented"||(r.apStep!=null&&i<r.apStep), cur=(r.life==="Pending approval"||r.life==="Returned for rework"||r.life==="Rejected")&&r.apStep===i; return `<div class="stg ${done?"done":cur?(r.life==="Rejected"?"rej":"cur"):""}"><div class="nm">${esc(s)}</div><div class="ct">${done?"✓":cur?(r.life==="Rejected"?"✕":"●"):"·"}</div><div class="av">${esc(roleLabel(AP_ROLE[s]))}</div></div>`; }).join("");
+  const where=r.life==="Open"?`In <b>${esc(STAGES[r.stageIdx])}</b> since ${esc(D(r.stageSince))} — not yet submitted for approval`:r.life==="Pending approval"?`Waiting for <b>${esc(AP[r.apStep])}</b> approval — ${esc(r.owner)} (${esc(roleLabel(r.ownerRole))}) since ${esc(D(r.stageSince))}`:r.life==="Returned for rework"?`Returned for rework at <b>${esc(AP[r.apStep])}</b> — ${esc(r.owner)} since ${esc(D(r.stageSince))}`:r.life==="Rejected"?`Rejected at <b>${esc(AP[r.apStep])}</b> on ${esc(D(r.stageSince))}`:r.life==="Approved"?`Approved — waiting for implementation (${esc(r.owner)})`:`Implemented on ${esc(D(r.implementedOn))}`;
+  add(w,panel("Where the change is","Engineering → Quality → SRM → Finance → Commodity → Management → final confirmation. Open changes have not reached the chain yet.",`<div class="tcm-flow detail">${steps}</div><div class="tcm-flow-sum"><span>${where}</span>${r.overdue?`<span class="od">${r.overdue} day${r.overdue===1?"":"s"} past the due date (${esc(D(r.due))})</span>`:r.due&&r.active?`<span>Due ${esc(D(r.due))}</span>`:""}</div>${r.tasks?`<div class="tcd-note">Implementation tasks: ${r.tasks.done} of ${r.tasks.total} done.</div>`:""}`,{style:"margin-bottom:16px"}));
+  /* details */
+  const fld=(k,v,wide)=>`<div class="f${wide?" wide":""}"><span>${k}</span><b>${v}</b></div>`;
+  const ev=[{d:r.raised,t:"Raised",s:"change created",past:true},{d:r.stageSince,t:r.life==="Implemented"?"Implemented":"In current stage since",s:r.stage,past:true},
+    r.due&&r.active?{d:r.due,t:r.life==="Approved"?"Implementation due":"Due",s:r.kind,od:r.overdue}:null,
+    r.plannedImpl&&r.life!=="Implemented"?{d:r.plannedImpl,t:"Planned implementation",s:r.impl?r.impl.s:"",st:r.impl&&r.impl.s}:null,
+    r.sop?{d:r.sop,t:"Project SOP",s:r.sop>T0?`in ${dayDiff(T0,r.sop)} days`:"in production",sop:true}:null].filter(Boolean);
+  if(r.life==="Implemented"&&r.plannedImpl) ev.push({d:r.plannedImpl,t:"Planned implementation",s:r.impl&&r.impl.d>0?`implemented ${r.impl.d} days later`:"implemented on time",past:true});
+  ev.push({d:T0,t:"Today",s:"data date",today:true}); ev.sort((x,y)=>x.d<y.d?-1:x.d>y.d?1:(x.today?1:0)-(y.today?1:0));
+  const tl=`<ul class="tcm-tl">${ev.map(e=>`<li class="${e.today?"today":e.d<=T0?"past":""}${e.od?" od":""}${e.st==="Delayed"?" od":e.st==="At risk"?" warn":""}"><i></i><div><b>${esc(e.t)}</b><small>${esc(e.s||"")}${e.od?` · ${e.od} days overdue`:""}</small></div><span>${esc(D(e.d))}</span></li>`).join("")}</ul>`;
+  const dep=[r.deps.supplier&&"Supplier offer outstanding",r.deps.validation&&"Validation not complete",r.deps.tooling&&"Tooling modification not yet released"+(r.oneTime?" ("+U.cr(r.oneTime)+")":"")].filter(Boolean);
+  grid(w,"g2",[
+    panel("Change details","",`<div class="tcm-kvg">${fld("Part",esc(r.part),true)}${fld("Part number",esc(r.partNo))}${fld("Vertical",esc(r.vertical))}${fld("Project",esc(carName(r.project)))}${fld("Supplier",esc(r.supplier))}${fld("Owner",esc(r.owner)+" · "+esc(roleLabel(r.ownerRole)))}${fld("Current stage",esc(r.stage))}${fld("Reason",esc(r.desc),true)}</div>`),
+    panel("Schedule","Past dates are filled; the dashed marker is the data date. Due = when the current step should be finished.",tl),
+    panel("Financial impact","Annualised recurring change in piece cost. One-time cost is separate.",`<div class="tcm-kvg">${fld("Piece price",pctTxt(r.pct))}${fld("Annualised impact",a==null?"not yet priced":`<span class="${a>0?"v8-bad":"v8-good"}">${money(a)} ${a<0?"saving":"additional cost"} / yr</span>`)}${fld("One-time tooling",r.oneTime?U.cr(r.oneTime):"none")}${fld("Basis",r.life==="Implemented"?"in effect (implemented)":r.life==="Approved"?"approved, not yet in effect":r.life==="Rejected"?"rejected — no effect":"forecast, not approved")}</div><div class="tcd-note">${esc(impactNote)}</div>`),
+    panel("Risk and dependencies","Production risk: High = two or more of the five indicators, Medium = one, Low = none. The first three are the module's own risk rule.",`<ul class="tcm-ul">${r.rk.factors.map(f=>`<li class="${f.hit?"hit":""}"><i></i>${esc(f.txt)}</li>`).join("")}</ul><div class="tcm-dep"><em>Open dependencies</em>${dep.length?dep.map(x=>`<span class="chip chip-amber"><span class="chip-dot"></span>${esc(x)}</span>`).join(""):`<span class="tcm-mute">None open</span>`}</div>`)]);
   foot(w,all); U.wire(w); return w;
 }
 
@@ -13213,6 +13358,8 @@ Object.assign(U.actions,{tcm:v=>{ const i=v.indexOf("="), k=v.slice(0,i), a=v.sl
   else if(k==="life"){ F.status=F.status===a?"":a; Router.render(); }
   else if(k==="type"){ F.type=F.type===a?"":a; Router.render(); }
   else if(k==="proj"){ F.project=F.project===a?"":a; Router.render(); }
+  else if(k==="ins"){ const x=insights(view().rows).find(y=>y.k===a); if(x) insModal(x); }
+  else if(k==="tab"){ UI.ovTab=a; Router.render(); }
   else if(k==="kpi"){ F.status=a; go("change-register"); }
   else if(k==="od"){ UI.od=a==="1"; if(Router.screen!=="change-register") go("change-register"); else Router.render(); }
   else if(k==="open"){ UI.sel=a; go("tc-change"); }
@@ -13231,6 +13378,32 @@ MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
   ["Dashboards",["change-dashboard","tc-impact","tc-approval","tc-impl","change-register"]],
   ["Change workflow",["intake","doc-upload","eval-sheet","validation","supplier-offers","mod-sheet","impact-analysis","approval-workflow","implementation","change-history"]],
   ["Approvals & reports",["approvals","reports-tc"]]);
+/* Production-risk card: hover or focus the risk label in the Overview table */
+(function(){
+  let tip=null, owner=null;
+  const hide=()=>{ if(tip){ tip.remove(); tip=null; owner=null; } };
+  const html=r=>{
+    const hits=r.rk.factors.filter(f=>f.hit).length, dep=[r.deps.supplier&&"Supplier offer outstanding",r.deps.validation&&"Validation not complete",r.deps.tooling&&"Tooling modification not yet released"+(r.oneTime?" ("+U.cr(r.oneTime)+")":"")].filter(Boolean);
+    if(!r.active) return `<div class="hd"><b>${esc(r.wf)}</b><span>${esc(r.part)}</span></div><p class="mu">Closed change (${esc(r.life.toLowerCase())}) — no production risk is counted.</p>`;
+    return `<div class="hd"><b>${esc(r.wf)}</b><span>${esc(r.part)} · ${esc(shortP(r.project))}</span></div>
+      <div class="sm">${rkChip(r.rk.level," production risk")}<span>${hits} of ${r.rk.factors.length} indicators flagged</span></div>
+      <ul>${r.rk.factors.map(f=>`<li class="${f.hit?"hit":"ok"}"><i>${f.hit?"!":"✓"}</i><span>${esc(f.txt)}</span></li>`).join("")}</ul>
+      ${dep.length?`<div class="dp"><em>Also open</em>${dep.map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:""}
+      <div class="ft">High = 2 or more indicators · Medium = 1 · Low = none${r.ann!=null?` · Impact ${esc(sg(-r.ann))}/yr`:""}</div>`;
+  };
+  const show=el=>{
+    const r=register().find(x=>x.id===el.dataset.rk); if(!r) return; hide(); owner=el;
+    tip=document.createElement("div"); tip.className="tcm-tip"; tip.setAttribute("role","tooltip"); tip.innerHTML=html(r); document.body.appendChild(tip);
+    const b=el.getBoundingClientRect(), t=tip.getBoundingClientRect(); let x=b.left+b.width/2-t.width/2, y=b.bottom+8;
+    if(y+t.height>innerHeight-8) y=b.top-t.height-8; x=Math.max(8,Math.min(x,innerWidth-t.width-8)); tip.style.left=x+"px"; tip.style.top=Math.max(8,y)+"px";
+  };
+  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk]");
+  document.addEventListener("mouseover",e=>{ const el=find(e); if(el&&el!==owner) show(el); else if(!el&&owner&&!(e.target.closest&&e.target.closest(".tcm-tip"))) hide(); });
+  document.addEventListener("focusin",e=>{ const el=find(e); if(el) show(el); });
+  document.addEventListener("focusout",e=>{ if(find(e)) hide(); });
+  document.addEventListener("scroll",hide,true); document.addEventListener("keydown",e=>{ if(e.key==="Escape") hide(); });
+})();
+
 /* Ask AIS: portfolio questions about technical changes are answered from the register (single-change questions stay with the workflow answer in v8_tc.js) */
 (function(){
   if(typeof Radar==="undefined") return;
