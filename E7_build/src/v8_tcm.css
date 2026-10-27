@@ -254,3 +254,5 @@ button.af-b{border:0;font:inherit;text-align:left;cursor:pointer;color:inherit;t
 .af-nm{min-height:32px;display:flex;align-items:center;justify-content:center;} .af-t{padding:12px 6px 10px;} 
 
 .tcm-pend{--mw:0px;} .tcm-pend .h,.tcm-pend .r{grid-template-columns:minmax(120px,1.5fr) minmax(88px,.95fr) minmax(70px,.8fr) 80px 88px;gap:8px;padding-left:10px;padding-right:10px;} .tcm-back{--mw:0px;} .tcm-back .h,.tcm-back .r{grid-template-columns:minmax(110px,1.4fr) 138px minmax(80px,.9fr) 66px minmax(72px,.9fr);gap:8px;} 
+
+.tcm-div .r[data-np]{cursor:help;border-radius:8px;} .tcm-div .r[data-np]:hover{background:var(--raise);} .tcm-div .r[data-np]:focus-visible{outline:2px solid var(--focus);outline-offset:-2px;} 

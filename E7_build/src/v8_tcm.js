@@ -375,7 +375,7 @@ function buildImpact(){
     kpi({icon:"activity",label:"Forecast, not approved",value:f.pipe.n?sg(f.pipe.net):"—",sub:`${f.pipe.n} priced · ${f.pipeUnpriced} not yet priced`,tip:"Net annualised saving (+) or cost (−) of open, pending and returned changes that already have a priced MOD sheet. Not part of the headline."})].join("")}</div></div>`);
   const byP=[...new Set(rows.map(r=>r.project))].map(c=>({c,f:fin(rows.filter(r=>r.project===c))})).filter(x=>x.f.n||x.f.pipe.n).sort((a,b)=>b.f.net-a.f.net);
   const mx=Math.max(1,...byP.map(x=>Math.max(x.f.sav,x.f.cost)));
-  const div=byP.length?`<div class="tcm-div">${byP.map(x=>`<div class="r"><span class="lb">${esc(shortP(x.c))}</span><span class="l"><i style="width:${x.f.cost/mx*100}%"></i></span><span class="rt"><i style="width:${x.f.sav/mx*100}%"></i></span><b class="${x.f.net>=0?"good":"bad"}">${sg(x.f.net)}</b></div>`).join("")}</div><div class="tcm-lg"><span><i style="background:var(--red)"></i>Additional cost</span><span><i style="background:var(--ok)"></i>Savings</span><span class="m">approved + implemented · net on the right</span></div>`:empty("No approved or implemented change with a priced impact for this selection.");
+  const div=byP.length?`<div class="tcm-div">${byP.map(x=>`<div class="r" data-np="${esc(x.c)}" tabindex="0"><span class="lb">${esc(shortP(x.c))}</span><span class="l"><i style="width:${x.f.cost/mx*100}%"></i></span><span class="rt"><i style="width:${x.f.sav/mx*100}%"></i></span><b class="${x.f.net>=0?"good":"bad"}">${sg(x.f.net)}</b></div>`).join("")}</div><div class="tcm-lg"><span><i style="background:var(--red)"></i>Additional cost</span><span><i style="background:var(--ok)"></i>Savings</span><span class="m">approved + implemented · net on the right</span></div>`:empty("No approved or implemented change with a priced impact for this selection.");
   grid(w,"g2",[panel("Financial impact overview","Approved and implemented changes. "+impactNote,noFin?empty("No priced approved or implemented change."):`<div class="tcm-chart">${waterfall(f)}</div>`),
     panel("Net impact by project","Savings and additional cost per project for approved and implemented changes.",div)]);
   const bucket=[["Implemented",f.savI,f.costI,f.nI,"In effect"],["Approved",f.savA,f.costA,f.nA,"Awaiting implementation"],["Forecast",f.pipe.sav,f.pipe.cost,f.pipe.n,"Open, pending, returned"]];
@@ -591,13 +591,22 @@ MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
       ${wl.length?`<div class="gk"><div style="grid-column:1/-1"><em>Waiting at this step</em>${wl.slice(0,4).map(r=>`<b>${esc(r.part)}<small>${esc(r.wf)} · ${esc(shortP(r.project))} · ${esc(r.owner)} · ${dayDiff(r.stageSince,T0)} d${r.overdue?` (${r.overdue} over)`:""}</small></b>`).join("")}${wl.length>4?`<small>+ ${wl.length-4} more</small>`:""}</div></div>`:""}
       <div class="ft">Waiting time = days since the change reached the step · target ${AP_SLA} days per step</div>`;
   };
+  const npHtml=code=>{
+    const rows=view().rows, pr=rows.filter(r=>r.project===code), f=fin(pr), all=fin(rows), ai=pr.filter(r=>(r.life==="Approved"||r.life==="Implemented")&&r.ann!=null).sort((a,b)=>Math.abs(b.ann)-Math.abs(a.ann));
+    const shr=(v,t)=>t?Math.round(v/t*100)+"%":"—", net=f.net, ineff=f.savI-f.costI, aw=f.savA-f.costA;
+    return `<div class="hd"><b>${esc(carName(code))}</b><span>${f.n} approved or implemented change${f.n===1?"":"s"} with a priced impact (${f.nI} implemented, ${f.nA} approved)</span></div>
+      <div class="gk one"><div><em>Savings</em><b class="${f.sav?"":""}">${f.sav?esc(money(f.sav)):"—"}</b></div><div><em>Add. cost</em><b class="${f.cost?"bad":""}">${f.cost?esc(money(f.cost)):"—"}</b></div><div><em>Net</em><b class="${net>=0?"":"bad"}">${esc(sg(net))}</b></div><div><em>One-time tooling</em><b>${f.oneTime?esc(U.cr(f.oneTime)):"—"}</b></div></div>
+      <ul><li class="ok"><i>•</i><span>In effect (implemented): ${f.nI?esc(sg(ineff)):"nothing implemented yet"}</span></li><li class="ok"><i>•</i><span>Approved, awaiting implementation: ${f.nA?esc(sg(aw)):"none"}</span></li><li class="ok"><i>•</i><span>Share of all savings: ${shr(f.sav,all.sav)} · share of all additional cost: ${shr(f.cost,all.cost)}</span></li>${f.pipe.n?`<li class="ok"><i>•</i><span>Forecast, not approved (not in the bars): ${esc(sg(f.pipe.net))} over ${f.pipe.n} change${f.pipe.n===1?"":"s"}</span></li>`:""}</ul>
+      ${ai.length?`<div class="gk"><div style="grid-column:1/-1"><em>Largest contributors</em>${ai.slice(0,3).map(r=>`<b>${esc(r.part)}<small>${esc(r.wf)} · ${esc(r.life)} · ${esc(sg(-r.ann))}/yr</small></b>`).join("")}${ai.length>3?`<small>+ ${ai.length-3} more</small>`:""}</div></div>`:""}
+      <div class="ft">Approved + implemented · annualised recurring ₹ per year · + saving, − additional cost</div>`;
+  };
   const show=el=>{
-    const d=el.dataset, r=(d.gp||d.st!==undefined)?null:register().find(x=>x.id===(d.gm||d.rk)); if(!d.gp&&d.st===undefined&&!r) return; hide(); owner=el;
-    tip=document.createElement("div"); tip.className="tcm-tip"+(d.gp||d.gm||d.st!==undefined?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.st!==undefined?stHtml(+d.st):d.gm?gHtml(r):html(r); document.body.appendChild(tip);
+    const d=el.dataset, r=(d.gp||d.np||d.st!==undefined)?null:register().find(x=>x.id===(d.gm||d.rk)); if(!d.gp&&!d.np&&d.st===undefined&&!r) return; hide(); owner=el;
+    tip=document.createElement("div"); tip.className="tcm-tip"+(d.gp||d.np||d.gm||d.st!==undefined?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.np?npHtml(d.np):d.st!==undefined?stHtml(+d.st):d.gm?gHtml(r):html(r); document.body.appendChild(tip);
     const b=el.getBoundingClientRect(), t=tip.getBoundingClientRect(); let x=b.left+b.width/2-t.width/2, y=b.bottom+8;
     if(y+t.height>innerHeight-8) y=b.top-t.height-8; x=Math.max(8,Math.min(x,innerWidth-t.width-8)); tip.style.left=x+"px"; tip.style.top=Math.max(8,y)+"px";
   };
-  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk], .tcm-dm[data-gm], .tcm-gp[data-gp], .af-s[data-st]");
+  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk], .tcm-dm[data-gm], .tcm-gp[data-gp], .af-s[data-st], .tcm-div .r[data-np]");
   document.addEventListener("mouseover",e=>{ const el=find(e); if(el&&el!==owner) show(el); else if(!el&&owner&&!(e.target.closest&&e.target.closest(".tcm-tip"))) hide(); });
   document.addEventListener("focusin",e=>{ const el=find(e); if(el) show(el); });
   document.addEventListener("focusout",e=>{ if(find(e)) hide(); });
