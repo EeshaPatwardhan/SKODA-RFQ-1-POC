@@ -200,17 +200,19 @@ function statusDonut(rows){
     <div class="lg">${LIFE.map(l=>{ const v=cnt(rows,l); return `<div class="o${F.status===l?" on":""}" data-act="tcm:life=${esc(l)}" role="button" tabindex="0" title="${esc(l)}: ${v} — click to filter"><i style="background:${LCOL[l]}"></i><span>${esc(l)}</span><b>${v}</b><em>${pc(v,n)}%</em></div>`; }).join("")}</div></div>`;
 }
 function waterfall(f){
-  const W=320,H=218,base=176,top=34,bw=64,x0=[26,128,230], sav=f.sav, cost=f.cost, net=f.net, mx=Math.max(sav,cost,Math.abs(net),1), k=(base-top)/mx;
-  const y=v=>base-v*k, lab=(x,yy,t,c)=>`<text x="${x+bw/2}" y="${yy}" text-anchor="middle" class="tcm-n" style="fill:${c}">${esc(t)}</text>`;
-  const netY=net>=0?[y(net),net*k]:[base,-net*k];
+  /* savings 0 → +S, additional cost S → S−C (may cross zero), net 0 → S−C; the scale always spans the lowest and highest point so nothing leaves the chart */
+  const W=320,H=236,top=34,plotH=128,bw=64,x0=[26,128,230], sav=f.sav, cost=f.cost, net=f.net, hi=Math.max(sav,0,sav-cost), lo=Math.min(0,net,sav-cost), span=(hi-lo)||1;
+  const y=v=>top+(hi-v)/span*plotH, y0=y(0), bar=(a,b)=>{ const t=Math.min(y(a),y(b)), h=Math.max(Math.abs(y(a)-y(b)),2); return [t,h]; };
+  const col=net>=0?"var(--c-anchor)":"var(--red)", b1=bar(0,sav), b2=bar(sav,sav-cost), b3=bar(0,net);
+  const lab=(x,yy,t,c)=>`<text x="${x+bw/2}" y="${yy}" text-anchor="middle" class="tcm-n" style="fill:${c}">${esc(t)}</text>`;
   return `<svg class="tcm-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Annualised financial impact: savings ${money(sav)}, additional cost ${money(cost)}, net ${sg(net)}">
-    <line x1="8" x2="${W-8}" y1="${base}" y2="${base}" stroke="var(--line)"/>
-    <rect x="${x0[0]}" y="${y(sav)}" width="${bw}" height="${sav*k}" rx="4" fill="var(--ok)"/>${lab(x0[0],y(sav)-7,money(sav),"var(--ok)")}
+    <line x1="8" x2="${W-8}" y1="${y0}" y2="${y0}" stroke="var(--line)"/>
+    <rect x="${x0[0]}" y="${b1[0]}" width="${bw}" height="${b1[1]}" rx="4" fill="var(--ok)"/>${lab(x0[0],b1[0]-7,money(sav),"var(--ok)")}
     <line x1="${x0[0]+bw}" x2="${x0[1]}" y1="${y(sav)}" y2="${y(sav)}" stroke="var(--faint)" stroke-dasharray="3 3"/>
-    <rect x="${x0[1]}" y="${y(sav)}" width="${bw}" height="${Math.max(cost*k,cost?3:0)}" rx="4" fill="var(--red)"/>${lab(x0[1],y(sav)-7,"−"+money(cost),"var(--red)")}
+    <rect x="${x0[1]}" y="${b2[0]}" width="${bw}" height="${b2[1]}" rx="4" fill="var(--red)"/>${lab(x0[1],Math.min(y(sav),y(sav-cost))-7,"−"+money(cost),"var(--red)")}
     <line x1="${x0[1]+bw}" x2="${x0[2]}" y1="${y(sav-cost)}" y2="${y(sav-cost)}" stroke="var(--faint)" stroke-dasharray="3 3"/>
-    <rect x="${x0[2]}" y="${netY[0]}" width="${bw}" height="${Math.max(netY[1],3)}" rx="4" fill="${net>=0?"var(--c-anchor)":"var(--red)"}"/>${lab(x0[2],(net>=0?netY[0]-7:netY[0]+netY[1]+15),sg(net),net>=0?"var(--c-anchor)":"var(--red)")}
-    ${["Savings","Additional cost","Net impact"].map((t,i)=>`<text x="${x0[i]+bw/2}" y="${base+17}" text-anchor="middle" class="tcm-l">${t}</text>`).join("")}${["approved + implemented","approved + implemented","savings − cost"].map((t,i)=>`<text x="${x0[i]+bw/2}" y="${base+30}" text-anchor="middle" class="tcm-l s">${t}</text>`).join("")}</svg>`;
+    <rect x="${x0[2]}" y="${b3[0]}" width="${bw}" height="${b3[1]}" rx="4" fill="${col}"/>${net>=0?lab(x0[2],b3[0]-7,sg(net),col):lab(x0[2],b3[0]+b3[1]+16,sg(net),col)}
+    ${["Savings","Additional cost","Net impact"].map((t,i)=>`<text x="${x0[i]+bw/2}" y="${H-24}" text-anchor="middle" class="tcm-l">${t}</text>`).join("")}${["per year","per year","savings − cost"].map((t,i)=>`<text x="${x0[i]+bw/2}" y="${H-10}" text-anchor="middle" class="tcm-l s">${t}</text>`).join("")}</svg>`;
 }
 function typeBars(rows){
   const mx=Math.max(1,...CATS.map(c=>cnt2(rows,c))), list=CATS.map(c=>({c,n:cnt2(rows,c)})).filter(x=>x.n||!F.type).sort((a,b)=>b.n-a.n);
@@ -236,21 +238,28 @@ function gantt(rows,months,o){
   let g=`<svg class="tcm-svg tcm-gantt" viewBox="0 0 ${W} ${H}" role="img" aria-label="Implementation timeline by project">`;
   ms.forEach((d,i)=>{ const x=X(d.getTime()), x2=X(i+1<ms.length?ms[i+1].getTime():ed.getTime()); g+=`<line x1="${x}" x2="${x}" y1="${top-8}" y2="${H-6}" stroke="var(--line2)"/><text x="${(x+x2)/2}" y="${top-14}" text-anchor="middle" class="tcm-l">${MON[d.getUTCMonth()]}${d.getUTCMonth()===0||i===0?" "+String(d.getUTCFullYear()).slice(2):""}</text>`; });
   codes.forEach((code,ri)=>{ const cy=top+ri*rh+rh/2, l=shown.filter(r=>r.project===code), xs=l.map(r=>X(Date.parse(r.plannedImpl+"T00:00:00Z")));
-    g+=`<line x1="8" x2="${W-RW}" y1="${top+ri*rh}" y2="${top+ri*rh}" stroke="var(--line2)"/><text x="8" y="${cy-2}" class="tcm-pl">${esc(shortP(code))}</text><text x="8" y="${cy+12}" class="tcm-l s">${l.length} change${l.length===1?"":"s"}${sopOf(code)?" · SOP "+esc(fmtDate(sopOf(code)).replace(/ 20(\d\d)$/," $1")):""}</text>`;
+    g+=`<line x1="8" x2="${W-RW}" y1="${top+ri*rh}" y2="${top+ri*rh}" stroke="var(--line2)"/><rect class="tcm-gp" data-gp="${esc(code)}" x="0" y="${top+ri*rh}" width="${LW-10}" height="${rh}" fill="transparent"/><text x="8" y="${cy-2}" class="tcm-pl">${esc(shortP(code))}</text><text x="8" y="${cy+12}" class="tcm-l s">${l.length} change${l.length===1?"":"s"}${sopOf(code)?" · SOP "+esc(fmtDate(sopOf(code)).replace(/ 20(\d\d)$/," $1")):""}</text>`;
     if(l.length>1) g+=`<rect x="${Math.min(...xs)}" y="${cy-7}" width="${Math.max(...xs)-Math.min(...xs)}" height="14" rx="7" fill="color-mix(in srgb,var(--brand) 16%,var(--panel))"/>`;
     const sop=sopOf(code); if(sop&&Date.parse(sop+"T00:00:00Z")<ed){ const sx=X(Date.parse(sop+"T00:00:00Z")); g+=`<line x1="${sx}" x2="${sx}" y1="${cy-15}" y2="${cy+15}" stroke="var(--ink)" stroke-width="2"/><text x="${sx+4}" y="${cy-8}" class="tcm-l s">SOP</text>`; }
     l.slice().sort((a,b)=>a.plannedImpl<b.plannedImpl?-1:1).forEach(r=>{ const x=X(Date.parse(r.plannedImpl+"T00:00:00Z")), s=r.impl.s, c=IMPLC[s];
-      g+=`<g class="tcm-dm" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><title>${esc(r.wf)} · ${esc(r.part)} · planned ${esc(fmtDate(r.plannedImpl))} · ${esc(s)}${r.impl.s==="Delayed"?" ("+r.impl.d+" days late)":""}</title><path d="M${x} ${cy-8}L${x+8} ${cy}L${x} ${cy+8}L${x-8} ${cy}Z" fill="${c}" stroke="var(--panel)" stroke-width="1.5"/></g>`; });
+      g+=`<g class="tcm-dm" data-gm="${esc(r.id)}" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><path d="M${x} ${cy-8}L${x+8} ${cy}L${x} ${cy+8}L${x-8} ${cy}Z" fill="${c}" stroke="var(--panel)" stroke-width="1.5"/></g>`; });
   });
   const tx=X(t0); g+=`<line x1="${tx}" x2="${tx}" y1="${top-6}" y2="${H-6}" stroke="var(--c-anchor)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${tx+4}" y="${H-10}" class="tcm-l s" style="fill:var(--c-anchor)">Today</text></svg>`;
   return g+`<div class="tcm-lg">${["On track","At risk","Delayed"].concat(o.all?["Implemented"]:[]).map(s=>`<span><i class="dm" style="background:${IMPLC[s]}"></i>${s}</span>`).join("")}<span class="m">Planned implementation date per change · dark bar = project SOP${later?` · ${later} later than ${months} months`:""}</span></div>`;
 }
-function approvalFlow(st,rows,big){
-  const bn=bottleneck(st), total=rows.filter(r=>r.life==="Pending approval").length;
-  return `<div class="tcm-flow${big?" big":""}">${st.map((s,i)=>`<div class="stg${bn&&bn.i===s.i?" bn":""}${s.n?"":" zero"}" title="${esc(s.a)} — waiting now ${s.n}, average ${s.avg.toFixed(1)} days, ${s.over} past the ${AP_SLA}-day target"><div class="nm">${esc(s.a)}</div><div class="ct">${s.n}</div><div class="av">${s.n?"avg "+s.avg.toFixed(1)+" d":"—"}</div>${s.over?`<div class="ov">${s.over} overdue</div>`:`<div class="ov ok">${s.n?"on time":""}</div>`}</div>`).join("")}</div>
-    <div class="tcm-flow-sum"><span><b>${total}</b> waiting for a decision · counted once, at the step they are waiting on</span>${bn?`<span class="bn">Bottleneck: <b>${esc(bn.a)}</b> — ${bn.n} waiting, ${bn.over} past the ${AP_SLA}-day target</span>`:`<span>No approval step has two or more changes waiting.</span>`}</div>
-    <div class="tcm-out"><span>${stChip("Approved")} <b>${cnt(rows,"Approved")+cnt(rows,"Implemented")}</b> through all steps</span><span>${stChip("Rejected")} <b>${cnt(rows,"Rejected")}</b></span><span>${stChip("Returned for rework")} <b>${cnt(rows,"Returned for rework")}</b></span></div>`;
+function approvalFlow(st,rows){
+  /* one circle per approval step with the changes waiting there now (each change is counted once), average wait and overdue count; the bottleneck is highlighted */
+  const bn=bottleneck(st), total=rows.filter(r=>r.life==="Pending approval").length, IC=["settings","shield","users","coins","package","bar-chart","check-circle"];
+  const steps=st.map((s,i)=>`<div class="af-s${bn&&bn.i===s.i?" bn":""}${s.n?"":" zero"}" data-st="${i}" tabindex="0"><div class="af-c">${Icons.svg(IC[i]||"check-circle")}</div><div class="af-nm">${esc(s.a)}</div><div class="af-t"><b>${s.n}</b>${s.over?`<em class="bad">${s.over} overdue</em>`:s.n?`<em class="ok">On time</em>`:`<em></em>`}</div></div>`).join('<div class="af-ar" aria-hidden="true"></div>');
+  const done=cnt(rows,"Approved")+cnt(rows,"Implemented");
+  return `<div class="af-row">${steps}</div>
+    <div class="af-foot"><div class="af-w"><div><b>${total}</b><span>waiting for a decision</span>${tip("Each change is counted once, at the approval step it is waiting on now.")}</div><small>Counted once, at the step they are waiting on</small></div>
+      <div class="af-o"><div><i style="background:var(--ok)"></i><b>${done}</b></div><span>Approved<br>through all steps</span></div>
+      <div class="af-o"><div><i style="background:var(--red)"></i><b>${cnt(rows,"Rejected")}</b></div><span>Rejected</span></div>
+      <div class="af-o"><div><i style="background:var(--faint)"></i><b>${cnt(rows,"Returned for rework")}</b></div><span>Returned for rework</span></div>
+      <button type="button" class="af-b${bn?"":" none"}"${bn?' data-act="tcm:scroll=tcm-decisions" title="Go to Decisions waiting"':" disabled"}><span class="ic">${Icons.svg("alert")}</span><div><em>${bn?"Bottleneck":"No bottleneck"}</em><b>${bn?`${esc(bn.a)} — ${bn.n} waiting, ${bn.over} past the ${AP_SLA}-day target`:"No approval step has two or more changes waiting"}</b></div>${bn?Icons.svg("chevron-right"):""}</button></div>`;
 }
+
 
 /* ------------------------------------------------------------ rule-based insights */
 /* Each insight: key, icon, up to three headline figures, a one-line action, the full text (issue / why / action) and the changes behind it (shown in the pop-up) */
@@ -369,13 +378,28 @@ function buildImpact(){
   const div=byP.length?`<div class="tcm-div">${byP.map(x=>`<div class="r"><span class="lb">${esc(shortP(x.c))}</span><span class="l"><i style="width:${x.f.cost/mx*100}%"></i></span><span class="rt"><i style="width:${x.f.sav/mx*100}%"></i></span><b class="${x.f.net>=0?"good":"bad"}">${sg(x.f.net)}</b></div>`).join("")}</div><div class="tcm-lg"><span><i style="background:var(--red)"></i>Additional cost</span><span><i style="background:var(--ok)"></i>Savings</span><span class="m">approved + implemented · net on the right</span></div>`:empty("No approved or implemented change with a priced impact for this selection.");
   grid(w,"g2",[panel("Financial impact overview","Approved and implemented changes. "+impactNote,noFin?empty("No priced approved or implemented change."):`<div class="tcm-chart">${waterfall(f)}</div>`),
     panel("Net impact by project","Savings and additional cost per project for approved and implemented changes.",div)]);
-  const bucket=[["Implemented — in effect",f.savI,f.costI,f.nI,"Implemented","actual run-rate (implemented, not measured)"],["Approved — awaiting implementation",f.savA,f.costA,f.nA,"Approved","approved, not yet in effect"],["Forecast — open, pending, returned",f.pipe.sav,f.pipe.cost,f.pipe.n,"","forecast, awaiting decision; not in the headline"]];
-  const cat=CATS.map(c=>({c,f:fin(rows.filter(r=>r.category===c))})).filter(x=>x.f.n||x.f.pipe.n);
-  const tb=(head,body)=>`<div class="pd-t tcm-fin"><div class="h">${head.map((x,i)=>`<span${i?' class="ra"':""}>${x}</span>`).join("")}</div>${body}</div>`;
-  grid(w,"g2",[panel("Where the value stands","Approved benefit is not realised benefit: only implemented changes are in effect.",tb(["Basis","Changes","Savings / yr","Add. cost / yr","Net / yr"],bucket.map(b=>`<div class="r"><span class="n"><b>${b[0]}</b><small>${b[5]}</small></span><span class="v">${b[3]}</span><span class="v good">${b[1]?money(b[1]):"—"}</span><span class="v bad">${b[2]?money(b[2]):"—"}</span><span class="v ${b[1]>=b[2]?"good":"bad"}">${b[3]?sg(b[1]-b[2]):"—"}</span></div>`).join(""))+`<div class="tcd-note">${f.unpriced?`${f.unpriced} approved or implemented change${f.unpriced===1?" has":"s have"} no priced MOD sheet and ${f.unpriced===1?"is":"are"} not counted. `:""}Rejected changes carry no financial effect.</div>`),
-    panel("Impact by change type","Approved and implemented changes per category.",cat.length?tb(["Type","Changes","Savings / yr","Add. cost / yr","Net / yr"],cat.map(x=>`<div class="r"><span class="n"><b>${esc(x.c)}</b></span><span class="v">${x.f.n}</span><span class="v good">${x.f.sav?money(x.f.sav):"—"}</span><span class="v bad">${x.f.cost?money(x.f.cost):"—"}</span><span class="v ${x.f.net>=0?"good":"bad"}">${x.f.n?sg(x.f.net):"—"}</span></div>`).join("")):empty("No priced change."))]);
-  const top=rows.filter(r=>r.ann!=null&&r.life!=="Rejected").sort((a,b)=>Math.abs(b.ann)-Math.abs(a.ann)).slice(0,10);
-  add(w,panel("Largest financial impacts","Ten largest priced changes (any status except rejected), by absolute annualised impact. Click a row for the change detail.",top.length?`<div class="pd-t tcm-top"><div class="h"><span>#</span><span>Change</span><span>Project</span><span>Type</span><span class="ra">Piece price</span><span class="ra">Impact / yr</span><span class="ra">One-time tooling</span><span class="ra">Status</span></div>${top.map((r,i)=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="k">${i+1}</span><span class="n"><b>${esc(r.part)} — ${esc(r.desc)}</b><small>${esc(r.wf)}</small></span><span class="s">${esc(shortP(r.project))}</span><span class="s">${esc(r.category)}</span><span class="v ${r.pct>0?"bad":"good"}">${pctTxt(r.pct)}</span><span class="v ${r.ann>0?"bad":"good"}">${sg(-r.ann)}</span><span class="s">${r.oneTime?U.cr(r.oneTime):"—"}</span><span class="ra">${stChip(r.life)}</span></div>`).join("")}</div>`:empty("No priced change in this selection."),{style:"margin-bottom:16px"}));
+  const bucket=[["Implemented",f.savI,f.costI,f.nI,"In effect"],["Approved",f.savA,f.costA,f.nA,"Awaiting implementation"],["Forecast",f.pipe.sav,f.pipe.cost,f.pipe.n,"Open, pending, returned"]];
+  const cat=CATS.map(c=>({c,f:fin(rows.filter(r=>r.category===c))})).filter(x=>x.f.n);
+  const ftbl=(first,body)=>`<div class="pd-t tcm-fin"><div class="h"><span>${first}</span><span class="ra">Changes</span><span class="ra">Savings / yr</span><span class="ra">Additional cost / yr</span><span class="ra">Net / yr</span></div>${body}</div>`;
+  const frow=(name,sub,n,sv,co)=>`<div class="r"><span class="n"><b>${esc(name)}</b>${sub?`<small>${esc(sub)}</small>`:""}</span><span class="v c">${n}</span><span class="v good">${sv?money(sv):"—"}</span><span class="v bad">${co?money(co):"—"}</span><span class="v ${sv>=co?"good":"bad"}">${n?sg(sv-co):"—"}</span></div>`;
+  const fsum=(icon,l1,v1,u1,l2,v2,cls,cap)=>`<div class="tcm-sum"><span class="ic">${Icons.svg(icon)}</span><div class="s1"><small>${l1}</small><b>${v1}<em>${u1}</em></b></div><div class="s2"><small>${l2}</small><b class="${cls}">${v2}</b>${cap?`<em>${cap}</em>`:""}</div></div>`;
+  const pipeN=bucket.reduce((s,b)=>s+b[3],0), pipeNet=bucket.reduce((s,b)=>s+b[1]-b[2],0);
+  grid(w,"g2",[panel("Financial Impact by Status","Approved benefit is not realised benefit: only implemented changes are in effect. Forecast covers open, pending and returned changes with a priced MOD sheet and is not approved.",
+      ftbl("Status",bucket.map(b=>frow(b[0],b[4],b[3],b[1],b[2])).join(""))+fsum("coins","Total pipeline",pipeN,"changes","Total net impact / yr",sg(pipeNet),pipeNet>=0?"good":"bad","including forecast")+(f.unpriced?`<div class="tcd-note">${f.unpriced} approved or implemented change${f.unpriced===1?" has":"s have"} no priced MOD sheet and ${f.unpriced===1?"is":"are"} not counted.</div>`:""),{sub:"Change pipeline by implementation status"}),
+    panel("Impact by change type","Approved and implemented changes per category.",cat.length?ftbl("Change type",cat.map(x=>frow(x.c,"",x.f.n,x.f.sav,x.f.cost)).join(""))+fsum("bar-chart","Total changes",f.n,"changes","Total net impact / yr",sg(f.net),f.net>=0?"good":"bad","approved + implemented"):empty("No priced change."),{sub:"Financial impact of changes by category"})]);
+  const top=rows.filter(r=>r.ann!=null&&r.life!=="Rejected").sort((a,b)=>Math.abs(b.ann)-Math.abs(a.ann));
+  const tp=U.el(U.panel(`Largest financial impacts <span class="count-pill">${top.length}</span>${tip("Priced changes (any status except rejected), largest absolute annualised impact first. Sort or filter any column from its heading; click a row for the change detail.")}`,"",{noPad:true,style:"margin-bottom:16px"}));
+  if(top.length) tp.querySelector(".panel-body").appendChild(FTable.create({id:"tcm-top",pageSize:5,sortable:true,rows:top,rowAct:r=>"tcm:open="+r.id,empty:"No change matches these filters.",columns:[
+    {key:"chg",w:"13%",label:"Change",get:r=>r.part,html:r=>`<b>${esc(r.part)}</b><small class="v8-sm">${esc(r.wf)}</small>`},
+    {key:"why",w:"17%",label:"Reason",get:r=>r.desc},
+    {key:"proj",w:"9%",label:"Project",get:r=>shortP(r.project)},
+    {key:"cat",w:"13%",label:"Type",get:r=>r.category},
+    {key:"pp",w:"9%",label:"Piece price",get:r=>r.pct>0?"up":r.pct<0?"down":"unchanged",order:r=>r.pct,align:"r",html:r=>`<span class="${r.pct>0?"v8-bad":"v8-good"}">${pctTxt(r.pct)}</span>`},
+    {key:"imp",w:"11%",label:"Impact / yr",get:r=>r.ann<0?"saving":"additional cost",order:r=>-r.ann,align:"r",html:r=>`<span class="${r.ann>0?"v8-bad":"v8-good"}">${sg(-r.ann)}</span>`},
+    {key:"tool",w:"11%",label:"One-time tooling",get:r=>r.oneTime?"with tooling":"none",order:r=>r.oneTime,align:"r",html:r=>r.oneTime?U.cr(r.oneTime):"—"},
+    {key:"st",w:"17%",label:"Status",get:r=>r.life,order:r=>LIFE.indexOf(r.life),html:r=>stChip(r.life)}]}));
+  else tp.querySelector(".panel-body").innerHTML=empty("No priced change in this selection.");
+  w.appendChild(tp);
   const lv=all.find(r=>r.live&&CD[r.live].stageIdx>=6);
   if(lv) add(w,`<div class="tcm-go"><span>The detailed, per-change impact sheet (MOD sheet comparison, risk factors and similar changes) stays in the workflow.</span><button type="button" class="btn btn-sm" data-act="tcm:sheet=${esc(lv.live)}">Open impact sheet · ${esc(lv.wf)}</button></div>`);
   foot(w,all); U.wire(w); return w;
@@ -392,13 +416,14 @@ function buildApproval(){
     kpi({icon:"flag",label:"Bottleneck step",value:bn?esc(bn.a):"—",tone:"txt",sub:bn?`${bn.n} waiting · ${bn.over} overdue`:"no step has 2+ waiting",tip:"Step with the most overdue changes, then the longest average wait (at least two waiting)."}),
     kpi({icon:"check-circle",label:"Approved",value:cnt(rows,"Approved")+cnt(rows,"Implemented"),sub:"through all steps"}),
     kpi({icon:"x-circle",label:"Rejected / returned",value:cnt(rows,"Rejected")+cnt(rows,"Returned for rework"),tone:cnt(rows,"Rejected")+cnt(rows,"Returned for rework")?"bad":"",sub:`${cnt(rows,"Rejected")} rejected · ${cnt(rows,"Returned for rework")} returned for rework`})].join("")}</div></div>`);
-  add(w,panel("Approval workflow status","The module's approval chain: Engineering → Quality → SRM → Finance → Commodity → Management → final confirmation by the AEKO Coordinator.",rows.length?approvalFlow(st,rows,true):empty("No change matches the filters."),{style:"margin-bottom:16px"}));
-  const tb=`<div class="pd-t tcm-aps"><div class="h"><span>Step</span><span>Approver role</span><span class="ra">Waiting now</span><span class="ra">Avg wait</span><span class="ra">Longest</span><span class="ra">Overdue</span><span class="ra">Passed this step</span></div>${st.map(s=>`<div class="r${bn&&bn.i===s.i?" bn":""}"><span class="n"><b>${esc(s.a)}</b></span><span class="s">${esc(roleLabel(s.role))}</span><span class="v">${s.n}</span><span class="v">${s.n?s.avg.toFixed(1)+" d":"—"}</span><span class="v">${s.n?s.max+" d":"—"}</span><span class="v ${s.over?"bad":""}">${s.over||"—"}</span><span class="v">${s.passed}</span></div>`).join("")}</div><div class="tcd-note">“Passed this step” counts changes that were approved at this step: those now at a later step, approved, implemented, or rejected / returned at a later step. A change appears under “waiting now” once only.</div>`;
+  add(w,panel("Approval workflow status","The module's approval chain: Engineering → Quality → SRM → Finance → Commodity → Management → final confirmation by the AEKO Coordinator.",rows.length?approvalFlow(st,rows):empty("No change matches the filters."),{style:"margin-bottom:16px",sub:"Changes waiting for decision at each approval step"}));
   const list=pend.slice().sort((a,b)=>b.overdue-a.overdue||dayDiff(b.stageSince,T0)-dayDiff(a.stageSince,T0));
-  grid(w,"g2",[panel("Steps and bottlenecks","Waiting time is measured from the day the change reached the step.",tb),
-    panel("Decisions waiting",`Every change waiting for an approval decision, longest wait first. Click a row for the change detail.`,list.length?`<div class="pd-t tcm-pend"><div class="h"><span>Change</span><span>Step</span><span>Approver</span><span class="ra">Waiting</span><span class="ra">Impact / yr</span></div>${list.slice(0,12).map(r=>`<div class="r${r.overdue?" od":""}" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)}</b><small>${esc(r.wf)} · ${esc(shortP(r.project))}</small></span><span class="s">${esc(AP[r.apStep])}</span><span class="s">${esc(r.owner)}</span><span class="v ${r.overdue?"bad":""}">${dayDiff(r.stageSince,T0)} d${r.overdue?`<small>${r.overdue} over</small>`:""}</span><span class="v ${r.ann>0?"bad":"good"}">${r.ann==null?"—":sg(-r.ann)}</span></div>`).join("")}</div>${list.length>12?`<div class="tcd-note">${list.length-12} more — see the Change Register (status: Pending approval).</div>`:""}`:empty("No change is waiting for an approval decision in this selection."))]);
   const back=rows.filter(r=>r.life==="Rejected"||r.life==="Returned for rework");
-  if(back.length) add(w,panel("Rejected and returned for rework","Changes that left the approval chain without approval.",`<div class="pd-t tcm-back"><div class="h"><span>Change</span><span>Outcome</span><span>Stopped at</span><span class="ra">Since</span><span>Owner</span></div>${back.map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)}</b><small>${esc(r.wf)} · ${esc(shortP(r.project))}</small></span><span>${stChip(r.life)}</span><span class="s">${esc(AP[r.apStep])}</span><span class="v">${esc(D(r.stageSince))}</span><span class="s">${esc(r.owner)}</span></div>`).join("")}</div>`,{style:"margin-bottom:16px"}));
+  const backBody=back.length?`<div class="pd-t tcm-back"><div class="h"><span>Change</span><span>Outcome</span><span>Stopped at</span><span class="ra">Since</span><span>Owner</span></div>${back.map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)}</b><small>${esc(r.wf)} · ${esc(shortP(r.project))}</small></span><span>${stChip(r.life)}</span><span class="s">${esc(AP[r.apStep])}</span><span class="v">${esc(D(r.stageSince))}</span><span class="s">${esc(r.owner)}</span></div>`).join("")}</div>`:empty("No change was rejected or returned for rework in this selection.");
+  const rejP=panel(`Rejected and returned for rework <span class="count-pill">${back.length}</span>`,"Changes that left the approval chain without approval.",backBody,{sub:"Rejected, or sent back to the requester for rework"});
+  const nShow=back.length||4;
+  const decP=panel("Decisions waiting","Every change waiting for an approval decision, longest wait first. Click a row for the change detail.",list.length?`<div class="pd-t tcm-pend"><div class="h"><span>Change</span><span>Step</span><span>Approver</span><span class="ra">Waiting</span><span class="ra">Impact / yr</span></div>${list.slice(0,nShow).map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)}</b><small>${esc(r.wf)} · ${esc(shortP(r.project))}</small></span><span class="s">${esc(AP[r.apStep])}</span><span class="s">${esc(r.owner)}</span><span class="wt"><span class="${r.overdue?"od":""}"><b>${dayDiff(r.stageSince,T0)} d</b>${r.overdue?`<small>${r.overdue} over</small>`:`<small>on time</small>`}</span></span><span class="v ${r.ann==null?"":r.ann>0?"bad":"good"}">${r.ann==null?"—":sg(-r.ann)}</span></div>`).join("")}</div>`:empty("No change is waiting for an approval decision in this selection."),{id:"tcm-decisions",sub:"Changes awaiting approval, sorted by longest waiting time",right:list.length?`<button type="button" class="btn btn-sm" data-act="tcm:kpi=Pending approval">View all${list.length>nShow?" "+list.length:""}${Icons.svg("chevron-right")}</button>`:""});
+  grid(w,"g2",[rejP,decP]);
   const lv=all.filter(r=>r.live&&CD[r.live].stageIdx>=7);
   if(lv.length) add(w,`<div class="tcm-go"><span>Sign-off, reminders and escalation for a live change happen in its approval chain.</span>${lv.map(r=>`<button type="button" class="btn btn-sm" data-act="tcm:chain=${esc(r.live)}">Approval chain · ${esc(r.wf)}</button>`).join("")}</div>`);
   foot(w,all); U.wire(w); return w;
@@ -417,7 +442,20 @@ function buildImpl(){
     kpi({icon:"wrench",label:"Tooling not released",value:rows.filter(r=>r.active&&r.deps.tooling).length,sub:"one-time tooling modification pending"})].join("")}</div></div>`);
   add(w,panel("Implementation timeline","Planned implementation date per change, next 12 months, with each project's SOP. Implemented changes in the window are shown in grey.",gantt(rows,12,{all:true,rh:48}),{style:"margin-bottom:16px"}));
   const lst=act.slice().sort((a,b)=>(a.impl.s==="Delayed"?-1:0)-(b.impl.s==="Delayed"?-1:0)||(a.plannedImpl<b.plannedImpl?-1:1));
-  add(w,panel(`Implementation register <span class="count-pill">${lst.length}</span>`,"Changes with a planned implementation date that are not yet implemented: delayed first, then by date.",lst.length?`<div class="pd-t tcm-impl"><div class="h"><span>Change</span><span>Project</span><span>Status</span><span class="ra">Planned</span><span class="ra">Days</span><span class="ra">Project SOP</span><span>Open dependencies</span><span class="ra">Stage</span></div>${lst.slice(0,14).map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)} — ${esc(r.desc)}</b><small>${esc(r.wf)}</small></span><span class="s">${esc(shortP(r.project))}</span><span><span class="tcm-st" style="--c:${IMPLC[r.impl.s]}"><i></i>${r.impl.s}</span></span><span class="v">${esc(D(r.plannedImpl))}</span><span class="v ${r.impl.s==="Delayed"?"bad":""}">${r.impl.s==="Delayed"?r.impl.d+" late":r.impl.d+" to go"}</span><span class="s">${esc(D(r.sop))}</span><span class="s">${[r.deps.supplier&&"supplier offer",r.deps.validation&&"validation",r.deps.tooling&&"tooling"].filter(Boolean).join(", ")||"none"}</span><span class="ra">${stChip(r.life)}</span></div>`).join("")}</div>${lst.length>14?`<div class="tcd-note">${lst.length-14} more in the Change Register.</div>`:""}`:empty("No change with a planned implementation date is waiting to be implemented."),{noPad:false,style:"margin-bottom:16px"}));
+  const ip=U.el(U.panel(`Implementation register <span class="count-pill">${lst.length}</span>${tip("Changes with a planned implementation date that are not yet implemented: delayed first, then by date. Sort or filter any column from its heading; click a row for the change detail.")}`,"",{noPad:true,style:"margin-bottom:16px"}));
+  const depTxt=r=>[r.deps.supplier&&"supplier offer",r.deps.validation&&"validation",r.deps.tooling&&"tooling"].filter(Boolean).join(", ")||"none";
+  if(lst.length) ip.querySelector(".panel-body").appendChild(FTable.create({id:"tcm-impl",pageSize:5,sortable:true,rows:lst,rowAct:r=>"tcm:open="+r.id,empty:"No change matches these filters.",columns:[
+    {key:"chg",w:"13%",label:"Change",get:r=>r.part,html:r=>`<b>${esc(r.part)}</b><small class="v8-sm">${esc(r.wf)}</small>`},
+    {key:"why",w:"16%",label:"Reason",get:r=>r.desc},
+    {key:"proj",w:"8%",label:"Project",get:r=>shortP(r.project)},
+    {key:"is",w:"10%",label:"Status",get:r=>r.impl.s,order:r=>["Delayed","At risk","On track"].indexOf(r.impl.s),html:r=>`<span class="tcm-st" style="--c:${IMPLC[r.impl.s]}"><i></i>${r.impl.s}</span>`},
+    {key:"plan",w:"9%",label:"Planned",get:r=>D(r.plannedImpl),order:r=>r.plannedImpl,align:"r"},
+    {key:"days",w:"9%",label:"Days",get:r=>r.impl.s==="Delayed"?"late":"to go",order:r=>r.impl.s==="Delayed"?-r.impl.d:r.impl.d,align:"r",html:r=>`<span class="${r.impl.s==="Delayed"?"v8-bad":""}">${r.impl.s==="Delayed"?r.impl.d+" late":r.impl.d+" to go"}</span>`},
+    {key:"sop",w:"9%",label:"Project SOP",get:r=>D(r.sop),order:r=>r.sop||"9999",align:"r"},
+    {key:"dep",w:"13%",label:"Open dependencies",get:depTxt},
+    {key:"st",w:"13%",label:"Stage",get:r=>r.life,order:r=>LIFE.indexOf(r.life),html:r=>stChip(r.life)}]}));
+  else ip.querySelector(".panel-body").innerHTML=empty("No change with a planned implementation date is waiting to be implemented.");
+  w.appendChild(ip);
   const live=all.filter(r=>r.live&&CD[r.live].stageIdx>=8);
   if(live.length) add(w,`<div class="tcm-go"><span>The task list of a live change (price history, BOM at SOP, purchase order, drawing, tooling, notification) is worked in its implementation screen.</span>${live.map(r=>`<button type="button" class="btn btn-sm" data-act="tcm:impl=${esc(r.live)}">Implementation tasks · ${esc(r.wf)} (${r.tasks.done}/${r.tasks.total})</button>`).join("")}</div>`);
   foot(w,all); U.wire(w); return w;
@@ -430,9 +468,9 @@ function buildRegister(){
   const ft=FTable.create({id:"tcm-reg",pageSize:10,sortable:true,rows:list,rowAct:r=>"tcm:open="+r.id,empty:"No change matches these filters.",columns:[
     {key:"id",w:"14%",label:"Change ID",get:r=>r.wf,html:r=>`<b>${esc(r.wf)}</b><small class="v8-sm">${esc(r.form)}${r.live?" · live workflow":""}</small>`},
     {key:"proj",w:"9%",label:"Project",get:r=>shortP(r.project)},
-    {key:"desc",w:"24%",label:"Description",get:r=>r.part+" — "+r.desc,html:r=>`<b>${esc(r.part)}</b><small class="v8-sm">${esc(r.desc)}</small>`},
-    {key:"cat",w:"12%",label:"Type",get:r=>r.category},
-    {key:"st",w:"12%",label:"Status",get:r=>r.life,order:r=>LIFE.indexOf(r.life),html:r=>stChip(r.life)},
+    {key:"desc",w:"20%",label:"Description",get:r=>r.part+" — "+r.desc,html:r=>`<b>${esc(r.part)}</b><small class="v8-sm">${esc(r.desc)}</small>`},
+    {key:"cat",w:"11%",label:"Type",get:r=>r.category},
+    {key:"st",w:"17%",label:"Status",get:r=>r.life,order:r=>LIFE.indexOf(r.life),html:r=>stChip(r.life)},
     {key:"pri",w:"8%",label:"Priority",get:r=>r.priority,order:r=>({High:0,Medium:1,Low:2,"—":3}[r.priority]),html:r=>prChip(r.priority)},
     {key:"imp",w:"10%",label:"Impact / yr",get:r=>r.ann==null?"not priced":r.ann<0?"saving":"cost",order:r=>r.ann==null?1e12:r.ann,align:"r",html:r=>r.ann==null?'<span class="tcm-mute">not priced</span>':`<span class="${r.ann>0?"v8-bad":"v8-good"}">${sg(-r.ann)}</span>`},
     {key:"od",w:"11%",label:"Days overdue",get:r=>r.overdue?"overdue":"—",order:r=>-r.overdue,align:"r",html:r=>r.overdue?`<b class="v8-bad">${r.overdue}</b>`:"—"}]});
@@ -443,9 +481,10 @@ function buildRegister(){
 function buildDetail(){
   const all=register(), r=all.find(x=>x.id===UI.sel)||all[0], w=document.createElement("div"); w.className="v8-page v8-board tc-page tcd tcm tcm-det";
   const hd=U.header(r.wf+" — "+r.part,r.desc+" · "+carName(r.project));
+  const fromS=UI.from&&UI.from!=="tc-change"?UI.from:"change-register", fromL=navLabel("techchange",fromS); const bc=hd.querySelector(".breadcrumb"); if(bc) bc.innerHTML=`Technical Change <b>›</b> <a href="#" data-act="tcm:go=${esc(fromS)}">${esc(fromL)}</a> <b>›</b> ${esc(r.wf)} — ${esc(r.part)}`;
   const meta=document.createElement("div"); meta.className="pd-meta"; meta.innerHTML=`<span>Data as of <b>${esc(fmtDate(T0))}</b></span><span class="pd-ill">Illustrative prototype data</span>`; hd.appendChild(meta); w.appendChild(hd);
   /* action bar */
-  add(w,`<div class="tcm-dh"><button type="button" class="btn btn-sm" data-act="tcm:go=change-register">${Icons.svg("undo")}Back to Change Register</button><span class="chips">${stChip(r.life)}${r.active?rkChip(r.rk.level," risk"):""}${r.active?prChip(r.priority," priority"):""}<span class="chip chip-gray"><span class="chip-dot"></span>${esc(r.category)}</span><span class="chip chip-gray"><span class="chip-dot"></span>${esc(r.form)}</span></span>${r.live?`<button type="button" class="btn btn-primary btn-sm" data-act="tc:open=${esc(r.live)}">Open in the change workflow</button>`:`<span class="tcm-mute">Generated register record — no workflow behind it</span>`}</div>`);
+  add(w,`<div class="tcm-dh"><button type="button" class="btn btn-sm" data-act="tcm:go=${esc(fromS)}">${Icons.svg("undo")}Back to ${esc(fromL)}</button><span class="chips">${stChip(r.life)}${r.active?rkChip(r.rk.level," risk"):""}${r.active?prChip(r.priority," priority"):""}<span class="chip chip-gray"><span class="chip-dot"></span>${esc(r.category)}</span><span class="chip chip-gray"><span class="chip-dot"></span>${esc(r.form)}</span></span>${r.live?`<button type="button" class="btn btn-primary btn-sm" data-act="tc:open=${esc(r.live)}">Open in the change workflow</button>`:`<span class="tcm-mute">Generated register record — no workflow behind it</span>`}</div>`);
   /* headline figures */
   const a=r.ann, hits=r.rk.factors.filter(f=>f.hit).length;
   add(w,`<div class="pd-kw"><div class="pd-kpis k4">${[
@@ -467,11 +506,15 @@ function buildDetail(){
   ev.push({d:T0,t:"Today",s:"data date",today:true}); ev.sort((x,y)=>x.d<y.d?-1:x.d>y.d?1:(x.today?1:0)-(y.today?1:0));
   const tl=`<ul class="tcm-tl">${ev.map(e=>`<li class="${e.today?"today":e.d<=T0?"past":""}${e.od?" od":""}${e.st==="Delayed"?" od":e.st==="At risk"?" warn":""}"><i></i><div><b>${esc(e.t)}</b><small>${esc(e.s||"")}${e.od?` · ${e.od} days overdue`:""}</small></div><span>${esc(D(e.d))}</span></li>`).join("")}</ul>`;
   const dep=[r.deps.supplier&&"Supplier offer outstanding",r.deps.validation&&"Validation not complete",r.deps.tooling&&"Tooling modification not yet released"+(r.oneTime?" ("+U.cr(r.oneTime)+")":"")].filter(Boolean);
-  grid(w,"g2",[
-    panel("Change details","",`<div class="tcm-kvg">${fld("Part",esc(r.part),true)}${fld("Part number",esc(r.partNo))}${fld("Vertical",esc(r.vertical))}${fld("Project",esc(carName(r.project)))}${fld("Supplier",esc(r.supplier))}${fld("Owner",esc(r.owner)+" · "+esc(roleLabel(r.ownerRole)))}${fld("Current stage",esc(r.stage))}${fld("Reason",esc(r.desc),true)}</div>`),
-    panel("Schedule","Past dates are filled; the dashed marker is the data date. Due = when the current step should be finished.",tl),
-    panel("Financial impact","Annualised recurring change in piece cost. One-time cost is separate.",`<div class="tcm-kvg">${fld("Piece price",pctTxt(r.pct))}${fld("Annualised impact",a==null?"not yet priced":`<span class="${a>0?"v8-bad":"v8-good"}">${money(a)} ${a<0?"saving":"additional cost"} / yr</span>`)}${fld("One-time tooling",r.oneTime?U.cr(r.oneTime):"none")}${fld("Basis",r.life==="Implemented"?"in effect (implemented)":r.life==="Approved"?"approved, not yet in effect":r.life==="Rejected"?"rejected — no effect":"forecast, not approved")}</div><div class="tcd-note">${esc(impactNote)}</div>`),
-    panel("Risk and dependencies","Production risk: High = two or more of the five indicators, Medium = one, Low = none. The first three are the module's own risk rule.",`<ul class="tcm-ul">${r.rk.factors.map(f=>`<li class="${f.hit?"hit":""}"><i></i>${esc(f.txt)}</li>`).join("")}</ul><div class="tcm-dep"><em>Open dependencies</em>${dep.length?dep.map(x=>`<span class="chip chip-amber"><span class="chip-dot"></span>${esc(x)}</span>`).join(""):`<span class="tcm-mute">None open</span>`}</div>`)]);
+  /* how the yearly figure is built (only when it reproduces the register value from the platform part data) */
+  const dp=DATA.parts.find(x=>x.number===r.partNo), pq=dp&&dp.poc?dp.poc:null, vol=volFor(r.project);
+  const calc=pq&&r.pct!=null&&a!=null&&Math.abs(Math.round(r.pct/100*pq.cur*pq.qty*vol)-a)<=1?`<div class="tcm-calc"><div><span>Piece price today</span><b>₹${Math.round(pq.cur).toLocaleString("en-IN")}</b></div><div><span>After the change (${esc(pctTxt(r.pct))})</span><b>₹${Math.round(pq.cur*(1+r.pct/100)).toLocaleString("en-IN")}</b></div><div><span>Quantity per car</span><b>${pq.qty}</b></div><div><span>Annual volume (${esc(carName(r.project))})</span><b>${vol.toLocaleString("en-IN")} cars</b></div><div class="tot"><span>Annualised ${a<0?"saving":"additional cost"}</span><b class="${a>0?"bad":"good"}">${esc(money(a))} / yr</b></div></div>`:`<div class="tcd-note">${esc(impactNote)}</div>`;
+  const finBody=`<div class="tcm-kvg">${fld("Basis",r.life==="Implemented"?"in effect (implemented)":r.life==="Approved"?"approved, not yet in effect":r.life==="Rejected"?"rejected — no effect":"forecast, not approved")}${fld("One-time tooling",r.oneTime?U.cr(r.oneTime):"none")}</div><div class="tcm-calc-h"><em>How the yearly figure is built</em></div>${a==null?`<div class="tcd-note">Not yet priced: the change has no priced MOD sheet.</div>`:calc}`;
+  const cols=add(w,`<div class="tcm-cols"><div class="c1"></div><div class="c2"></div></div>`), L=cols.children[0], R=cols.children[1];
+  [panel("Change details","",`<div class="tcm-kvg">${fld("Part",esc(r.part),true)}${fld("Part number",esc(r.partNo))}${fld("Vertical",esc(r.vertical))}${fld("Project",esc(carName(r.project)))}${fld("Supplier",esc(r.supplier))}${fld("Owner",esc(r.owner)+" · "+esc(roleLabel(r.ownerRole)))}${fld("Current stage",esc(r.stage))}${fld("Reason",esc(r.desc),true)}</div>`),
+    panel("Risk and dependencies","Production risk: High = two or more of the five indicators, Medium = one, Low = none. The first three are the module's own risk rule.",`<ul class="tcm-ul">${r.rk.factors.map(f=>`<li class="${f.hit?"hit":""}"><i></i>${esc(f.txt)}</li>`).join("")}</ul><div class="tcm-dep"><em>Open dependencies</em>${dep.length?dep.map(x=>`<span class="chip chip-amber"><span class="chip-dot"></span>${esc(x)}</span>`).join(""):`<span class="tcm-mute">None open</span>`}</div>`)].forEach(x=>L.appendChild(U.el(x)));
+  [panel("Schedule","Past dates are filled; the dashed marker is the data date. Due = when the current step should be finished.",tl),
+    panel("Financial impact","Annualised recurring change in piece cost. One-time cost is separate.",finBody)].forEach(x=>R.appendChild(U.el(x)));
   foot(w,all); U.wire(w); return w;
 }
 
@@ -484,10 +527,11 @@ Object.assign(U.actions,{tcm:v=>{ const i=v.indexOf("="), k=v.slice(0,i), a=v.sl
   else if(k==="type"){ F.type=F.type===a?"":a; Router.render(); }
   else if(k==="proj"){ F.project=F.project===a?"":a; Router.render(); }
   else if(k==="ins"){ const x=insights(view().rows).find(y=>y.k===a); if(x) insModal(x); }
+  else if(k==="scroll"){ const el=document.getElementById(a); if(el){ el.scrollIntoView({behavior:"smooth",block:"start"}); el.classList.remove("pd-flash"); void el.offsetWidth; el.classList.add("pd-flash"); setTimeout(()=>el.classList.remove("pd-flash"),1800); } }
   else if(k==="tab"){ UI.ovTab=a; Router.render(); }
   else if(k==="kpi"){ F.status=a; go("change-register"); }
   else if(k==="od"){ UI.od=a==="1"; if(Router.screen!=="change-register") go("change-register"); else Router.render(); }
-  else if(k==="open"){ UI.sel=a; go("tc-change"); }
+  else if(k==="open"){ if(Router.screen!=="tc-change") UI.from=Router.screen; UI.sel=a; go("tc-change"); }
   else if(k==="sheet"){ T.ctx.activeId=a; go("impact-analysis"); }
   else if(k==="chain"){ T.ctx.activeId=a; go("approval-workflow"); }
   else if(k==="impl"){ T.ctx.activeId=a; go("implementation"); } }});
@@ -516,13 +560,44 @@ MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
       ${dep.length?`<div class="dp"><em>Also open</em>${dep.map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:""}
       <div class="ft">High = 2 or more indicators · Medium = 1 · Low = none${r.ann!=null?` · Impact ${esc(sg(-r.ann))}/yr`:""}</div>`;
   };
+  const gHtml=r=>{
+    const s=r.impl&&r.impl.s, dd=r.plannedImpl?dayDiff(T0,r.plannedImpl):null, why=[];
+    const when=s==="Implemented"?`Implemented ${D(r.implementedOn)} — ${r.impl.d>0?r.impl.d+" days after the plan":r.impl.d<0?(-r.impl.d)+" days before the plan":"on the planned date"}`:dd<0?`Planned ${D(r.plannedImpl)} — ${-dd} day${dd===-1?"":"s"} ago`:dd===0?`Planned today (${D(r.plannedImpl)})`:`Planned ${D(r.plannedImpl)} — in ${dd} day${dd===1?"":"s"}`;
+    if(s==="Delayed") why.push(["hit",`Planned date passed ${-dd} day${dd===-1?"":"s"} ago and the change is not implemented`]);
+    else if(s==="At risk"){ if(r.sopCrit) why.push(["hit",`Planned inside the ${SOP_BUFFER}-day window before the ${shortP(r.project)} SOP, or later`]); if(dd<=45&&r.life!=="Approved") why.push(["hit",`Due within 45 days but still ${r.life.toLowerCase()} — not yet approved`]); if(dd<=60&&r.deps.tooling) why.push(["hit","Tooling modification not released and due within 60 days"]); }
+    else if(s==="On track") why.push(["ok","No timing, SOP-window or tooling risk flagged"]);
+    else why.push(["ok","Closed — price, BOM and purchase order updated"]);
+    const sop=r.sop?`${D(r.sop)}${r.sop>T0?` · in ${dayDiff(T0,r.sop)} days`:" · in production"}${r.plannedImpl&&r.sop>T0?`<small>${dayDiff(r.plannedImpl,r.sop)>=0?dayDiff(r.plannedImpl,r.sop)+" days before SOP":(-dayDiff(r.plannedImpl,r.sop))+" days after SOP"}</small>`:""}`:"—";
+    const dep=[r.deps.supplier&&"supplier offer",r.deps.validation&&"validation",r.deps.tooling&&"tooling"].filter(Boolean);
+    return `<div class="hd"><b>${esc(r.wf)}</b><span>${esc(r.part)} — ${esc(r.desc)}</span></div>
+      <div class="sm"><span class="tcm-st" style="--c:${IMPLC[s]||"var(--faint)"}"><i></i>${esc(s||"—")}</span><span>${esc(when)}</span></div>
+      <ul>${why.map(w=>`<li class="${w[0]}"><i>${w[0]==="hit"?"!":"✓"}</i><span>${esc(w[1])}</span></li>`).join("")}</ul>
+      <div class="gk"><div><em>Project</em><b>${esc(carName(r.project))}</b></div><div><em>Project SOP</em><b>${sop}</b></div><div><em>Status · stage</em><b>${esc(r.life)}<small>${esc(r.stage)}</small></b></div><div><em>Owner</em><b>${esc(r.owner)}<small>${esc(roleLabel(r.ownerRole))}</small></b></div><div><em>Impact / yr</em><b>${r.ann==null?"not priced":esc(sg(-r.ann))}</b></div><div><em>Open dependencies</em><b>${dep.length?esc(dep.join(", ")):"none"}</b></div></div>
+      <div class="ft">Click the marker to open the change</div>`;
+  };
+  const gpHtml=code=>{
+    const l=view().rows.filter(r=>r.project===code&&r.plannedImpl&&r.life!=="Rejected"), c=k=>l.filter(r=>r.impl&&r.impl.s===k).length, sop=sopOf(code), up=l.filter(r=>r.life!=="Implemented"&&r.plannedImpl>=T0).sort((a,b)=>a.plannedImpl<b.plannedImpl?-1:1)[0];
+    return `<div class="hd"><b>${esc(carName(code))}</b><span>${l.length} change${l.length===1?"":"s"} with a planned implementation date</span></div>
+      <div class="gk one"><div><em>Delayed</em><b class="bad">${c("Delayed")}</b></div><div><em>At risk</em><b class="warn">${c("At risk")}</b></div><div><em>On track</em><b>${c("On track")}</b></div><div><em>Implemented</em><b>${c("Implemented")}</b></div></div>
+      <div class="gk"><div><em>Project SOP</em><b>${sop?esc(D(sop))+(sop>T0?` · in ${dayDiff(T0,sop)} days`:" · in production"):"—"}</b></div><div><em>Next planned</em><b>${up?esc(D(up.plannedImpl))+`<small>${esc(up.part)}</small>`:"none ahead"}</b></div><div><em>Inside the ${SOP_BUFFER}-day pre-SOP window</em><b>${l.filter(r=>r.sopCrit).length}</b></div></div>`;
+  };
+  const stHtml=i=>{
+    const rows=view().rows, st=approvalStats(rows), s=st[i], bn=bottleneck(st), pendN=rows.filter(r=>r.life==="Pending approval").length;
+    const wl=rows.filter(r=>r.life==="Pending approval"&&r.apStep===i).sort((a,b)=>b.overdue-a.overdue||dayDiff(b.stageSince,T0)-dayDiff(a.stageSince,T0));
+    const gap=s.avg-AP_SLA, avgNote=!s.n?"nothing waiting":gap>0?`${gap.toFixed(1)} days over the ${AP_SLA}-day target`:`within the ${AP_SLA}-day target`;
+    return `<div class="hd"><b>${i+1}. ${esc(s.a)}${bn&&bn.i===i?' <span class="tcm-st" style="--c:var(--c-amber)"><i></i>Bottleneck</span>':""}</b><span>Approver role: ${esc(roleLabel(s.role))}</span></div>
+      <div class="gk one"><div><em>Waiting now</em><b>${s.n}</b></div><div><em>Avg wait</em><b class="${s.n&&gap>0?"warn":""}">${s.n?s.avg.toFixed(1)+" d":"—"}</b></div><div><em>Longest</em><b>${s.n?s.max+" d":"—"}</b></div><div><em>Overdue</em><b class="${s.over?"bad":""}">${s.over}</b></div></div>
+      <ul><li class="${s.n&&gap>0?"hit":"ok"}"><i>${s.n&&gap>0?"!":"✓"}</i><span>Average wait: ${esc(avgNote)}</span></li><li class="ok"><i>•</i><span>${pendN?Math.round(s.n/pendN*100):0}% of the ${pendN} change${pendN===1?"":"s"} waiting for a decision (${s.n} here)</span></li><li class="ok"><i>•</i><span>${s.passed} change${s.passed===1?" has":"s have"} passed this step${s.esc?` · ${s.esc} escalated`:""}</span></li></ul>
+      ${wl.length?`<div class="gk"><div style="grid-column:1/-1"><em>Waiting at this step</em>${wl.slice(0,4).map(r=>`<b>${esc(r.part)}<small>${esc(r.wf)} · ${esc(shortP(r.project))} · ${esc(r.owner)} · ${dayDiff(r.stageSince,T0)} d${r.overdue?` (${r.overdue} over)`:""}</small></b>`).join("")}${wl.length>4?`<small>+ ${wl.length-4} more</small>`:""}</div></div>`:""}
+      <div class="ft">Waiting time = days since the change reached the step · target ${AP_SLA} days per step</div>`;
+  };
   const show=el=>{
-    const r=register().find(x=>x.id===el.dataset.rk); if(!r) return; hide(); owner=el;
-    tip=document.createElement("div"); tip.className="tcm-tip"; tip.setAttribute("role","tooltip"); tip.innerHTML=html(r); document.body.appendChild(tip);
+    const d=el.dataset, r=(d.gp||d.st!==undefined)?null:register().find(x=>x.id===(d.gm||d.rk)); if(!d.gp&&d.st===undefined&&!r) return; hide(); owner=el;
+    tip=document.createElement("div"); tip.className="tcm-tip"+(d.gp||d.gm||d.st!==undefined?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.st!==undefined?stHtml(+d.st):d.gm?gHtml(r):html(r); document.body.appendChild(tip);
     const b=el.getBoundingClientRect(), t=tip.getBoundingClientRect(); let x=b.left+b.width/2-t.width/2, y=b.bottom+8;
     if(y+t.height>innerHeight-8) y=b.top-t.height-8; x=Math.max(8,Math.min(x,innerWidth-t.width-8)); tip.style.left=x+"px"; tip.style.top=Math.max(8,y)+"px";
   };
-  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk]");
+  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk], .tcm-dm[data-gm], .tcm-gp[data-gp], .af-s[data-st]");
   document.addEventListener("mouseover",e=>{ const el=find(e); if(el&&el!==owner) show(el); else if(!el&&owner&&!(e.target.closest&&e.target.closest(".tcm-tip"))) hide(); });
   document.addEventListener("focusin",e=>{ const el=find(e); if(el) show(el); });
   document.addEventListener("focusout",e=>{ if(find(e)) hide(); });

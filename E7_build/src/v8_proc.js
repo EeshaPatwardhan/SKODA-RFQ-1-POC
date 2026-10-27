@@ -154,12 +154,12 @@ function build(){
 }
 
 window.V8Proc={PF,DEFAULT:DEFAULT_PROJECT,pricedParts};
-/* floating "back to top" button on the Procurement dashboard pages and Home (the page scrolls inside #content) */
+/* floating "back to top" button on every page once it is scrolled down (the page scrolls inside #content) */
 (function(){
   let b=null; const box=()=>document.getElementById("content");
   const ensure=()=>{ if(b) return b; b=document.createElement("button"); b.id="v8-top"; b.type="button"; b.title="Back to top"; b.setAttribute("aria-label","Back to top");
     b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'; b.onclick=()=>{ const c=box(); if(c) c.scrollTo({top:0,behavior:"smooth"}); }; document.body.appendChild(b); return b; };
-  const upd=()=>{ const c=box(), on=!!c&&/^(proc-|home$|task-centre$)/.test(Router.screen||"")&&c.scrollTop>360; ensure().classList.toggle("on",on); };
+  const upd=()=>{ const c=box(), on=!!c&&c.scrollTop>200; ensure().classList.toggle("on",on); };
   document.addEventListener("scroll",upd,true); setInterval(upd,400);
 })();
 /* ------------------------------------------------------------ wiring */
