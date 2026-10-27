@@ -84,8 +84,11 @@ function totals(d){ const m=d.mod.rows, cur=m.reduce((s,r)=>s+(+r.cur||0),0), ne
   return {cur,neu,delta,pct:cur?delta/cur*100:0}; }
 function volumeOf(d){ const code=d.ref.project, v=DATA.carVolumes.filter(x=>x.project===code).sort((a,b)=>b.year-a.year)[0], cbd=DATA.cbds[d.ref.partNo];
   return {car:v?v.volume:0,qty:cbd?cbd.qtyPerCar:1,annual:(v?v.volume:0)*(cbd?cbd.qtyPerCar:1),year:v?v.year:null}; }
-function riskOf(d){
-  const t=totals(d), sup=DATA.suppliers.find(s=>s.name===d.ref.supplier), m=K.model(), e=S.evaluate(m).find(x=>x.pt.id===d.ref.partNo);
+let EVAL_AT=null, EVAL_MAP=null;
+function evalOf(m,partNo){ if(EVAL_AT!==m){ EVAL_AT=m; EVAL_MAP=new Map(S.evaluate(m).map(x=>[x.pt.id,x])); } return EVAL_MAP.get(partNo); }
+function riskOf(d){ return riskCalc(totals(d).pct,d.ref.supplier,d.ref.partNo); }
+function riskCalc(pct,supplier,partNo){
+  const t={pct}, sup=DATA.suppliers.find(s=>s.name===supplier), m=K.model(), e=evalOf(m,partNo);
   const f=[];
   f.push({k:"Cost",hit:t.pct>3,txt:t.pct>3?`Piece price ${t.pct.toFixed(1)}% up`:"Cost delta contained"});
   const next=e&&e.next, days=next?Math.round((next.R-m.today)/S.DAY):null;
@@ -469,6 +472,9 @@ const _nl4=navLabel; navLabel=function(m,s){ return (m==="techchange"&&TC_LABEL[
 
 /* changes already at / past the approval stage get their (silent) flows now, so the right role has a task from the first load */
 DATA.changes.forEach(c=>{ const d=CD[c.id]; if(d&&d.stageIdx>=7) tcEnsure(d); });
+
+/* read-only access for the management pages (v8_tcm.js): the live workflow records and the helpers that price and rate a change */
+window.V8TC={T0,STAGES,STAGE_ALIAS,STAGE_SCREEN,APPROVAL_CHAIN,STAGE_ROLE,IMPL_TASKS,OFFER_DAYS,CD,ctx,riskOf,riskCalc,totals,volumeOf,projOf,carName,sopOf,fmtDate,addDays,dayDiff,users};
 
 /* Ask AIS: technical-change questions */
 (function(){

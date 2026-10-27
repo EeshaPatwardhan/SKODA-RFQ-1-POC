@@ -1383,121 +1383,158 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
   .ao-h{display:none;} .ao-r{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;} .ao-r .sp,.ao-r .ow,.ao-r .na{grid-column:1 / -1;} .dr-cards,.dr-ryg{grid-template-columns:minmax(0,1fr);} .dr-sec dl > div{grid-template-columns:minmax(0,1fr);gap:4px;} }
 .sf-ns{margin-top:12px;padding:10px 14px;border-radius:12px;background:var(--raise);border:1px dashed var(--line);font-size:12px;color:var(--muted);} .sf-ns b{color:var(--ink);}
 
-/* V8 · SRM Overview board */
-.ov-page .page-header{margin-bottom:8px;}
-.ov-page .page-header h1{font-size:22px;margin-bottom:2px;}
-.ov-page .page-header p.sub{font-size:13px;max-width:78ch;}
-.ov-filters{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 14px;padding:12px 14px;margin-bottom:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);}
-.ov-f{display:flex;flex-direction:column;gap:4px;flex:1 1 148px;min-width:140px;max-width:230px;}
-.ov-f > span{font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);}
-.ov-sel{display:flex;align-items:center;gap:6px;height:36px;padding:0 8px;border:1px solid var(--line);border-radius:9px;background:var(--panel);}
+/* V8 · SRM Overview board — compact: 10–12 px gaps, flat white cards, one-row filters and KPIs on wide screens */
+#content:has(.ov-page){padding-left:24px;padding-right:24px;padding-bottom:40px;}
+.ov-page .page-header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:6px 16px;margin-bottom:8px;}
+.ov-page .page-header .breadcrumb{font-size:11.5px;margin-bottom:2px;}
+.ov-page .page-header h1{font-size:20px;line-height:1.2;margin-bottom:1px;}
+.ov-page .page-header p.sub{font-size:12.5px;max-width:78ch;margin:0;}
+.ov-asof{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:flex-end;}
+.ov-ill{font-size:11px;font-weight:700;color:var(--brand);background:var(--brand-soft);border-radius:20px;padding:3px 9px;}
+.ov-date{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);}
+.ov-date svg.i{width:14px;height:14px;} .ov-date b{color:var(--ink);font-weight:700;}
+.ov-filters{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px 10px;padding:8px 12px;margin-bottom:10px;background:var(--panel);border:1px solid var(--line);border-radius:10px;}
+.ov-f{display:flex;flex-direction:column;gap:3px;flex:1 1 150px;min-width:140px;}
+.ov-f > span{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);line-height:1.2;}
+.ov-sel{display:flex;align-items:center;gap:6px;height:32px;padding:0 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);}
 .ov-sel:focus-within{border-color:var(--brand);}
-.ov-sel svg.i{width:15px;height:15px;flex:none;color:var(--muted);}
-.ov-sel select{flex:1;min-width:0;border:0;background:none;outline:0;color:var(--ink);font-size:13px;height:100%;cursor:pointer;}
-.ov-asof{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end;}
-.ov-ill{font-size:11.5px;font-weight:700;color:var(--brand);background:var(--brand-soft);border-radius:20px;padding:4px 10px;}
-.ov-date{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);}
-.ov-date svg.i{width:15px;height:15px;} .ov-date b{color:var(--ink);font-weight:700;}
-.ov-clear{border:0;background:none;color:var(--brand);font-weight:700;font-size:12.5px;padding:6px;cursor:pointer;}
-.ov-clear:hover{text-decoration:underline;}
-.ov-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:14px;container-type:inline-size;}
-.ov-kpi{display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);min-width:0;}
+.ov-sel svg.i{width:14px;height:14px;flex:none;color:var(--muted);}
+.ov-sel select{flex:1;min-width:0;border:0;background:none;outline:0;color:var(--ink);font-size:12.5px;height:100%;cursor:pointer;}
+.ov-clear{flex:none;display:inline-flex;align-items:center;gap:5px;height:32px;margin-left:2px;padding:0 4px 0 14px;border:0;border-left:1px solid var(--line2);border-radius:0;background:none;color:var(--muted);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;}
+.ov-clear svg.i{width:14px;height:14px;}
+.ov-clear:hover:not(:disabled){color:var(--brand);}
+.ov-clear:disabled{opacity:.45;cursor:default;}
+.ov-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:10px;}
+.ov-kpi{display:flex;flex-direction:column;justify-content:flex-start;gap:3px;min-height:92px;padding:11px 14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;min-width:0;}
 .ov-kpi.kpi-link{cursor:pointer;} .ov-kpi.kpi-link:hover{border-color:var(--brand);}
-.ov-kpi-top{display:flex;align-items:center;gap:8px;min-width:0;}
-.ov-ic{flex:none;width:28px;height:28px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;}
-.ov-ic svg.i{width:15px;height:15px;}
-.ov-lb{min-width:0;font-size:12px;font-weight:650;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ov-kpi-mid{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;}
-.ov-val{font-size:26px;font-weight:750;letter-spacing:-.02em;line-height:1.05;color:var(--ink);font-variant-numeric:tabular-nums;}
+.ov-lb{min-width:0;font-size:12px;font-weight:600;color:var(--muted);line-height:1.25;}
+.ov-val{font-size:26px;font-weight:750;letter-spacing:-.02em;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums;}
 .ov-val.good{color:var(--ok);} .ov-val.warn{color:var(--amber);} .ov-val.bad{color:var(--red);}
-.ov-kpi-sub{font-size:11.5px;color:var(--muted);line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ov-kpi-sub{margin-top:auto;font-size:11.5px;color:var(--muted);line-height:1.35;}
 .ov-kpi-sub .bad{color:var(--red);font-weight:700;} .ov-kpi-sub .warn{color:var(--amber);font-weight:700;} .ov-kpi-sub .good{color:var(--ok);font-weight:700;}
 .ov-ch{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;padding:3px 7px;border-radius:8px;background:var(--raise);border:1px solid var(--line2);flex:none;}
 .ov-ch b{font-size:11.5px;font-variant-numeric:tabular-nums;} .ov-ch small{font-size:10px;color:var(--muted);font-weight:600;}
 .ov-ch.good b{color:var(--ok);} .ov-ch.bad b{color:var(--red);}
-@container (max-width:1080px){ .ov-ch small{display:none;} }
-.ov-row{display:grid;gap:14px;margin-bottom:14px;align-items:stretch;}
-.ov-row > .panel{margin:0 !important;min-width:0;display:flex;flex-direction:column;}
-.ov-row > .panel > .panel-body{flex:1;min-width:0;}
-.ov-row.a{grid-template-columns:minmax(0,1.05fr) minmax(0,1.25fr) minmax(0,.95fr);}
+.ov-row{display:grid;gap:12px;margin-bottom:12px;align-items:stretch;}
+.ov-row > .panel{margin:0 !important;min-width:0;display:flex;flex-direction:column;container-type:inline-size;border-radius:10px;box-shadow:none;}
+.ov-row > .panel > .panel-body{flex:1;min-width:0;display:flex;flex-direction:column;}
+.ov-row.a{grid-template-columns:minmax(0,1.12fr) minmax(0,1.2fr) minmax(0,.9fr);}
 .ov-row.b{grid-template-columns:minmax(0,.9fr) minmax(0,1.45fr) minmax(0,.9fr);}
-.ov-row.c{grid-template-columns:minmax(0,1.2fr) minmax(0,1.25fr) minmax(250px,.85fr);align-items:start;}
-.ov-page .panel-header h3 .ov-i{display:inline-flex;margin-left:4px;color:var(--faint);cursor:help;}
+.ov-row.c{grid-template-columns:minmax(0,1.2fr) minmax(0,1.25fr) minmax(250px,.85fr);}
+.ov-page .panel-header{padding:9px 14px 7px;gap:6px 12px;align-items:flex-start;}
+.ov-page .panel-header h3{font-size:15px;line-height:1.25;}
+.ov-page .panel-header .ph-s{font-size:11.5px;margin-top:1px;}
+.ov-page .panel-header .btn{flex:none;white-space:nowrap;min-height:0;height:28px;padding:0 10px;font-size:12px;gap:5px;}
+.ov-page .panel-header .ph-t{min-width:0;}
+.ov-page .panel-header h3 .ov-i{display:inline-flex;vertical-align:-2px;margin-left:4px;color:var(--faint);cursor:help;}
 .ov-page .panel-header h3 .ov-i svg.i{width:14px;height:14px;color:var(--faint);}
-.ov-leg{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:11.5px;font-weight:650;color:var(--muted);}
-.ov-leg i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:0;}
+.ov-leg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;font-weight:650;color:var(--muted);}
+.ov-leg i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:0;}
 .ov-leg i.ok,.ov-stk i.ok,.ov-mini i.ok,.ov-ms.ok i{background:var(--ok);}
 .ov-leg i.risk,.ov-stk i.risk,.ov-mini i.risk,.ov-ms.risk i,.ov-og-f i.risk{background:var(--c-amber);}
 .ov-leg i.delayed,.ov-stk i.delayed,.ov-mini i.delayed,.ov-ms.delayed i,.ov-og-f i.delayed{background:var(--red);}
-.ov-leg-in{padding:2px 16px 8px;}
-.ov-empty{padding:16px;font-size:13px;color:var(--muted);line-height:1.45;}
+.ov-leg-in{padding:2px 16px 6px;}
+.ov-empty{padding:14px 16px;font-size:13px;color:var(--muted);line-height:1.45;}
 .ov-nil{font-size:12px;color:var(--muted);}
-.ov-note{margin:8px 16px 12px;font-size:11.5px;line-height:1.45;color:var(--muted);}
-.ov-mh-h,.ov-mh{display:grid;grid-template-columns:92px minmax(0,1fr) 36px;gap:8px;align-items:center;}
-.ov-mh-h{padding:2px 16px 6px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);}
-.ov-mh-h .r,.ov-mh .tn{text-align:right;}
-.ov-mh{width:100%;border:0;border-top:1px solid var(--line2);background:none;padding:7px 16px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;}
-.ov-mh:hover{background:var(--raise);}
-.ov-mh .nm{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ov-mh .tn{font-weight:700;font-variant-numeric:tabular-nums;font-size:13px;}
+.ov-note{margin:auto 16px 0;padding:8px 0 10px;border-top:1px solid var(--line2);font-size:11.5px;line-height:1.45;color:var(--muted);}
+
+/* Milestone health by project */
+.mh-h,.mh-r{display:grid;grid-template-columns:124px minmax(0,1fr) 64px 44px;gap:10px;align-items:center;}
+.mh-h{padding:7px 16px;background:var(--raise);border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);}
+.mh-h .r,.mh-r .pn{text-align:right;} .mh-h .c,.mh-r .ds{text-align:center;}
+.mh-r{width:100%;flex:1 1 0;min-height:46px;max-height:62px;border:0;border-bottom:1px solid var(--line2);background:none;padding:6px 16px;text-align:left;cursor:pointer;color:var(--ink);font:inherit;}
+.mh-r:last-child{border-bottom:0;} .mh-r:hover{background:var(--raise);}
+.mh-r .pj{display:flex;align-items:center;gap:8px;min-width:0;}
+.mh-r .pj .tile{flex:none;width:26px;height:26px;border-radius:7px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;}
+.mh-r .pj .tile svg.i{width:15px;height:15px;}
+.mh-r .pj b{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+.mh-r .pj > svg.i{flex:none;width:13px;height:13px;color:var(--faint);margin-left:-2px;}
+.mh-r:hover .pj > svg.i{color:var(--brand);}
+.mh-r .ov-stk{height:22px;border-radius:6px;}
+.mh-r .ov-stk i{font-size:11px;}
+.mh-pill{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:54px;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;}
+.mh-pill svg.i{width:12px;height:12px;}
+.mh-pill.bad{background:var(--red-soft);color:var(--red);} .mh-pill.nil{background:var(--raise);color:var(--muted);}
+.mh-r .pn{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;}
+.mh-r .pn b{font-size:14px;font-variant-numeric:tabular-nums;} .mh-r .pn small{font-size:10.5px;color:var(--muted);}
 .ov-stk{display:flex;height:16px;border-radius:5px;overflow:hidden;background:var(--line2);min-width:0;}
 .ov-stk i{display:flex;align-items:center;justify-content:center;height:100%;font-style:normal;font-size:10px;font-weight:700;color:#fff;min-width:2px;}
-.ov-scroll{overflow:auto;max-height:340px;}
+.ov-stk i.risk{color:#4a3500;}
+
+/* Supplier readiness table + shared tables */
 .ov-tbl{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed;}
-.ov-sup{min-width:0;}
-.ov-li-h,.ov-li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:8px;align-items:center;}
-.ov-li-h{padding:2px 14px 6px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);}
-.ov-li-h span:last-child,.ov-li .ed{text-align:right;}
-.ov-lis{display:flex;flex-direction:column;}
-.ov-li{width:100%;border:0;border-top:1px solid var(--line2);background:none;padding:8px 14px;text-align:left;cursor:pointer;font:inherit;color:var(--text);}
+.ov-tbl th{background:var(--raise);text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:7px 8px;white-space:nowrap;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);}
+.ov-tbl td{padding:0 8px;height:37px;border-bottom:1px solid var(--line2);vertical-align:middle;color:var(--text);}
+.ov-tbl tbody tr:last-child td{border-bottom:0;}
+.ov-tbl th:first-child,.ov-tbl td:first-child{padding-left:16px;}
+.ov-tbl th:last-child,.ov-tbl td:last-child{padding-right:16px;}
+.ov-tbl th.r{text-align:right;}
+.ov-tbl .rk{color:var(--muted);font-weight:600;}
+.ov-tbl .nm b{display:block;color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.ov-tbl .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink);}
+.ov-tbl .num.warn{color:var(--amber);} .ov-tbl .num.bad{color:var(--red);} .ov-tbl .num.zero{color:var(--faint);font-weight:600;}
+.ov-tbl .rd{white-space:nowrap;}
+.ov-tbl .rd .pc{display:inline-block;width:36px;text-align:right;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;}
+.ov-tbl tr.ov-go{cursor:pointer;} .ov-tbl tr.ov-go:hover td{background:var(--raise);}
+.ov-tbl[hidden],.ov-tbl tr[hidden]{display:none;}
+.ov-sup th:nth-child(1){width:34px;} .ov-sup th:nth-child(3){width:52px;} .ov-sup th:nth-child(4){width:150px;} .ov-sup th:nth-child(5),.ov-sup th:nth-child(6){width:60px;}
+.ov-sup .rd{display:flex;align-items:center;gap:8px;height:37px;}
+.ov-mini{display:block;flex:1;min-width:30px;height:7px;border-radius:4px;background:var(--line2);overflow:hidden;margin:0;}
+.ov-mini i{display:block;height:100%;border-radius:4px;opacity:.9;}
+
+/* Pager (supplier table, ranked lists, insights) */
+.ov-pg{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;padding:5px 12px;border-top:1px solid var(--line2);font-size:11.5px;color:var(--muted);}
+.ov-pg .ft-pg button{min-width:26px;height:26px;border-radius:7px;font-size:12px;padding:0 6px;}
+.ov-pg .of{padding:0 6px;font-size:11.5px;white-space:nowrap;}
+.ov-pg [hidden]{display:none;}
+
+/* Ranked lists (top risks, open actions): rank | text | fixed right column, so header and rows line up */
+.ov-li-h,.ov-li{display:grid;grid-template-columns:20px minmax(0,1fr) 124px;gap:8px;align-items:center;}
+.ov-li-h{padding:6px 14px;background:var(--raise);border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);white-space:nowrap;}
+.ov-li-h span{overflow:hidden;text-overflow:ellipsis;}
+.ov-li-h span:last-child,.ov-li .ed{text-align:right;justify-self:end;}
+.ov-lis{display:flex;flex-direction:column;flex:1;}
+.ov-li{width:100%;flex:1 1 0;min-height:46px;max-height:60px;margin:0;border:0;border-bottom:1px solid var(--line2);border-radius:0;box-shadow:none;background:none;padding:5px 14px;text-align:left;cursor:pointer;font:inherit;color:var(--text);}
+.ov-li:last-child{border-bottom:0;}
+.ov-li[hidden]{display:none;}
 .ov-li:hover{background:var(--raise);}
 .ov-li .rk{font-size:12px;font-weight:700;color:var(--muted);}
 .ov-li .bd{min-width:0;}
-.ov-li .bd b{display:block;font-size:12.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ov-li .bd small{display:block;margin-top:2px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ov-li .ed{display:flex;flex-direction:column;align-items:flex-end;gap:3px;max-width:46%;}
-.ov-li .ed small{font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap;}
+.ov-li .bd b{display:block;font-size:12.5px;line-height:1.3;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ov-li .bd small{display:block;margin-top:1px;font-size:11px;line-height:1.3;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ov-li .ed{display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:0;max-width:100%;}
+.ov-li .ed .chip{padding:1px 8px;font-size:11px;line-height:1.5;}
+.ov-li .ed small{font-size:11px;line-height:1.3;color:var(--muted);font-weight:600;white-space:nowrap;}
 .ov-li .ov-soon{font-style:normal;}
-.ov-tbl th{position:sticky;top:0;z-index:1;background:var(--raise);text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding:8px;white-space:nowrap;}
-.ov-tbl td{padding:8px;border-top:1px solid var(--line2);vertical-align:middle;color:var(--text);}
-.ov-tbl th:first-child,.ov-tbl td:first-child{padding-left:16px;}
-.ov-tbl th:last-child,.ov-tbl td:last-child{padding-right:16px;}
-.ov-tbl .rk{width:28px;color:var(--muted);font-weight:700;}
-.ov-tbl .nm b{display:block;color:var(--ink);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
-.ov-tbl .nm small,.ov-tbl .dt small{display:block;margin-top:1px;color:var(--muted);font-size:11px;font-weight:500;}
-.ov-tbl .clip{max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ov-tbl .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink);}
-.ov-tbl .num.warn{color:var(--amber);} .ov-tbl .num.bad{color:var(--red);}
-.ov-tbl .rd{white-space:nowrap;}
-.ov-tbl .rd b.ok{color:var(--ok);} .ov-tbl .rd b.risk{color:var(--amber);} .ov-tbl .rd b.delayed{color:var(--red);}
-.ov-tbl tr.ov-go{cursor:pointer;} .ov-tbl tr.ov-go:hover td{background:var(--raise);}
-.ov-tbl .act{min-width:160px;line-height:1.35;color:var(--ink);}
-.ov-mini{display:inline-block;width:52px;height:7px;border-radius:4px;background:var(--line2);overflow:hidden;vertical-align:middle;margin-right:6px;}
-.ov-mini i{display:block;height:100%;}
-.ov-soon{display:inline-block;margin-left:4px;padding:1px 5px;border-radius:6px;background:var(--amber-soft);color:var(--amber);font-size:10px;font-weight:700;}
-.ov-st{padding:2px 16px 0;}
-.ov-st-r{display:grid;grid-template-columns:minmax(88px,1.15fr) minmax(48px,1.2fr) 62px;gap:8px;align-items:center;padding:5px 0;}
-.ov-st-r .n{font-size:12.5px;font-weight:650;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ov-st-r .bar{height:10px;border-radius:5px;background:var(--line2);overflow:hidden;}
+.ov-soon{display:inline-block;margin-left:4px;padding:0 5px;border-radius:6px;background:var(--amber-soft);color:var(--amber);font-size:10px;font-weight:700;}
+
+/* Readiness by stage */
+.ov-st{padding:0 16px;}
+.ov-st-r{display:grid;grid-template-columns:minmax(88px,1.15fr) minmax(48px,1.2fr) 64px;gap:10px;align-items:center;min-height:37px;border-bottom:1px solid var(--line2);}
+.ov-st-r:last-child{border-bottom:0;}
+.ov-st-r .n{font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ov-st-r .bar{height:9px;border-radius:5px;background:var(--line2);overflow:hidden;}
 .ov-st-r .bar i{display:block;height:100%;border-radius:5px;background:var(--ok);}
-.ov-st-r .bar i.ns{background:var(--faint);opacity:1;}
+.ov-st-r .bar i.ns{background:var(--faint);opacity:.6;}
 .ov-st-r .bar i.st0{opacity:.4;} .ov-st-r .bar i.st1{opacity:.52;} .ov-st-r .bar i.st2{opacity:.64;}
 .ov-st-r .bar i.st3{opacity:.76;} .ov-st-r .bar i.st4{opacity:.88;} .ov-st-r .bar i.st5{opacity:1;}
-.ov-st-r .v{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
-.ov-st-r .v b{font-size:13px;color:var(--ink);} .ov-st-r .v small{margin-left:4px;color:var(--muted);font-size:11px;}
-.ov-og{padding:12px 16px;border-top:1px solid var(--line2);} .ov-og:first-child{border-top:0;}
+.ov-st-r .v{display:flex;justify-content:flex-end;align-items:baseline;gap:8px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.ov-st-r .v b{font-size:13px;color:var(--ink);} .ov-st-r .v small{min-width:28px;text-align:right;color:var(--muted);font-size:11.5px;}
+
+/* Origin · timeline · tooling (unchanged panels, tighter) */
+.ov-og{padding:10px 16px;border-top:1px solid var(--line2);} .ov-og:first-child{border-top:0;}
 .ov-og-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline;}
 .ov-og-h b{font-size:14px;color:var(--ink);} .ov-og-h span{font-size:11.5px;color:var(--muted);text-align:right;}
-.ov-og-m{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 8px;}
+.ov-og-m{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 0 6px;}
 .ov-og-m > b{font-size:22px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink);}
 .ov-og-m > b.good{color:var(--ok);} .ov-og-m > b.warn{color:var(--amber);} .ov-og-m > b.bad{color:var(--red);}
-.ov-og-f{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:8px;font-size:11.5px;color:var(--muted);}
+.ov-og-f{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:6px;font-size:11.5px;color:var(--muted);}
 .ov-og-f i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;}
 .ov-og-f i.ns{background:var(--faint);}
-.ov-tl{overflow-x:auto;padding-bottom:8px;}
+.ov-tl{overflow-x:auto;padding-bottom:6px;}
 .ov-tl-h,.ov-tl-r{display:grid;grid-template-columns:108px repeat(6,minmax(78px,1fr));gap:4px;align-items:stretch;min-width:620px;}
 .ov-tl-h{padding:0 12px 4px;font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);}
-.ov-tl-r{padding:6px 12px;border-top:1px solid var(--line2);}
+.ov-tl-r{padding:5px 12px;border-top:1px solid var(--line2);}
 .ov-tl-h .mo,.ov-tl-r .mo{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:28px;border-radius:8px;text-align:center;}
 .ov-tl-h .mo.now,.ov-tl-r .mo.now{background:color-mix(in srgb,var(--brand) 8%,transparent);}
 .ov-tl-r .pj{border:0;background:none;text-align:left;cursor:pointer;padding:2px 0;color:var(--ink);font:inherit;}
@@ -1505,46 +1542,56 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .ov-tl-r .pj:hover b{color:var(--brand);}
 .ov-ms{display:inline-flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;cursor:pointer;color:var(--ink);font-size:10px;font-weight:700;line-height:1.15;padding:2px;font-family:inherit;}
 .ov-ms i{width:8px;height:8px;transform:rotate(45deg);border-radius:1px;}
-.ov-tool{padding:12px 16px 4px;}
+.ov-tool{padding:10px 16px 4px;}
 .ov-tool-top{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;}
-.ov-tool-top > b{font-size:32px;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink);}
+.ov-tool-top > b{font-size:30px;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink);}
 .ov-tool-top > b.good{color:var(--ok);} .ov-tool-top > b.warn{color:var(--amber);} .ov-tool-top > b.bad{color:var(--red);}
-.ov-pbar{height:10px;border-radius:6px;background:var(--line2);overflow:hidden;}
+.ov-pbar{height:9px;border-radius:6px;background:var(--line2);overflow:hidden;}
 .ov-pbar i{display:block;height:100%;border-radius:6px;background:var(--faint);}
 .ov-pbar i.good{background:var(--ok);} .ov-pbar i.warn{background:var(--c-amber);} .ov-pbar i.bad{background:var(--red);}
-.ov-tool-meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12px;color:var(--muted);}
+.ov-tool-meta{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px;font-size:12px;color:var(--muted);}
 .ov-tool-meta b{color:var(--ink);}
-.ov-tool-rows{display:flex;flex-direction:column;gap:7px;margin-top:12px;}
+.ov-tool-rows{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
 .ov-tr{display:grid;grid-template-columns:88px minmax(0,1fr) 32px;gap:8px;align-items:center;font-size:12px;color:var(--text);}
 .ov-tr .bar{height:8px;border-radius:4px;background:var(--line2);overflow:hidden;}
 .ov-tr .bar i{display:block;height:100%;border-radius:4px;}
 .ov-tr .bar i.ok{background:var(--ok);} .ov-tr .bar i.risk{background:var(--c-amber);} .ov-tr .bar i.delayed{background:var(--red);} .ov-tr .bar i.notstarted{background:var(--faint);}
 .ov-tr b{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);}
-.ov-ins{display:flex;flex-direction:column;gap:8px;padding:4px 12px 12px;}
-.ov-in{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:flex-start;padding:8px;border:1px solid var(--line2);border-radius:12px;background:var(--panel);color:inherit;}
+.ov-tool .ov-note{margin:10px 0 0;}
+
+/* Insights */
+.ov-ins{display:flex;flex-direction:column;gap:6px;padding:8px 12px;flex:1;}
+.ov-in{display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;align-items:flex-start;padding:7px 8px;border:1px solid var(--line2);border-radius:8px;background:var(--panel);color:inherit;}
+.ov-in[hidden]{display:none;}
 .ov-in[data-act]{cursor:pointer;} .ov-in[data-act]:hover{border-color:var(--brand);}
-.ov-in .ic{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--raise);color:var(--brand);}
-.ov-in .ic svg.i{width:15px;height:15px;}
+.ov-in .ic{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;background:var(--raise);color:var(--brand);}
+.ov-in .ic svg.i{width:14px;height:14px;}
 .ov-in.risk .ic{background:var(--red-soft);color:var(--red);}
 .ov-in.warn .ic{background:var(--amber-soft);color:var(--amber);}
 .ov-in.info .ic{background:var(--info-soft);color:var(--info);}
 .ov-in.save .ic{background:var(--ok-soft);color:var(--ok);}
-.ov-in b{display:block;font-size:12.5px;line-height:1.35;color:var(--ink);}
-.ov-in p{margin:3px 0 6px;font-size:11.5px;line-height:1.4;color:var(--muted);}
+.ov-in b{display:block;font-size:12.5px;line-height:1.3;color:var(--ink);}
+.ov-in p{margin:1px 0 2px;font-size:11.5px;line-height:1.35;color:var(--muted);}
 .ov-ask{border:0;background:none;padding:0;color:var(--brand);font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;}
 .ov-ask:hover{text-decoration:underline;}
-.ov-sup th:nth-child(1){width:28px;} .ov-sup th:nth-child(3){width:46px;} .ov-sup th:nth-child(4){width:112px;} .ov-sup th:nth-child(5),.ov-sup th:nth-child(6){width:52px;}
-.ov-kpi:focus-visible,.ov-mh:focus-visible,.ov-ms:focus-visible,.ov-tl-r .pj:focus-visible,.ov-in:focus-visible,.ov-tbl tr.ov-go:focus-visible,.ov-li:focus-visible,.ov-ask:focus-visible,.ov-clear:focus-visible{outline:2px solid var(--brand);outline-offset:2px;}
-@media (max-width:1280px){
+.ov-kpi:focus-visible,.mh-r:focus-visible,.ov-ms:focus-visible,.ov-tl-r .pj:focus-visible,.ov-in:focus-visible,.ov-tbl tr.ov-go:focus-visible,.ov-li:focus-visible,.ov-ask:focus-visible,.ov-clear:focus-visible{outline:2px solid var(--brand);outline-offset:-2px;}
+
+/* Narrow panels (container queries) and narrow screens */
+@container (max-width:470px){ .mh-h,.mh-r{grid-template-columns:104px minmax(0,1fr) 60px 40px;gap:8px;} .mh-pill{min-width:0;padding:3px 7px;} }
+@container (max-width:340px){ .mh-h,.mh-r{grid-template-columns:104px minmax(0,1fr) 40px;} .mh-h .c,.mh-r .ds{display:none;} .ov-sup th:nth-child(4){width:118px;} .ov-sup th:nth-child(5),.ov-sup th:nth-child(6){width:50px;} }
+@media (max-width:1200px){
   .ov-kpis{grid-template-columns:repeat(3,minmax(0,1fr));}
   .ov-row.a,.ov-row.b,.ov-row.c{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+  .ov-row.a > .panel:nth-child(3),.ov-row.b > .panel:nth-child(3),.ov-row.c > .panel:nth-child(3){grid-column:1 / -1;}
 }
 @media (max-width:820px){
-  .ov-kpis,.ov-row.a,.ov-row.b,.ov-row.c{grid-template-columns:minmax(0,1fr);}
-  .ov-f{max-width:none;flex-basis:calc(50% - 14px);}
-  .ov-asof{margin-left:0;}
+  .ov-kpis{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .ov-row.a,.ov-row.b,.ov-row.c{grid-template-columns:minmax(0,1fr);}
+  .ov-row.a > .panel:nth-child(3),.ov-row.b > .panel:nth-child(3),.ov-row.c > .panel:nth-child(3){grid-column:auto;}
+  .ov-f{flex-basis:calc(50% - 10px);}
+  .ov-asof{justify-content:flex-start;}
 }
-@media (max-width:560px){ .ov-f{flex-basis:100%;} .ov-tool-top{grid-template-columns:auto minmax(0,1fr);} .ov-tool-top .ov-ch{grid-column:1 / -1;align-items:flex-start;} }
+@media (max-width:560px){ .ov-f{flex-basis:100%;} .ov-kpis{grid-template-columns:minmax(0,1fr);} .ov-tool-top{grid-template-columns:auto minmax(0,1fr);} .ov-tool-top .ov-ch{grid-column:1 / -1;align-items:flex-start;} }
 
 
 /* ===== V8 additions: v8_srm_parts.css ===== */
@@ -2016,6 +2063,93 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
   .tcd-prod .h > :nth-child(3),.tcd-prod .r > :nth-child(3),.tcd-hi .h > :nth-child(3),.tcd-hi .r > :nth-child(3),.tcd-od .h > :nth-child(3),.tcd-od .r > :nth-child(3){display:none;}
   .tcd-prod .h,.tcd-prod .r{grid-template-columns:14px minmax(0,1fr) 74px 84px;} .tcd-hi .h,.tcd-hi .r{grid-template-columns:14px minmax(0,1fr) 72px 84px;} .tcd-od .h,.tcd-od .r{grid-template-columns:14px minmax(0,1fr) 48px minmax(54px,.7fr);}
 }
+
+
+/* ===== V8 additions: v8_tcm.css ===== */
+/* V8 · Technical Change management dashboard (Overview, Change Impact, Approval Workflow, Implementation, Change Register) — builds on the Procurement dashboard cards (.pd-*) and v8_tc_dash.css */
+.tcm{container-type:inline-size;}
+.tcm .tcd-hr{gap:10px 14px;} .tcm .tcd-hr .pd-f{flex:0 1 168px;} .tcm .pd-reset{margin-left:0;padding:10px 4px;}
+.tcm .pd-kpi .lb{white-space:normal;line-height:1.2;} .tcm .pd-kpi .sb{white-space:normal;line-height:1.25;min-height:30px;font-size:11.5px;} .tcm .pd-kpi .sb.bad{color:var(--red);font-weight:600;}
+.tcm .pd-kpi .vl{overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+.pd-kpis.k8{grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;} .pd-kpis.k6{grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;}
+.pd-kpis.k8 .pd-kpi,.pd-kpis.k6 .pd-kpi{padding:13px 13px;} .pd-kpis.k8 .vl,.pd-kpis.k6 .vl{font-size:21px;} .pd-kpis.k8 .ic,.pd-kpis.k6 .ic{width:32px;height:32px;} .pd-kpis.k8 .ic svg.i,.pd-kpis.k6 .ic svg.i{width:16px;height:16px;}
+@container (max-width:1059px){ .pd-kpis.k8{grid-template-columns:repeat(4,minmax(0,1fr));} .pd-kpis.k6{grid-template-columns:repeat(3,minmax(0,1fr));} }
+@container (max-width:620px){ .pd-kpis.k8,.pd-kpis.k6{grid-template-columns:repeat(2,minmax(0,1fr));} }
+
+/* panel grids (the page is the container) */
+.tcm-g{display:grid;gap:16px;margin-bottom:16px;grid-template-columns:minmax(0,1fr);}
+.tcm-g > .panel{min-width:0;margin:0 !important;display:flex;flex-direction:column;container-type:inline-size;} .tcm-g > .panel > .panel-body{flex:1;display:flex;flex-direction:column;}
+.tcm > .panel{margin-top:0;} .tcm .panel-header h3{font-size:15px;}
+@container (min-width:720px){ .tcm-g.g4,.tcm-g.g3{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@container (min-width:900px){ .tcm-g.g2{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@container (min-width:1100px){ .tcm-g.g3{grid-template-columns:repeat(3,minmax(0,1fr));} }
+@container (min-width:1240px){ .tcm-g.g4{grid-template-columns:repeat(4,minmax(0,1fr));} .tcm-g.g12{grid-template-columns:minmax(0,4fr) minmax(0,8fr);} }
+@container (min-width:1500px){ .tcm-g.g75{grid-template-columns:repeat(2,minmax(0,1fr));} }
+
+/* shared small pieces */
+.tcm-svg{display:block;width:100%;height:auto;overflow:visible;} .tcm-chart{display:flex;justify-content:center;align-items:center;flex:1;} .tcm-chart .tcm-svg{max-width:340px;}
+.tcm-n{font-size:15px;font-weight:700;fill:var(--ink);} .tcm-l{font-size:11.5px;fill:var(--muted);} .tcm-l.s{font-size:10px;fill:var(--faint);} .tcm-pl{font-size:13px;font-weight:600;fill:var(--ink);}
+.tcm-col{cursor:pointer;} .tcm-col:hover rect{filter:brightness(1.12);} .tcm-col:focus{outline:0;} .tcm-col:focus-visible rect{stroke:var(--focus);stroke-width:2;}
+.tcm-dm{cursor:pointer;} .tcm-dm:hover path{stroke:var(--ink);} .tcm-gantt text{pointer-events:none;}
+.tcm-st{display:inline-flex;align-items:center;gap:6px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 14%,var(--panel));white-space:nowrap;line-height:1.5;} .tcm-st i{width:7px;height:7px;border-radius:50%;background:var(--c);flex:none;}
+.tcm-mute{color:var(--faint);font-size:12px;}
+.tcm-lg{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:11.5px;color:var(--muted);margin-top:10px;} .tcm-lg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:0;} .tcm-lg i.dm{transform:rotate(45deg);border-radius:1px;} .tcm-lg .m{margin-left:auto;color:var(--faint);}
+.tcm-foot{font-size:11.5px;color:var(--muted);line-height:1.5;margin:4px 0 24px;padding:10px 14px;border-radius:10px;background:var(--raise);border:1px solid var(--line2);} .tcm-foot b{color:var(--ink);}
+.tcm-go{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:12px 16px;border:1px dashed var(--line);border-radius:12px;font-size:12.5px;color:var(--muted);margin-bottom:16px;} .tcm-go > span{flex:1 1 280px;}
+.tcm-dh{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-bottom:16px;} .tcm-dh > span:nth-child(2){display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex:1;}
+
+/* type bars, project stack, risk bar */
+.tcm-bars .r{cursor:pointer;border-radius:8px;grid-template-columns:minmax(96px,1.3fr) minmax(40px,2fr) 24px 38px;} .tcm-bars .r:hover,.tcm-bars .r.on{background:var(--raise);} .tcm-bars .r.on .lb{font-weight:700;color:var(--ink);}
+.tcm-stk{display:grid;gap:2px;flex:1;align-content:center;} .tcm-stk .r{display:grid;grid-template-columns:minmax(70px,92px) minmax(0,1fr) 28px;gap:10px;align-items:center;padding:7px 4px;border-radius:8px;cursor:pointer;font-size:12.5px;} .tcm-stk .r:hover,.tcm-stk .r.on{background:var(--raise);}
+.tcm-stk .lb{color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .tcm-stk .r.on .lb{font-weight:700;color:var(--ink);} .tcm-stk .t{text-align:right;color:var(--ink);font-variant-numeric:tabular-nums;}
+.tcm-stk .bar{display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--line2);} .tcm-stk .bar i{display:grid;place-items:center;color:#fff;font-size:11px;font-style:normal;font-weight:700;min-width:0;} .tcm-stk .bar i[style*="c-amber"]{color:#2b2000;}
+.tcm-rbar{display:flex;height:26px;border-radius:8px;overflow:hidden;margin-bottom:4px;} .tcm-rbar i{display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700;font-style:normal;} .tcm-rbar i[style*="c-amber"]{color:#2b2000;}
+.tcm-facts{display:grid;margin-top:6px;} .tcm-facts > div{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;align-items:baseline;padding:9px 2px;border-bottom:1px solid var(--line2);} .tcm-facts > div:last-child{border-bottom:0;}
+.tcm-facts span{font-size:12.5px;color:var(--text);font-weight:600;} .tcm-facts b{font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;} .tcm-facts b.bad{color:var(--red);} .tcm-facts b.warn{color:var(--amber);} .tcm-facts em{grid-column:1/-1;font-style:normal;font-size:11px;color:var(--muted);line-height:1.35;}
+.tcm-facts.s b{font-size:15px;} .tcm-facts.s > div{padding:7px 2px;}
+
+/* approval flow */
+.tcm-flow{display:flex;overflow-x:auto;padding:2px 0 6px;} .tcm-flow .stg{flex:1 1 0;min-width:92px;padding:11px 18px 10px 24px;margin-right:-8px;text-align:center;background:color-mix(in srgb,var(--brand) 9%,var(--panel));clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%,14px 50%);} .tcm-flow .stg:first-child{clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%);padding-left:16px;}
+.tcm-flow .nm{font-size:11.5px;font-weight:700;color:var(--ink);line-height:1.2;min-height:28px;display:flex;align-items:center;justify-content:center;} .tcm-flow .ct{font-size:26px;font-weight:700;color:var(--ink);line-height:1.15;} .tcm-flow .av{font-size:10.5px;color:var(--muted);} .tcm-flow .ov{font-size:10.5px;font-weight:700;color:var(--red);min-height:14px;} .tcm-flow .ov.ok{color:var(--ok);font-weight:600;}
+.tcm-flow .stg.bn{background:color-mix(in srgb,var(--c-amber) 30%,var(--panel));} .tcm-flow .stg.zero{opacity:.7;}
+.tcm-flow.big .stg{padding-top:16px;padding-bottom:14px;} .tcm-flow.big .ct{font-size:32px;} .tcm-flow.big .nm{font-size:12.5px;}
+.tcm-flow.detail .stg.done{background:color-mix(in srgb,var(--ok) 18%,var(--panel));} .tcm-flow.detail .stg.cur{background:color-mix(in srgb,var(--c-amber) 30%,var(--panel));} .tcm-flow.detail .stg.rej{background:color-mix(in srgb,var(--red) 22%,var(--panel));}
+.tcm-flow-sum{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 18px;font-size:12px;color:var(--muted);margin:8px 2px 0;} .tcm-flow-sum b{color:var(--ink);} .tcm-flow-sum .bn{color:var(--amber);font-weight:600;}
+.tcm-out{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line2);font-size:12.5px;color:var(--muted);} .tcm-out b{color:var(--ink);margin-left:2px;}
+
+/* diverging bars (Change Impact) */
+.tcm-div{display:grid;gap:2px;} .tcm-div .r{display:grid;grid-template-columns:minmax(70px,96px) minmax(0,1fr) minmax(0,1fr) 78px;gap:0 6px;align-items:center;padding:7px 2px;border-bottom:1px solid var(--line2);font-size:12.5px;} .tcm-div .r:last-child{border-bottom:0;}
+.tcm-div .l,.tcm-div .rt{height:16px;display:flex;} .tcm-div .l{justify-content:flex-end;} .tcm-div .rt{border-left:1px solid var(--line);} .tcm-div .l i{display:block;height:100%;background:var(--red);border-radius:4px 0 0 4px;} .tcm-div .rt i{display:block;height:100%;background:var(--ok);border-radius:0 4px 4px 0;}
+.tcm-div .lb{color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .tcm-div b{text-align:right;font-variant-numeric:tabular-nums;} .tcm-div b.good{color:var(--ok);} .tcm-div b.bad{color:var(--red);}
+
+/* tables */
+.tcm .pd-t{overflow-x:auto;} .tcm .pd-t > .h,.tcm .pd-t > .r{min-width:var(--mw,560px);} .tcm .pd-t .r > .ra{display:flex;justify-content:flex-end;} .tcm .pd-t .h > span:not(.ra){text-align:left;}
+.tcm .pd-t .n b{-webkit-line-clamp:2;} .tcm .pd-t .n small{white-space:nowrap;} .tcm .pd-t .pq small{display:block;font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.3;white-space:normal;}
+.tcm .pd-t .v small{display:block;font-size:10px;color:var(--red);font-weight:600;}
+.tcm-hi{--mw:820px;} .tcm-hi .h,.tcm-hi .r{grid-template-columns:18px minmax(150px,1.7fr) 74px 104px 84px minmax(150px,1.5fr) 104px;}
+.tcm-od{--mw:600px;} .tcm-od .h,.tcm-od .r{grid-template-columns:18px minmax(96px,1.1fr) 72px minmax(110px,1.2fr) 66px minmax(84px,1fr) 70px;}
+.tcm-top{--mw:880px;} .tcm-top .h,.tcm-top .r{grid-template-columns:18px minmax(150px,1.8fr) 74px 110px 72px 90px 92px 104px;}
+.tcm-fin{--mw:520px;} .tcm-fin .h,.tcm-fin .r{grid-template-columns:minmax(150px,1.7fr) 62px minmax(70px,1fr) minmax(70px,1fr) minmax(70px,1fr);}
+.tcm-aps{--mw:600px;} .tcm-aps .h,.tcm-aps .r{grid-template-columns:minmax(96px,1.2fr) minmax(90px,1fr) 62px 62px 62px 62px 76px;} .tcm-aps .r.bn{background:color-mix(in srgb,var(--c-amber) 14%,var(--panel));}
+.tcm-pend{--mw:560px;} .tcm-pend .h,.tcm-pend .r{grid-template-columns:minmax(120px,1.5fr) 96px minmax(80px,1fr) 66px 88px;} .tcm-pend .r.od{background:color-mix(in srgb,var(--red) 5%,var(--panel));}
+.tcm-back{--mw:560px;} .tcm-back .h,.tcm-back .r{grid-template-columns:minmax(120px,1.5fr) 150px 100px 72px minmax(90px,1fr);}
+.tcm-impl{--mw:900px;} .tcm-impl .h,.tcm-impl .r{grid-template-columns:minmax(160px,1.8fr) 72px 92px 78px 80px 72px minmax(110px,1fr) 104px;}
+@container (max-width:720px){ .tcm-hi .h > :nth-child(4),.tcm-hi .r > :nth-child(4){display:none;} .tcm-hi{--mw:700px;} .tcm-hi .h,.tcm-hi .r{grid-template-columns:18px minmax(150px,1.7fr) 74px 84px minmax(150px,1.5fr) 104px;} }
+
+/* insights */
+.tcm-ins{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;} .tcm-ins .it{display:flex;flex-direction:column;gap:7px;border:1px solid var(--line2);border-radius:12px;padding:13px 15px;background:var(--raise);}
+.tcm-ins .hd{display:flex;align-items:center;gap:8px;color:var(--ink);font-size:13px;} .tcm-ins .no{width:22px;height:22px;border-radius:50%;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font-size:12px;font-weight:700;flex:none;}
+.tcm-ins p{margin:0;font-size:12.5px;line-height:1.45;color:var(--text);} .tcm-ins p.is{color:var(--ink);font-weight:600;} .tcm-ins em{display:block;font-style:normal;font-weight:700;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:1px;}
+.tcm-ins a{margin-top:auto;display:inline-flex;align-items:center;gap:5px;color:var(--brand);font-weight:650;font-size:12.5px;} .tcm-ins a:hover{text-decoration:underline;} .tcm-ins a svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* change detail */
+.tcm-kv .kv{display:grid;grid-template-columns:140px minmax(0,1fr);gap:8px;padding:8px 0;border-bottom:1px solid var(--line2);font-size:12.5px;} .tcm-kv .kv:last-child{border-bottom:0;} .tcm-kv .kv span{color:var(--muted);} .tcm-kv .kv b{color:var(--ink);font-weight:600;}
+.tcm-ul{list-style:none;margin:0;padding:0;} .tcm-ul li{display:flex;gap:9px;align-items:flex-start;padding:8px 0;font-size:12.5px;border-bottom:1px solid var(--line2);color:var(--muted);} .tcm-ul li:last-child{border-bottom:0;} .tcm-ul li i{width:9px;height:9px;border-radius:50%;margin-top:5px;background:var(--ok);flex:none;} .tcm-ul li.hit{color:var(--ink);font-weight:600;} .tcm-ul li.hit i{background:var(--red);}
+.tcm .v8-sm{display:block;font-size:11px;color:var(--muted);font-weight:400;}
+@media (max-width:900px){ .tcm .tcd-hr .pd-f{flex:1 1 150px;} }
+.tcm-fin .n small{white-space:normal !important;}
+#tcm-reg td:first-child b{white-space:nowrap;} #tcm-reg .ft-t td{padding-top:9px;padding-bottom:9px;}
+.tcm-flow .stg:last-child{margin-right:0;}
 
 
 /* ===== V8 additions: v8_home.css ===== */
@@ -10882,11 +11016,28 @@ function overviewFilters(m){
   const icons={project:"car",supplier:"building",brand:"flag",family:"layers",sopYear:"calendar"};
   const d=document.createElement("div"); d.className="ov-filters";
   d.innerHTML=filterSpec(m).map(([k,label,opts,tip])=>`<label class="ov-f"><span title="${esc(tip||label)}">${esc(label)}</span><span class="ov-sel">${Icons.svg(icons[k]||"filter")}<select data-f="${k}" aria-label="${esc(label)}">${opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(F[k])?" selected":""}>${esc(o[1])}</option>`).join("")}</select></span></label>`).join("")+
-    `<div class="ov-asof"><span class="ov-ill" title="Milestone commitments, tool plans and owner names are generated for this prototype. Parts, projects, suppliers and SOP dates are platform data.">Illustrative data</span><span class="ov-date" title="Statuses are evaluated as of this date">${Icons.svg("calendar")} Data as of <b>${fmtDate(m.today)}</b></span>${filtersOn()?`<button type="button" class="ov-clear" data-f="reset">Clear</button>`:""}</div>`;
+    `<button type="button" class="ov-clear" data-f="reset" title="Clear all filters"${filtersOn()?"":" disabled"}>${Icons.svg("refresh")}Reset</button>`;
   bindFilters(d); return d;
 }
 function ovKpi(o){
-  return `<div class="ov-kpi${o.act?" kpi-link":""}" ${o.act?`data-act="${o.act}" role="button" tabindex="0"`:""} title="${esc(o.tip||"")}"><div class="ov-kpi-top"><span class="ov-ic">${Icons.svg(o.icon)}</span><span class="ov-lb">${o.label}</span></div><div class="ov-kpi-mid"><b class="ov-val ${o.tone||""}">${o.value}</b>${o.chip||""}</div><div class="ov-kpi-sub">${o.sub||""}</div></div>`;
+  return `<div class="ov-kpi${o.act?" kpi-link":""}" ${o.act?`data-act="${o.act}" role="button" tabindex="0"`:""} title="${esc(o.tip||"")}"><span class="ov-lb">${o.label}</span><b class="ov-val ${o.tone||""}">${o.value}</b><div class="ov-kpi-sub">${o.sub||""}</div></div>`;
+}
+/* whole-number shares that add up to 100 (largest remainder), so the labels on a stacked bar never total 99 or 101 */
+function share100(vals){
+  const t=vals.reduce((a,b)=>a+b,0); if(!t) return vals.map(()=>0);
+  const raw=vals.map(v=>v/t*100), out=raw.map(Math.floor); let left=100-out.reduce((a,b)=>a+b,0);
+  raw.map((r,i)=>[r-out[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([,i])=>{ if(left>0&&vals[i]>0){ out[i]++; left--; } });
+  return out;
+}
+/* pages a list that is already in the DOM: hides rows outside the page and adds a pager footer to the panel body (page 1 again when the filters redraw the screen) */
+function ovPaginate(panel,rowSel,size,unit){
+  const rows=[...panel.querySelectorAll(rowSel)], body=panel.querySelector(".panel-body"); if(!body||rows.length<=size) return;
+  const pages=Math.ceil(rows.length/size), foot=document.createElement("div"); foot.className="ov-pg"; let p=0;
+  const draw=()=>{ rows.forEach((r,i)=>{ r.hidden=Math.floor(i/size)!==p; });
+    const nums=pages<=5?Array.from({length:pages},(_,i)=>`<button type="button" data-p="${i}" class="${i===p?"on":""}"${i===p?' aria-current="page"':""} aria-label="Page ${i+1}">${i+1}</button>`).join(""):`<span class="of">Page ${p+1} of ${pages}</span>`;
+    foot.innerHTML=`<span class="rg">${p*size+1}–${Math.min(rows.length,(p+1)*size)} of ${rows.length}${unit?" "+unit:""}</span><div class="ft-pg"><button type="button" data-p="${p-1}" ${p<=0?"disabled":""} aria-label="Previous page">‹</button>${nums}<button type="button" data-p="${p+1}" ${p>=pages-1?"disabled":""} aria-label="Next page">›</button></div>`; };
+  foot.addEventListener("click",e=>{ const b=e.target.closest("[data-p]"); if(b&&!b.disabled){ p=+b.dataset.p; draw(); } });
+  body.appendChild(foot); draw();
 }
 function milestoneHealth(m,ev){
   const seen=new Set(ev.map(e=>e.pt.prog));
@@ -10897,19 +11048,22 @@ function milestoneHealth(m,ev){
     return {p,all:l.length,n,ns:l.length-n,c,dshare:n?c.delayed/n:0,rshare:n?c.risk/n:0};
   }).sort((a,b)=>b.dshare-a.dshare||b.rshare-a.rshare||short(a.p.name).localeCompare(short(b.p.name)));
   if(!rows.length) return `<div class="ov-empty">No parts in this selection.</div>`;
+  const KS=["ok","risk","delayed"];
   const body=rows.map(r=>{
     const tip=`${short(r.p.name)} · ${r.n} started of ${r.all} · On track ${r.c.ok} · At risk ${r.c.risk} · Delayed ${r.c.delayed} · Not started ${r.ns}`;
-    const bar=!r.n?`<span class="ov-nil">No started parts</span>`:`<span class="ov-stk">${["ok","risk","delayed"].map(k=>{ const c=r.c[k]; if(!c) return ""; const w=c/r.n*100; return `<i class="${k}" style="width:${w.toFixed(2)}%">${w>=14?Math.round(w)+"%":""}</i>`; }).join("")}</span>`;
-    return `<button type="button" class="ov-mh" data-act="sfg:project=${esc(r.p.code)}|srm-status-dash" title="${esc(tip)} · Open status tracking"><span class="nm">${esc(short(r.p.name))}</span>${bar}<span class="tn" title="${esc(r.n+" started · "+r.ns+" not started")}">${r.n}</span></button>`;
+    const pc=share100(KS.map(k=>r.c[k]));
+    const bar=!r.n?`<span class="ov-nil">No started parts</span>`:`<span class="ov-stk">${KS.map((k,i)=>{ const c=r.c[k]; if(!c) return ""; const w=c/r.n*100; return `<i class="${k}" style="width:${w.toFixed(2)}%" title="${esc(V.LABEL[k]+": "+c+" parts")}">${w>=9?pc[i]+"%":""}</i>`; }).join("")}</span>`;
+    const ds=!r.n?`<span class="mh-pill nil">—</span>`:r.c.delayed?`<span class="mh-pill bad">${Icons.svg("alert")}${pc[2]}%</span>`:`<span class="mh-pill nil">0%</span>`;
+    return `<button type="button" class="mh-r" data-act="sfg:project=${esc(r.p.code)}|srm-status-dash" title="${esc(tip)} · Open status tracking"><span class="pj"><span class="tile">${Icons.svg("car")}</span><b>${esc(short(r.p.name))}</b>${Icons.svg("chevron-right")}</span>${bar}<span class="ds">${ds}</span><span class="pn" title="${esc(r.n+" started · "+r.ns+" not started")}"><b>${r.n}</b><small>parts</small></span></button>`;
   }).join("");
-  return `<div class="ov-mh-h"><span>Project</span><span>Share of started parts</span><span class="r">Parts</span></div>${body}`;
+  return `<div class="mh-h"><span>Project</span><span>Status distribution</span><span class="c">Delayed share</span><span class="r">Parts</span></div>${body}`;
 }
 function supplierTable(sup){
   const ranked=sup.filter(x=>x.started>=5&&x.readiness!=null).sort((a,b)=>a.readiness-b.readiness||b.counts.delayed-a.counts.delayed||a.name.localeCompare(b.name));
   if(!ranked.length) return `<div class="ov-empty">No supplier has five or more started parts in this selection. That is the same cutoff as the suppliers KPI.</div>`;
   const band=v=>v>=80?"ok":v>=60?"risk":"delayed";
-  const rows=ranked.map((x,i)=>`<tr class="ov-go" data-act="sfg:supplier=${esc(x.name)}|srm-tooling-dash" role="button" tabindex="0" title="Open ${esc(x.name)}'s parts"><td class="rk">${i+1}</td><td class="nm"><b>${esc(x.name)}</b></td><td class="num" title="Started parts">${x.started}</td><td class="rd"><span class="ov-mini"><i class="${band(x.readiness)}" style="width:${Math.max(0,Math.min(100,x.readiness)).toFixed(1)}%"></i></span><b class="${band(x.readiness)}">${Math.round(x.readiness)}%</b></td><td class="num ${x.counts.risk?"warn":""}">${x.counts.risk}</td><td class="num ${x.counts.delayed?"bad":""}">${x.counts.delayed}</td></tr>`).join("");
-  return `<div class="ov-scroll"><table class="ov-tbl ov-sup"><thead><tr><th title="1 = lowest readiness">#</th><th>Supplier</th><th title="Started parts">Parts</th><th>Readiness</th><th>At risk</th><th>Delayed</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  const rows=ranked.map((x,i)=>`<tr class="ov-go" data-act="sfg:supplier=${esc(x.name)}|srm-tooling-dash" role="button" tabindex="0" title="Open ${esc(x.name)}'s parts"><td class="rk">${i+1}</td><td class="nm"><b title="${esc(x.name)}">${esc(x.name)}</b></td><td class="num" title="Started parts">${x.started}</td><td class="rd"><span class="ov-mini"><i class="${band(x.readiness)}" style="width:${Math.max(0,Math.min(100,x.readiness)).toFixed(1)}%"></i></span><span class="pc">${Math.round(x.readiness)}%</span></td><td class="num ${x.counts.risk?"warn":"zero"}">${x.counts.risk}</td><td class="num ${x.counts.delayed?"bad":"zero"}">${x.counts.delayed}</td></tr>`).join("");
+  return `<table class="ov-tbl ov-sup"><thead><tr><th title="1 = lowest readiness">#</th><th>Supplier</th><th class="r" title="Started parts">Parts</th><th>Readiness</th><th class="r">At risk</th><th class="r">Delayed</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 function stageBars(ev){
   if(!ev.length) return `<div class="ov-empty">No parts in this selection.</div>`;
@@ -10928,7 +11082,7 @@ function originPanel(m,ev,ev7){
     const s=S.summary(g[o]), s7=S.summary(g7[o]||[]), started=s.started||0;
     const segs=["ok","risk","delayed"].map(k=>{ const c=s.counts[k]||0; if(!c||!started) return ""; return `<i class="${k}" style="width:${(c/started*100).toFixed(2)}%" title="${esc(V.LABEL[k]+": "+c)}"></i>`; }).join("");
     return `<div class="ov-og"><div class="ov-og-h"><b>${esc(originLabel(o))}</b><span>${s.suppliers} supplier${s.suppliers===1?"":"s"} · ${nf(g[o].length,0)} parts</span></div><div class="ov-og-m"><b class="${bandCls(s.readiness)}">${pct0(s.readiness)}</b>${ovDelta(s.readiness,s7.readiness,"up","%")}</div>${started?`<div class="ov-stk">${segs}</div>`:`<div class="ov-nil">No started parts</div>`}<div class="ov-og-f"><span><i class="risk"></i>${s.counts.risk} at risk</span><span><i class="delayed"></i>${s.counts.delayed} delayed</span><span><i class="ns"></i>${s.counts.notstarted} not started</span></div></div>`;
-  }).join("")+`<p class="ov-note">Origin is domestic or international on the supplier master. A map is not shown: every supplier country on the master is India, and plant names are illustrative.</p>`;
+  }).join("");
 }
 function timeline(m,pm){
   const hz=sixMonths(m.today);
@@ -10952,10 +11106,11 @@ function toolingBody(sm,sm7){
   const max=Math.max(1,...rows.map(r=>r[2])), bar=v==null?0:Math.max(0,Math.min(100,v));
   return `<div class="ov-tool"><div class="ov-tool-top"><b class="${bandCls(v)}">${pct0(v)}</b><div class="ov-pbar" role="img" aria-label="Tooling readiness ${esc(pct0(v))}"><i class="${bandCls(v)}" style="width:${bar.toFixed(1)}%"></i></div>${ovDelta(v,sm7.toolReadiness,"up","%")}</div><div class="ov-tool-meta"><span><b>${nf(sm.toolSum,0)}</b> tools in progress</span><span><b>${nf(sm.toolN,0)}</b> parts started</span></div><div class="ov-tool-rows">${rows.map(([k,lab,n])=>`<div class="ov-tr"><span>${lab}</span><span class="bar"><i class="${k}" style="width:${(n/max*100).toFixed(1)}%"></i></span><b>${n}</b></div>`).join("")}</div><p class="ov-note">The percentage is plan attainment of parts whose tools have started. The rows count parts, by tooling status.</p></div>`;
 }
+const OV_LIST=20;   // rows kept in the two ranked lists on the Overview (paged 5 at a time); the full list is on Part Readiness
 function riskTable(m,ev,end){
   const all=attention(ev).slice().sort((a,b)=>S.RANK[b.status]-S.RANK[a.status]||a.pt.sop-b.pt.sop||a.readiness-b.readiness);
   if(!all.length) return {n:0,shown:0,html:`<div class="ov-empty">No started part is at risk or delayed for this selection.</div>`};
-  const rows=all.slice(0,5);
+  const rows=all.slice(0,OV_LIST);
   const body=rows.map((e,i)=>{
     const soon=e.pt.sop>=m.today&&e.pt.sop<end, k=driverMs(e), bits=[];
     if(e.tool&&(e.tool.st==="risk"||e.tool.st==="delayed")) bits.push(e.tool.st==="delayed"?"Tooling delayed":"Tooling at risk");
@@ -10964,19 +11119,19 @@ function riskTable(m,ev,end){
     const impTip=high?"More than "+S.TH.delayed+" days late on an upcoming milestone":(S.TH.risk+1)+" to "+S.TH.delayed+" days late on an upcoming milestone";
     return `<button type="button" class="ov-li" data-act="srmpart:${esc(e.pt.id)}" title="Open supplier-readiness detail"><span class="rk">${i+1}</span><span class="bd"><b>${esc(e.pt.name)}</b><small>${esc(short(e.pt.progName))} · ${esc(e.pt.vendor)} · ${esc(bits.join(" · ")||S.STATUS[e.status])}</small></span><span class="ed"><span class="chip ${high?"chip-red":"chip-amber"}" title="${esc(impTip)}"><span class="chip-dot"></span>${high?"High":"Medium"}</span><small>${esc(fmtDate(e.pt.sop))}${soon?` <em class="ov-soon" title="SOP falls in the next 6 months">6 mo</em>`:""}</small></span></button>`;
   }).join("");
-  return {n:all.length,shown:rows.length,html:`<div class="ov-li-h"><span></span><span>Part · project · supplier · risk</span><span>Impact / SOP</span></div><div class="ov-lis">${body}</div>`};
+  return {n:all.length,shown:rows.length,html:`<div class="ov-li-h"><span></span><span>Part · project · supplier · risk</span><span>Impact · SOP</span></div><div class="ov-lis">${body}</div>`};
 }
 function actionTable(m,ev){
   const all=attention(ev).slice().sort((a,b)=>S.RANK[b.status]-S.RANK[a.status]||(a.next&&b.next?a.next.R-b.next.R:0)||a.readiness-b.readiness);
   if(!all.length) return {n:0,shown:0,html:`<div class="ov-empty">No part needs an action for this selection.</div>`};
-  const rows=all.slice(0,5);
+  const rows=all.slice(0,OV_LIST);
   const body=rows.map((e,i)=>{
     const due=e.next, drv=driverMs(e), own=m.vend[e.pt.vendor]?m.vend[e.pt.vendor].owner:"—";
     const when=due?(()=>{ const d=Math.round((due.R-m.today)/DAY); return d>0?"in "+d+" d":d===0?"today":Math.abs(d)+" d ago"; })():"";
     const tip=drv&&due&&drv.id!==due.id?`Next gate ${due.id}. Status is set by ${drv.id}, ${Math.round(drv.dm)} days from its required date.`:"Required date of the next milestone";
-    return `<button type="button" class="ov-li" data-act="srmpart:${esc(e.pt.id)}" title="${esc(tip)}"><span class="rk">${i+1}</span><span class="bd"><b>${esc(S.nextAction(e))}</b><small>${esc(e.pt.name)} · ${esc(short(e.pt.progName))}</small></span><span class="ed">${chip(e.status)}<small>${esc(own)}</small><small>${due?esc(fmtDate(due.R))+" · "+esc(when):"—"}</small></span></button>`;
+    return `<button type="button" class="ov-li" data-act="srmpart:${esc(e.pt.id)}" title="${esc(tip)}"><span class="rk">${i+1}</span><span class="bd"><b title="${esc(S.nextAction(e))}">${esc(S.nextAction(e))}</b><small>${esc(e.pt.name)} · ${esc(short(e.pt.progName))} · ${esc(own)}</small></span><span class="ed">${chip(e.status)}<small>${due?esc(fmtDate(due.R))+" · "+esc(when):"—"}</small></span></button>`;
   }).join("");
-  return {n:all.length,shown:rows.length,html:`<div class="ov-li-h"><span></span><span>Action · part</span><span>Status / owner / due</span></div><div class="ov-lis">${body}</div>`};
+  return {n:all.length,shown:rows.length,html:`<div class="ov-li-h"><span></span><span>Action · part · owner</span><span>Status · due</span></div><div class="ov-lis">${body}</div>`};
 }
 function insightPanel(list){
   if(!list.length) return `<div class="ov-empty">Nothing stands out for this selection.</div>`;
@@ -10987,30 +11142,36 @@ function buildOverview(){
   const {m,ev,ev7,sm,sm7}=ctx(), w=document.createElement("div"); w.className="v8-page ov-page";
   const hd=U.header("Overview","Supplier readiness, milestone health and the risks that can affect upcoming SOP dates. Every figure follows the filters.");
   const h1=hd.querySelector("h1"); if(h1) h1.textContent="Supplier Readiness Management (SRM) – Overview";
+  const meta=document.createElement("div"); meta.className="ov-asof";
+  meta.innerHTML=`<span class="ov-ill" title="Milestone commitments, tool plans and owner names are generated for this prototype. Parts, projects, suppliers and SOP dates are platform data.">Illustrative data</span><span class="ov-date" title="Statuses are evaluated as of this date">${Icons.svg("calendar")} Data as of <b>${fmtDate(m.today)}</b></span>`;
+  hd.appendChild(meta);
   w.appendChild(hd); w.appendChild(overviewFilters(m));
   const sup=suppliers(m,ev), pm=progMilestones(m,ev), mc=msCounts(pm), weak=sup.filter(x=>x.started>=5&&x.readiness!=null&&x.readiness<60).length;
   const hz=sixMonths(m.today), risks=riskTable(m,ev,hz.end), acts=actionTable(m,ev), gates=mc.risk+mc.delayed;
   add(w,`<div class="ov-kpis">${[
-    ovKpi({icon:"users",label:"Suppliers in scope",value:nf(sm.suppliers,0),sub:weak?`<span class="bad">${weak} below 60% readiness</span>`:`<span class="good">None below 60% readiness</span>`,act:"sgo:srm-performance-dash",tip:"Suppliers with parts in the current filter. Below 60% counts only suppliers with at least 5 started parts."}),
-    ovKpi({icon:"package",label:"Parts in scope",value:nf(sm.n,0),sub:`${nf(sm.started,0)} started · ${nf(sm.counts.notstarted,0)} not started`,act:"sgo:srm-tooling-dash",tip:"Parts in the current filter. Not started means nomination is not yet due."}),
-    ovKpi({icon:"target",label:"Overall supplier readiness",value:pct0(sm.readiness),tone:bandCls(sm.readiness),chip:ovDelta(sm.readiness,sm7.readiness,"up","%"),sub:"Average of started parts",tip:"100% means the next commitment is on or ahead of the required date. 0% means 40 or more days late."}),
-    ovKpi({icon:"wrench",label:"Tooling readiness",value:pct0(sm.toolReadiness),tone:bandCls(sm.toolReadiness),chip:ovDelta(sm.toolReadiness,sm7.toolReadiness,"up","%"),sub:`${nf(sm.toolN,0)} parts · ${nf(sm.toolSum,0)} tools`,act:"sgo:srm-tooling-dash",tip:"Average plan attainment of parts whose tools have started."}),
-    ovKpi({icon:"alert",label:"Milestones at risk",value:nf(gates,0),tone:mc.delayed?"bad":mc.risk?"warn":"good",sub:`<span class="bad">${mc.delayed} delayed</span> · <span class="warn">${mc.risk} at risk</span>`,act:"sgo:srm-status-dash",tip:"Project facelift gates still ahead of today. A gate is delayed when at least 20% of its facelift parts are more than 30 days late, and at risk at the model's lower share. On-track gates are not in this count."}),
-    ovKpi({icon:"clipboard-check",label:"Open actions",value:nf(sm.actions,0),tone:sm.counts.delayed?"bad":sm.counts.risk?"warn":"",chip:ovDelta(sm.actions,sm7.actions,"down",""),sub:`<span class="bad">${sm.counts.delayed} delayed</span> · <span class="warn">${sm.counts.risk} at risk</span>`,act:"sgo:srm-tooling-dash",tip:"Started parts that are at risk or delayed. One action per part."})
+    ovKpi({label:"Suppliers in scope",value:nf(sm.suppliers,0),sub:weak?`<span class="bad">${weak} below 60% readiness</span>`:`<span class="good">None below 60% readiness</span>`,act:"sgo:srm-performance-dash",tip:"Suppliers with parts in the current filter. Below 60% counts only suppliers with at least 5 started parts."}),
+    ovKpi({label:"Parts in scope",value:nf(sm.n,0),sub:`${nf(sm.started,0)} started · ${nf(sm.counts.notstarted,0)} not started`,act:"sgo:srm-tooling-dash",tip:"Parts in the current filter. Not started means nomination is not yet due."}),
+    ovKpi({label:"Overall supplier readiness",value:pct0(sm.readiness),tone:bandCls(sm.readiness),sub:"Average of started parts",tip:"100% means the next commitment is on or ahead of the required date. 0% means 40 or more days late."}),
+    ovKpi({label:"Tooling readiness",value:pct0(sm.toolReadiness),tone:bandCls(sm.toolReadiness),sub:`${nf(sm.toolN,0)} parts · ${nf(sm.toolSum,0)} tools`,act:"sgo:srm-tooling-dash",tip:"Average plan attainment of parts whose tools have started."}),
+    ovKpi({label:"Milestones at risk",value:nf(gates,0),tone:mc.delayed?"bad":mc.risk?"warn":"good",sub:`<span class="bad">${mc.delayed} delayed</span> · <span class="warn">${mc.risk} at risk</span>`,act:"sgo:srm-status-dash",tip:"Project facelift gates still ahead of today. A gate is delayed when at least 20% of its facelift parts are more than 30 days late, and at risk at the model's lower share. On-track gates are not in this count."}),
+    ovKpi({label:"Open actions",value:nf(sm.actions,0),tone:sm.counts.delayed?"bad":sm.counts.risk?"warn":"",sub:`<span class="bad">${sm.counts.delayed} delayed</span> · <span class="warn">${sm.counts.risk} at risk</span>`,act:"sgo:srm-tooling-dash",tip:"Started parts that are at risk or delayed. One action per part."})
   ].join("")}</div>`);
   const r1=add(w,`<div class="ov-row a"></div>`);
-  r1.appendChild(U.el(U.panel("Milestone health by project "+ovInfo("Each started part is counted once, by its worst upcoming milestone. The bar excludes parts that have not started. Click a project to open status tracking."),milestoneHealth(m,ev),{noPad:true,sub:"Highest delayed share first",right:ovLeg})));
-  r1.appendChild(U.el(U.panel("Supplier readiness by supplier "+ovInfo("Lowest readiness first. A supplier needs at least 5 started parts before it is ranked — the same rule as the suppliers KPI."),supplierTable(sup),{noPad:true,sub:"Click a row for that supplier's parts",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-performance-dash">View all</button>`})));
+  r1.appendChild(U.el(U.panel("Milestone health by project "+ovInfo("Each started part is counted once, by its worst upcoming milestone. The bar excludes parts that have not started. Click a project to open status tracking."),milestoneHealth(m,ev),{noPad:true,sub:"Share of started parts by milestone status",right:ovLeg})));
+  const pSup=U.el(U.panel("Supplier readiness "+ovInfo("Lowest readiness first. A supplier needs at least 5 started parts before it is ranked — the same rule as the suppliers KPI."),supplierTable(sup),{noPad:true,sub:"Click a supplier to view its parts",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-performance-dash">View all</button>`}));
+  r1.appendChild(pSup); ovPaginate(pSup,"tbody tr",7,"suppliers");
   r1.appendChild(U.el(U.panel("Readiness by stage "+ovInfo("How many parts are at each readiness stage today. This is not a cumulative count of parts that have passed the stage."),stageBars(ev),{noPad:true,sub:"Share of parts in scope"})));
   const r2=add(w,`<div class="ov-row b"></div>`);
   r2.appendChild(U.el(U.panel("Readiness by origin "+ovInfo("Domestic or international, from the supplier master. A map is not shown: every supplier country on the master is India, and plant names are illustrative."),originPanel(m,ev,ev7),{noPad:true,sub:"Weaker origin first"})));
   r2.appendChild(U.el(U.panel("Upcoming key milestones "+ovInfo("Project facelift gates whose required date falls in the next six calendar months. Colour uses the existing gate rule. Click a gate to open it on status tracking."),timeline(m,pm),{noPad:true,sub:"Next 6 months · facelift gates"})));
   r2.appendChild(U.el(U.panel("Tooling readiness "+ovInfo("The percentage is the average plan attainment of parts whose tools have started. The rows are part counts by tooling status."),toolingBody(sm,sm7),{noPad:true,sub:"Against plan"})));
   const r3=add(w,`<div class="ov-row c"></div>`);
-  r3.appendChild(U.el(U.panel("Top risks to production readiness "+ovInfo("Delayed parts first, then the earliest part SOP. Impact is High for delayed and Medium for at risk — the same split as open actions. It is not a separate production-loss estimate."),risks.html,{noPad:true,sub:risks.n?`Showing ${risks.shown} of ${risks.n} · earliest SOP within the same status first`:"No delayed or at-risk parts",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`})));
-  r3.appendChild(U.el(U.panel("Open actions — highest priority "+ovInfo("One row per part. Delayed first, then the nearest next milestone. The action text is that milestone's standard next step."),acts.html,{noPad:true,sub:acts.n?`Showing ${acts.shown} of ${acts.n}`:"Nothing open",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`})));
-  r3.appendChild(U.el(U.panel("Key insights &amp; recommendations "+ovInfo("Existing rules only: the largest cluster missing a milestone, suppliers under 60% readiness, tooling behind plan, the project with the highest delayed share, and at-risk parts whose price forecast rises more than 5%."),insightPanel(insights(m,ev,sm,sup)),{noPad:true,sub:"Click a card to open the related view"})));
-  add(w,U.note(`Illustrative prototype data: milestone chains, supplier commitment dates, tool requirements and SRM owner names are generated. Parts, projects, suppliers and SOP dates are platform data. Material-cost and commodity views stay in <a href="#" data-act="go:fc-material">Forecast &amp; risk</a>.`,"info"));
+  const pRisk=U.el(U.panel("Top risks to production readiness "+ovInfo("Delayed parts first, then the earliest part SOP. Impact is High for delayed and Medium for at risk — the same split as open actions. It is not a separate production-loss estimate."),risks.html,{noPad:true,sub:risks.n?`Top ${risks.shown} of ${risks.n} · delayed first, then earliest SOP`:"No delayed or at-risk parts",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`}));
+  r3.appendChild(pRisk); ovPaginate(pRisk,".ov-lis > .ov-li",5);
+  const pAct=U.el(U.panel("Open actions — highest priority "+ovInfo("One row per part. Delayed first, then the nearest next milestone. The action text is that milestone's standard next step."),acts.html,{noPad:true,sub:acts.n?`Top ${acts.shown} of ${acts.n} · delayed first`:"Nothing open",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`}));
+  r3.appendChild(pAct); ovPaginate(pAct,".ov-lis > .ov-li",5);
+  const pIns=U.el(U.panel("Key insights "+ovInfo("Existing rules only: the largest cluster missing a milestone, suppliers under 60% readiness, tooling behind plan, the project with the highest delayed share, and at-risk parts whose price forecast rises more than 5%."),insightPanel(insights(m,ev,sm,sup)),{noPad:true,sub:"Recommendations · click a card to open the view"}));
+  r3.appendChild(pIns); ovPaginate(pIns,".ov-ins > .ov-in",3);
   U.wire(w); return w;
 }
 
@@ -12046,8 +12207,11 @@ function totals(d){ const m=d.mod.rows, cur=m.reduce((s,r)=>s+(+r.cur||0),0), ne
   return {cur,neu,delta,pct:cur?delta/cur*100:0}; }
 function volumeOf(d){ const code=d.ref.project, v=DATA.carVolumes.filter(x=>x.project===code).sort((a,b)=>b.year-a.year)[0], cbd=DATA.cbds[d.ref.partNo];
   return {car:v?v.volume:0,qty:cbd?cbd.qtyPerCar:1,annual:(v?v.volume:0)*(cbd?cbd.qtyPerCar:1),year:v?v.year:null}; }
-function riskOf(d){
-  const t=totals(d), sup=DATA.suppliers.find(s=>s.name===d.ref.supplier), m=K.model(), e=S.evaluate(m).find(x=>x.pt.id===d.ref.partNo);
+let EVAL_AT=null, EVAL_MAP=null;
+function evalOf(m,partNo){ if(EVAL_AT!==m){ EVAL_AT=m; EVAL_MAP=new Map(S.evaluate(m).map(x=>[x.pt.id,x])); } return EVAL_MAP.get(partNo); }
+function riskOf(d){ return riskCalc(totals(d).pct,d.ref.supplier,d.ref.partNo); }
+function riskCalc(pct,supplier,partNo){
+  const t={pct}, sup=DATA.suppliers.find(s=>s.name===supplier), m=K.model(), e=evalOf(m,partNo);
   const f=[];
   f.push({k:"Cost",hit:t.pct>3,txt:t.pct>3?`Piece price ${t.pct.toFixed(1)}% up`:"Cost delta contained"});
   const next=e&&e.next, days=next?Math.round((next.R-m.today)/S.DAY):null;
@@ -12432,6 +12596,9 @@ const _nl4=navLabel; navLabel=function(m,s){ return (m==="techchange"&&TC_LABEL[
 /* changes already at / past the approval stage get their (silent) flows now, so the right role has a task from the first load */
 DATA.changes.forEach(c=>{ const d=CD[c.id]; if(d&&d.stageIdx>=7) tcEnsure(d); });
 
+/* read-only access for the management pages (v8_tcm.js): the live workflow records and the helpers that price and rate a change */
+window.V8TC={T0,STAGES,STAGE_ALIAS,STAGE_SCREEN,APPROVAL_CHAIN,STAGE_ROLE,IMPL_TASKS,OFFER_DAYS,CD,ctx,riskOf,riskCalc,totals,volumeOf,projOf,carName,sopOf,fmtDate,addDays,dayDiff,users};
+
 /* Ask AIS: technical-change questions */
 (function(){
   const base=Radar.local, R=Radar.R, RE=/(\baeko\b|\bawe\b|\baea\b|technical change|mod sheet|change (status|pipeline)|running change)/i;
@@ -12443,6 +12610,485 @@ DATA.changes.forEach(c=>{ const d=CD[c.id]; if(d&&d.stageIdx>=7) tcEnsure(d); })
       actions:[{l:"Change Dashboard",a:"goto:techchange/change-dashboard"},{l:"Approval workflow",a:"goto:techchange/approval-workflow"}],basis:"Technical Change module · computed in this page"});
   };
 })();
+})();
+
+</script>
+<script>
+/* ===== V8 · v8_tcm.js ===== */
+/* =====================================================================
+   V8  ·  Technical Change management dashboard — Overview · Change Impact · Approval Workflow · Implementation · Change Register
+   One change register feeds every page, so each count, ₹ figure and chart reconciles to the same rows.
+   Register = the 5 live workflow changes (DATA.changes, read from the module so a stage change shows here at once)
+            + 60 generated records (v8_tcm.js, deterministic, labelled "Illustrative prototype data" in the UI).
+   Generated: every record's category, dates, owner, piece-price change and tooling cost. Real inputs: project, part, supplier, annual volume, quantity per car,
+   piece price (POC part panel), project SOP dates, the risk rule of the module (riskCalc: cost / milestone / supplier) and the approval chain of the module.
+   ===================================================================== */
+(function(){
+"use strict";
+const T=window.V8TC; if(!T) return;
+const P=PocCore, C=PocCharts, U=PocUI, S=SrmData, K=V8Srm, esc=C.esc, h=S.hash;
+const {T0,STAGES,CD,riskCalc,totals,projOf,carName,sopOf,fmtDate,addDays,dayDiff}=T;
+
+/* ------------------------------------------------------------ vocabulary and rules */
+const LIFE=["Open","Pending approval","Approved","Implemented","Rejected","Returned for rework"];
+const LCOL={"Open":"var(--info)","Pending approval":"var(--c-amber)","Approved":"var(--ok)","Implemented":"var(--c-anchor)","Rejected":"var(--red)","Returned for rework":"var(--faint)"};
+const ACTIVE=["Open","Pending approval","Approved","Returned for rework"];
+const CATS=["Cost Reduction","Design Change","Supplier Change","Quality Improvement","Regulatory","Other"];
+const REAL_CAT=["Design Change","Cost Reduction","Supplier Change","Other","Quality Improvement"];
+const AP=["Engineering","Quality","SRM","Finance","Commodity","Management","Final confirmation"];
+const AP_ROLE={Engineering:"aeko",Quality:"approver",SRM:"srm",Finance:"finance",Commodity:"commodity",Management:"pm","Final confirmation":"aeko"};
+const AP_SLA=3, RETURN_SLA=5, SOP_BUFFER=60, STAGE_SLA=[5,3,10,7,5,7,7], STAGE_ROLE_OPEN=["aeko","aeko","aeko","buyer","buyer","buyer","buyer"];
+const nf0=v=>Math.round(v).toLocaleString("en-IN");
+const money=v=>U.cr(Math.abs(v)), sg=v=>(v>0?"+":v<0?"−":"")+U.cr(Math.abs(v));
+const pc=(a,b)=>b?Math.round(a/b*100):0;
+const shortP=code=>K.short(carName(code));
+const roleLabel=r=>(ROLES.find(x=>x.id===r)||{}).label||r;
+const people=role=>DATA.users.filter(u=>u.role===role).map(u=>u.name);
+const F={project:"",type:"",status:"",year:""}, UI={sel:null,od:false,tab:"all"};
+
+/* ------------------------------------------------------------ the register */
+const volFor=code=>{ const y=+T0.slice(0,4), v=DATA.carVolumes.filter(x=>x.project===code); return (v.find(x=>x.year===y)||v.slice().sort((a,b)=>b.year-a.year)[0]||{volume:0}).volume; };
+const shuffled=(list,key)=>list.map((v,i)=>[h(key+"|"+i),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+const expand=pairs=>pairs.flatMap(([v,n])=>Array(n).fill(v));
+const DESC={"Cost Reduction":["Lightweight material alternative","Supplier VA/VE cost-down","Process optimisation","Design simplification — fewer pieces"],
+  "Design Change":["Geometry revision for packaging","Connector and fitment revision","Design revision — cavity re-profiling","Mounting point relocation"],
+  "Supplier Change":["Second-source qualification","Supplier transfer to a localised source","Sub-supplier change at the same price basis"],
+  "Quality Improvement":["Tolerance correction","Corrosion protection upgrade","Process-control improvement"],
+  "Regulatory":["Regulatory compliance update","Homologation requirement update"],"Other":["BOM and documentation correction","Packaging change"]};
+
+function schedule(r,rnd){
+  const L=r.life; let since;
+  if(L==="Open") since=[0,0,1,1,2,2,3,3,4,5,6,8,12][rnd("sn",13)];
+  else if(L==="Pending approval") since=[0,0,1,1,1,2,2,3,3,4,5,6,8][rnd("sn",13)];
+  else if(L==="Approved") since=2+rnd("sn",70);
+  else if(L==="Implemented") since=4+rnd("sn",140);
+  else if(L==="Rejected") since=6+rnd("sn",60);
+  else since=[1,2,3,5,7,9,12][rnd("sn",7)];
+  r.stageSince=addDays(T0,-since); r.raised=addDays(T0,-(since+4+rnd("rs",45)));
+  const pi=rnd("pi",1000)/1000;
+  if(L==="Open") r.plannedImpl=addDays(T0,20+Math.floor(pi*260));
+  else if(L==="Pending approval") r.plannedImpl=addDays(T0,15+Math.floor(pi*200));
+  else if(L==="Approved") r.plannedImpl=addDays(T0,-30+Math.floor(pi*150));
+  else if(L==="Implemented"){ r.implementedOn=r.stageSince; r.plannedImpl=addDays(r.implementedOn,-6+Math.floor(pi*16)); }
+  else if(L==="Returned for rework") r.plannedImpl=addDays(T0,30+Math.floor(pi*200));
+  else r.plannedImpl=null;
+}
+const apIndex=s=>{ const l=String(s.label||""), k=AP.findIndex((a,i)=>i<6&&l.indexOf(a)===0); return k>=0?k:(/AEKO Coordinator|final/i.test(l)?6:0); };
+const stageLabel=r=>r.life==="Open"?STAGES[r.stageIdx]:r.life==="Pending approval"?"Approval · "+AP[r.apStep]:r.life==="Approved"?"Implementation":r.life==="Implemented"?"Closed":r.life==="Rejected"?"Rejected at "+AP[r.apStep]:"Rework · "+AP[r.apStep];
+function ownerOf(r,rnd){
+  const role=r.life==="Open"?STAGE_ROLE_OPEN[r.stageIdx]:(r.life==="Pending approval"||r.life==="Rejected")?AP_ROLE[AP[r.apStep]]:r.life==="Returned for rework"?"aeko":"buyer";
+  const l=people(role); r.ownerRole=role; r.owner=l.length?l[rnd("ow",l.length)]:roleLabel(role);
+}
+function finish(r){
+  r.active=ACTIVE.includes(r.life); r.stage=stageLabel(r);
+  r.due=r.life==="Open"?addDays(r.stageSince,STAGE_SLA[r.stageIdx]):r.life==="Pending approval"?addDays(r.stageSince,AP_SLA):r.life==="Returned for rework"?addDays(r.stageSince,RETURN_SLA):r.life==="Approved"?r.plannedImpl:null;
+  r.kind=r.life==="Open"?STAGES[r.stageIdx]:r.life==="Pending approval"?AP[r.apStep]+" approval":r.life==="Returned for rework"?"Rework":"Implementation";
+  const dd=r.due&&r.active?dayDiff(r.due,T0):0; r.overdue=dd>0?dd:0;
+  r.sop=sopOf(r.project); r.sopCrit=!!(r.active&&r.sop&&r.sop>T0&&r.plannedImpl&&r.plannedImpl>=addDays(r.sop,-SOP_BUFFER));
+  r.impl=implOf(r);
+  const fx=r.risk.factors.concat([{k:"SOP",hit:r.sopCrit,txt:r.sopCrit?"Planned inside the "+SOP_BUFFER+"-day window before the project's SOP, or later":"Not inside the pre-SOP window"},{k:"Overdue",hit:r.overdue>7,txt:r.overdue>7?r.overdue+" days past the due date":"Not more than 7 days overdue"}]), hits=fx.filter(f=>f.hit).length;
+  r.rk={level:!r.active?"—":hits>=2?"High":hits===1?"Medium":"Low",hits,factors:fx};
+  const a=Math.abs(r.ann||0), sc=(r.rk.level==="High"?2:r.rk.level==="Medium"?1:0)+(a>=2e7?2:a>=5e6?1:0);
+  r.score=sc; r.priority=!r.active?"—":sc>=3?"High":sc>=2?"Medium":"Low";
+  r.year=(r.implementedOn||r.plannedImpl||"").slice(0,4);
+  return r;
+}
+function implOf(r){
+  if(r.life==="Rejected"||!r.plannedImpl) return null;
+  if(r.life==="Implemented"){ const late=dayDiff(r.plannedImpl,r.implementedOn); return {s:"Implemented",d:late}; }
+  const dd=dayDiff(T0,r.plannedImpl);
+  if(dd<0) return {s:"Delayed",d:-dd};
+  const risk=r.sopCrit||(dd<=45&&r.life!=="Approved")||(dd<=60&&r.deps.tooling);
+  return {s:risk?"At risk":"On track",d:dd};
+}
+let SYN=null;
+function genSyn(){
+  const byProj={}; DATA.parts.forEach(p=>{ if(p.poc&&p.poc.cur&&p.poc.prog) (byProj[p.project]||(byProj[p.project]=[])).push(p); });
+  Object.values(byProj).forEach(a=>a.sort((x,y)=>x.number<y.number?-1:1));
+  const used=new Set(DATA.changes.map(c=>c.partNo));
+  const pick=(code,i)=>{ const a=byProj[code]||[], k=h("pt|"+i)%a.length; for(let n=0;n<a.length;n++){ const p=a[(k+n)%a.length]; if(!used.has(p.number)){ used.add(p.number); return p; } } return a[k]; };
+  const lives=shuffled(expand([["Open",20],["Pending approval",13],["Approved",11],["Implemented",12],["Rejected",2],["Returned for rework",2]]),"lf");
+  const cats=shuffled(expand([["Cost Reduction",16],["Design Change",13],["Supplier Change",10],["Quality Improvement",8],["Regulatory",8],["Other",5]]),"ct");
+  const projs=shuffled(expand([["KUS",14],["TGN",12],["KYL",12],["SLV",8],["VRT",8],["KDQ",6]]),"pj");
+  const AP_POOL=[0,0,1,1,2,2,3,3,3,4,4,4,4,5,5,6];
+  return lives.map((life,i)=>{
+    const rnd=(k,n)=>h(k+"|"+i)%n, cat=cats[i], code=projs[i], p=pick(code,i);
+    const form=cat==="Regulatory"?"AEKO":["AEKO","AEKO","AEKO","AEKO","AEKO","AEKO","AWE","AWE","AWE","AeA"][rnd("fm",10)];
+    const no=100+i*2+rnd("wn",2), wf=(form==="AeA"?"AEA":form)+"-2026-"+String(no).padStart(4,"0");
+    const r={id:"R"+String(i+1).padStart(2,"0"),live:null,wf,form,category:cat,project:code,part:p.designation,partNo:p.number,supplier:p.supplier,vertical:p.poc.category,life};
+    r.desc=DESC[cat][rnd("ds",DESC[cat].length)];
+    r.stageIdx=life==="Open"?rnd("st",7):life==="Approved"?8:life==="Implemented"?9:7;
+    r.apStep=life==="Pending approval"?AP_POOL[rnd("ap",AP_POOL.length)]:life==="Rejected"?rnd("rj",6):life==="Returned for rework"?rnd("rt",6):null;
+    schedule(r,rnd);
+    const x=rnd("pc",1000)/1000; let pct=cat==="Cost Reduction"?-(2+x*8):cat==="Supplier Change"?(rnd("sg",10)<3?0.5+x*3:-(1.5+x*5)):cat==="Design Change"?-1+x*6:cat==="Quality Improvement"?x*4:cat==="Regulatory"?0.5+x*5.5:-1.5+x*3.5;
+    r.pct=Math.round(pct*10)/10; r.priced=life!=="Open"||r.stageIdx>=5;
+    r.ann=r.priced?Math.round(r.pct/100*p.poc.cur*p.poc.qty*volFor(code)):null; if(!r.priced) r.pct=null;
+    r.oneTime=rnd("tl",100)<35?(4+rnd("tv",46))*1e5:0;
+    r.risk=riskCalc(r.pct||0,r.supplier,r.partNo);
+    r.deps={validation:life==="Open"&&r.stageIdx===3,supplier:life==="Open"&&r.stageIdx===4,tooling:r.oneTime>0&&(life==="Pending approval"||life==="Approved"||life==="Returned for rework")};
+    ownerOf(r,rnd); r.tasks=null;
+    return finish(r);
+  });
+}
+function liveRec(c,i){
+  const d=CD[c.id], t=totals(d), vq=T.volumeOf(d), rnd=(k,n)=>h(k+"|"+c.id)%n, priced=t.neu!==t.cur, fl=d.flow;
+  const rej=fl&&fl.steps.some(s=>s.status==="rejected"), cur=fl&&fl.steps.find(s=>s.status==="current");
+  const life=d.stageIdx>=9?"Implemented":d.stageIdx===8?"Approved":d.stageIdx===7?(rej?"Returned for rework":"Pending approval"):"Open";
+  const r={id:c.id,live:c.id,wf:c.wf,form:c.type,category:REAL_CAT[i%5],project:c.project,part:c.part,partNo:c.partNo,supplier:c.supplier,vertical:(DATA.parts.find(p=>p.number===c.partNo)||{poc:{}}).poc.category||"—",life,desc:d.reason,
+    stageIdx:Math.min(d.stageIdx,9),apStep:life==="Pending approval"||life==="Returned for rework"?(cur?apIndex(cur):0):null};
+  schedule(r,rnd);
+  if(d.createdOn&&r.raised>d.createdOn) r.raised=d.createdOn; if(r.stageSince<r.raised) r.stageSince=r.raised;
+  if(life==="Open"&&d.stageIdx===4&&d.supplier.distributedOn) r.stageSince=d.supplier.distributedOn;   // the module's own date: package sent to the supplier
+  if(life==="Implemented") r.implementedOn=r.stageSince;
+  r.priced=priced; r.pct=priced?Math.round(t.pct*10)/10:null; r.ann=priced?Math.round(t.delta*vq.qty*volFor(c.project)):null;
+  const m=/₹([\d.]+) L/.exec(d.supplier.investment||""); r.oneTime=m&&d.stageIdx>=4?Math.round(+m[1]*1e5):0;
+  r.risk=T.riskOf(d);
+  r.deps={validation:life==="Open"&&d.stageIdx===3,supplier:life==="Open"&&d.stageIdx===4&&!d.supplier.locked,tooling:r.oneTime>0&&(life==="Pending approval"||life==="Approved"||life==="Returned for rework")};
+  ownerOf(r,rnd); r.tasks={done:d.implementation.filter(x=>x.done).length,total:d.implementation.length};
+  return finish(r);
+}
+function register(){ if(!SYN) SYN=genSyn(); return DATA.changes.map(liveRec).concat(SYN); }
+const inView=r=>(!F.project||r.project===F.project)&&(!F.type||r.category===F.type)&&(!F.status||r.life===F.status)&&(!F.year||r.year===F.year);
+const view=()=>{ const all=register(); return {all,rows:all.filter(inView)}; };
+const cnt=(rows,l)=>rows.filter(r=>r.life===l).length;
+
+/* ------------------------------------------------------------ calculations (one definition each) */
+function fin(rows){
+  const o={sav:0,cost:0,savI:0,costI:0,savA:0,costA:0,n:0,nI:0,nA:0,unpriced:0,oneTime:0,pipe:{sav:0,cost:0,n:0},pipeUnpriced:0};
+  rows.forEach(r=>{
+    if(r.life==="Approved"||r.life==="Implemented"){
+      if(r.ann==null){ o.unpriced++; return; }
+      const s=r.ann<0?-r.ann:0, c=r.ann>0?r.ann:0; o.n++; o.sav+=s; o.cost+=c; o.oneTime+=r.oneTime;
+      if(r.life==="Implemented"){ o.nI++; o.savI+=s; o.costI+=c; } else { o.nA++; o.savA+=s; o.costA+=c; }
+    } else if(r.life!=="Rejected"){
+      if(r.ann==null){ o.pipeUnpriced++; return; }
+      o.pipe.n++; if(r.ann<0) o.pipe.sav-=r.ann; else o.pipe.cost+=r.ann;
+    }
+  });
+  o.net=o.sav-o.cost; o.pipe.net=o.pipe.sav-o.pipe.cost; return o;
+}
+function approvalStats(rows){
+  const pend=rows.filter(r=>r.life==="Pending approval");
+  return AP.map((a,i)=>{ const l=pend.filter(r=>r.apStep===i), w=l.map(r=>dayDiff(r.stageSince,T0)), passed=rows.filter(r=>r.life==="Approved"||r.life==="Implemented"||((r.life==="Pending approval"||r.life==="Rejected"||r.life==="Returned for rework")&&r.apStep>i)).length;
+    return {a,i,role:AP_ROLE[a],n:l.length,avg:l.length?w.reduce((x,y)=>x+y,0)/l.length:0,max:w.length?Math.max(...w):0,over:l.filter(r=>r.overdue>0).length,passed,esc:l.filter(r=>r.live&&CD[r.live].flow&&ApprovalEngine.escalationFor(CD[r.live].flow)).length}; });
+}
+const bottleneck=st=>st.filter(s=>s.n>=2).sort((a,b)=>b.over-a.over||b.avg-a.avg)[0]||null;
+const nextSop=()=>DATA.projects.filter(p=>p.sop&&p.sop>T0).sort((a,b)=>a.sop<b.sop?-1:1)[0]||null;
+const prodOf=rows=>{ const proj=DATA.projects.filter(p=>p.sop&&p.sop<=T0).map(p=>p.code); return rows.filter(r=>r.active&&proj.includes(r.project)); };
+const impactNote="Annualised recurring change in piece cost = piece-price change × quantity per car × annual volume of the project. One-time tooling cost is kept apart and is not part of the net figure.";
+
+/* ------------------------------------------------------------ shared markup */
+const kpi=o=>`<div class="pd-kpi${o.act?" kpi-link":""}"${o.act?` data-act="${o.act}" role="button" tabindex="0"`:""} title="${esc(o.tip||"")}"><div class="top"><span class="ic ${o.ict||""}">${Icons.svg(o.icon)}</span><span class="lb">${o.label}</span></div><div class="mid"><span class="vl ${o.tone||""}">${o.value}</span></div><div class="sb ${o.stone||""}" title="${esc(String(o.sub||"").replace(/<[^>]*>/g,""))}">${o.sub||""}</div></div>`;
+const tip=t=>`<span class="pd-i" title="${esc(t)}">${Icons.svg("info")}</span>`;
+const panel=(title,t,body,o)=>U.panel(`${title}${t?tip(t):""}`,body,o);
+const empty=t=>`<div class="pd-empty">${t}</div>`;
+const link=(act,label)=>`<div class="pd-more"><a href="#" data-act="${act}">${label}${Icons.svg("chevron-right")}</a></div>`;
+const stChip=l=>`<span class="tcm-st" style="--c:${LCOL[l]}"><i></i>${esc(l)}</span>`;
+const LV={High:"var(--red)",Medium:"var(--c-amber)",Low:"var(--ok)","—":"var(--faint)"};
+const rkChip=(l,x)=>`<span class="tcm-st" style="--c:${LV[l]}"><i></i>${l==="—"?"closed":esc(l)+(x||"")}</span>`;
+const prChip=(p,x)=>p==="—"?`<span class="tcm-mute">—</span>`:`<span class="chip ${p==="High"?"chip-red":p==="Medium"?"chip-amber":"chip-gray"}"><span class="chip-dot"></span>${p}${x||""}</span>`;
+const IMPLC={"On track":"var(--ok)","At risk":"var(--c-amber)","Delayed":"var(--red)","Implemented":"var(--faint)"};
+const prodText=r=>{ const hit=r.rk.factors.filter(f=>f.hit).map(f=>f.txt); if(r.deps.tooling) hit.push("tooling not released"); return hit.length?hit.slice(0,2).join(" · ")+(hit.length>2?" · +"+(hit.length-2)+" more":""):"No risk factor flagged"; };
+const pctTxt=v=>v==null?"—":(v>0?"+":v<0?"−":"")+Math.abs(v).toFixed(1)+"%";
+
+function shell(title,sub){
+  const w=document.createElement("div"); w.className="v8-page v8-board tc-page tcd tcm";
+  const hd=U.header(title,sub), all=register();
+  const opt=(arr,cur,all0,fmt)=>`<option value="">${all0}</option>`+arr.map(v=>`<option value="${esc(v)}"${v===cur?" selected":""}>${esc(fmt?fmt(v):v)}</option>`).join("");
+  const years=[...new Set(all.map(r=>r.year).filter(Boolean))].sort(), codes=[...new Set(DATA.projects.map(p=>p.code))];
+  const sel=(k,label,ic,html)=>`<label class="pd-f"><span>${label}</span><span class="pd-sel">${Icons.svg(ic)}<select data-f="${k}">${html}</select></span></label>`;
+  const hr=document.createElement("div"); hr.className="tcd-hr tcm-hr";
+  hr.innerHTML=sel("project","Project","car",opt(codes,F.project,"All projects",carName))+sel("type","Change type","layers",opt(CATS.filter(c=>all.some(r=>r.category===c)),F.type,"All types"))+sel("status","Status","flag",opt(LIFE,F.status,"All statuses"))+sel("year","Implementation year","calendar",opt(years,F.year,"All years"))+
+    `<button type="button" class="pd-reset" data-act="tcm:reset" title="Clear all filters">${Icons.svg("refresh")}Reset</button>
+    <div class="tcd-meta"><span>Data as of <b>${esc(fmtDate(T0))}</b></span><span class="pd-ill">Illustrative prototype data</span></div>`;
+  hr.addEventListener("change",e=>{ const k=e.target.dataset&&e.target.dataset.f; if(k){ F[k]=e.target.value; Router.render(); } });
+  hd.appendChild(hr); w.appendChild(hd); return w;
+}
+const add=(w,html)=>{ const e=U.el(html); w.appendChild(e); return e; };
+function grid(w,cls,panels){ const g=add(w,`<div class="tcm-g ${cls}"></div>`); panels.forEach(p=>{ if(typeof p==="string") g.appendChild(U.el(p)); else g.appendChild(p); }); return g; }
+const foot=(w,all)=>add(w,`<div class="tcm-foot"><b>Prototype data.</b> ${all.length} changes: ${DATA.changes.length} come from the live Technical Change workflow (status follows the workflow), ${all.length-DATA.changes.length} are generated register records. Dates, owners, categories, piece-price changes and tooling costs are illustrative; parts, suppliers, volumes, prices and SOP dates come from the platform. ${esc(impactNote)}</div>`);
+
+/* ------------------------------------------------------------ charts */
+function statusCols(rows){
+  const order=["Open","Pending approval","Approved","Implemented"], v=order.map(l=>cnt(rows,l)), mx=Math.max(1,...v), W=300,H=214,base=160,top=30,bw=52,gap=(W-4*bw)/5;
+  return `<svg class="tcm-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Changes by status: ${order.map((l,i)=>l+" "+v[i]).join(", ")}"><line x1="8" x2="${W-8}" y1="${base}" y2="${base}" stroke="var(--line)"/>${order.map((l,i)=>{ const x=gap+i*(bw+gap), hh=v[i]?Math.max(4,v[i]/mx*(base-top)):0, y=base-hh, words=l.split(" ");
+    return `<g class="tcm-col" data-act="tcm:life=${esc(l)}" role="button" tabindex="0"><title>${esc(l)}: ${v[i]} (${pc(v[i],rows.length)}% of ${rows.length}) — click to filter</title><rect x="${x}" y="${y}" width="${bw}" height="${hh}" rx="4" fill="${LCOL[l]}"/><text x="${x+bw/2}" y="${y-7}" text-anchor="middle" class="tcm-n">${v[i]}</text>${words.map((wd,k)=>`<text x="${x+bw/2}" y="${base+17+k*14}" text-anchor="middle" class="tcm-l">${esc(wd)}</text>`).join("")}</g>`; }).join("")}</svg>`;
+}
+function waterfall(f){
+  const W=320,H=218,base=176,top=34,bw=64,x0=[26,128,230], sav=f.sav, cost=f.cost, net=f.net, mx=Math.max(sav,cost,Math.abs(net),1), k=(base-top)/mx;
+  const y=v=>base-v*k, lab=(x,yy,t,c)=>`<text x="${x+bw/2}" y="${yy}" text-anchor="middle" class="tcm-n" style="fill:${c}">${esc(t)}</text>`;
+  const netY=net>=0?[y(net),net*k]:[base,-net*k];
+  return `<svg class="tcm-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Annualised financial impact: savings ${money(sav)}, additional cost ${money(cost)}, net ${sg(net)}">
+    <line x1="8" x2="${W-8}" y1="${base}" y2="${base}" stroke="var(--line)"/>
+    <rect x="${x0[0]}" y="${y(sav)}" width="${bw}" height="${sav*k}" rx="4" fill="var(--ok)"/>${lab(x0[0],y(sav)-7,money(sav),"var(--ok)")}
+    <line x1="${x0[0]+bw}" x2="${x0[1]}" y1="${y(sav)}" y2="${y(sav)}" stroke="var(--faint)" stroke-dasharray="3 3"/>
+    <rect x="${x0[1]}" y="${y(sav)}" width="${bw}" height="${Math.max(cost*k,cost?3:0)}" rx="4" fill="var(--red)"/>${lab(x0[1],y(sav)-7,"−"+money(cost),"var(--red)")}
+    <line x1="${x0[1]+bw}" x2="${x0[2]}" y1="${y(sav-cost)}" y2="${y(sav-cost)}" stroke="var(--faint)" stroke-dasharray="3 3"/>
+    <rect x="${x0[2]}" y="${netY[0]}" width="${bw}" height="${Math.max(netY[1],3)}" rx="4" fill="${net>=0?"var(--c-anchor)":"var(--red)"}"/>${lab(x0[2],(net>=0?netY[0]-7:netY[0]+netY[1]+15),sg(net),net>=0?"var(--c-anchor)":"var(--red)")}
+    ${["Savings","Additional cost","Net impact"].map((t,i)=>`<text x="${x0[i]+bw/2}" y="${base+17}" text-anchor="middle" class="tcm-l">${t}</text>`).join("")}${["approved + implemented","approved + implemented","savings − cost"].map((t,i)=>`<text x="${x0[i]+bw/2}" y="${base+30}" text-anchor="middle" class="tcm-l s">${t}</text>`).join("")}</svg>`;
+}
+function typeBars(rows){
+  const mx=Math.max(1,...CATS.map(c=>cnt2(rows,c))), list=CATS.map(c=>({c,n:cnt2(rows,c)})).filter(x=>x.n||!F.type).sort((a,b)=>b.n-a.n);
+  return `<div class="tcd-bars tcm-bars">${list.map((x,i)=>`<div class="r${F.type===x.c?" on":""}" data-act="tcm:type=${esc(x.c)}" role="button" tabindex="0" title="${esc(x.c)}: ${x.n} — click to filter"><span class="lb">${esc(x.c)}</span><span class="tr"><i style="width:${x.n?Math.max(3,x.n/mx*100):0}%;background:color-mix(in srgb,var(--brand) ${Math.max(35,100-i*13)}%,var(--panel))"></i></span><b class="n">${x.n}</b><span class="p">${pc(x.n,rows.length)}%</span></div>`).join("")}</div>`;
+}
+const cnt2=(rows,c)=>rows.filter(r=>r.category===c).length;
+function projectStack(rows){
+  const codes=[...new Set(rows.map(r=>r.project))], list=codes.map(c=>{ const l=rows.filter(r=>r.project===c); return {c,l,n:l.length}; }).sort((a,b)=>b.n-a.n), mx=Math.max(1,...list.map(x=>x.n));
+  const order=["Implemented","Approved","Pending approval","Open","Returned for rework","Rejected"];
+  return `<div class="tcm-stk">${list.map(x=>`<div class="r${F.project===x.c?" on":""}" data-act="tcm:proj=${esc(x.c)}" role="button" tabindex="0" title="${esc(carName(x.c))}: ${x.n} — click to filter"><span class="lb">${esc(shortP(x.c))}</span><span class="bar" style="width:${x.n/mx*100}%">${order.map(l=>{ const n=x.l.filter(r=>r.life===l).length; return n?`<i style="flex:${n};background:${LCOL[l]}" title="${l}: ${n}">${n/x.n>=.1?n:""}</i>`:""; }).join("")}</span><b class="t">${x.n}</b></div>`).join("")}</div>
+    <div class="tcm-lg">${order.map(l=>`<span><i style="background:${LCOL[l]}"></i>${l}</span>`).join("")}</div>`;
+}
+/* Gantt-style timeline: one row per project, one diamond per planned implementation date */
+function gantt(rows,months,o){
+  o=o||{}; const items=rows.filter(r=>r.plannedImpl&&r.life!=="Rejected"&&(o.all||r.life!=="Implemented"));
+  const t0=Date.parse(T0+"T00:00:00Z"), sd=new Date(t0); sd.setUTCDate(1); sd.setUTCMonth(sd.getUTCMonth()-1); const ed=new Date(sd); ed.setUTCMonth(ed.getUTCMonth()+months);
+  const inWin=r=>Date.parse(r.plannedImpl+"T00:00:00Z")<ed, shown=items.filter(inWin), later=items.length-shown.length;
+  if(!shown.length) return empty("No planned implementation date falls in the next "+months+" months for this selection.")+(later?`<div class="tcd-note">${later} later than the window.</div>`:"");
+  const codes=[...new Set(shown.map(r=>r.project))].sort((a,b)=>String(sopOf(a)).localeCompare(String(sopOf(b)))), W=1000,LW=150,RW=18,top=34,rh=o.rh||44,H=top+codes.length*rh+8;
+  const X=ms=>LW+(Math.min(Math.max(ms,sd.getTime()),ed.getTime())-sd.getTime())/(ed.getTime()-sd.getTime())*(W-LW-RW);
+  const ms=[]; for(let d=new Date(sd);d<ed;d.setUTCMonth(d.getUTCMonth()+1)) ms.push(new Date(d));
+  const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  let g=`<svg class="tcm-svg tcm-gantt" viewBox="0 0 ${W} ${H}" role="img" aria-label="Implementation timeline by project">`;
+  ms.forEach((d,i)=>{ const x=X(d.getTime()), x2=X(i+1<ms.length?ms[i+1].getTime():ed.getTime()); g+=`<line x1="${x}" x2="${x}" y1="${top-8}" y2="${H-6}" stroke="var(--line2)"/><text x="${(x+x2)/2}" y="${top-14}" text-anchor="middle" class="tcm-l">${MON[d.getUTCMonth()]}${d.getUTCMonth()===0||i===0?" "+String(d.getUTCFullYear()).slice(2):""}</text>`; });
+  codes.forEach((code,ri)=>{ const cy=top+ri*rh+rh/2, l=shown.filter(r=>r.project===code), xs=l.map(r=>X(Date.parse(r.plannedImpl+"T00:00:00Z")));
+    g+=`<line x1="8" x2="${W-RW}" y1="${top+ri*rh}" y2="${top+ri*rh}" stroke="var(--line2)"/><text x="8" y="${cy-2}" class="tcm-pl">${esc(shortP(code))}</text><text x="8" y="${cy+12}" class="tcm-l s">${l.length} change${l.length===1?"":"s"}${sopOf(code)?" · SOP "+esc(fmtDate(sopOf(code)).replace(/ 20(\d\d)$/," $1")):""}</text>`;
+    if(l.length>1) g+=`<rect x="${Math.min(...xs)}" y="${cy-7}" width="${Math.max(...xs)-Math.min(...xs)}" height="14" rx="7" fill="color-mix(in srgb,var(--brand) 16%,var(--panel))"/>`;
+    const sop=sopOf(code); if(sop&&Date.parse(sop+"T00:00:00Z")<ed){ const sx=X(Date.parse(sop+"T00:00:00Z")); g+=`<line x1="${sx}" x2="${sx}" y1="${cy-15}" y2="${cy+15}" stroke="var(--ink)" stroke-width="2"/><text x="${sx+4}" y="${cy-8}" class="tcm-l s">SOP</text>`; }
+    l.slice().sort((a,b)=>a.plannedImpl<b.plannedImpl?-1:1).forEach(r=>{ const x=X(Date.parse(r.plannedImpl+"T00:00:00Z")), s=r.impl.s, c=IMPLC[s];
+      g+=`<g class="tcm-dm" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><title>${esc(r.wf)} · ${esc(r.part)} · planned ${esc(fmtDate(r.plannedImpl))} · ${esc(s)}${r.impl.s==="Delayed"?" ("+r.impl.d+" days late)":""}</title><path d="M${x} ${cy-8}L${x+8} ${cy}L${x} ${cy+8}L${x-8} ${cy}Z" fill="${c}" stroke="var(--panel)" stroke-width="1.5"/></g>`; });
+  });
+  const tx=X(t0); g+=`<line x1="${tx}" x2="${tx}" y1="${top-6}" y2="${H-6}" stroke="var(--c-anchor)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${tx+4}" y="${H-10}" class="tcm-l s" style="fill:var(--c-anchor)">Today</text></svg>`;
+  return g+`<div class="tcm-lg">${["On track","At risk","Delayed"].concat(o.all?["Implemented"]:[]).map(s=>`<span><i class="dm" style="background:${IMPLC[s]}"></i>${s}</span>`).join("")}<span class="m">Planned implementation date per change · dark bar = project SOP${later?` · ${later} later than ${months} months`:""}</span></div>`;
+}
+function approvalFlow(st,rows,big){
+  const bn=bottleneck(st), total=rows.filter(r=>r.life==="Pending approval").length;
+  return `<div class="tcm-flow${big?" big":""}">${st.map((s,i)=>`<div class="stg${bn&&bn.i===s.i?" bn":""}${s.n?"":" zero"}" title="${esc(s.a)} — waiting now ${s.n}, average ${s.avg.toFixed(1)} days, ${s.over} past the ${AP_SLA}-day target"><div class="nm">${esc(s.a)}</div><div class="ct">${s.n}</div><div class="av">${s.n?"avg "+s.avg.toFixed(1)+" d":"—"}</div>${s.over?`<div class="ov">${s.over} overdue</div>`:`<div class="ov ok">${s.n?"on time":""}</div>`}</div>`).join("")}</div>
+    <div class="tcm-flow-sum"><span><b>${total}</b> waiting for a decision · counted once, at the step they are waiting on</span>${bn?`<span class="bn">Bottleneck: <b>${esc(bn.a)}</b> — ${bn.n} waiting, ${bn.over} past the ${AP_SLA}-day target</span>`:`<span>No approval step has two or more changes waiting.</span>`}</div>
+    <div class="tcm-out"><span>${stChip("Approved")} <b>${cnt(rows,"Approved")+cnt(rows,"Implemented")}</b> through all steps</span><span>${stChip("Rejected")} <b>${cnt(rows,"Rejected")}</b></span><span>${stChip("Returned for rework")} <b>${cnt(rows,"Returned for rework")}</b></span></div>`;
+}
+
+/* ------------------------------------------------------------ rule-based insights */
+function insights(rows){
+  const out=[], st=approvalStats(rows), f=fin(rows), sl=st.filter(s=>s.n>=2).sort((a,b)=>b.avg-a.avg)[0];
+  if(sl) out.push({k:"Approval",issue:`${sl.a} approval is the slowest step: ${sl.n} changes waiting, ${sl.avg.toFixed(1)} days on average against a ${AP_SLA}-day target (${sl.over} overdue).`,why:"A change cannot be implemented, and its saving cannot start, until every approval step has cleared. This step holds the longest queue.",act:`Ask ${roleLabel(sl.role)} to clear the queue first, or agree a delegate for this step.`,go:"tcm:go=tc-approval",lab:"Approval Workflow"});
+  const awaiting=rows.filter(r=>(r.life==="Pending approval"||r.life==="Returned for rework")&&r.ann!=null&&r.ann<0).sort((a,b)=>a.ann-b.ann);
+  if(awaiting.length) out.push({k:"Decisions",issue:`${awaiting.length} change${awaiting.length===1?"":"s"} with ${money(awaiting.reduce((s,r)=>s-r.ann,0))}/yr of savings ${awaiting.length===1?"is":"are"} waiting for a decision; ${awaiting.filter(r=>r.overdue>0).length} past the target date.`,why:"Savings only start after approval and implementation, so each day of waiting is a day of savings not realised.",act:`Decide ${awaiting.slice(0,2).map(r=>r.wf).join(" and ")} first — the largest savings waiting.`,go:"tcm:go=tc-approval",lab:"Approval Workflow"});
+  const late=rows.filter(r=>r.life==="Approved"&&r.impl&&r.impl.s==="Delayed");
+  if(late.length) out.push({k:"Implementation",issue:`${late.length} approved change${late.length===1?" is":"s are"} past the planned implementation date ${late.reduce((s,r)=>s+(r.ann<0?-r.ann:0),0)?` (${money(late.reduce((s,r)=>s+(r.ann<0?-r.ann:0),0))}/yr of savings not yet in effect)`:""}.`,why:"Approval alone does not change the price paid: price, BOM, purchase order and drawing must be updated.",act:"Confirm tooling, purchase-order and drawing release with the buyer and SRM; re-plan the dates that cannot be met.",go:"tcm:go=tc-impl",lab:"Implementation"});
+  const ns=nextSop(); if(ns){ const l=rows.filter(r=>r.active&&r.project===ns.code), m=l.filter(r=>r.sopCrit);
+    if(l.length) out.push({k:"SOP",issue:`${ns.name} SOP is in ${dayDiff(T0,ns.sop)} days (${fmtDate(ns.sop)}): ${l.length} change${l.length===1?" is":"s are"} still open, ${m.length} planned inside the ${SOP_BUFFER}-day window before SOP or later.`,why:"A change that lands next to SOP risks tooling, supplier-readiness and validation problems on the first vehicles.",act:m.length?`Bring forward or drop the ${m.length} late-planned change${m.length===1?"":"s"}, or freeze scope for this SOP.`:"No change is planned inside the pre-SOP window; keep the dates under review.",go:"tcm:go=change-register",lab:"Change Register"}); }
+  if(f.n) out.push({k:"Value",issue:`Approved and implemented changes give ${money(f.sav)}/yr savings against ${money(f.cost)}/yr additional cost: net ${sg(f.net)}/yr. ${sg(f.savI-f.costI)}/yr is in effect (implemented), ${sg(f.savA-f.costA)}/yr awaits implementation.`,why:"Approved benefits are only realised once implemented. Realised savings are not measured in the prototype.",act:"Track each implemented change against purchase-order prices to confirm the saving.",go:"tcm:go=tc-impact",lab:"Change Impact"});
+  const dep=rows.filter(r=>r.active&&(r.deps.supplier||r.deps.validation||r.deps.tooling));
+  if(dep.length){ const tl=rows.filter(r=>r.active&&r.deps.tooling).reduce((s,r)=>s+r.oneTime,0);
+    out.push({k:"Dependencies",issue:`${dep.length} active change${dep.length===1?" has":"s have"} unresolved dependencies: supplier offer ${dep.filter(r=>r.deps.supplier).length}, validation ${dep.filter(r=>r.deps.validation).length}, tooling ${dep.filter(r=>r.deps.tooling).length}${tl?` (${U.cr(tl)} one-time tooling not yet released)`:""}.`,why:"Open supplier, validation or tooling items are the usual reason an approved change misses its implementation date.",act:"Coordinate supplier, SRM and plant on the changes with a tooling dependency first.",go:"tcm:go=change-register",lab:"Change Register"}); }
+  return out;
+}
+
+/* ------------------------------------------------------------ tables */
+const D=d=>d?fmtDate(d).replace(/ 20(\d\d)$/," $1"):"—";
+function highImpact(rows,n){
+  const l=rows.filter(r=>r.active&&r.ann!=null).sort((a,b)=>b.score-a.score||Math.abs(b.ann)-Math.abs(a.ann)).slice(0,n);
+  if(!l.length) return empty("No active change in this selection has a priced impact yet.");
+  return `<div class="pd-t tcm-hi"><div class="h"><span>#</span><span>Change</span><span>Project</span><span>Type</span><span class="ra">Impact / yr</span><span>Production &amp; quality</span><span class="ra">Status</span></div>${l.map((r,i)=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0" title="Open ${esc(r.wf)}"><span class="k">${i+1}</span><span class="n"><b>${esc(r.part)} — ${esc(r.desc)}</b><small>${esc(r.wf)}</small></span><span class="s">${esc(shortP(r.project))}</span><span class="s">${esc(r.category)}</span><span class="v ${r.ann>0?"bad":"good"}">${sg(-r.ann)}</span><span class="pq">${rkChip(r.rk.level)}<small>${esc(prodText(r))}</small></span><span class="ra">${stChip(r.life)}</span></div>`).join("")}</div>`;
+}
+const overdueList=rows=>rows.filter(r=>r.overdue>0).sort((a,b)=>({High:0,Medium:1,Low:2}[a.priority]-{High:0,Medium:1,Low:2}[b.priority])||b.overdue-a.overdue);
+function overdueTable(rows,n){
+  const all=overdueList(rows), l=n?all.slice(0,n):all;
+  if(!all.length) return empty("No change is past its due date. A change is only marked overdue when its due date is known.");
+  return `<div class="pd-t tcm-od"><div class="h"><span>#</span><span>Change</span><span>Project</span><span>Current stage</span><span class="ra">Days overdue</span><span>Owner</span><span class="ra">Priority</span></div>${l.map((r,i)=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="k">${i+1}</span><span class="n"><b>${esc(r.wf)}</b><small>${esc(r.part)}</small></span><span class="s">${esc(shortP(r.project))}</span><span class="s">${esc(r.kind)}</span><span class="v bad">${r.overdue}</span><span class="s">${esc(r.owner)}</span><span class="ra">${prChip(r.priority)}</span></div>`).join("")}</div>`;
+}
+
+/* ------------------------------------------------------------ 1 · Overview */
+function buildOverview(){
+  const {all,rows}=view(), n=rows.length, w=shell("Technical Change Management","Driving value through engineered changes while ensuring quality, cost efficiency and production readiness.");
+  const f=fin(rows), st=approvalStats(rows), pend=cnt(rows,"Pending approval"), od=rows.filter(r=>r.life==="Pending approval"&&r.overdue>0).length, prj=new Set(rows.map(r=>r.project)).size, live=rows.filter(r=>r.live).length;
+  const none="—", noFin=!f.n;
+  add(w,`<div class="pd-kw"><div class="pd-kpis k8">${[
+    kpi({icon:"file",label:"Total changes",value:n,sub:n?`${prj} project${prj===1?"":"s"} · ${live} in the live workflow`:"no change matches the filters",act:"tcm:go=change-register",tip:"Every change in the register that matches the filters."}),
+    kpi({icon:"clipboard",label:"Open changes",value:cnt(rows,"Open"),ict:"info",sub:pc(cnt(rows,"Open"),n)+"% of total",act:"tcm:kpi=Open",tip:"Created and being evaluated, validated, priced or analysed — not yet submitted for approval."}),
+    kpi({icon:"clock",label:"Pending approvals",value:pend,ict:"warn",sub:od?`${od} past the ${AP_SLA}-day target`:pc(pend,n)+"% of total",stone:od?"bad":"",act:"tcm:go=tc-approval",tip:`Submitted and waiting at one approval step. Each is counted once. Target: ${AP_SLA} days per step.`}),
+    kpi({icon:"check-circle",label:"Approved changes",value:cnt(rows,"Approved"),ict:"ok",sub:pc(cnt(rows,"Approved"),n)+"% of total · not yet implemented",act:"tcm:kpi=Approved",tip:"Approved and waiting for implementation. Implemented changes are counted separately."}),
+    kpi({icon:"settings",label:"Implemented",value:cnt(rows,"Implemented"),sub:pc(cnt(rows,"Implemented"),n)+"% of total",act:"tcm:go=tc-impl",tip:"Implementation finished and the change is closed."}),
+    kpi({icon:"trend-down",label:"Annualized savings",value:noFin?none:money(f.sav),tone:noFin?"":"good",sub:noFin?"no priced approved change":`from ${f.n} approved + implemented`,act:"tcm:go=tc-impact",tip:"Annualised recurring saving of approved and implemented changes that lower the piece price. "+impactNote}),
+    kpi({icon:"trend-up",label:"Annualized additional cost",value:noFin?none:money(f.cost),tone:noFin?"":"bad",sub:noFin?"no priced approved change":(f.oneTime?`+ ${U.cr(f.oneTime)} one-time tooling, not included`:"no one-time tooling"),act:"tcm:go=tc-impact",tip:"Annualised recurring cost of approved and implemented changes that raise the piece price."}),
+    kpi({icon:"coins",label:"Net financial impact",value:noFin?none:sg(f.net),tone:noFin?"":f.net>=0?"good":"bad",sub:noFin?"unavailable":`savings − additional cost · ${U.cr(f.savI-f.costI)} in effect`,act:"tcm:go=tc-impact",tip:"Savings minus additional cost: same scope (approved + implemented), same basis (annualised recurring, ₹). In effect = implemented only."})].join("")}</div></div>`);
+
+  const pn=pend+cnt(rows,"Returned for rework")+cnt(rows,"Rejected");
+  const stBody=n?`<div class="tcm-chart">${statusCols(rows)}</div><div class="tcd-note">Each change has exactly one status. Not shown: ${cnt(rows,"Rejected")} rejected · ${cnt(rows,"Returned for rework")} returned for rework. Total ${n}.</div>`:empty("No change matches the filters.");
+  const finBody=noFin?empty("No approved or implemented change has a priced impact yet, so there is no financial impact to show."):`<div class="tcm-chart">${waterfall(f)}</div><div class="tcm-facts s"><div><span>In effect (implemented)</span><b>${sg(f.savI-f.costI)}</b></div><div><span>Approved, not yet implemented</span><b>${sg(f.savA-f.costA)}</b></div><div><span>Forecast, awaiting decision</span><b>${f.pipe.n?sg(f.pipe.net):"—"}</b></div></div><div class="tcd-note">₹ per year, recurring. Savings and cost are summed per change (a change that raises the price counts as cost). Forecast = open and pending changes with a priced MOD sheet; it is not part of the headline.</div>`;
+  grid(w,"g4",[
+    panel("Changes by status","Open, pending approval, approved and implemented are mutually exclusive: every change is in exactly one.",stBody),
+    panel("Changes by type","Change categories present in the register. Click a bar to filter the page.",n?typeBars(rows):empty("No change matches the filters.")),
+    panel("Financial impact overview","Approved and implemented changes only. "+impactNote,finBody),
+    panel("Changes by project","Status of every change per project. Click a project to filter the page.",n?projectStack(rows):empty("No change matches the filters."))]);
+
+  /* production impact */
+  const act=rows.filter(r=>r.active), lv=l=>act.filter(r=>r.rk.level===l).length, ns=nextSop(), prodN=prodOf(rows).length, anyProd=DATA.projects.some(p=>p.sop&&p.sop<=T0);
+  const nsRows=ns?act.filter(r=>r.project===ns.code):[], dep=act.filter(r=>r.deps.supplier||r.deps.validation||r.deps.tooling);
+  const rb=act.length?`<div class="tcm-rbar">${["High","Medium","Low"].map(l=>lv(l)?`<i style="flex:${lv(l)};background:${LV[l]}" title="${l} risk: ${lv(l)}">${lv(l)}</i>`:"").join("")}</div><div class="tcm-lg"><span><i style="background:var(--red)"></i>High ${lv("High")}</span><span><i style="background:var(--c-amber)"></i>Medium ${lv("Medium")}</span><span><i style="background:var(--ok)"></i>Low ${lv("Low")}</span><span class="m">active changes</span></div>`:"";
+  const prodBody=act.length?rb+`<div class="tcm-facts"><div><span>High-risk changes</span><b class="${lv("High")?"bad":""}">${lv("High")}</b><em>${pc(lv("High"),act.length)}% of ${act.length} active</em></div>
+    <div><span>Affecting in-production vehicles</span><b>${anyProd?prodN:"0"}</b><em>${anyProd?"projects past SOP":ns?`no project is in production yet · first SOP ${esc(shortP(ns.code))} ${esc(D(ns.sop))}`:"none recorded"}</em></div>
+    <div><span>Need implementation before ${ns?esc(shortP(ns.code))+" SOP":"next SOP"}</span><b class="${nsRows.filter(r=>r.sopCrit).length?"bad":""}">${nsRows.length}</b><em>${nsRows.filter(r=>r.sopCrit).length} planned inside the ${SOP_BUFFER}-day window or later</em></div>
+    <div><span>Unresolved supplier / validation / tooling</span><b class="${dep.length?"warn":""}">${dep.length}</b><em>${dep.filter(r=>r.deps.supplier).length} offer · ${dep.filter(r=>r.deps.validation).length} validation · ${dep.filter(r=>r.deps.tooling).length} tooling</em></div></div>`:empty("No active change in this selection.");
+  const stAp=approvalFlow(st,rows,false);
+  grid(w,"g12",[panel("Production impact","Risk is counted from indicators (price up, late milestone, high-risk supplier, inside the pre-SOP window, more than 7 days overdue): High = two or more, Medium = one. Never from the open status alone. In-production = project SOP date reached. Pre-SOP window = "+SOP_BUFFER+" days before the project's SOP.",prodBody),
+    panel("Approval workflow status","The module's approval chain. Counts are changes waiting at each step now (each counted once); average = days waiting so far; target "+AP_SLA+" days per step.",n?stAp:empty("No change matches the filters."))]);
+  add(w,panel("Implementation timeline","Planned implementation date of every approved or still-open change, per project (next 6 months). Delayed = planned date passed and not implemented; at risk = within 45 days and not yet approved, inside the pre-SOP window, or tooling due within 60 days.",gantt(rows,6),{style:"margin-bottom:16px"}));
+
+  grid(w,"g75",[panel("High-impact changes","Active changes ranked by an explicit score: production risk (High 2, Medium 1) + financial materiality (≥ ₹2 Cr/yr 2, ≥ ₹50 L/yr 1), maximum 4; ties by size of impact. Impact: + saving, − additional cost.",highImpact(rows,6)+link("tcm:go=change-register","View all in Change Register")),
+    panel("Overdue changes",`Past the due date of the current step: ${AP_SLA} days per approval step, evaluation stages 2–7 days, ${RETURN_SLA} days for rework, planned date for implementation. No date → not overdue.`,overdueTable(rows,6)+(overdueList(rows).length>6?link("tcm:od=1",`View all ${overdueList(rows).length} overdue`):""))]);
+  const ins=insights(rows);
+  add(w,panel("Key insights & recommendations","Rule-based insights calculated from the register — no AI model. Each shows the issue, why it matters and what management could do.",ins.length?`<div class="tcm-ins">${ins.map((x,i)=>`<div class="it"><div class="hd"><span class="no">${i+1}</span><b>${esc(x.k)}</b></div><p class="is">${esc(x.issue)}</p><p><em>Why it matters</em> ${esc(x.why)}</p><p><em>Consider</em> ${esc(x.act)}</p><a href="#" data-act="${x.go}">${esc(x.lab)}${Icons.svg("chevron-right")}</a></div>`).join("")}</div>`:empty("Nothing needs management attention in this selection."),{style:"margin-bottom:16px"}));
+  foot(w,all); U.wire(w); return w;
+}
+
+/* ------------------------------------------------------------ 2 · Change Impact */
+function buildImpact(){
+  const {all,rows}=view(), w=shell("Change Impact","Financial effect of technical changes: approved savings and additional cost, what is already in effect, and what is still forecast."), f=fin(rows), noFin=!f.n;
+  add(w,`<div class="pd-kw"><div class="pd-kpis k6">${[
+    kpi({icon:"trend-down",label:"Annualized savings",value:noFin?"—":money(f.sav),tone:noFin?"":"good",sub:`${f.n} approved + implemented`,tip:impactNote}),
+    kpi({icon:"trend-up",label:"Annualized additional cost",value:noFin?"—":money(f.cost),tone:noFin?"":"bad",sub:"recurring, per year"}),
+    kpi({icon:"coins",label:"Net financial impact",value:noFin?"—":sg(f.net),tone:noFin?"":f.net>=0?"good":"bad",sub:"savings − additional cost"}),
+    kpi({icon:"settings",label:"In effect (implemented)",value:f.nI?sg(f.savI-f.costI):"—",tone:f.nI&&f.savI>=f.costI?"good":"",sub:`${f.nI} implemented change${f.nI===1?"":"s"}`,tip:"Run-rate of implemented changes. Realised-to-date savings need purchase-order actuals, which the prototype does not hold."}),
+    kpi({icon:"wrench",label:"One-time tooling",value:f.oneTime?U.cr(f.oneTime):"—",sub:"approved + implemented, not in net",tip:"Supplier tooling modification cost quoted for approved and implemented changes. One-time, so kept apart from the annualised figures."}),
+    kpi({icon:"activity",label:"Forecast, not yet approved",value:f.pipe.n?sg(f.pipe.net):"—",sub:`${f.pipe.n} priced · ${f.pipeUnpriced} not yet priced`,tip:"Net annualised saving (+) or cost (−) of open, pending and returned changes that already have a priced MOD sheet. Not part of the headline."})].join("")}</div></div>`);
+  const byP=[...new Set(rows.map(r=>r.project))].map(c=>({c,f:fin(rows.filter(r=>r.project===c))})).filter(x=>x.f.n||x.f.pipe.n).sort((a,b)=>b.f.net-a.f.net);
+  const mx=Math.max(1,...byP.map(x=>Math.max(x.f.sav,x.f.cost)));
+  const div=byP.length?`<div class="tcm-div">${byP.map(x=>`<div class="r"><span class="lb">${esc(shortP(x.c))}</span><span class="l"><i style="width:${x.f.cost/mx*100}%"></i></span><span class="rt"><i style="width:${x.f.sav/mx*100}%"></i></span><b class="${x.f.net>=0?"good":"bad"}">${sg(x.f.net)}</b></div>`).join("")}</div><div class="tcm-lg"><span><i style="background:var(--red)"></i>Additional cost</span><span><i style="background:var(--ok)"></i>Savings</span><span class="m">approved + implemented · net on the right</span></div>`:empty("No approved or implemented change with a priced impact for this selection.");
+  grid(w,"g2",[panel("Financial impact overview","Approved and implemented changes. "+impactNote,noFin?empty("No priced approved or implemented change."):`<div class="tcm-chart">${waterfall(f)}</div>`),
+    panel("Net impact by project","Savings and additional cost per project for approved and implemented changes.",div)]);
+  const bucket=[["Implemented — in effect",f.savI,f.costI,f.nI,"Implemented","actual run-rate (implemented, not measured)"],["Approved — awaiting implementation",f.savA,f.costA,f.nA,"Approved","approved, not yet in effect"],["Forecast — open, pending, returned",f.pipe.sav,f.pipe.cost,f.pipe.n,"","forecast, awaiting decision; not in the headline"]];
+  const cat=CATS.map(c=>({c,f:fin(rows.filter(r=>r.category===c))})).filter(x=>x.f.n||x.f.pipe.n);
+  const tb=(head,body)=>`<div class="pd-t tcm-fin"><div class="h">${head.map((x,i)=>`<span${i?' class="ra"':""}>${x}</span>`).join("")}</div>${body}</div>`;
+  grid(w,"g2",[panel("Where the value stands","Approved benefit is not realised benefit: only implemented changes are in effect.",tb(["Basis","Changes","Savings / yr","Add. cost / yr","Net / yr"],bucket.map(b=>`<div class="r"><span class="n"><b>${b[0]}</b><small>${b[5]}</small></span><span class="v">${b[3]}</span><span class="v good">${b[1]?money(b[1]):"—"}</span><span class="v bad">${b[2]?money(b[2]):"—"}</span><span class="v ${b[1]>=b[2]?"good":"bad"}">${b[3]?sg(b[1]-b[2]):"—"}</span></div>`).join(""))+`<div class="tcd-note">${f.unpriced?`${f.unpriced} approved or implemented change${f.unpriced===1?" has":"s have"} no priced MOD sheet and ${f.unpriced===1?"is":"are"} not counted. `:""}Rejected changes carry no financial effect.</div>`),
+    panel("Impact by change type","Approved and implemented changes per category.",cat.length?tb(["Type","Changes","Savings / yr","Add. cost / yr","Net / yr"],cat.map(x=>`<div class="r"><span class="n"><b>${esc(x.c)}</b></span><span class="v">${x.f.n}</span><span class="v good">${x.f.sav?money(x.f.sav):"—"}</span><span class="v bad">${x.f.cost?money(x.f.cost):"—"}</span><span class="v ${x.f.net>=0?"good":"bad"}">${x.f.n?sg(x.f.net):"—"}</span></div>`).join("")):empty("No priced change."))]);
+  const top=rows.filter(r=>r.ann!=null&&r.life!=="Rejected").sort((a,b)=>Math.abs(b.ann)-Math.abs(a.ann)).slice(0,10);
+  add(w,panel("Largest financial impacts","Ten largest priced changes (any status except rejected), by absolute annualised impact. Click a row for the change detail.",top.length?`<div class="pd-t tcm-top"><div class="h"><span>#</span><span>Change</span><span>Project</span><span>Type</span><span class="ra">Piece price</span><span class="ra">Impact / yr</span><span class="ra">One-time tooling</span><span class="ra">Status</span></div>${top.map((r,i)=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="k">${i+1}</span><span class="n"><b>${esc(r.part)} — ${esc(r.desc)}</b><small>${esc(r.wf)}</small></span><span class="s">${esc(shortP(r.project))}</span><span class="s">${esc(r.category)}</span><span class="v ${r.pct>0?"bad":"good"}">${pctTxt(r.pct)}</span><span class="v ${r.ann>0?"bad":"good"}">${sg(-r.ann)}</span><span class="s">${r.oneTime?U.cr(r.oneTime):"—"}</span><span class="ra">${stChip(r.life)}</span></div>`).join("")}</div>`:empty("No priced change in this selection."),{style:"margin-bottom:16px"}));
+  const lv=all.find(r=>r.live&&CD[r.live].stageIdx>=6);
+  if(lv) add(w,`<div class="tcm-go"><span>The detailed, per-change impact sheet (MOD sheet comparison, risk factors and similar changes) stays in the workflow.</span><button type="button" class="btn btn-sm" data-act="tcm:sheet=${esc(lv.live)}">Open impact sheet · ${esc(lv.wf)}</button></div>`);
+  foot(w,all); U.wire(w); return w;
+}
+
+/* ------------------------------------------------------------ 3 · Approval Workflow */
+function buildApproval(){
+  const {all,rows}=view(), w=shell("Approval Workflow","Where changes wait for a decision, how long they have waited, and which step is the bottleneck."), st=approvalStats(rows), pend=rows.filter(r=>r.life==="Pending approval"), bn=bottleneck(st);
+  const waits=pend.map(r=>dayDiff(r.stageSince,T0)), avg=waits.length?waits.reduce((a,b)=>a+b,0)/waits.length:0, ov=pend.filter(r=>r.overdue>0).length;
+  add(w,`<div class="pd-kw"><div class="pd-kpis k6">${[
+    kpi({icon:"clock",label:"Waiting for a decision",value:pend.length,ict:"warn",sub:"each counted once, at its current step"}),
+    kpi({icon:"alert",label:`Past the ${AP_SLA}-day target`,value:ov,tone:ov?"bad":"",sub:pend.length?pc(ov,pend.length)+"% of waiting":"none waiting"}),
+    kpi({icon:"gauge",label:"Average wait so far",value:pend.length?avg.toFixed(1)+" d":"—",sub:pend.length?`longest ${Math.max(...waits)} days`:"none waiting",tip:"Days since the change arrived at its current approval step. Completed decisions are not timed in the prototype."}),
+    kpi({icon:"flag",label:"Bottleneck step",value:bn?esc(bn.a):"—",sub:bn?`${bn.n} waiting · ${bn.over} overdue`:"no step has 2+ waiting",tip:"Step with the most overdue changes, then the longest average wait (at least two waiting)."}),
+    kpi({icon:"check-circle",label:"Approved",value:cnt(rows,"Approved")+cnt(rows,"Implemented"),ict:"ok",sub:"through all steps"}),
+    kpi({icon:"x-circle",label:"Rejected / returned",value:cnt(rows,"Rejected")+cnt(rows,"Returned for rework"),tone:cnt(rows,"Rejected")+cnt(rows,"Returned for rework")?"bad":"",sub:`${cnt(rows,"Rejected")} rejected · ${cnt(rows,"Returned for rework")} returned for rework`})].join("")}</div></div>`);
+  add(w,panel("Approval workflow status","The module's approval chain: Engineering → Quality → SRM → Finance → Commodity → Management → final confirmation by the AEKO Coordinator.",rows.length?approvalFlow(st,rows,true):empty("No change matches the filters."),{style:"margin-bottom:16px"}));
+  const tb=`<div class="pd-t tcm-aps"><div class="h"><span>Step</span><span>Approver role</span><span class="ra">Waiting now</span><span class="ra">Avg wait</span><span class="ra">Longest</span><span class="ra">Overdue</span><span class="ra">Passed this step</span></div>${st.map(s=>`<div class="r${bn&&bn.i===s.i?" bn":""}"><span class="n"><b>${esc(s.a)}</b></span><span class="s">${esc(roleLabel(s.role))}</span><span class="v">${s.n}</span><span class="v">${s.n?s.avg.toFixed(1)+" d":"—"}</span><span class="v">${s.n?s.max+" d":"—"}</span><span class="v ${s.over?"bad":""}">${s.over||"—"}</span><span class="v">${s.passed}</span></div>`).join("")}</div><div class="tcd-note">“Passed this step” counts changes that were approved at this step: those now at a later step, approved, implemented, or rejected / returned at a later step. A change appears under “waiting now” once only.</div>`;
+  const list=pend.slice().sort((a,b)=>b.overdue-a.overdue||dayDiff(b.stageSince,T0)-dayDiff(a.stageSince,T0));
+  grid(w,"g2",[panel("Steps and bottlenecks","Waiting time is measured from the day the change reached the step.",tb),
+    panel("Decisions waiting",`Every change waiting for an approval decision, longest wait first. Click a row for the change detail.`,list.length?`<div class="pd-t tcm-pend"><div class="h"><span>Change</span><span>Step</span><span>Approver</span><span class="ra">Waiting</span><span class="ra">Impact / yr</span></div>${list.slice(0,12).map(r=>`<div class="r${r.overdue?" od":""}" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)}</b><small>${esc(r.wf)} · ${esc(shortP(r.project))}</small></span><span class="s">${esc(AP[r.apStep])}</span><span class="s">${esc(r.owner)}</span><span class="v ${r.overdue?"bad":""}">${dayDiff(r.stageSince,T0)} d${r.overdue?`<small>${r.overdue} over</small>`:""}</span><span class="v ${r.ann>0?"bad":"good"}">${r.ann==null?"—":sg(-r.ann)}</span></div>`).join("")}</div>${list.length>12?`<div class="tcd-note">${list.length-12} more — see the Change Register (status: Pending approval).</div>`:""}`:empty("No change is waiting for an approval decision in this selection."))]);
+  const back=rows.filter(r=>r.life==="Rejected"||r.life==="Returned for rework");
+  if(back.length) add(w,panel("Rejected and returned for rework","Changes that left the approval chain without approval.",`<div class="pd-t tcm-back"><div class="h"><span>Change</span><span>Outcome</span><span>Stopped at</span><span class="ra">Since</span><span>Owner</span></div>${back.map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)}</b><small>${esc(r.wf)} · ${esc(shortP(r.project))}</small></span><span>${stChip(r.life)}</span><span class="s">${esc(AP[r.apStep])}</span><span class="v">${esc(D(r.stageSince))}</span><span class="s">${esc(r.owner)}</span></div>`).join("")}</div>`,{style:"margin-bottom:16px"}));
+  const lv=all.filter(r=>r.live&&CD[r.live].stageIdx>=7);
+  if(lv.length) add(w,`<div class="tcm-go"><span>Sign-off, reminders and escalation for a live change happen in its approval chain.</span>${lv.map(r=>`<button type="button" class="btn btn-sm" data-act="tcm:chain=${esc(r.live)}">Approval chain · ${esc(r.wf)}</button>`).join("")}</div>`);
+  foot(w,all); U.wire(w); return w;
+}
+
+/* ------------------------------------------------------------ 4 · Implementation */
+function buildImpl(){
+  const {all,rows}=view(), w=shell("Implementation","Planned implementation dates, what is late or at risk, and what has been implemented."), act=rows.filter(r=>r.impl&&r.life!=="Implemented"&&r.life!=="Rejected"), s=x=>act.filter(r=>r.impl.s===x).length;
+  const approved=rows.filter(r=>r.life==="Approved"), due30=act.filter(r=>r.impl.s!=="Delayed"&&r.impl.d<=30).length, done=rows.filter(r=>r.life==="Implemented"), lateDone=done.filter(r=>r.impl&&r.impl.d>0).length;
+  add(w,`<div class="pd-kw"><div class="pd-kpis k6">${[
+    kpi({icon:"check-circle",label:"Approved, awaiting implementation",value:approved.length,ict:"ok",sub:"price, BOM, PO and drawing to update"}),
+    kpi({icon:"alert",label:"Delayed",value:s("Delayed"),tone:s("Delayed")?"bad":"",sub:"planned date passed, not implemented",tip:"Any change not yet implemented whose planned implementation date is earlier than today."}),
+    kpi({icon:"flag",label:"At risk",value:s("At risk"),ict:"warn",sub:"see the rule on the timeline",tip:"Planned within 45 days and not yet approved, or inside the "+SOP_BUFFER+"-day window before the project's SOP, or tooling due within 60 days."}),
+    kpi({icon:"calendar",label:"Due in the next 30 days",value:due30,sub:"planned dates, not delayed"}),
+    kpi({icon:"settings",label:"Implemented",value:done.length,sub:lateDone?`${lateDone} after the planned date`:"on or before the planned date"}),
+    kpi({icon:"wrench",label:"Tooling not yet released",value:rows.filter(r=>r.active&&r.deps.tooling).length,sub:"one-time tooling modification pending"})].join("")}</div></div>`);
+  add(w,panel("Implementation timeline","Planned implementation date per change, next 12 months, with each project's SOP. Implemented changes in the window are shown in grey.",gantt(rows,12,{all:true,rh:48}),{style:"margin-bottom:16px"}));
+  const lst=act.slice().sort((a,b)=>(a.impl.s==="Delayed"?-1:0)-(b.impl.s==="Delayed"?-1:0)||(a.plannedImpl<b.plannedImpl?-1:1));
+  add(w,panel(`Implementation register <span class="count-pill">${lst.length}</span>`,"Changes with a planned implementation date that are not yet implemented: delayed first, then by date.",lst.length?`<div class="pd-t tcm-impl"><div class="h"><span>Change</span><span>Project</span><span>Status</span><span class="ra">Planned</span><span class="ra">Days</span><span class="ra">Project SOP</span><span>Open dependencies</span><span class="ra">Stage</span></div>${lst.slice(0,14).map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)} — ${esc(r.desc)}</b><small>${esc(r.wf)}</small></span><span class="s">${esc(shortP(r.project))}</span><span><span class="tcm-st" style="--c:${IMPLC[r.impl.s]}"><i></i>${r.impl.s}</span></span><span class="v">${esc(D(r.plannedImpl))}</span><span class="v ${r.impl.s==="Delayed"?"bad":""}">${r.impl.s==="Delayed"?r.impl.d+" late":r.impl.d+" to go"}</span><span class="s">${esc(D(r.sop))}</span><span class="s">${[r.deps.supplier&&"supplier offer",r.deps.validation&&"validation",r.deps.tooling&&"tooling"].filter(Boolean).join(", ")||"none"}</span><span class="ra">${stChip(r.life)}</span></div>`).join("")}</div>${lst.length>14?`<div class="tcd-note">${lst.length-14} more in the Change Register.</div>`:""}`:empty("No change with a planned implementation date is waiting to be implemented."),{noPad:false,style:"margin-bottom:16px"}));
+  const live=all.filter(r=>r.live&&CD[r.live].stageIdx>=8);
+  if(live.length) add(w,`<div class="tcm-go"><span>The task list of a live change (price history, BOM at SOP, purchase order, drawing, tooling, notification) is worked in its implementation screen.</span>${live.map(r=>`<button type="button" class="btn btn-sm" data-act="tcm:impl=${esc(r.live)}">Implementation tasks · ${esc(r.wf)} (${r.tasks.done}/${r.tasks.total})</button>`).join("")}</div>`);
+  foot(w,all); U.wire(w); return w;
+}
+
+/* ------------------------------------------------------------ 5 · Change Register (+ detail) */
+function buildRegister(){
+  const {all,rows}=view(), w=shell("Change Register","Every technical change with its status, stage, risk, financial impact and dates. Click a row for the change detail.");
+  const list=UI.od?rows.filter(r=>r.overdue>0):rows;
+  const ft=FTable.create({id:"tcm-reg",pageSize:10,sortable:true,rows:list,rowAct:r=>"tcm:open="+r.id,empty:"No change matches these filters.",columns:[
+    {key:"id",label:"Change ID",get:r=>r.wf,html:r=>`<b>${esc(r.wf)}</b><small class="v8-sm">${esc(r.form)}${r.live?" · live workflow":""}</small>`},
+    {key:"proj",label:"Project",get:r=>shortP(r.project)},
+    {key:"desc",label:"Description",get:r=>r.part+" — "+r.desc,html:r=>`<b>${esc(r.part)}</b><small class="v8-sm">${esc(r.desc)}</small>`},
+    {key:"cat",label:"Type",get:r=>r.category},
+    {key:"st",label:"Status",get:r=>r.life,order:r=>LIFE.indexOf(r.life),html:r=>stChip(r.life)},
+    {key:"stage",label:"Current stage",get:r=>r.stage},
+    {key:"risk",label:"Risk",get:r=>r.rk.level,order:r=>({High:0,Medium:1,Low:2,"—":3}[r.rk.level]),html:r=>rkChip(r.rk.level)},
+    {key:"pri",label:"Priority",get:r=>r.priority,order:r=>({High:0,Medium:1,Low:2,"—":3}[r.priority]),html:r=>prChip(r.priority)},
+    {key:"imp",label:"Impact / yr",get:r=>r.ann==null?"not priced":r.ann<0?"saving":"cost",order:r=>r.ann==null?1e12:r.ann,align:"r",html:r=>r.ann==null?'<span class="tcm-mute">not priced</span>':`<span class="${r.ann>0?"v8-bad":"v8-good"}">${sg(-r.ann)}</span>`},
+    {key:"plan",label:"Planned impl.",get:r=>r.plannedImpl?fmtDate(r.plannedImpl):"—",order:r=>r.plannedImpl||"9999",html:r=>esc(D(r.plannedImpl))},
+    {key:"od",label:"Days overdue",get:r=>r.overdue?"overdue":"—",order:r=>-r.overdue,align:"r",html:r=>r.overdue?`<b class="v8-bad">${r.overdue}</b>`:"—"},
+    {key:"own",label:"Owner",get:r=>r.owner}]});
+  const p=U.el(U.panel(`Change register <span class="count-pill">${list.length}</span>`,"",{noPad:true,sub:"Page filters above apply · sort or filter any column from its heading · impact = annualised recurring change in piece cost, + saving, − additional cost",right:`<div class="fc-segs tight"><button type="button" class="fc-seg ${UI.od?"":"on"}" data-act="tcm:od=0">All</button><button type="button" class="fc-seg ${UI.od?"on":""}" data-act="tcm:od=1">Overdue only</button></div>`}));
+  p.querySelector(".panel-body").appendChild(ft); w.appendChild(p); add(w,`<div class="tcd-note" style="margin:10px 2px 16px">Priority score = production risk (High 2, Medium 1) + materiality (≥ ₹2 Cr/yr 2, ≥ ₹50 L/yr 1): 3–4 High, 2 Medium, 0–1 Low. Impact sign: + saving, − additional cost.</div>`);
+  foot(w,all); U.wire(w); return w;
+}
+function buildDetail(){
+  const all=register(), r=all.find(x=>x.id===UI.sel)||all[0], w=document.createElement("div"); w.className="v8-page v8-board tc-page tcd tcm";
+  w.appendChild(U.header(r.wf+" — "+r.part,r.desc+" · "+carName(r.project)));
+  const kv=(k,v)=>`<div class="kv"><span>${k}</span><b>${v}</b></div>`;
+  add(w,`<div class="tcm-dh"><button type="button" class="btn btn-sm" data-act="tcm:go=change-register">${Icons.svg("undo")}Back to Change Register</button><span>${stChip(r.life)} ${rkChip(r.rk.level," risk")} ${prChip(r.priority," priority")} <span class="chip chip-gray"><span class="chip-dot"></span>${esc(r.category)}</span></span>${r.live?`<button type="button" class="btn btn-primary btn-sm" data-act="tc:open=${esc(r.live)}">Open in the change workflow</button>`:`<span class="tcm-mute">Generated register record — no workflow behind it</span>`}</div>`);
+  const steps=AP.map((a,i)=>{ const done=r.life==="Approved"||r.life==="Implemented"||(r.apStep!=null&&i<r.apStep)||(r.life==="Open"?false:false), cur=(r.life==="Pending approval"||r.life==="Returned for rework"||r.life==="Rejected")&&r.apStep===i; return `<div class="stg ${done?"done":cur?(r.life==="Rejected"?"rej":"cur"):""}"><div class="nm">${esc(a)}</div><div class="ct">${done?"✓":cur?(r.life==="Rejected"?"✕":"●"):"·"}</div><div class="av">${esc(roleLabel(AP_ROLE[a]))}</div></div>`; }).join("");
+  const a=r.ann;
+  grid(w,"g3",[
+    panel("Change","",`<div class="tcm-kv">${kv("Request",esc(r.form))}${kv("Type",esc(r.category))}${kv("Project",esc(carName(r.project)))}${kv("Part",esc(r.part)+" · "+esc(r.partNo))}${kv("Vertical",esc(r.vertical))}${kv("Supplier",esc(r.supplier))}${kv("Current stage",esc(r.stage))}${kv("Owner",esc(r.owner)+" · "+esc(roleLabel(r.ownerRole)))}</div>`),
+    panel("Financial impact","Annualised recurring change in piece cost. One-time cost is separate.",`<div class="tcm-kv">${kv("Piece price",pctTxt(r.pct))}${kv("Annualised impact",a==null?"not yet priced":`<span class="${a>0?"v8-bad":"v8-good"}">${money(a)}${a<0?" saving":" additional cost"} / yr</span>`)}${kv("One-time tooling",r.oneTime?U.cr(r.oneTime):"none")}${kv("Basis",r.life==="Implemented"?"in effect (implemented)":r.life==="Approved"?"approved, not yet in effect":r.life==="Rejected"?"rejected — no effect":"forecast, not approved")}</div><div class="tcd-note">${esc(impactNote)}</div>`),
+    panel("Dates","Due date = when the current step should be finished.",`<div class="tcm-kv">${kv("Raised",esc(fmtDate(r.raised)))}${kv("In current stage since",esc(fmtDate(r.stageSince)))}${kv("Due",r.due?esc(fmtDate(r.due))+(r.overdue?` <span class="v8-bad">· ${r.overdue} days overdue</span>`:""):"no date")}${kv("Planned implementation",r.plannedImpl?esc(fmtDate(r.plannedImpl))+(r.impl?` · ${esc(r.impl.s)}`:""):"none")}${r.implementedOn?kv("Implemented",esc(fmtDate(r.implementedOn))):""}${kv("Project SOP",r.sop?esc(fmtDate(r.sop))+(r.sop>T0?` · in ${dayDiff(T0,r.sop)} days`:" · in production"):"—")}</div>`)]);
+  grid(w,"g2",[panel("Risk and dependencies","Production risk: High = two or more of the five indicators below, Medium = one, Low = none. The first three are the module's own risk rule (price up more than 3%, milestone within 90 days with a late supplier commitment, high-risk supplier).",`<ul class="tcm-ul">${r.rk.factors.map(f=>`<li class="${f.hit?"hit":""}"><i></i>${esc(f.txt)}</li>`).join("")}<li class="${r.deps.supplier?"hit":""}"><i></i>Supplier offer ${r.deps.supplier?"outstanding":"not outstanding"}</li><li class="${r.deps.validation?"hit":""}"><i></i>Validation ${r.deps.validation?"not complete":"not an open item"}</li><li class="${r.deps.tooling?"hit":""}"><i></i>Tooling modification ${r.deps.tooling?"not yet released"+(r.oneTime?" ("+U.cr(r.oneTime)+")":""):(r.oneTime?"released":"not required")}</li></ul>`),
+    panel("Approval progress","Engineering → Quality → SRM → Finance → Commodity → Management → final confirmation.",`<div class="tcm-flow detail">${steps}</div>${r.tasks?`<div class="tcd-note">Implementation tasks: ${r.tasks.done} of ${r.tasks.total} done.</div>`:""}`)]);
+  foot(w,all); U.wire(w); return w;
+}
+
+/* ------------------------------------------------------------ wiring */
+const go=(id)=>Router.go(id,"techchange");
+Object.assign(U.actions,{tcm:v=>{ const i=v.indexOf("="), k=v.slice(0,i), a=v.slice(i+1);
+  if(v==="reset"){ F.project=F.type=F.status=F.year=""; UI.od=false; Router.render(); }
+  else if(k==="go") go(a);
+  else if(k==="life"){ F.status=F.status===a?"":a; Router.render(); }
+  else if(k==="type"){ F.type=F.type===a?"":a; Router.render(); }
+  else if(k==="proj"){ F.project=F.project===a?"":a; Router.render(); }
+  else if(k==="kpi"){ F.status=a; go("change-register"); }
+  else if(k==="od"){ UI.od=a==="1"; if(Router.screen!=="change-register") go("change-register"); else Router.render(); }
+  else if(k==="open"){ UI.sel=a; go("tc-change"); }
+  else if(k==="sheet"){ T.ctx.activeId=a; go("impact-analysis"); }
+  else if(k==="chain"){ T.ctx.activeId=a; go("approval-workflow"); }
+  else if(k==="impl"){ T.ctx.activeId=a; go("implementation"); } }});
+const NEW=[["tc-impact","Change Impact","bar-chart",buildImpact],["tc-approval","Approval Workflow","check-circle",buildApproval],["tc-impl","Implementation","flag",buildImpl],["change-register","Change Register","list",buildRegister],["tc-change","Change detail","file",buildDetail]];
+const at=NAV.techchange.findIndex(x=>x.id==="change-dashboard");
+NEW.forEach(([id,label,ic,fn],i)=>{ NAV.techchange.splice(at+1+i,0,{id,label,icon:"📊"}); NAV_ICONS[id]=ic; NAV_SHORT[id]=label; SCREENS.techchange[id]=fn; });
+NAV_HIDDEN.add("tc-change"); SCREENS.techchange["change-dashboard"]=buildOverview;
+const LAB={"change-dashboard":"Overview","tc-impact":"Change Impact","tc-approval":"Approval Workflow","tc-impl":"Implementation","change-register":"Change Register","tc-change":"Change detail","impact-analysis":"Impact Sheet","approval-workflow":"Approval Chain","implementation":"Implementation Tasks"};
+NAV.techchange.forEach(i=>{ if(LAB[i.id]) i.label=LAB[i.id]; }); Object.assign(NAV_SHORT,LAB);
+Object.assign(NAV_ICONS,{"change-dashboard":"layout"});
+const _nl=navLabel; navLabel=function(m,s){ return (m==="techchange"&&LAB[s])||_nl(m,s); };
+MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
+  ["Dashboards",["change-dashboard","tc-impact","tc-approval","tc-impl","change-register"]],
+  ["Change workflow",["intake","doc-upload","eval-sheet","validation","supplier-offers","mod-sheet","impact-analysis","approval-workflow","implementation","change-history"]],
+  ["Approvals & reports",["approvals","reports-tc"]]);
+/* Ask AIS: portfolio questions about technical changes are answered from the register (single-change questions stay with the workflow answer in v8_tc.js) */
+(function(){
+  if(typeof Radar==="undefined") return;
+  const base=Radar.local, R=Radar.R, RE=/(technical change|change register|change management|\baeko\b|\bawe\b|\baea\b)/i, RE2=/(saving|additional cost|net impact|overdue|bottleneck|pending|implemented|how many|total|approved|status|financial|financial impact)/i;
+  Radar.local=function(q,c2){
+    if(!(RE.test(q)&&RE2.test(q))||/mod sheet/i.test(q)) return base(q,c2);
+    const all=register(), f=fin(all), c=l=>cnt(all,l), st=approvalStats(all), bn=bottleneck(st), od=all.filter(r=>r.overdue>0).length;
+    const html=`<p><b>${all.length}</b> technical changes in the register: <b>${c("Open")}</b> open, <b>${c("Pending approval")}</b> pending approval, <b>${c("Approved")}</b> approved, <b>${c("Implemented")}</b> implemented, <b>${c("Rejected")}</b> rejected, <b>${c("Returned for rework")}</b> returned for rework.</p>
+      <p>Approved + implemented changes: savings <b>${money(f.sav)}</b>/yr, additional cost <b>${money(f.cost)}</b>/yr, net <b>${sg(f.net)}</b>/yr (annualised, recurring; ${money(f.savI-f.costI)} of it implemented). One-time tooling ${U.cr(f.oneTime)} is not included.</p>
+      <p>${od} change${od===1?" is":"s are"} past a due date${bn?`; the approval bottleneck is <b>${esc(bn.a)}</b> (${bn.n} waiting, ${bn.over} overdue)`:""}.</p>`;
+    return R(html,{charts:[{kind:"bar",title:"Changes by status",unit:"currency",currencySymbol:"",source:"Technical Change register",orientation:"horizontal",series:[{key:"v",label:"Changes"}],rows:LIFE.map(l=>({label:l,values:{v:c(l)},tone:"neutral"}))}],
+      actions:[{l:"Overview",a:"goto:techchange/change-dashboard"},{l:"Approval Workflow",a:"goto:techchange/tc-approval"},{l:"Change Register",a:"goto:techchange/change-register"}],basis:"Technical Change register (5 live workflow changes + 60 illustrative records) · computed in this page"});
+  };
+})();
+window.V8TCM={register,fin,F,view};
 })();
 
 </script>
