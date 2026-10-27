@@ -7,6 +7,11 @@ Every patch asserts that the text it replaces exists exactly once, so a drift in
 """
 import os, re, sys, json
 sys.stdout.reconfigure(encoding="utf-8")
+# Since the team switched to editing SAVWIPL_prototype_V8.html directly, this build is ARCHIVE ONLY: running it rewrites
+# V8 and E7 from src/ and would erase every edit made in the HTML (sidebar, chatbot, ...). Pass --force to do it on purpose.
+if "--force" not in sys.argv:
+    sys.exit("build_e7.py is archive-only: SAVWIPL_prototype_V8.html is now the master and is edited directly.\n"
+             "Rebuilding would overwrite it from src/ and lose those edits. If you really want that, run: python build_e7.py --force")
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SRC_HTML = os.path.join(ROOT, "SAVWIPL_prototype_E6.html")

@@ -1,5 +1,9 @@
 # E7 / V8 — SKODA AIS prototype with the forecasting POC (E7) and the SRM dashboards (V8)
 
+> **Status: archive only (from 27 Oct 2026).** `SAVWIPL_prototype_V8.html` is now the **master** and is edited directly (it is what Vercel serves).
+> This folder is kept as history and as the record of how V8 was assembled. **Do not run `build_e7.py`**: it regenerates V8 from `src/` and would erase every edit made in the HTML since (sidebar, chatbot, later work). The script now refuses to run unless you pass `--force`.
+> `src/` no longer matches V8 exactly; read the HTML for the current behaviour. The notes below describe the original build workflow and the design decisions, which are still useful context.
+
 `SAVWIPL_prototype_E7.html` (one file, opens by double-click) = the E6 prototype + the forecasting POC.
 The POC is the **master data** for programmes, vendors, categories, parts, prices, FX and forecasts; every E6 workflow
 (sourcing import, CBD, price history, commodity/FX approvals, change requests, POs, tasks, approvals, reports) runs on
