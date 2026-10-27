@@ -260,7 +260,7 @@ function milestoneHealth(m,ev){
   const body=rows.map(r=>{
     const tip=`${short(r.p.name)} · ${r.n} started of ${r.all} · On track ${r.c.ok} · At risk ${r.c.risk} · Delayed ${r.c.delayed} · Not started ${r.ns}`;
     const pc=share100(KS.map(k=>r.c[k]));
-    const bar=!r.n?`<span class="ov-nil">No started parts</span>`:`<span class="ov-stk">${KS.map((k,i)=>{ const c=r.c[k]; if(!c) return ""; const w=c/r.n*100; return `<i class="${k}" style="width:${w.toFixed(2)}%" title="${esc(V.LABEL[k]+": "+c+" parts")}">${w>=9?pc[i]+"%":""}</i>`; }).join("")}</span>`;
+    const bar=!r.n?`<span class="ov-nil">No started parts</span>`:`<span class="ov-stk">${KS.map((k,i)=>{ const c=r.c[k]; if(!c) return ""; const w=c/r.n*100; return `<i class="${k}" style="width:${w.toFixed(2)}%" title="${esc(V.LABEL[k]+": "+c+" parts")}">${w>=12?pc[i]+"%":""}</i>`; }).join("")}</span>`;
     const ds=!r.n?`<span class="mh-pill nil">—</span>`:r.c.delayed?`<span class="mh-pill bad">${Icons.svg("alert")}${pc[2]}%</span>`:`<span class="mh-pill nil">0%</span>`;
     return `<button type="button" class="mh-r" data-act="sfg:project=${esc(r.p.code)}|srm-status-dash" title="${esc(tip)} · Open status tracking"><span class="pj"><span class="tile">${Icons.svg("car")}</span><b>${esc(short(r.p.name))}</b>${Icons.svg("chevron-right")}</span>${bar}<span class="ds">${ds}</span><span class="pn" title="${esc(r.n+" started · "+r.ns+" not started")}"><b>${r.n}</b><small>parts</small></span></button>`;
   }).join("");
@@ -364,22 +364,24 @@ function buildOverview(){
     ovKpi({label:"Milestones at risk",value:nf(gates,0),tone:mc.delayed?"bad":mc.risk?"warn":"good",sub:`<span class="bad">${mc.delayed} delayed</span> · <span class="warn">${mc.risk} at risk</span>`,act:"sgo:srm-status-dash",tip:"Project facelift gates still ahead of today. A gate is delayed when at least 20% of its facelift parts are more than 30 days late, and at risk at the model's lower share. On-track gates are not in this count."}),
     ovKpi({label:"Open actions",value:nf(sm.actions,0),tone:sm.counts.delayed?"bad":sm.counts.risk?"warn":"",sub:`<span class="bad">${sm.counts.delayed} delayed</span> · <span class="warn">${sm.counts.risk} at risk</span>`,act:"sgo:srm-tooling-dash",tip:"Started parts that are at risk or delayed. One action per part."})
   ].join("")}</div>`);
-  const r1=add(w,`<div class="ov-row a"></div>`);
+  const r1=add(w,`<div class="ov-row two"></div>`);
   r1.appendChild(U.el(U.panel("Milestone health by project "+ovInfo("Each started part is counted once, by its worst upcoming milestone. The bar excludes parts that have not started. Click a project to open status tracking."),milestoneHealth(m,ev),{noPad:true,sub:"Share of started parts by milestone status",right:ovLeg})));
   const pSup=U.el(U.panel("Supplier readiness "+ovInfo("Lowest readiness first. A supplier needs at least 5 started parts before it is ranked — the same rule as the suppliers KPI."),supplierTable(sup),{noPad:true,sub:"Click a supplier to view its parts",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-performance-dash">View all</button>`}));
   r1.appendChild(pSup); ovPaginate(pSup,"tbody tr",7,"suppliers");
-  r1.appendChild(U.el(U.panel("Readiness by stage "+ovInfo("How many parts are at each readiness stage today. This is not a cumulative count of parts that have passed the stage."),stageBars(ev),{noPad:true,sub:"Share of parts in scope"})));
-  const r2=add(w,`<div class="ov-row b"></div>`);
-  r2.appendChild(U.el(U.panel("Readiness by origin "+ovInfo("Domestic or international, from the supplier master. A map is not shown: every supplier country on the master is India, and plant names are illustrative."),originPanel(m,ev,ev7),{noPad:true,sub:"Weaker origin first"})));
-  r2.appendChild(U.el(U.panel("Upcoming key milestones "+ovInfo("Project facelift gates whose required date falls in the next six calendar months. Colour uses the existing gate rule. Click a gate to open it on status tracking."),timeline(m,pm),{noPad:true,sub:"Next 6 months · facelift gates"})));
+  const r2=add(w,`<div class="ov-row two"></div>`);
+  r2.appendChild(U.el(U.panel("Readiness by stage "+ovInfo("How many parts are at each readiness stage today. This is not a cumulative count of parts that have passed the stage."),stageBars(ev),{noPad:true,sub:"Share of parts in scope"})));
   r2.appendChild(U.el(U.panel("Tooling readiness "+ovInfo("The percentage is the average plan attainment of parts whose tools have started. The rows are part counts by tooling status."),toolingBody(sm,sm7),{noPad:true,sub:"Against plan"})));
-  const r3=add(w,`<div class="ov-row c"></div>`);
+  const r3=add(w,`<div class="ov-row one"></div>`);
+  r3.appendChild(U.el(U.panel("Upcoming key milestones "+ovInfo("Project facelift gates whose required date falls in the next six calendar months. Colour uses the existing gate rule. Click a gate to open it on status tracking."),timeline(m,pm),{noPad:true,sub:"Next 6 months · facelift gates"})));
+  const r4=add(w,`<div class="ov-row two"></div>`);
   const pRisk=U.el(U.panel("Top risks to production readiness "+ovInfo("Delayed parts first, then the earliest part SOP. Impact is High for delayed and Medium for at risk — the same split as open actions. It is not a separate production-loss estimate."),risks.html,{noPad:true,sub:risks.n?`Top ${risks.shown} of ${risks.n} · delayed first, then earliest SOP`:"No delayed or at-risk parts",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`}));
-  r3.appendChild(pRisk); ovPaginate(pRisk,".ov-lis > .ov-li",5);
+  r4.appendChild(pRisk); ovPaginate(pRisk,".ov-lis > .ov-li",5);
   const pAct=U.el(U.panel("Open actions — highest priority "+ovInfo("One row per part. Delayed first, then the nearest next milestone. The action text is that milestone's standard next step."),acts.html,{noPad:true,sub:acts.n?`Top ${acts.shown} of ${acts.n} · delayed first`:"Nothing open",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`}));
-  r3.appendChild(pAct); ovPaginate(pAct,".ov-lis > .ov-li",5);
+  r4.appendChild(pAct); ovPaginate(pAct,".ov-lis > .ov-li",5);
+  const r5=add(w,`<div class="ov-row two"></div>`);
+  r5.appendChild(U.el(U.panel("Readiness by origin "+ovInfo("Domestic or international, from the supplier master. A map is not shown: every supplier country on the master is India, and plant names are illustrative."),originPanel(m,ev,ev7),{noPad:true,sub:"Weaker origin first"})));
   const pIns=U.el(U.panel("Key insights "+ovInfo("Existing rules only: the largest cluster missing a milestone, suppliers under 60% readiness, tooling behind plan, the project with the highest delayed share, and at-risk parts whose price forecast rises more than 5%."),insightPanel(insights(m,ev,sm,sup)),{noPad:true,sub:"Recommendations · click a card to open the view"}));
-  r3.appendChild(pIns); ovPaginate(pIns,".ov-ins > .ov-in",3);
+  r5.appendChild(pIns); ovPaginate(pIns,".ov-ins > .ov-in",3);
   U.wire(w); return w;
 }
 
