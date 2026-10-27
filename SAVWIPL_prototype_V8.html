@@ -4103,7 +4103,7 @@ const Nav = {
       }
       if(hasActive && this.moved) this.sub[key] = true;
       let open = this.sub[key];
-      if(open === undefined) open = hasActive || (gi===0 && g.title!=="Procurement dashboard") || total<=9;
+      if(open === undefined) open = hasActive;   // sub-sections start closed unless they hold the active screen
       const sg = document.createElement("div"); sg.className = "sgrp" + (open ? "" : " closed") + (hasActive ? " current" : "");
       const sh = document.createElement("button");
       sh.type = "button"; sh.className = "sgrp-h"; sh.setAttribute("aria-expanded", open ? "true":"false");
@@ -4143,9 +4143,10 @@ const Nav = {
     el.innerHTML = "";
     const mod = Router.module;
     const allowed = MODULE_ACCESS[RBAC.role] || [];
-    if(this.lastModule !== mod) this.openMod = mod;
-    if(this.openMod && !allowed.includes(this.openMod)) this.openMod = null;
     this.moved = this.lastScreen !== Router.screen || this.lastModule !== mod;
+    // every dropdown starts closed; opening a screen opens just its own module (and sub-section) so the active item is visible
+    if(this.moved && !this.onHome()) this.openMod = mod;
+    if(this.openMod && !allowed.includes(this.openMod)) this.openMod = null;
     const onHome = this.onHome();
 
     // Home: the one shared entry point
