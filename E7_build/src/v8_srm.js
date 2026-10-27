@@ -222,13 +222,13 @@ function driverMs(e){ const fut=(e.milestones||[]).filter(k=>k.future&&k.st===e.
 function attention(ev){ return ev.filter(e=>e.started&&(e.status==="risk"||e.status==="delayed")); }
 function overviewFilters(m){
   const icons={project:"car",supplier:"building",brand:"flag",family:"layers",sopYear:"calendar"};
-  const d=document.createElement("div"); d.className="ov-filters";
-  d.innerHTML=filterSpec(m).map(([k,label,opts,tip])=>`<label class="ov-f"><span title="${esc(tip||label)}">${esc(label)}</span><span class="ov-sel">${Icons.svg(icons[k]||"filter")}<select data-f="${k}" aria-label="${esc(label)}">${opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(F[k])?" selected":""}>${esc(o[1])}</option>`).join("")}</select></span></label>`).join("")+
-    `<button type="button" class="ov-clear" data-f="reset" title="Clear all filters"${filtersOn()?"":" disabled"}>${Icons.svg("refresh")}Reset</button>`;
+  const d=document.createElement("div"); d.className="pd-fbar";
+  d.innerHTML=filterSpec(m).map(([k,label,opts,tip])=>`<label class="pd-f"><span${tip?` title="${esc(tip)}"`:""}>${esc(label)}</span><span class="pd-sel">${Icons.svg(icons[k]||"filter")}<select data-f="${k}" aria-label="${esc(label)}">${opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(F[k])?" selected":""}>${esc(o[1])}</option>`).join("")}</select></span></label>`).join("")+
+    `<button type="button" class="pd-reset" data-f="reset" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`;
   bindFilters(d); return d;
 }
 function ovKpi(o){
-  return `<div class="ov-kpi${o.act?" kpi-link":""}" ${o.act?`data-act="${o.act}" role="button" tabindex="0"`:""} title="${esc(o.tip||"")}"><span class="ov-lb">${o.label}</span><b class="ov-val ${o.tone||""}">${o.value}</b><div class="ov-kpi-sub">${o.sub||""}</div></div>`;
+  return `<div class="pd-kpi${o.act?" kpi-link":""}" ${o.act?`data-act="${o.act}" role="button" tabindex="0"`:""} title="${esc(o.tip||"")}"><div class="top"><span class="ic">${Icons.svg(o.icon)}</span><span class="lb">${o.label}</span></div><div class="mid"><span class="vl ${o.tone||""}">${o.value}</span></div><div class="sb" title="${esc(String(o.sub||"").replace(/<[^>]*>/g,""))}">${o.sub||""}</div></div>`;
 }
 /* whole-number shares that add up to 100 (largest remainder), so the labels on a stacked bar never total 99 or 101 */
 function share100(vals){
@@ -347,23 +347,23 @@ function insightPanel(list){
   return `<div class="ov-ins">${list.map(i=>`<div class="ov-in ${i.k}" ${i.a?`data-act="${esc(i.a)}" role="button" tabindex="0"`:""}><span class="ic">${Icons.svg(ic[i.k]||"info")}</span><div><b>${esc(i.t)}</b><p>${esc(i.s)}</p>${i.q?`<button type="button" class="ov-ask" data-act="ask:${esc(i.q)}" data-no-icon>Ask AIS</button>`:""}</div></div>`).join("")}</div>`;
 }
 function buildOverview(){
-  const {m,ev,ev7,sm,sm7}=ctx(), w=document.createElement("div"); w.className="v8-page ov-page";
+  const {m,ev,ev7,sm,sm7}=ctx(), w=document.createElement("div"); w.className="v8-page v8-board ov-page";
   const hd=U.header("Overview","Supplier readiness, milestone health and the risks that can affect upcoming SOP dates. Every figure follows the filters.");
   const h1=hd.querySelector("h1"); if(h1) h1.textContent="Supplier Readiness Management (SRM) – Overview";
-  const meta=document.createElement("div"); meta.className="ov-asof";
-  meta.innerHTML=`<span class="ov-ill" title="Milestone commitments, tool plans and owner names are generated for this prototype. Parts, projects, suppliers and SOP dates are platform data.">Illustrative data</span><span class="ov-date" title="Statuses are evaluated as of this date">${Icons.svg("calendar")} Data as of <b>${fmtDate(m.today)}</b></span>`;
+  const meta=document.createElement("div"); meta.className="pd-meta";
+  meta.innerHTML=`<span title="Statuses are evaluated as of this date">Data as of <b>${fmtDate(m.today)}</b></span><span class="pd-ill" title="Milestone commitments, tool plans and owner names are generated for this prototype. Parts, projects, suppliers and SOP dates are platform data.">Illustrative data</span>`;
   hd.appendChild(meta);
   w.appendChild(hd); w.appendChild(overviewFilters(m));
   const sup=suppliers(m,ev), pm=progMilestones(m,ev), mc=msCounts(pm), weak=sup.filter(x=>x.started>=5&&x.readiness!=null&&x.readiness<60).length;
   const hz=sixMonths(m.today), risks=riskTable(m,ev,hz.end), acts=actionTable(m,ev), gates=mc.risk+mc.delayed;
-  add(w,`<div class="ov-kpis">${[
-    ovKpi({label:"Suppliers in scope",value:nf(sm.suppliers,0),sub:weak?`<span class="bad">${weak} below 60% readiness</span>`:`<span class="good">None below 60% readiness</span>`,act:"sgo:srm-performance-dash",tip:"Suppliers with parts in the current filter. Below 60% counts only suppliers with at least 5 started parts."}),
-    ovKpi({label:"Parts in scope",value:nf(sm.n,0),sub:`${nf(sm.started,0)} started · ${nf(sm.counts.notstarted,0)} not started`,act:"sgo:srm-tooling-dash",tip:"Parts in the current filter. Not started means nomination is not yet due."}),
-    ovKpi({label:"Overall supplier readiness",value:pct0(sm.readiness),tone:bandCls(sm.readiness),sub:"Average of started parts",tip:"100% means the next commitment is on or ahead of the required date. 0% means 40 or more days late."}),
-    ovKpi({label:"Tooling readiness",value:pct0(sm.toolReadiness),tone:bandCls(sm.toolReadiness),sub:`${nf(sm.toolN,0)} parts · ${nf(sm.toolSum,0)} tools`,act:"sgo:srm-tooling-dash",tip:"Average plan attainment of parts whose tools have started."}),
-    ovKpi({label:"Milestones at risk",value:nf(gates,0),tone:mc.delayed?"bad":mc.risk?"warn":"good",sub:`<span class="bad">${mc.delayed} delayed</span> · <span class="warn">${mc.risk} at risk</span>`,act:"sgo:srm-status-dash",tip:"Project facelift gates still ahead of today. A gate is delayed when at least 20% of its facelift parts are more than 30 days late, and at risk at the model's lower share. On-track gates are not in this count."}),
-    ovKpi({label:"Open actions",value:nf(sm.actions,0),tone:sm.counts.delayed?"bad":sm.counts.risk?"warn":"",sub:`<span class="bad">${sm.counts.delayed} delayed</span> · <span class="warn">${sm.counts.risk} at risk</span>`,act:"sgo:srm-tooling-dash",tip:"Started parts that are at risk or delayed. One action per part."})
-  ].join("")}</div>`);
+  add(w,`<div class="pd-kw"><div class="pd-kpis k6">${[
+    ovKpi({icon:"users",label:"Suppliers in scope",value:nf(sm.suppliers,0),sub:weak?`<span class="bad">${weak} below 60% readiness</span>`:`<span class="good">None below 60% readiness</span>`,act:"sgo:srm-performance-dash",tip:"Suppliers with parts in the current filter. Below 60% counts only suppliers with at least 5 started parts."}),
+    ovKpi({icon:"package",label:"Parts in scope",value:nf(sm.n,0),sub:`${nf(sm.started,0)} started · ${nf(sm.counts.notstarted,0)} not started`,act:"sgo:srm-tooling-dash",tip:"Parts in the current filter. Not started means nomination is not yet due."}),
+    ovKpi({icon:"target",label:"Overall supplier readiness",value:pct0(sm.readiness),tone:bandCls(sm.readiness),sub:"Average of started parts",tip:"100% means the next commitment is on or ahead of the required date. 0% means 40 or more days late."}),
+    ovKpi({icon:"wrench",label:"Tooling readiness",value:pct0(sm.toolReadiness),tone:bandCls(sm.toolReadiness),sub:`${nf(sm.toolN,0)} parts · ${nf(sm.toolSum,0)} tools`,act:"sgo:srm-tooling-dash",tip:"Average plan attainment of parts whose tools have started."}),
+    ovKpi({icon:"alert",label:"Milestones at risk",value:nf(gates,0),tone:mc.delayed?"bad":mc.risk?"warn":"good",sub:`<span class="bad">${mc.delayed} delayed</span> · <span class="warn">${mc.risk} at risk</span>`,act:"sgo:srm-status-dash",tip:"Project facelift gates still ahead of today. A gate is delayed when at least 20% of its facelift parts are more than 30 days late, and at risk at the model's lower share. On-track gates are not in this count."}),
+    ovKpi({icon:"clipboard-check",label:"Open actions",value:nf(sm.actions,0),tone:sm.counts.delayed?"bad":sm.counts.risk?"warn":"",sub:`<span class="bad">${sm.counts.delayed} delayed</span> · <span class="warn">${sm.counts.risk} at risk</span>`,act:"sgo:srm-tooling-dash",tip:"Started parts that are at risk or delayed. One action per part."})
+  ].join("")}</div></div>`);
   const r1=add(w,`<div class="ov-row two"></div>`);
   r1.appendChild(U.el(U.panel("Milestone health by project "+ovInfo("Each started part is counted once, by its worst upcoming milestone. The bar excludes parts that have not started. Click a project to open status tracking."),milestoneHealth(m,ev),{noPad:true,sub:"Share of started parts by milestone status",right:ovLeg})));
   const pSup=U.el(U.panel("Supplier readiness "+ovInfo("Lowest readiness first. A supplier needs at least 5 started parts before it is ranked — the same rule as the suppliers KPI."),supplierTable(sup),{noPad:true,sub:"Click a supplier to view its parts",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-performance-dash">View all</button>`}));
