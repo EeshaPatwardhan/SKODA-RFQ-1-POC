@@ -592,17 +592,12 @@ MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
       <div class="ft">Waiting time = days since the change reached the step · target ${AP_SLA} days per step</div>`;
   };
   const npHtml=code=>{
-    const rows=view().rows, pr=rows.filter(r=>r.project===code), f=fin(pr), all=fin(rows), ai=pr.filter(r=>(r.life==="Approved"||r.life==="Implemented")&&r.ann!=null).sort((a,b)=>Math.abs(b.ann)-Math.abs(a.ann));
-    const shr=(v,t)=>t?Math.round(v/t*100)+"%":"—", net=f.net, ineff=f.savI-f.costI, aw=f.savA-f.costA;
-    return `<div class="hd"><b>${esc(carName(code))}</b><span>${f.n} approved or implemented change${f.n===1?"":"s"} with a priced impact (${f.nI} implemented, ${f.nA} approved)</span></div>
-      <div class="gk one"><div><em>Savings</em><b class="${f.sav?"":""}">${f.sav?esc(money(f.sav)):"—"}</b></div><div><em>Add. cost</em><b class="${f.cost?"bad":""}">${f.cost?esc(money(f.cost)):"—"}</b></div><div><em>Net</em><b class="${net>=0?"":"bad"}">${esc(sg(net))}</b></div><div><em>One-time tooling</em><b>${f.oneTime?esc(U.cr(f.oneTime)):"—"}</b></div></div>
-      <ul><li class="ok"><i>•</i><span>In effect (implemented): ${f.nI?esc(sg(ineff)):"nothing implemented yet"}</span></li><li class="ok"><i>•</i><span>Approved, awaiting implementation: ${f.nA?esc(sg(aw)):"none"}</span></li><li class="ok"><i>•</i><span>Share of all savings: ${shr(f.sav,all.sav)} · share of all additional cost: ${shr(f.cost,all.cost)}</span></li>${f.pipe.n?`<li class="ok"><i>•</i><span>Forecast, not approved (not in the bars): ${esc(sg(f.pipe.net))} over ${f.pipe.n} change${f.pipe.n===1?"":"s"}</span></li>`:""}</ul>
-      ${ai.length?`<div class="gk"><div style="grid-column:1/-1"><em>Largest contributors</em>${ai.slice(0,3).map(r=>`<b>${esc(r.part)}<small>${esc(r.wf)} · ${esc(r.life)} · ${esc(sg(-r.ann))}/yr</small></b>`).join("")}${ai.length>3?`<small>+ ${ai.length-3} more</small>`:""}</div></div>`:""}
-      <div class="ft">Approved + implemented · annualised recurring ₹ per year · + saving, − additional cost</div>`;
+    const f=fin(view().rows.filter(r=>r.project===code));
+    return `<div class="hd"><b>${esc(carName(code))}</b></div><div class="nv"><div><span><i style="background:var(--red)"></i>Additional cost</span><b class="bad">${f.cost?esc(money(f.cost)):"—"}</b></div><div><span><i style="background:var(--ok)"></i>Savings</span><b class="good">${f.sav?esc(money(f.sav)):"—"}</b></div><div class="tot"><span>Net impact</span><b class="${f.net>=0?"good":"bad"}">${esc(sg(f.net))}</b></div></div>`;
   };
   const show=el=>{
     const d=el.dataset, r=(d.gp||d.np||d.st!==undefined)?null:register().find(x=>x.id===(d.gm||d.rk)); if(!d.gp&&!d.np&&d.st===undefined&&!r) return; hide(); owner=el;
-    tip=document.createElement("div"); tip.className="tcm-tip"+(d.gp||d.np||d.gm||d.st!==undefined?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.np?npHtml(d.np):d.st!==undefined?stHtml(+d.st):d.gm?gHtml(r):html(r); document.body.appendChild(tip);
+    tip=document.createElement("div"); tip.className="tcm-tip"+(d.np?" s":d.gp||d.gm||d.st!==undefined?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.np?npHtml(d.np):d.st!==undefined?stHtml(+d.st):d.gm?gHtml(r):html(r); document.body.appendChild(tip);
     const b=el.getBoundingClientRect(), t=tip.getBoundingClientRect(); let x=b.left+b.width/2-t.width/2, y=b.bottom+8;
     if(y+t.height>innerHeight-8) y=b.top-t.height-8; x=Math.max(8,Math.min(x,innerWidth-t.width-8)); tip.style.left=x+"px"; tip.style.top=Math.max(8,y)+"px";
   };

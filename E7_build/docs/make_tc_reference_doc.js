@@ -338,7 +338,7 @@ body.push(table(["Card", "What it shows", "How it is calculated"], [
 body.push(H3("Visuals"));
 body.push(table(["Visual", "Type", "What it shows and how it is built", "Interaction"], [
   ["Financial impact overview", "Waterfall", "Three bars, in ₹ per year: Savings (green, from 0 up), Additional cost (red, hanging down from the savings level) and Net impact (from 0). The scale spans the lowest and highest point, so a net below zero stays inside the chart; labels sit above a bar, or below it when the bar is negative. Scope: approved + implemented.", "Hover the info icon for the scope and formula."],
-  ["Net impact by project", "Diverging bars", "One row per project with priced changes: additional cost to the left (red), savings to the right (green), net at the far right (green or red).", "Hover a project row for a card: savings, additional cost, net and one-time tooling of its approved and implemented changes; the in-effect and awaiting-implementation split; its share of all savings and all additional cost; the forecast (not in the bars); and its three largest contributing changes."],
+  ["Net impact by project", "Diverging bars", "One row per project with priced changes: additional cost to the left (red), savings to the right (green), net at the far right (green or red).", "Hover a project row for a small card with its additional cost, savings and net impact."],
   ["Financial Impact by Status", "Table + summary card", ["Rows: Implemented (in effect), Approved (awaiting implementation), Forecast (open, pending, returned). Columns: Changes, Savings / yr, Additional cost / yr, Net / yr.", "Summary card: 'Total pipeline' (sum of the three rows' changes) and 'Total net impact / yr' — **this total includes the forecast row**, which the card states."], "Hover the info icon: approved benefit is not realised benefit."],
   ["Impact by change type", "Table + summary card", "One row per category with approved or implemented changes: Changes, Savings, Additional cost, Net. Summary card: total changes and total net of approved + implemented (equal to the Net impact card).", "None."],
   ["Largest financial impacts", "Table with column filters", ["All priced, non-rejected changes by absolute annualised impact, 5 per page. Columns: Change (part and ID), Reason, Project, Type, Piece price, Impact / yr, One-time tooling, Status."], ["Click a column heading to sort; click its funnel to filter by value (counts shown); 'Rows per page' 10 / 25 / 50; pagination.", "Click a row to open the Change detail page."]],
@@ -473,7 +473,7 @@ body.push(table(["Step", "Approver role", "Due after reaching the step"], [
 body.push(H1n("Appendix D — Revision history"));
 body.push(table(["Version", "Date", "Change"], [
   ["1.0", "27 Oct 2026", "First issue: glossary, business rules, and every KPI card and visual of the five dashboards and the Change detail page."],
-  ["1.1", "27 Oct 2026", "Change Impact — Net impact by project: hover card per project (section 5.2). Revision history added."],
+  ["1.1", "27 Oct 2026", "Change Impact — Net impact by project: hover card per project showing additional cost, savings and net (section 5.2). Revision history added."],
 ], [1100, 1700, 6838]));
 body.push(P("Keep this table up to date: add a row each time a dashboard, KPI card, visual, rule or glossary term changes.", { spacing: { before: 120, after: 120 } }));
 
