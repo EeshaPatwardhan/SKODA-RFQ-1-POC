@@ -76,7 +76,7 @@ body.push(table(["Item", "Detail"], [
   ["Application", "SKODA AIS prototype V8 (SAVWIPL_prototype_V8.html) — Technical Change → Dashboards"],
   ["Dashboards covered", "Overview · Change Impact · Approval Workflow · Implementation · Change Register · Change detail"],
   ["Data status", "**Illustrative prototype data.** 65 changes: 5 from the live Technical Change workflow, 60 generated register records. Reference (data) date: 29 July 2026."],
-  ["Version", "1.1 — 27 October 2026 (revision history in Appendix D)"],
+  ["Version", "1.3 — 28 October 2026 (revision history in Appendix D)"],
   ["Audience", "Management, product owners, reviewers and anyone who needs to explain a figure on these pages"],
 ], [2400, 7238]));
 body.push(gap());
@@ -170,6 +170,7 @@ const gl = [
   ["Owner", "The person responsible for the current step: the stage owner for open changes, the approver for pending ones, the buyer for approved and implemented ones, the AEKO coordinator for rework."],
   ["Part / part number", "The component the change applies to, with its platform part number."],
   ["Piece price", "Price of one part. The dashboards show the **change of the piece price** in % against today's price (+ price up, − price down)."],
+  ["Phase (lifecycle)", "One of the four phases of a change shown on the Change detail page: Preparation (workflow stages Intake to Impact), Approval (seven approval steps), Implementation and Closed. An approved change stays in Implementation until its implementation tasks are done."],
   ["Planned implementation date", "The date the change is planned to be in effect (price, BOM, purchase order and drawing updated)."],
   ["Pre-SOP window", "The 60 days before a project's SOP. A change planned inside this window, or after SOP, is flagged because tooling, supplier readiness and validation may not be ready."],
   ["Priced / not yet priced", "A change is priced when it has a MOD sheet with new prices. Open changes before the MOD stage are not priced and carry no rupee figure."],
@@ -224,7 +225,7 @@ body.push(table(["Rule", "Definition"], [
 body.push(gap());
 body.push(H2("4.3  Overdue rules"));
 body.push(P("A change is overdue when the due date of its current step is earlier than the data date. If a step has no due date, the change is never marked overdue. Closed changes (Implemented, Rejected) are never overdue."));
-body.push(table(["Where the change is", "Due date", "Target"], [
+body.push(table(["Where the change is", ["Four lifecycle phases as chevrons: **Preparation** (Intake to Impact), **Approval** (seven steps), **Implementation** and **Closed**. Each shows done (green), current (amber), late (red, for an approved change past its planned date), not reached, or not applicable (rejected changes).", "A second row shows the detail of the phase: the seven preparation stages while the change is Open, otherwise the seven approval steps.", "A sentence states where the change is, for example 'Approved on 18 Jul 26, now in Implementation — planned 28 Jul 26, 1 day late · A. Krishnan (Buyer)', with the due or planned date and days overdue."], "Status, approval step, implementation status and dates of the change (sections 4.1, 4.3 and 4.4)."], [
   ["Open — Intake", "Date it entered the stage + 5 days", "5 days"],
   ["Open — AI Extraction", "+ 3 days", "3 days"],
   ["Open — Evaluation", "+ 10 days", "10 days"],
@@ -321,7 +322,7 @@ body.push(table(["Insight", "Appears when", "Content"], [
 body.push(H2p("5.2  Change Impact"));
 body.push(P("**Purpose.** The financial view: what the approved and implemented changes save or cost per year, what is already in effect, what is still forecast, and where the value sits (project, status, type, individual change)."));
 body.push(H3("Layout, top to bottom"));
-body.push(bullet("Header and filter bar; six KPI cards."));
+body.push(bullet("Header and filter bar; five KPI cards in one row."));
 body.push(bullet("Row: Financial impact overview (waterfall) · Net impact by project."));
 body.push(bullet("Row: Financial Impact by Status · Impact by change type."));
 body.push(bullet("Largest financial impacts (table, five rows per page)."));
@@ -332,7 +333,6 @@ body.push(table(["Card", "What it shows", "How it is calculated"], [
   ["Additional cost", "Yearly recurring cost of approved and implemented changes that raise the piece price.", "Sum of the annualised impacts of approved + implemented changes that raise the piece price."],
   ["Net impact", "Savings − additional cost, with + for a net saving.", "Savings − additional cost (same scope, same basis, ₹)."],
   ["In effect", "Net run-rate of implemented changes. Second line: number of implemented changes.", "Net of the implemented part only. Realised-to-date savings are not available (no purchase-order actuals)."],
-  ["One-time tooling", "Tooling-modification cost of approved and implemented changes.", "Sum of quoted one-time tooling; shown apart because it is not recurring and not part of the net."],
   ["Forecast, not approved", "Net annualised effect of open, pending and returned changes that already have a priced MOD sheet. Second line: priced versus not yet priced counts.", "Net of Open (priced), Pending approval and Returned for rework changes. Not part of any headline."],
 ], [1900, 4000, 3738]));
 body.push(H3("Visuals"));
@@ -348,7 +348,7 @@ body.push(table(["Visual", "Type", "What it shows and how it is built", "Interac
 body.push(H2p("5.3  Approval Workflow"));
 body.push(P("**Purpose.** Where changes wait for a decision, how long they have waited, which step is the bottleneck and what happened to changes that left the chain without approval."));
 body.push(H3("Layout, top to bottom"));
-body.push(bullet("Header and filter bar; six KPI cards."));
+body.push(bullet("Header and filter bar; five KPI cards in one row."));
 body.push(bullet("Approval workflow status (seven steps and a summary row)."));
 body.push(bullet("Row: Rejected and returned for rework · Decisions waiting (same number of rows in each)."));
 body.push(H3("KPI cards"));
@@ -357,13 +357,12 @@ body.push(table(["Card", "What it shows", "How it is calculated"], [
   ["Past 3-day target", "How many of them are overdue, and the % of those waiting.", "Waiting longer than 3 days at the current step."],
   ["Average wait", "Average days waiting so far; second line gives the longest wait.", "Mean of days since each pending change reached its step. Completed decisions are not timed."],
   ["Bottleneck step", "Name of the step; second line: how many wait there and how many are overdue.", "Step with the most overdue changes, then the longest average wait; needs at least two waiting."],
-  ["Approved", "Changes that passed all steps.", "Status Approved + Implemented."],
   ["Rejected / returned", "Changes that left the chain without approval; second line gives the split.", "Status Rejected + Returned for rework."],
 ], [1900, 4000, 3738]));
 body.push(H3("Visuals"));
 body.push(table(["Visual", "Type", "What it shows and how it is built", "Interaction"], [
-  ["Approval workflow status — steps", "Seven step circles on a connector line, one tile per step", ["Each circle has an icon and the step name (Engineering, Quality, SRM, Finance, Commodity, Management, Final confirmation).", "The tile shows the number of changes waiting at the step now (each change at exactly one step, so the tiles add up to the Waiting for decision card) and either 'N overdue' (red) or 'On time' (green). A step with nothing waiting shows 0.", "The bottleneck step has an amber circle, ring and tile."], ["Hover or focus a step for a detail card: waiting now, average wait, longest wait and overdue; average against the 3-day target; share of the queue; how many changes passed the step; escalations; and up to four waiting changes with owner and days.", "The card follows the page filters."]],
-  ["Approval workflow status — summary row", "Four figures and a card", "Waiting for a decision (with the note that each change is counted once); Approved through all steps; Rejected; Returned for rework; and an amber Bottleneck card naming the step, how many wait and how many are past target.", "Click the Bottleneck card to scroll to Decisions waiting (not clickable when there is no bottleneck)."],
+  ["Approval workflow status — steps", "Seven step circles on a connector line, one tile per step", ["Each circle has an icon and the step name: Engineering (gear), Quality (shield), SRM (people), Finance (database), Commodity (cart), Management (bar chart), Final confirmation (tick). Steps are joined by a thin line with a small chevron.", "The tile shows the number of changes waiting at the step now (each change at exactly one step, so the tiles add up to the Waiting for decision card) and either 'N overdue' (red) or 'On time' (green). A step with nothing waiting shows 0.", "The bottleneck step has an amber circle, ring and tile."], ["Hover or focus a step for a detail card: waiting now, longest wait, overdue and passed; the longest wait against the 3-day target; share of the queue; how many changes passed the step; escalations; and up to four waiting changes with owner and days.", "The card follows the page filters."]],
+  ["Approval workflow status — summary row", "Four figures and a card", "Waiting for a decision (with the note that each change is counted once); Approved through all steps; Rejected; Returned for rework; and an amber Bottleneck card naming the step, how many wait and how many are past target.", "None. The Bottleneck card is a plain note, not a link."],
   ["Rejected and returned for rework", "Table", "Changes that left the chain without approval: Change (part, ID, project), Outcome, Stopped at (step), Since, Owner. Count badge in the title.", "Click a row to open the Change detail page."],
   ["Decisions waiting", "Table", "Changes waiting for approval, longest wait first (overdue first). Columns: Change, Step, Approver, Waiting (a pill: red with 'N over' when late, grey 'on time'), Impact / yr. Shows as many rows as the Rejected panel and a 'View all N' button.", "Click a row to open the Change detail page. 'View all' opens the Change Register filtered to Pending approval."],
 ], [1800, 1500, 3838, 2500]));
@@ -372,7 +371,7 @@ body.push(table(["Visual", "Type", "What it shows and how it is built", "Interac
 body.push(H2p("5.4  Implementation"));
 body.push(P("**Purpose.** Planned implementation dates, which changes are late or at risk, and how the plan sits against each project's SOP."));
 body.push(H3("Layout, top to bottom"));
-body.push(bullet("Header and filter bar; six KPI cards."));
+body.push(bullet("Header and filter bar; five KPI cards in one row."));
 body.push(bullet("Implementation timeline (Gantt-style, 12 months)."));
 body.push(bullet("Implementation register (table, five rows per page)."));
 body.push(H3("KPI cards"));
@@ -382,7 +381,6 @@ body.push(table(["Card", "What it shows", "How it is calculated"], [
   ["At risk", "Changes likely to miss their date or land too close to SOP.", "Rule in section 4.4 (45 days and not approved; pre-SOP window; tooling due within 60 days)."],
   ["Due in 30 days", "Changes due soon.", "Not delayed, planned date within the next 30 days."],
   ["Implemented", "Closed changes; second line: how many finished after the planned date.", "Status = Implemented."],
-  ["Tooling not released", "Changes with a one-time tooling modification still pending.", "Active changes with the tooling dependency (section 4.7)."],
 ], [1900, 4000, 3738]));
 body.push(H3("Visuals"));
 body.push(table(["Visual", "Type", "What it shows and how it is built", "Interaction"], [
@@ -474,6 +472,8 @@ body.push(H1n("Appendix D — Revision history"));
 body.push(table(["Version", "Date", "Change"], [
   ["1.0", "27 Oct 2026", "First issue: glossary, business rules, and every KPI card and visual of the five dashboards and the Change detail page."],
   ["1.1", "27 Oct 2026", "Change Impact — Net impact by project: hover card per project showing additional cost, savings and net (section 5.2). Revision history added."],
+  ["1.2", "28 Oct 2026", "Change detail — 'Where the change is' now shows the full lifecycle (Preparation, Approval, Implementation, Closed) with a detail row; approved changes are shown in Implementation, so a delayed approved change no longer looks complete. Glossary: Phase (lifecycle)."],
+  ["1.3", "28 Oct 2026", "Change Impact, Approval Workflow and Implementation now show five KPI cards in one row (dropped: One-time tooling, Approved, Tooling not released; sections 5.2–5.4). Approval workflow status redrawn smaller with the reference icons and connectors, no average wait, and a Bottleneck note that is no longer a link (section 5.3)."],
 ], [1100, 1700, 6838]));
 body.push(P("Keep this table up to date: add a row each time a dashboard, KPI card, visual, rule or glossary term changes.", { spacing: { before: 120, after: 120 } }));
 
