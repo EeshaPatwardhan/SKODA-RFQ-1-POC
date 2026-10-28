@@ -1795,8 +1795,14 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .pd-t .n{min-width:0;} .pd-t .n b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink);font-size:12.5px;font-weight:600;line-height:1.3;} .pd-t .n small{display:block;font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;} .pd-t .n small.bad{color:var(--red);} .pd-t .n small.good{color:var(--ok);}
 .pd-t .k{color:var(--muted);font-weight:600;} .pd-t .v{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600;} .pd-t .v.bad{color:var(--red);font-weight:700;} .pd-t .v.good{color:var(--ok);font-weight:700;} .pd-t .s{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600;}
 .pd-t .bar{height:14px;border-radius:4px;background:var(--line2);overflow:hidden;} .pd-t .bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,color-mix(in srgb,var(--brand) 55%,var(--panel)),var(--brand));}
-.pd-cat .h,.pd-cat .r{grid-template-columns:minmax(86px,1.1fr) minmax(40px,1fr) 66px 36px;}
-.pd-top .h,.pd-top .r{grid-template-columns:16px minmax(70px,1.15fr) minmax(36px,.8fr) 60px 42px;}
+.pd-cat .h,.pd-cat .r{grid-template-columns:minmax(88px,.8fr) minmax(110px,1.7fr) 86px 38px;}
+.pd-t .d12{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap;} .pd-t .d12.bad{color:var(--red);} .pd-t .d12.good{color:var(--ok);}
+.pd-t .pd-chh small{display:block;font-weight:500;color:var(--muted);font-size:10px;margin-top:1px;white-space:nowrap;}
+.pd-t .bv{display:flex;flex-direction:column;gap:6px;min-width:0;} .pd-t .bv b{font-size:12.5px;font-weight:650;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1;}
+.pd-t .bt{display:block;height:5px;border-radius:3px;background:var(--line2);overflow:hidden;} .pd-t .bt i{display:block;height:100%;border-radius:3px;background:var(--brand);}
+.pd-cat .r,.pd-top .r{min-height:52px;}
+.pd-per{display:inline-flex;} .pd-per select{appearance:none;-webkit-appearance:none;font:inherit;font-size:12px;font-weight:600;color:var(--ink);background:var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b6b65' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center/12px;border:1px solid var(--line);border-radius:8px;padding:6px 32px 6px 12px!important;min-width:136px;text-overflow:ellipsis;cursor:pointer;outline:0;} .pd-per select:hover{border-color:var(--brand);} .pd-per select:focus-visible{box-shadow:0 0 0 2px color-mix(in srgb,var(--brand) 25%,transparent);border-color:var(--brand);}
+.pd-top .h,.pd-top .r{grid-template-columns:16px minmax(100px,1.1fr) minmax(90px,1.3fr) 86px 44px;}
 .pd-inc .h,.pd-inc .r{grid-template-columns:16px minmax(80px,1.4fr) 64px 56px 52px;}
 .pd-tgt .h,.pd-tgt .r{grid-template-columns:16px minmax(70px,1.3fr) 50px 52px 54px 56px;}
 .pd-dec .h,.pd-dec .r{grid-template-columns:16px minmax(80px,1.15fr) minmax(64px,1fr) minmax(52px,.8fr) 84px;} .pd-dec .it,.pd-dec .st{font-size:12px;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
@@ -1817,7 +1823,7 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 @container (max-width:520px){
   .pd-tgt .h,.pd-tgt .r{grid-template-columns:14px minmax(0,1fr) 44px 46px 50px;} .pd-tgt .h > :nth-child(6),.pd-tgt .r > :nth-child(6){display:none;}
   .pd-dec .h,.pd-dec .r{grid-template-columns:14px minmax(0,1fr) minmax(0,1fr) 78px;} .pd-dec .h > :nth-child(4),.pd-dec .r > :nth-child(4){display:none;}
-  .pd-inc .h,.pd-inc .r{grid-template-columns:14px minmax(0,1fr) 56px 50px 48px;} .pd-top .h,.pd-top .r{grid-template-columns:14px minmax(0,1fr) 30px 56px 38px;}
+  .pd-inc .h,.pd-inc .r{grid-template-columns:14px minmax(0,1fr) 56px 50px 48px;} .pd-top .h,.pd-top .r{grid-template-columns:14px minmax(0,1fr) 70px 70px 38px;}
 }
 
 /* supplier concentration: no stray focus rectangle when a segment or a legend entry is clicked (keyboard focus stays visible) */
@@ -1908,11 +1914,11 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .pd-t .n .nt b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink);font-size:12.5px;font-weight:600;line-height:1.3;}
 .pd-t .n .nt small{display:block;font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
 .pd-t .n .nt small.bad{color:var(--red);} .pd-t .n .nt small.good{color:var(--ok);}
-.pd-top .h,.pd-top .r{grid-template-columns:16px minmax(110px,1.4fr) minmax(30px,.6fr) 58px 42px;}
+.pd-top .h,.pd-top .r{grid-template-columns:16px minmax(100px,1.1fr) minmax(90px,1.3fr) 86px 44px;}
 .pd-inc .h,.pd-inc .r{grid-template-columns:16px minmax(110px,1.5fr) 58px 52px 50px;}
 .pd-tgt .h,.pd-tgt .r{grid-template-columns:16px minmax(110px,1.4fr) 46px 48px 52px 54px;}
 @container (max-width:520px){
-  .pd-top .h,.pd-top .r{grid-template-columns:14px minmax(0,1fr) 30px 56px 38px;} .pd-inc .h,.pd-inc .r{grid-template-columns:14px minmax(0,1fr) 54px 48px 46px;} .pd-tgt .h,.pd-tgt .r{grid-template-columns:14px minmax(0,1fr) 44px 46px 50px;}
+  .pd-top .h,.pd-top .r{grid-template-columns:14px minmax(0,1fr) 70px 70px 38px;} .pd-inc .h,.pd-inc .r{grid-template-columns:14px minmax(0,1fr) 54px 48px 46px;} .pd-tgt .h,.pd-tgt .r{grid-template-columns:14px minmax(0,1fr) 44px 46px 50px;}
   .pd-t .n.hasth .va-part{display:none;}
 }
 
@@ -11843,6 +11849,9 @@ rollup();
 const P=PocCore, C=PocCharts, U=PocUI, esc=C.esc, nf=C.nf, V=V8Charts, A=()=>window.__cbdApi;
 const NH=P.NH, TODAY_S=(typeof TODAY!=="undefined"?TODAY:"2026-07-29");
 const PF={project:P.PROGS[0].code,category:"",supplier:""};
+/* comparison period of the two cost panels on the overview. Prices are monthly, so a week or a day is the latest month's move pro-rated */
+const PERIODS=[["12","Last 12 months","12 mo ago",12],["6","Last 6 months","6 mo ago",6],["3","Last 3 months","3 mo ago",3],["1","Last month","1 mo ago",1],["w","Last week","1 week ago",7/30],["d","Last day","yesterday",1/30]];
+let PER="12";
 const pct=(a,b)=>b?(a/b-1)*100:0, sum=(a,f)=>a.reduce((s,x)=>s+f(x),0);
 const sgn=(v,d)=>U.sgn(v,d==null?1:d), cr=v=>U.cr(v), inr=(v,d)=>U.inr(v,d);
 const chgChip=v=>`<span class="chip ${Math.abs(v)<0.05?"chip-gray":v>0?"chip-red":"chip-green"}"><span class="chip-dot"></span>${sgn(v)}</span>`;   // cost up = red
@@ -11909,18 +11918,25 @@ const ptitle=(t,tip)=>`${t} ${info(tip)}`;
 const more=(act,label)=>`<div class="pd-more"><a href="#" data-act="${act}">${label}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>`;
 const empty=t=>`<div class="mut small" style="padding:8px 2px">${t}</div>`;
 const dim=(list)=>({np:P.projCount(list)});
+/* change over the selected period: ▲ red when cost rose, ▼ green when it fell */
+const per=()=>PERIODS.find(x=>x[0]===PER)||PERIODS[0];
+const priceAgo=p=>{ const m=per()[3]; return m>=1?p.h[NH-1-m]:p.cur-(p.cur-p.h[NH-2])*m; };
+const dchg=v=>{ const dec=per()[3]>=1?1:2, t=Math.abs(v)<Math.pow(10,-dec)/2?"":v>0?"bad":"good"; return `<span class="d12 ${t}" title="Change in cost over the ${per()[1].toLowerCase()}">${t?(v>0?"▲":"▼")+" ":""}${Math.abs(v).toFixed(dec)}%</span>`; };
+const chgHead=()=>`<span class="ra pd-chh">Cost change<small>vs ${per()[2]}</small></span>`;
+const perSel=()=>`<label class="pd-per"><select data-pper aria-label="Compare cost with">${PERIODS.map(x=>`<option value="${x[0]}"${x[0]===PER?" selected":""}>${x[1]}</option>`).join("")}</select></label>`;
+const PERTIP=" Use the drop-down to compare with 12, 6, 3 or 1 month ago, a week ago or yesterday (prices are monthly, so a week or a day is the latest month's move pro-rated).";
 
 /* 1 · Cost per vehicle by vertical. The Vertical filter does not apply here — it would leave one row. */
 function categoryPanel(listNoCat){
-  const rows=group(listNoCat,p=>p.category).sort((a,b)=>b.cur-a.cur), mx=Math.max(1,...rows.map(r=>r.cur));
-  const body=rows.length?`<div class="pd-t pd-cat"><div class="h"><span>Vertical</span><span></span><span class="ra">₹ per vehicle</span><span class="ra">Share</span></div>${rows.map(r=>`<button type="button" class="r ${PF.category===r.name?"on":""}" data-act="pset:category=${esc(r.name)}" title="Filter the other panels to ${esc(r.name)}"><span class="n"><b>${esc(r.name)}</b><small class="${r.chg12>0?"bad":"good"}">12 mo ${sgn(r.chg12)}</small></span><span class="bar"><i style="width:${(r.cur/mx*100).toFixed(1)}%"></i></span><span class="v">${nf(Math.round(r.cur),0)}</span><span class="s">${r.share.toFixed(0)}%</span></button>`).join("")}</div>`:empty("No parts in this selection.");
-  return U.panel(ptitle("Cost per vehicle by vertical","Cost per vehicle of the tracked parts, by vertical (piece price × quantity per vehicle). The small figure is the change in that vertical's cost over 12 months. The Vertical filter does not narrow this panel; click a row to filter the others."),body);
+  const np=P.projCount(listNoCat), rows=group(listNoCat,p=>p.category).map(r=>Object.assign(r,{chg:pct(r.cur,P.cost(r.list,priceAgo,np))})).sort((a,b)=>b.cur-a.cur), mx=Math.max(1,...rows.map(r=>r.cur));
+  const body=rows.length?`<div class="pd-t pd-cat"><div class="h"><span>Vertical</span><span>₹ per vehicle</span>${chgHead()}<span class="ra">Share</span></div>${rows.map(r=>`<button type="button" class="r ${PF.category===r.name?"on":""}" data-act="pset:category=${esc(r.name)}" title="Filter the other panels to ${esc(r.name)}"><span class="n"><b>${esc(r.name)}</b></span><span class="bv"><b>${nf(Math.round(r.cur),0)}</b><span class="bt"><i style="width:${(r.cur/mx*100).toFixed(1)}%"></i></span></span>${dchg(r.chg)}<span class="s">${r.share.toFixed(0)}%</span></button>`).join("")}</div>`:empty("No parts in this selection.");
+  return U.panel(ptitle("Cost per vehicle by vertical","Cost per vehicle of the tracked parts, by vertical (piece price × quantity per vehicle). Cost change is the change in that vertical's cost over the selected period."+PERTIP+" The Vertical filter does not narrow this panel; click a row to filter the others."),body,{right:perSel()});
 }
 /* 2 · Top parts by cost per vehicle */
 function topCostPanel(list){
-  const np=P.projCount(list), tot=P.cost(list,p=>p.cur,np)||1, rows=list.map(p=>({p,c:p.qty*p.cur/np})).sort((a,b)=>b.c-a.c).slice(0,5), mx=Math.max(1,...rows.map(r=>r.c));
-  const body=rows.length?`<div class="pd-t pd-top"><div class="h"><span>#</span><span>Part</span><span></span><span class="ra">₹ per vehicle</span><span class="ra">Share</span></div>${rows.map((r,i)=>`<div class="r" data-act="ppart:${esc(r.p.id)}" role="button" tabindex="0" title="Open part details"><span class="k">${i+1}</span><span class="n hasth">${art(r.p)}<span class="nt"><b>${esc(r.p.name)}</b><small>${esc(r.p.id)}</small></span></span><span class="bar"><i style="width:${(r.c/mx*100).toFixed(1)}%"></i></span><span class="v">${nf(Math.round(r.c),0)}</span><span class="s">${(r.c/tot*100).toFixed(1)}%</span></div>`).join("")}</div>`:empty("No parts in this selection.");
-  return U.panel(ptitle("Top parts by cost per vehicle","The five parts that add most to the cost per vehicle: piece price × quantity fitted per vehicle. Share = part's cost ÷ cost per vehicle of the selection."),body);
+  const np=P.projCount(list), tot=P.cost(list,p=>p.cur,np)||1, rows=list.map(p=>({p,c:p.qty*p.cur/np,chg:pct(p.cur,priceAgo(p))})).sort((a,b)=>b.c-a.c).slice(0,5), mx=Math.max(1,...rows.map(r=>r.c));
+  const body=rows.length?`<div class="pd-t pd-top"><div class="h"><span>#</span><span>Part</span><span>₹ per vehicle</span>${chgHead()}<span class="ra">Share</span></div>${rows.map((r,i)=>`<div class="r" data-act="ppart:${esc(r.p.id)}" role="button" tabindex="0" title="Open part details"><span class="k">${i+1}</span><span class="n hasth">${art(r.p)}<span class="nt"><b>${esc(r.p.name)}</b><small>${esc(r.p.id)}</small></span></span><span class="bv"><b>${nf(Math.round(r.c),0)}</b><span class="bt"><i style="width:${(r.c/mx*100).toFixed(1)}%"></i></span></span>${dchg(r.chg)}<span class="s">${(r.c/tot*100).toFixed(1)}%</span></div>`).join("")}</div>`:empty("No parts in this selection.");
+  return U.panel(ptitle("Top parts by cost per vehicle","The five parts that add most to the cost per vehicle: piece price × quantity fitted per vehicle. Share = part's cost ÷ cost per vehicle of the selection. Cost change is that part's price change over the selected period."+PERTIP),body,{right:perSel()});
 }
 /* 3 · Supplier spend concentration */
 function supplierPanel(list,cur){
@@ -11984,6 +12000,7 @@ function build(){
   const gw=add(`<div class="pd-gw"><div class="pd-grid"></div></div>`), g=gw.querySelector(".pd-grid");
   [categoryPanel(listNoCat),topCostPanel(list),supplierPanel(list,cur),increasePanel(list),targetPanel(priced),decisionsPanel()].forEach((h,i)=>{ const e=U.el(h); g.appendChild(e); if(i===0) paginate(e,5); });
   w.appendChild(U.el(`<div class="v8-foot">Cost per vehicle of the tracked parts (piece price × quantity per vehicle) — the same basis as the <a href="#" data-act="go:fc-outlook">Forecast Dashboard</a>. Part prices are illustrative; cost vs target covers the ${Object.keys(DATA.priceVersions).length} parts with a cost breakdown.</div>`));
+  w.addEventListener("change",e=>{ const t=e.target; if(t&&t.matches&&t.matches("select[data-pper]")){ PER=t.value; const c=document.getElementById("content"), y=c?c.scrollTop:0; Router.render(); if(c) c.scrollTop=y; } });
   U.wire(w); return w;
 }
 
