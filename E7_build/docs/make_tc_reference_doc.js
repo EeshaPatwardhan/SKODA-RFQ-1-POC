@@ -76,7 +76,7 @@ body.push(table(["Item", "Detail"], [
   ["Application", "SKODA AIS prototype V8 (SAVWIPL_prototype_V8.html) — Technical Change → Dashboards"],
   ["Dashboards covered", "Overview · Change Impact · Approval Workflow · Implementation · Change Register · Change detail"],
   ["Data status", "**Illustrative prototype data.** 65 changes: 5 from the live Technical Change workflow, 60 generated register records. Reference (data) date: 29 July 2026."],
-  ["Version", "1.3 — 28 October 2026 (revision history in Appendix D)"],
+  ["Version", "1.6 — 28 October 2026 (revision history in Appendix D)"],
   ["Audience", "Management, product owners, reviewers and anyone who needs to explain a figure on these pages"],
 ], [2400, 7238]));
 body.push(gap());
@@ -85,7 +85,7 @@ body.push(note("**How to use this document.** Section 2 explains where the numbe
 /* ---- contents ---- */
 body.push(H1("Contents"));
 [
-  ["1", "Purpose and scope"], ["2", "Data foundation and filters"], ["3", "Glossary"], ["4", "Business rules and thresholds"],
+  ["1", "Purpose and scope"], ["2", "Data foundation, filters and navigation"], ["3", "Glossary"], ["4", "Business rules and thresholds"],
   ["5", "Dashboard reference"], ["5.1", "Overview"], ["5.2", "Change Impact"], ["5.3", "Approval Workflow"], ["5.4", "Implementation"],
   ["5.5", "Change Register"], ["5.6", "Change detail page"], ["6", "Limitations and what is not available"],
   ["A", "Appendix A — Worked example of an annualised impact"], ["B", "Appendix B — Colours and status legend"], ["C", "Appendix C — Approval steps and approver roles"], ["D", "Appendix D — Revision history"],
@@ -102,7 +102,7 @@ body.push(P("This document describes the dashboards as built. It covers the five
 body.push(note("Every dashboard page carries the chip **Illustrative prototype data** and a **Data as of 29 Jul 2026** label. Figures are not actual SKODA results."));
 
 /* ---- 2 data ---- */
-body.push(H1("2  Data foundation and filters"));
+body.push(H1("2  Data foundation, filters and navigation"));
 body.push(H2("2.1  One register feeds every page"));
 body.push(P("All six pages read the same change register, so every count, rupee figure and chart reconciles to the same rows. The register holds 65 changes:"));
 body.push(table(["Source", "Count", "What it is"], [
@@ -135,6 +135,10 @@ body.push(table(["Filter", "Options", "Effect"], [
 ], [1700, 3700, 4238]));
 body.push(P("Every KPI card, chart, table and insight on the page follows the filters. When a selection leaves nothing to show, the panel shows an empty-state message instead of a chart.", { spacing: { before: 120, after: 120 } }));
 
+body.push(H2("2.4  Navigation: back link and breadcrumb"));
+body.push(P("Every page with a page header carries one subtle link above the breadcrumb: **‹ Back to <previous page>**. It is the same on all dashboards (Technical Change, Procurement, Forecast, SRM). It returns to the page you came from, whether you arrived by a click on a row, a KPI card or the menu, and each click steps one page further back. When the previous page belongs to another module the link names the module (for example 'Back to Technical Change › Overview'). The Home page and the first page of a session have no back link."));
+body.push(P("On the Change detail page the breadcrumb also shows the path, for example Technical Change › Approval Workflow › AEKO-2026-0169 — Wheel Nut; its middle part is a link to the page you came from."));
+
 /* ---- 3 glossary ---- */
 body.push(H1("3  Glossary"));
 body.push(P("Terms are listed alphabetically. Terms in **bold** inside a definition have their own entry."));
@@ -155,7 +159,7 @@ const gl = [
   ["Delayed", "A change not yet implemented whose planned implementation date is earlier than the data date."],
   ["Dependency (open)", "An unresolved item that can hold a change back: supplier offer outstanding, validation not complete, or tooling modification not yet released."],
   ["Escalation", "A live approval flow that reached the escalation rule of the approval engine (four reminders, or an overdue milestone). Shown in the step hover card when present."],
-  ["Forecast (not approved)", "Net annualised effect of changes that are Open (with a priced MOD sheet), Pending approval or Returned for rework. Kept apart from the headline because nothing is approved yet."],
+  ["Forecast (not approved)", "Net annualised effect of changes that are Open (with a priced MOD sheet), Pending approval or Returned for rework. Kept apart from the headline because nothing is approved yet. Open changes that are still too early to have a price are not counted."],
   ["High-impact change", "An active change ranked high by the **priority score** (production risk plus financial materiality)."],
   ["Illustrative prototype data", "Generated data used to demonstrate the dashboards. Not SKODA actuals."],
   ["Implemented", "Implementation tasks are complete and the change is closed. Its saving or cost is **in effect**."],
@@ -333,7 +337,7 @@ body.push(table(["Card", "What it shows", "How it is calculated"], [
   ["Additional cost", "Yearly recurring cost of approved and implemented changes that raise the piece price.", "Sum of the annualised impacts of approved + implemented changes that raise the piece price."],
   ["Net impact", "Savings − additional cost, with + for a net saving.", "Savings − additional cost (same scope, same basis, ₹)."],
   ["In effect", "Net run-rate of implemented changes. Second line: number of implemented changes.", "Net of the implemented part only. Realised-to-date savings are not available (no purchase-order actuals)."],
-  ["Forecast, not approved", "Net annualised effect of open, pending and returned changes that already have a priced MOD sheet. Second line: priced versus not yet priced counts.", "Net of Open (priced), Pending approval and Returned for rework changes. Not part of any headline."],
+  ["Open changes, forecasted", "Forecast of the changes that are not approved yet: the net yearly saving (+) or cost (−) of the open, pending and returned changes that already have a price. Second line: 'N priced · M not yet priced' — N changes counted, M still without a price (not counted).", "Net of Open (priced), Pending approval and Returned for rework changes. Not part of any headline."],
 ], [1900, 4000, 3738]));
 body.push(H3("Visuals"));
 body.push(table(["Visual", "Type", "What it shows and how it is built", "Interaction"], [
@@ -406,7 +410,7 @@ body.push(H2p("5.6  Change detail page"));
 body.push(P("**Purpose.** Everything about one change on one page. It opens from any table row, timeline diamond or insight pop-up."));
 body.push(H3("Navigation"));
 body.push(bullet("The breadcrumb shows the path you came by, for example **Technical Change › Approval Workflow › AEKO-2026-0169 — Wheel Nut**. The middle part is a link back to that page."));
-body.push(bullet("The 'Back to …' button names the page you came from (Overview, Change Impact, Approval Workflow, Implementation or Change Register)."));
+body.push(bullet("The subtle **Back to …** link above the breadcrumb returns to the page you came from (see section 2.4)."));
 body.push(bullet("For one of the five live changes the page offers 'Open in the change workflow'; for generated records it states that there is no workflow behind them."));
 body.push(H3("Elements"));
 body.push(table(["Element", "What it shows", "How it is calculated"], [
@@ -473,6 +477,10 @@ body.push(table(["Version", "Date", "Change"], [
   ["1.0", "27 Oct 2026", "First issue: glossary, business rules, and every KPI card and visual of the five dashboards and the Change detail page."],
   ["1.1", "27 Oct 2026", "Change Impact — Net impact by project: hover card per project showing additional cost, savings and net (section 5.2). Revision history added."],
   ["1.2", "28 Oct 2026", "Change detail — 'Where the change is' now shows the full lifecycle (Preparation, Approval, Implementation, Closed) with a detail row; approved changes are shown in Implementation, so a delayed approved change no longer looks complete. Glossary: Phase (lifecycle)."],
+  ["1.3", "28 Oct 2026", "Navigation: one subtle back link ('Back to …') on every page header, replacing the separate back buttons of the Procurement detail pages and the Change detail page (section 2.4)."],
+  ["1.4", "28 Oct 2026", "Change Impact — Forecast, not approved KPI card: clearer second line ('per year if all N priced changes are approved · M unpriced') and tooltip."],
+  ["1.5", "28 Oct 2026", "Change Impact — the word 'Forecast' replaced by 'Not yet approved' (KPI card, Financial Impact by Status row, glossary and rules); card second line simplified to 'per year, from N changes not approved yet'."],
+  ["1.6", "28 Oct 2026", "Change Impact — wording reverted to 'Forecast'; the KPI card is now labelled 'Open changes, forecasted' with the second line 'N priced · M not yet priced'."],
   ["1.3", "28 Oct 2026", "Change Impact, Approval Workflow and Implementation now show five KPI cards in one row (dropped: One-time tooling, Approved, Tooling not released; sections 5.2–5.4). Approval workflow status redrawn smaller with the reference icons and connectors, no average wait, and a Bottleneck note that is no longer a link (section 5.3)."],
 ], [1100, 1700, 6838]));
 body.push(P("Keep this table up to date: add a row each time a dashboard, KPI card, visual, rule or glossary term changes.", { spacing: { before: 120, after: 120 } }));

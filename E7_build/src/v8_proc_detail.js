@@ -49,7 +49,7 @@ function frame(title,barHtml,onChange){
   const w=document.createElement("div"); w.className="v8-page v8-board";
   const hd=U.header(title);
   const meta=document.createElement("div"); meta.className="pd-meta";
-  meta.innerHTML=`<span>Prices as of <b>${esc(P.monthLabel(P.MONTHS[NH-1]))}</b> · workflows as of <b>${esc(fmtDate(TODAY_S))}</b></span><span class="pd-ill">Illustrative data — synthetic scenario</span><button type="button" class="btn btn-sm" data-act="pdback">Back to Procurement Overview</button>`;
+  meta.innerHTML=`<span>Prices as of <b>${esc(P.monthLabel(P.MONTHS[NH-1]))}</b> · workflows as of <b>${esc(fmtDate(TODAY_S))}</b></span><span class="pd-ill">Illustrative data — synthetic scenario</span>`;
   hd.appendChild(meta); w.appendChild(hd);
   if(barHtml){ const bar=document.createElement("div"); bar.className="pd-fbar"; const pg=progOf(PX.PF.project);
     bar.innerHTML=(pg&&window.V8Art?`<div class="pd-carbox solo">${window.V8Art.car(pg.code)}</div>`:"")+barHtml;
