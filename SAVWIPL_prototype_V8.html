@@ -12157,7 +12157,8 @@ function costBreakdownPanel(p){
     :"The breakdown is calculated from net weight × commodity price, import content × FX and the cost lines entered for this part. The piece price is what the supplier charges today. The difference is price that no cost line explains, such as supplier margin and overheads, or cost lines that are not entered yet.";
   return U.panel(ptitle("Cost breakdown (current price)","Components of the cost breakdown: raw material (weights × commodity price), import content (× FX) and the cost lines entered for this part. It is a calculation, not the price: the supplier's piece price is shown below for comparison."),
     `<div class="pd-conc2 pd-cb"><div class="dn">${donut}</div><div class="lg">${slices.map(s=>`<div class="o"><i style="background:${s.color}"></i><span title="${esc(s.label)}${s.inc&&s.inc.length?" — includes "+esc(s.inc.join(", ")):""}">${esc(s.label)}${s.inc&&s.inc.length?` <small class="pd-inc">incl. ${s.inc.length} sub-line${s.inc.length>1?"s":""}</small>`:""}</span><em>${inr(s.value)}</em><b>${Math.round(s.value/tot*100)}%</b></div>`).join("")}</div></div>`+
-    `<div class="pd-cbn"><div><span>Cost breakdown <small>calculated</small></span><b>${inr(tot)}</b></div><div><span>Piece price <small>supplier, current</small></span><b>${inr(p.cur)}</b></div><div class="g ${over?"bad":""}"><span>${over?"Breakdown above price":"Not explained by the breakdown"} ${info(gapTip)}</span><b>${over?"+":""}${inr(Math.abs(gap))} <small>${Math.abs(gp).toFixed(1)}% of price</small></b></div></div>`);
+    `<div class="pd-cbn"><div><span>Cost breakdown <small>calculated</small></span><b>${inr(tot)}</b></div><div><span>Piece price <small>supplier, current</small></span><b>${inr(p.cur)}</b></div><div class="g ${over?"bad":""}"><span>${over?"Breakdown above price":"Not explained by the breakdown"} ${info(gapTip)}</span><b>${over?"+":""}${inr(Math.abs(gap))} <small>${Math.abs(gp).toFixed(1)}% of price</small></b></div></div>`+
+    more("pcbd:"+esc(p.id),"Open cost breakdown tree"));   // only parts that have a cost breakdown reach this line
 }
 function decisionsFor(match){
   const out=[];
@@ -12389,6 +12390,7 @@ function buildPrice(){
 Object.assign(U.actions,{
   ppart:v=>{ const p=P.part(v); if(!p) return; CTX.part=p.id; PX.PF.project=p.progCode; go("proc-part"); },   // opened for one part: the filters follow it
   psup:v=>{ CTX.supplier=v; CTX.sclr=false; go("proc-supplier"); },
+  pcbd:v=>{ if(DATA.cbds[v]&&window.__openCbd) window.__openCbd(v); },   // Cost & Price > CBD Tree, opened on this part
   pprice:v=>{ const f=CTX.price; f.part=""; if(Router.screen==="proc-overview"){ f.category=PX.PF.category||""; f.supplier=PX.PF.supplier||""; } if(v){ const [k,val]=v.split("="); if(k==="part"){ f.part=val; const p=P.part(val); if(p) PX.PF.project=p.progCode; } else if(k==="category") f.category=val; else if(k==="supplier") f.supplier=val; } go("proc-price"); },
   pafilter:v=>{ const [k,val]=v.split("="); CTX.price[k]=CTX.price[k]===val?"":val; CTX.price.part=""; Router.render(); },
   vhmore:v=>openVersionModal(v),
