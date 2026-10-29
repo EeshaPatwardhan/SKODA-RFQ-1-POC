@@ -6719,7 +6719,8 @@ function cfRiskView(){
   );
 })();
 
-let CR_FILTER="all";
+let CR_FILTER="all", CR_PICK=null;
+window.openChangeRequest=wf=>{ CR_FILTER="all"; CR_PICK=wf; Router.go("change-requests","procurement"); };   // Change Requests searched on one workflow no. (from Part / Supplier Details)
 
 function crHighValue(type, value, newValue){
   if(type==="business-share") return true;
@@ -6755,7 +6756,8 @@ function buildChangeRequests(){
   const list=document.createElement("div"); list.className="panel";
   list.innerHTML=`<div class="panel-header"><h3>Change requests <span class="count-pill">${rows.length}</span></h3></div>`;
   const lb=document.createElement("div"); lb.className="panel-body no-pad";
-  const table=Components.masterTable({
+  const crq=CR_PICK; CR_PICK=null;
+  const table=Components.masterTable({query:crq,
     columns:[
       {key:"wf",label:"Workflow no.",render:r=>Components.wfChip(r.wf)},
       {key:"type",label:"Type",render:r=>`<span class="chip chip-gray"><span class="chip-dot"></span>${r.type}</span>`},
@@ -10757,7 +10759,7 @@ function split(sel,o){
 const SKIP=/^(id|wf|number|partNumber|designation|subject|name|part|docs|duns|lastUpdated|effectiveFrom|dummyNo|actualNo|poNo|toolingRef|sourcingNo|title|reason|note|email|racf|history|aeko)$/i;
 function masterTable(cfg){
   const columns=cfg.columns, rows=cfg.rows, emptyText=cfg.emptyText;
-  const wrap=document.createElement("div"); let sortState={col:null,dir:1}, text="", picks={};
+  const wrap=document.createElement("div"); let sortState={col:null,dir:1}, text=cfg.query||"", picks={};
   const cand=columns.filter(c=>c.key&&!/^__/.test(c.key)&&!SKIP.test(c.key)).map(c=>{ const vals=rows.map(r=>r[c.key]); if(!vals.length||vals.some(v=>v!=null&&typeof v==="object")) return null;
     const set=uniq(vals.filter(v=>v!=null&&v!=="").map(String)); if(set.length<2||set.length>24||set.some(v=>v.length>30)||set.every(v=>/^[\d.,\s-]+$/.test(v))) return null; return {c,set}; }).filter(Boolean);
   const pri=k=>/^(project|model)$/i.test(k)?0:/supplier/i.test(k)?1:2;
@@ -10777,7 +10779,7 @@ function masterTable(cfg){
       return `<select data-fk="${esc(f.c.key)}" title="${esc(f.c.label)}"><option value="">${esc(allLbl)}</option>${f.set.sort((a,b)=>String(shown(f.c,a)).localeCompare(String(shown(f.c,b)))).map(v=>`<option value="${esc(v)}">${esc(shown(f.c,v))}</option>`).join("")}</select>`; }).join("")}</div>
     <div class="panel-body no-pad"><table class="mtable"><thead><tr>${columns.map(c=>`<th data-key="${c.key}">${c.label}</th>`).join("")}</tr></thead><tbody></tbody></table></div>
     <div class="table-footer"><span class="count"></span><span>Page 1 of 1</span></div>`;
-  wrap.querySelector("input[type=text]").addEventListener("input",e=>{ text=e.target.value; renderRows(); });
+  const qIn=wrap.querySelector("input[type=text]"); qIn.value=text; qIn.addEventListener("input",e=>{ text=e.target.value; renderRows(); });
   wrap.querySelectorAll("select[data-fk]").forEach(s=>s.addEventListener("change",()=>{ picks[s.dataset.fk]=s.value; renderRows(); }));
   wrap.querySelectorAll("th").forEach(th=>th.addEventListener("click",()=>{ const k=th.dataset.key; sortState.dir=sortState.col===k?-sortState.dir:1; sortState.col=k; renderRows(); }));
   renderRows(); return wrap;
@@ -12565,8 +12567,9 @@ function decisionsFor(match){
   return out;
 }
 const stChip=s=>`<span class="chip ${({Pending:"chip-amber",Approved:"chip-green",Rejected:"chip-red",Open:"chip-blue"})[s]||"chip-gray"}"><span class="chip-dot"></span>${esc(s)}</span>`;
+U.actions.crgo=v=>{ if(window.openChangeRequest) window.openChangeRequest(v); else Router.go("change-requests","procurement"); };
 function decisionsTable(list){
-  return list.length?U.table(["Type","Reference","Subject","Stage","Status"],list.slice(0,6).map(d=>`<tr class="v8-row" data-act="${d.kind==="Technical change"?"tcm:wf="+esc(d.wf):"go:approvals"}" title="${d.kind==="Technical change"?"Open "+esc(d.wf)+" in the Technical Change register":"Open in Approvals"}" role="button" tabindex="0"><td><b>${esc(d.kind)}</b></td><td>${Components.wfChip(d.wf)}</td><td>${esc(d.subject)}</td><td>${esc(d.stage)}</td><td>${stChip(d.status)}</td></tr>`).join(""))+(list.length>6?`<div class="mut small" style="margin-top:6px">+${list.length-6} more</div>`:""):empty("No commercial decision is linked to this selection.");
+  return list.length?U.table(["Type","Reference","Subject","Stage","Status"],list.slice(0,6).map(d=>`<tr class="v8-row" data-act="${d.kind==="Technical change"?"tcm:wf="+esc(d.wf):"crgo:"+esc(d.wf)}" title="Open ${esc(d.wf)} in ${d.kind==="Technical change"?"the Technical Change register":"Change Requests"}" role="button" tabindex="0"><td><b>${esc(d.kind)}</b></td><td>${Components.wfChip(d.wf)}</td><td>${esc(d.subject)}</td><td>${esc(d.stage)}</td><td>${stChip(d.status)}</td></tr>`).join(""))+(list.length>6?`<div class="mut small" style="margin-top:6px">+${list.length-6} more</div>`:""):empty("No commercial decision is linked to this selection.");
 }
 function notesPanel(p){
   const vs=versionsOf(p.id), dp=dpOf(p.id);
