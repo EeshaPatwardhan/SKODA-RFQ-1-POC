@@ -2669,6 +2669,12 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .rh-tk{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;align-items:center;} .rh-tk .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;} .rh-tk .ic svg.i{width:19px;height:19px;}
 .rh-tk .ic.b{background:var(--info-soft);color:var(--info);} .rh-tk .ic.g{background:var(--brand-soft);color:var(--brand);} .rh-tk .ic.o{background:var(--amber-soft);color:var(--amber);}
 .rh-ms{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:center;} .rh-ms .ic{width:32px;height:32px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;} .rh-ms .ic svg.i{width:17px;height:17px;}
+/* director: one scorecard per module */
+.rh-mh{display:inline-flex;align-items:center;gap:10px;} .rh-mh em{font-style:normal;flex:none;width:28px;height:28px;border-radius:9px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;} .rh-mh em svg.i{width:15px;height:15px;}
+.rh-mc{display:grid;}
+.rh-mr{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:2px 12px;padding:10px 0;border-bottom:1px solid var(--line2);} .rh-mr:first-child{padding-top:2px;} .rh-mr:last-child{border-bottom:0;padding-bottom:0;}
+.rh-mr span{font-size:13px;color:var(--text);} .rh-mr b{font-size:16px;font-weight:700;color:var(--ink);text-align:right;white-space:nowrap;}
+.rh-mr small{grid-column:1/-1;font-size:12px;color:var(--muted);} .rh-mr small.up{color:var(--ok);} .rh-mr small.bad{color:var(--red);} .rh-mr small.warn{color:var(--amber);}
 .rh-note{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:2px 4px;} .rh-note b{padding:3px 11px;border-radius:20px;background:var(--brand-soft);color:var(--brand);font-weight:600;font-size:12px;}
 /* ===== end v8_home_roles.css ===== */
 </style>
@@ -3095,7 +3101,7 @@ const UserMenu = {
 };
 
 const DEPT = {buyer:"Procurement", pm:"BN – Project Management", srm:"SRM / KTM", aeko:"BN – Aeko coordination",
-  commodity:"Lead Commodity", finance:"Finance – Controlling", approver:"Approvers (heads)", admin:"IT – Platform administration"};
+  commodity:"Lead Commodity", finance:"Finance – Controlling", approver:"Approvers (heads)", director:"Leadership – Director", admin:"IT – Platform administration"};
 
 const Profile = {
   open(){
@@ -4126,6 +4132,7 @@ const ROLES = [
   {id:"commodity", label:"Commodity Mgr"},
   {id:"finance", label:"Finance"},
   {id:"approver", label:"Approver"},
+  {id:"director", label:"Director"},
   {id:"admin", label:"Admin"},
 ];
 
@@ -4138,6 +4145,7 @@ const MODULE_ACCESS = {
   commodity:  ["procurement"],
   finance:    ["procurement"],
   approver:   ["procurement","techchange","srm"],
+  director:   ["procurement","techchange","srm"],
   admin:      ["procurement","techchange","srm","admin"],
 };
 
@@ -4150,6 +4158,7 @@ const RBAC_WRITE = {
   commodity: ["commodity","fx"],
   finance:   ["investment","material-cost-dash"],
   approver:  ["approval-workflow","change-requests"],
+  director:  [],   // read-only: sees all three modules, edits nothing
   admin:     ["*"],
 };
 
@@ -4191,6 +4200,7 @@ const DATA = {
     {id:"u10", name:"L. Bose", racf:"LBS10", role:"srm"},
     {id:"u11", name:"N. Pillai", racf:"NPL11", role:"pm"},
     {id:"u12", name:"D. Shah", racf:"DSH12", role:"aeko"},
+    {id:"u13", name:"A. Kulkarni", racf:"AKU13", role:"director"},
   ],
   projects: PocSeed.projects(),   // E7: the 6 POC programmes
   parts: [],                       // seeded below from the POC part panel
@@ -14385,7 +14395,7 @@ const U=PocUI, esc=PocCharts.esc, ic=n=>Icons.svg(n);
 const T0=(typeof TODAY!=="undefined"?TODAY:"2026-07-29");
 
 /* role → which of the four layouts */
-const VIEW={buyer:"buyer",aeko:"buyer",commodity:"buyer",pm:"manager",srm:"manager",finance:"head",approver:"head",admin:"board"};
+const VIEW={buyer:"buyer",aeko:"buyer",commodity:"buyer",pm:"manager",srm:"manager",finance:"head",approver:"head",director:"director",admin:"board"};
 
 /* ------------------------------------------------------------ helpers */
 const roleLabel=r=>(ROLES.find(x=>x.id===r)||{}).label||r;
@@ -14396,7 +14406,7 @@ const day=off=>{ const d=new Date(T0+"T00:00:00"); d.setDate(d.getDate()+off); r
 const rs=n=>"₹"+Number(n).toLocaleString("en-IN");
 const homeMod=()=>["procurement","techchange","srm"].includes(Router.module)?Router.module:"procurement";
 /* screens that live in one module only; the rest (approvals, my-tasks) open in the module Home is shown in */
-const MOD={"proc-overview":"procurement","ebon-po":"procurement","masters-hub":"procurement"};
+const MOD={"proc-overview":"procurement","ebon-po":"procurement","masters-hub":"procurement","change-dashboard":"techchange","srm-overview":"srm"};
 const goTo=s=>Router.go(s,MOD[s]||homeMod());
 const greet=()=>{ const h=new Date().getHours(); return h<12?"Good morning":h<17?"Good afternoon":"Good evening"; };
 const dateLine=()=>new Date(T0+"T00:00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
@@ -14557,8 +14567,57 @@ function board(){
   `</div>`;
 }
 
+/* ------------------------------------------------------------ 5 · Director — all three modules on one page */
+const MODS=[
+  {id:"procurement",name:"Procurement",icon:"package",go:"proc-overview",chip:"chip-blue",rows:[
+    ["Total spend","₹ 48.7 Cr","↑ 6% vs last year",""],
+    ["Cost savings","₹ 5.2 Cr","72% of the ₹ 7.2 Cr target","up"],
+    ["Cost per vehicle","₹ 1.84 L","↑ 2.4% since SOP","bad"],
+    ["Contracts expiring (30 days)","5","Renewals not yet started","warn"]]},
+  {id:"techchange",name:"Technical Change",icon:"activity",go:"change-dashboard",chip:"chip-amber",rows:[
+    ["Open changes","18","6 raised this quarter",""],
+    ["Awaiting approval","5","2 high value","warn"],
+    ["Cost impact of open changes","+₹ 1,240","per vehicle, if all are approved","bad"],
+    ["Implementation overdue","2","Past the agreed cut-in date","bad"]]},
+  {id:"srm",name:"SRM",icon:"layout",go:"srm-overview",chip:"chip-green",rows:[
+    ["Part readiness","86%","↑ 3 pts vs last month","up"],
+    ["Tools at risk","7","Of 64 tracked tools","warn"],
+    ["Milestones slipped","3","Against the SOP plan","bad"],
+    ["Supplier on-time delivery","92%","↑ 4% vs last year","up"]]}
+];
+const modChip=m=>`<span class="chip ${m.chip}"><span class="chip-dot"></span>${m.name}</span>`;
+function director(){
+  const M=Object.fromEntries(MODS.map(m=>[m.id,m]));
+  const esc8=[
+    ["procurement","Price increase notice – Bosch India (+4.5%)","u1","₹ 38 L a year",-3],
+    ["techchange","AEKO-2026-0052 battery tray redesign (high value)","u4","+₹ 640 per vehicle",-5],
+    ["srm","Tooling slip at Sona BLW puts an SOP milestone at risk","u3","3 weeks late",-2],
+    ["procurement","Single-source dependency – Mahle India","u5","12 parts",-8]
+  ];
+  return hero("director",`One view across Procurement, Technical Change and SRM.`,"This Quarter")+
+  kpis([
+    kpi({icon:"wallet",tone:"warn",value:"₹ 48.7 Cr",label:"Procurement Spend",sub:"↑ 6% vs last year",sc:"up",go:"proc-overview"}),
+    kpi({icon:"target",tone:"ok",value:"₹ 5.2 Cr",label:"Cost Savings",sub:"72% of this year’s target",sc:"up"}),
+    kpi({icon:"activity",tone:"info",value:"18",label:"Open Technical Changes",sub:"5 awaiting approval",sc:"info",go:"change-dashboard"}),
+    kpi({icon:"gauge",tone:"ok",value:"86%",label:"Part Readiness (SRM)",sub:"↑ 3 pts vs last month",sc:"up",go:"srm-overview"}),
+    kpi({icon:"alert",tone:"bad",value:"4",label:"Escalations",sub:"Need your decision",sc:"bad"})
+  ])+
+  `<div class="rh-g c3">`+
+    MODS.map(m=>U.panel(`<span class="rh-mh"><em>${ic(m.icon)}</em>${m.name}</span>`,
+      `<div class="rh-mc">${m.rows.map(([l,v,s,t])=>`<div class="rh-mr"><span>${l}</span><b>${v}</b><small class="${t}">${s}</small></div>`).join("")}</div>`,
+      {right:link("Open dashboard",m.go)})).join("")+
+  `</div><div class="rh-g c21b">`+
+    U.panel(`Escalations Needing Your Decision <span class="count-pill">${esc8.length}</span>`,`<div class="rh-sc"><table class="rh-t" style="min-width:620px"><thead><tr><th>Module</th><th>Item</th><th>Owner</th><th>Impact</th><th>Raised</th><th>Action</th></tr></thead><tbody>${esc8.map(([m,t,o,imp,d])=>`<tr><td>${modChip(M[m])}</td><td style="white-space:normal;min-width:180px">${esc(t)}</td><td>${esc(person(o))}</td><td>${imp}</td><td>${day(d)}</td><td>${act("View",M[m].go)}</td></tr>`).join("")}</tbody></table></div>`,{noPad:true})+
+    U.panel("Key Takeaways",`<div class="rh-ul">${[
+      ["b","trend-up","Savings ahead of plan","₹ 5.2 Cr delivered, 18% above the quarter’s target"],
+      ["o","activity","Change cost is building up","Open technical changes add ₹ 1,240 per vehicle if all are approved"],
+      ["g","gauge","Readiness improving","86% of parts ready; 3 milestones still behind the SOP plan"]
+    ].map(([c,i,t,s])=>`<div class="rh-tk"><span class="ic ${c}">${ic(i)}</span><div><b>${t}</b><small>${s}</small></div></div>`).join("")}</div>`)+
+  `</div>`;
+}
+
 /* ------------------------------------------------------------ page */
-const BUILD={buyer,manager,head,board};
+const BUILD={buyer,manager,head,board,director};
 function build(){
   const view=VIEW[RBAC.role]||"buyer";
   const shell=document.createElement("div"); shell.className="v8-page rh-w";
