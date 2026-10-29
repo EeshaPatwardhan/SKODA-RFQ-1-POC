@@ -453,7 +453,9 @@ kbd{font:inherit;font-size:11px;border:1px solid var(--line);border-bottom-width
 .page-header h1{font-size:26px;line-height:1.2;margin:0 0 6px;color:var(--ink);font-weight:700;letter-spacing:-.02em;}
 .page-header p.sub{margin:0;color:var(--muted);font-size:14px;max-width:78ch;}
 .breadcrumb{font-size:12.5px;color:var(--faint);margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.breadcrumb b{color:var(--faint);font-weight:400;} .breadcrumb a{color:inherit;text-decoration:none;} .breadcrumb a:hover{color:var(--brand);text-decoration:underline;}
+.breadcrumb b{color:var(--faint);font-weight:400;}
+.pd-srm-go{display:inline-flex;align-items:center;gap:4px;padding:0;border:0;background:none;cursor:pointer;font:inherit;color:var(--muted);}
+.pd-srm-go svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s;} .pd-srm-go:hover svg{transform:translateX(2px);color:var(--brand);} .pd-srm-go:hover .chip{filter:brightness(.96);} .breadcrumb a{color:inherit;text-decoration:none;} .breadcrumb a:hover{color:var(--brand);text-decoration:underline;}
 .page-header.hero h1{font-size:32px;letter-spacing:-.028em;font-weight:700;}
 .page-header.hero .hi{display:block;font-size:15px;color:var(--muted);font-weight:500;margin-bottom:6px;}
 
@@ -11356,7 +11358,7 @@ const P=PocCore, C=PocCharts, U=PocUI, S=SrmData, V=V8Charts, esc=C.esc, nf=C.nf
 const TODAY_STR=(typeof TODAY!=="undefined"?TODAY:"2026-07-29");
 let MODEL=null;
 const model=()=>MODEL||(MODEL=S.build({today:TODAY_STR,parts:P.PARTS,vendors:P.VENDS,programmes:DATA.projects.map(p=>({code:p.code,name:p.name,sop:p.sop}))}));
-const F={project:"",family:"",supplier:"",sopYear:""}; let DRILL=null; let PCOLS=2; let MSEL=-1;   // MSEL: milestone picked on Status Tracking (-1 = next open one)
+const F={project:"",family:"",supplier:"",sopYear:""}; let DRILL=null, PICK=null; let PCOLS=2; let MSEL=-1;   // MSEL: milestone picked on Status Tracking (-1 = next open one)
 const MS=S.MS, DAY=S.DAY, fmtDate=V.fmtDate;
 const pct0=v=>v==null?"—":Math.round(v)+"%";
 const chipCls={ok:"chip-green",risk:"chip-amber",delayed:"chip-red",notstarted:"chip-gray"};
@@ -11868,9 +11870,14 @@ function buildParts(){
   const g2=add(w,`<div class="v8-g"></div>`);
   g2.appendChild(U.el(toolStagesPanel(ev)));
   const rows=ev.filter(e=>e.started&&(e.status==="risk"||e.status==="delayed")).sort((a,b)=>S.RANK[b.status]-S.RANK[a.status]||(a.next&&b.next?a.next.R-b.next.R:0)||a.readiness-b.readiness).map(e=>({e}));
-  const t=FTable.create({id:"srm-risk-parts",columns:PARTS_COLS(),rows,pageSize:10,rowAct:r=>"srmpart:"+r.e.pt.id,empty:"No at-risk or delayed part matches these filters."});
+  /* opened from Procurement Part Details: an at-risk / delayed part is filtered in this table; any other part opens its detail */
+  const pk=PICK; PICK=null; const pe=pk&&ev.find(e=>e.pt.id===pk), inRisk=pe&&rows.some(r=>r.e===pe);
+  const t=FTable.create({id:"srm-risk-parts",columns:PARTS_COLS(),rows,pageSize:10,rowAct:r=>"srmpart:"+r.e.pt.id,empty:"No at-risk or delayed part matches these filters.",
+    filters:inRisk?{part:[pe.pt.name],project:[short(pe.pt.progName)],vertical:[pe.pt.family],supplier:[pe.pt.vendor]}:null});
   add(w,U.panel(`At-risk parts <span class="count-pill">${rows.length}</span>`,"",{style:"margin-top:16px",sub:"Delayed first, then at risk, nearest milestone first · filter any column from its heading · click a row for the part's detail"}));
   w.lastChild.querySelector(".panel-body").appendChild(t);
+  if(inRisk){ const pn=w.lastChild; setTimeout(()=>{ pn.scrollIntoView({block:"start"}); openSrmPart(pk); },60); }
+  else if(pe) setTimeout(()=>openSrmPart(pk),60);
   U.wire(w); return w;
 }
 
@@ -11953,6 +11960,7 @@ Object.assign(U.actions,{
   sms:v=>{ MSEL=+v; Router.render(); },
   sml:v=>{ const [code,mi]=v.split("|"); if(code) F.project=code; MSEL=+mi; Router.go("srm-status-dash","srm"); },
   srmpart:v=>{ openSrmPart(v); },
+  srmfocus:v=>{ F.project=F.family=F.supplier=F.sopYear=""; DRILL=null; PICK=v; Router.go("srm-tooling-dash","srm"); },   // from Procurement Part Details: this part in Part Readiness
   smd:v=>{ const [code,mi]=v.split("|"); openMilestoneDrawer(code,+mi); },
 });
 const SRM_LABEL={"srm-overview":"Overview","srm-tooling-dash":"Part Readiness","srm-status-dash":"Status Tracking","srm-performance-dash":"Supplier Performance"};
@@ -12510,7 +12518,7 @@ function partHeader(p,tgt){
   const item=(t,v)=>`<div><dt>${t}</dt><dd>${v}</dd></div>`;
   return `<div class="pd-card pd-slim stack pd-part"><dl class="meta">`+
     item("Part",`${esc(p.name)} <span class="mono pd-pid">(${esc(p.id)})</span>`)+item("Program phase",phase?esc(phase):"—")+
-    item("SRM status",ev?`<span class="chip ${({ok:"chip-green",risk:"chip-amber",delayed:"chip-red",notstarted:"chip-gray"})[ev.status]}"><span class="chip-dot"></span>${esc(SrmData.STATUS[ev.status])}</span>`:"—")+
+    item("SRM status",ev?`<button type="button" class="pd-srm-go" data-act="srmfocus:${esc(p.id)}" title="Open this part in SRM › Part Readiness"><span class="chip ${({ok:"chip-green",risk:"chip-amber",delayed:"chip-red",notstarted:"chip-gray"})[ev.status]}"><span class="chip-dot"></span>${esc(SrmData.STATUS[ev.status])}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>`:"—")+
     item("Last price update",esc(lastUp))+item("Supplier",esc(p.vendorName))+
     `</dl></div>`;
 }
