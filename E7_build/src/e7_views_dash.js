@@ -34,7 +34,7 @@ function buyerBrief(){
     byV.set(p.vendorName,{vendor:p.vendorName,part:p,rise,driver:top?DRIVER[top[0]]:"the forecast itself"}); } });
   const calls=[...byV.values()].sort((a,b)=>b.rise-a.rise).slice(0,3); if(!calls.length) return "";
   const gap=P.cost(P.PARTS,p=>p.fcEnd)-P.cost(P.PARTS,p=>p.cur), fl=MS.forecast.label;
-  return `<section class="panel"><div class="panel-body"><div class="mut small">Radar</div><h3 class="bb-t">Hold these prices before ${esc(fl)}</h3>
+  return `<section class="panel"><div class="panel-body"><div class="mut small">AIS</div><h3 class="bb-t">Hold these prices before ${esc(fl)}</h3>
     <p class="small mut" style="max-width:70ch">${gap>0?`Doing nothing adds ${spend(gap)} to the cost of an average vehicle between SOP and ${esc(fl)}. These three suppliers hold the largest single-part increases.`:`These three suppliers hold the largest single-part increases into ${esc(fl)}.`}</p>
     <ol class="bb-grid">${calls.map((c,i)=>`<li><button type="button" class="bb-b" data-act="part:${esc(c.part.id)}"><span class="mut small">Call ${i+1}</span><b>${esc(c.vendor)}</b><span class="bb-x">${esc(c.part.name)} is up <b class="var up">${spend(c.rise)}</b>, mainly from ${esc(c.driver)}. Ask them to hold the SOP price.</span></button>
       <button type="button" class="bb-ask" data-act="ask:Why should we talk to ${esc(c.vendor)} about ${esc(c.part.name)} before ${esc(fl)}? The forecast shows it up ${spend(c.rise)}, mainly from ${esc(c.driver)}. What should we ask for?">Ask why</button></li>`).join("")}</ol></div></section>`;

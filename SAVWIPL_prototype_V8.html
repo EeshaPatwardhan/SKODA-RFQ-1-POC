@@ -453,7 +453,7 @@ kbd{font:inherit;font-size:11px;border:1px solid var(--line);border-bottom-width
 .page-header h1{font-size:26px;line-height:1.2;margin:0 0 6px;color:var(--ink);font-weight:700;letter-spacing:-.02em;}
 .page-header p.sub{margin:0;color:var(--muted);font-size:14px;max-width:78ch;}
 .breadcrumb{font-size:12.5px;color:var(--faint);margin-bottom:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.breadcrumb b{color:var(--faint);font-weight:400;}
+.breadcrumb b{color:var(--faint);font-weight:400;} .breadcrumb a{color:inherit;text-decoration:none;} .breadcrumb a:hover{color:var(--brand);text-decoration:underline;}
 .page-header.hero h1{font-size:32px;letter-spacing:-.028em;font-weight:700;}
 .page-header.hero .hi{display:block;font-size:15px;color:var(--muted);font-weight:500;margin-bottom:6px;}
 
@@ -2516,7 +2516,11 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .fc-dash .fc-pair{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;margin-top:16px;align-items:stretch;}
 .fc-dash .fc-pair > .panel{display:flex;flex-direction:column;min-width:0;margin:0 !important;} .fc-dash .fc-pair > .panel > .panel-body{flex:1;display:flex;flex-direction:column;}
 .fc-dash .fc-pair > .panel > .panel-body > .fc-donut{flex:1;align-content:center;justify-content:center;} .fc-dash .fc-pair > .panel > .panel-body > .pc-wrap,.fc-dash .fc-pair > .panel > .panel-body > .pc-chart,.fc-dash .fc-pair > .panel > .panel-body > svg{margin-block:auto;}
-.fc-dash .fc-pair .panel-header{min-height:74px;align-items:flex-start;}
+.fc-dash .fc-pair .panel-header{min-height:66px;align-items:center;} .fc-dash .fc-pair.eq{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0;margin-bottom:16px;} .fc-dash .fc-pair.eq.one{grid-template-columns:minmax(0,1fr);} .fc-dash .fc-pair > .panel > .panel-body > .pc-bars{flex:1;align-content:stretch;} .fc-dash .fx-struct table.mtable td{padding:8px 12px;} .fc-dash .fx-struct table.mtable th{padding:8px 12px;}
+.fc-dash .fc-scn{margin-bottom:16px;} .fc-dash .fc-scn .panel-header{flex-wrap:wrap;} .fc-dash .fc-scn .fc-actions{margin:0;} .fc-dash .fc-scn .fc-ctrls{grid-template-columns:repeat(3,minmax(0,1fr)) repeat(2,minmax(0,1.3fr));align-items:start;}
+@media (max-width:1180px){ .fc-dash .fc-scn .fc-ctrls{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));} }
+.fc-pchart .panel-header{flex-wrap:nowrap !important;} .fc-pchart .ph-t{flex:1;min-width:0;} .fc-pchart .ph-s{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fc-pchart .fc-segs{flex:none;flex-wrap:nowrap;} .fc-dash .fc-pair > .panel > .panel-body:has(> .wl-ends){justify-content:space-between;gap:14px;} .fc-dash .fc-pair .panel-body > .wl-ends + p{margin:0 !important;} .fc-pchart .fc-seg{white-space:nowrap;} .fc-pchart .fc-tiles{margin-bottom:6px;}
 @media (max-width:1180px){ .fc-dash .fc-pair{grid-template-columns:minmax(0,1fr);} }
 @media (max-width:560px){ .hm-st3{grid-template-columns:1fr;} .hm-search{flex-basis:100%;} .hm-tabs{padding:12px 14px 0;} .hm-list{padding:6px 6px 12px !important;} .hm-jump{grid-template-columns:1fr;} }
 @media (max-width:620px){
@@ -3007,7 +3011,7 @@ const NAV_ICONS = {
   "commodity":"coins","change-requests":"swap","approvals":"check-circle","ebon-po":"receipt",
   "imported-parts":"globe","bom-sop":"car",
   "change-dashboard":"layout","reports-tc":"file","intake":"sparkles","eval-sheet":"clipboard","supplier-offers":"users","mod-sheet":"edit","implementation":"settings",
-  "srm-tooling-dash":"layout","srm-status-dash":"activity","reports-srm":"file",
+  "srm-tooling-dash":"layout","srm-status-dash":"activity",
   "part-assignment":"users","tool-readiness":"wrench","milestone-tracking":"flag","readiness-ryg":"gauge","alerts-escalations":"bell"
 };
 // shorter names for the sidebar only (page titles and tooltips keep the full name)
@@ -3038,7 +3042,7 @@ const MODULE_TREE = {
     ["Approval & rollout",["approvals","implementation"]]
   ],
   srm:[
-    ["Dashboards",["srm-tooling-dash","srm-status-dash","reports-srm"]],
+    ["Dashboards",["srm-tooling-dash","srm-status-dash"]],
     ["Parts, tools & milestones",["part-assignment","tool-readiness","milestone-tracking","readiness-ryg"]],
     ["Alerts & approvals",["alerts-escalations","approvals"]]
   ],
@@ -4338,7 +4342,6 @@ const NAV = {
     {id:"readiness-ryg", label:"Readiness (RYG)", icon:"🚦"},
     {id:"alerts-escalations", label:"Alerts & Escalations", icon:"⚠️"},
     {id:"status-report", label:"Status Report (PPT/PDF)", icon:"📑"},
-    {id:"reports-srm", label:"Reports", icon:"📊"},
     {id:"ai-assistant-srm", label:"AI Assistant", icon:"✨"},
   ],
   admin: [
@@ -4788,7 +4791,7 @@ const Components = {
       const h = new Date().getHours();
       const g = h<12 ? "Good morning" : h<17 ? "Good afternoon" : "Good evening";
       const d = new Date().toLocaleDateString(undefined,{weekday:"long", day:"numeric", month:"long", year:"numeric"});
-      return this.el(`<div class="page-header hero"><div><div class="breadcrumb">${mod} <b>›</b> Home</div><span class="hi">${d}</span><h1>${g}, ${role}</h1>${sub? `<p class="sub">${sub}</p>`:""}</div></div>`);
+      return this.el(`<div class="page-header hero"><div><div class="breadcrumb">Home</div><span class="hi">${d}</span><h1>${g}, ${role}</h1>${sub? `<p class="sub">${sub}</p>`:""}</div></div>`);
     }
     return this.el(`<div class="page-header"><div><div class="breadcrumb">${mod} <b>›</b> ${title}</div><h1>${title}</h1>${sub? `<p class="sub">${sub}</p>`:""}</div></div>`);
   },
@@ -7895,7 +7898,7 @@ function masterGovernance(){ return Components.el(`<div class="panel"><div class
 // Reports & AI ids used in NAV -> point to the full builders
 Object.assign(SCREENS.procurement, {"reports":buildReportCentreFull, "reports-centre":buildReportCentreFull, "ai-assistant":buildAIAssistant});
 Object.assign(SCREENS.techchange,  {"reports-tc":buildReportCentreFull, "reports-centre":buildReportCentreFull, "ai-assistant-tc":buildAIAssistant});
-Object.assign(SCREENS.srm,         {"reports-srm":buildReportCentreFull, "reports-centre":buildReportCentreFull, "ai-assistant-srm":buildAIAssistant, "status-report":buildReportCentreFull});
+Object.assign(SCREENS.srm,         {"reports-centre":buildReportCentreFull, "ai-assistant-srm":buildAIAssistant, "status-report":buildReportCentreFull});
 // Admin console screens
 Object.assign(SCREENS.admin, {
   "users-roles":       adminScreen("Users & Roles","Directory of users mapped to roles and the modules each role may see.", usersRoles),
@@ -8234,7 +8237,7 @@ function buyerBrief(){
     byV.set(p.vendorName,{vendor:p.vendorName,part:p,rise,driver:top?DRIVER[top[0]]:"the forecast itself"}); } });
   const calls=[...byV.values()].sort((a,b)=>b.rise-a.rise).slice(0,3); if(!calls.length) return "";
   const gap=P.cost(P.PARTS,p=>p.fcEnd)-P.cost(P.PARTS,p=>p.cur), fl=MS.forecast.label;
-  return `<section class="panel"><div class="panel-body"><div class="mut small">Radar</div><h3 class="bb-t">Hold these prices before ${esc(fl)}</h3>
+  return `<section class="panel"><div class="panel-body"><div class="mut small">AIS</div><h3 class="bb-t">Hold these prices before ${esc(fl)}</h3>
     <p class="small mut" style="max-width:70ch">${gap>0?`Doing nothing adds ${spend(gap)} to the cost of an average vehicle between SOP and ${esc(fl)}. These three suppliers hold the largest single-part increases.`:`These three suppliers hold the largest single-part increases into ${esc(fl)}.`}</p>
     <ol class="bb-grid">${calls.map((c,i)=>`<li><button type="button" class="bb-b" data-act="part:${esc(c.part.id)}"><span class="mut small">Call ${i+1}</span><b>${esc(c.vendor)}</b><span class="bb-x">${esc(c.part.name)} is up <b class="var up">${spend(c.rise)}</b>, mainly from ${esc(c.driver)}. Ask them to hold the SOP price.</span></button>
       <button type="button" class="bb-ask" data-act="ask:Why should we talk to ${esc(c.vendor)} about ${esc(c.part.name)} before ${esc(fl)}? The forecast shows it up ${spend(c.rise)}, mainly from ${esc(c.driver)}. What should we ask for?">Ask why</button></li>`).join("")}</ol></div></section>`;
@@ -8255,7 +8258,7 @@ function priceChart(view){
   const fIdx=vis.map((p,i)=>p.forecast!=null?i:-1).filter(i=>i>=0), peak=fIdx.length?fIdx.reduce((a,b)=>vis[b].forecast>vis[a].forecast?b:a):-1;
   const marks=[]; const ni=idxOf(MS.nomination.month), si=idxOf(MS.sop.month), ti=lastActRow?idxOf(lastActRow.month):-1;
   if(ni>=0) marks.push({i:ni,label:"Nomination",y:12}); if(si>=0&&si!==ti) marks.push({i:si,label:"SOP",y:24}); if(ti>=0) marks.push({i:ti,label:hasF?"Today":"SOP",y:36,dash:"4 3",color:C.C.muted});
-  const chart=C.line({labels:vis.map(r=>ml(r.month)),height:view==="focus"?320:290,mLeft:62,maxX:view==="focus"?14:9,aria:"Cost per vehicle, actual vs forecast",
+  const chart=C.line({labels:vis.map(r=>ml(r.month)),height:view==="focus"?236:224,mLeft:62,maxX:view==="focus"?14:9,aria:"Cost per vehicle, actual vs forecast",
     yFmt:v=>yMax>=1000&&yMax<1e5?"₹"+(v/1000).toFixed(2)+"K":axisCur(v,yMax),
     shade:hasF&&ti>=0&&ti<vis.length-1?[{from:ti,to:vis.length-1,color:"var(--amber-soft)",opacity:.7,label:"Next "+P.NF+" months",textColor:"var(--amber)"}]:[],
     marks,
@@ -8266,7 +8269,8 @@ function priceChart(view){
   const change=lastActRow&&lastFcRow?(lastFcRow.forecast/lastActRow.actual-1)*100:null;
   const kf=R.kpis.find(k=>k.id==="forecast");
   const tiles=hasF&&lastActRow&&lastFcRow?`<div class="fc-tiles"><div><p>Latest actual · ${esc(lastActRow.label)}</p><b>${lakh(lastActRow.actual)}</b></div><div class="amber"><p>Forecast · ${esc(lastFcRow.label)}</p><b>${lakh(lastFcRow.forecast)} ${change!=null?`<span class="var ${change>0?"up":"dn"}" style="font-size:12px">${change>0?"+":change<0?"−":""}${Math.abs(change).toFixed(1)}%</span>`:""}</b></div>${lastFcRow.lower!=null?`<div><p>Likely range · ${esc(lastFcRow.label)}</p><b>${lakh(lastFcRow.lower)} to ${lakh(lastFcRow.upper)}</b></div>`:""}<div><p>Forecast cost per vehicle · ${esc(lastFcRow.label)}</p><b>${spend(kf?kf.value:null)} <small class="mut">per vehicle</small></b></div></div>`:"";
-  return panel("Cost per vehicle forecast",tiles+chart,{sub:"Tracked parts, average car · Nomination and SOP are history · the forecast is the next "+P.NF+" months",
+  const sub="Tracked parts, average car · Nomination and SOP are history · the forecast is the next "+P.NF+" months";
+  return panel("Cost per vehicle forecast",tiles+chart,{cls:"fc-pchart",sub:`<span title="${esc(sub)}">${esc(sub)}</span>`,
     right:hasF?`<div class="fc-segs tight"><button class="fc-seg ${view==="focus"?"on":""}" data-act="set:dash.view=focus">Focus on forecast</button><button class="fc-seg ${view==="full"?"on":""}" data-act="set:dash.view=full">Full history</button></div>`:""});
 }
 
@@ -8332,12 +8336,11 @@ U.v.outlook=function(){
     <div class="fc-fx"><span class="fc-chipbox">${P.PARTS.length} parts</span><button type="button" class="btn btn-sm" data-act="params:open">${Icons.svg("layers")} Parameters <span class="count-pill">${R.parameterCatalogue.total}</span></button><button type="button" class="btn btn-sm" data-act="export:all">${Icons.svg("download")} Export</button></div></div>`));
   const ops=R.meta.ops||R.drift||R.featureSelection;
   const synth=R.provenance.skuLayer==="synthetic";
-  wrap.appendChild(el(note(`<b>${esc(P.model)}</b> model · history ${U.mlong(P.MONTHS[0])} – ${U.mlong(P.MONTHS[P.NH-1])} · forecast ${U.mlong(P.FM[0])} – ${U.mlong(P.FM[P.NF-1])}. ${synth?"The macro trend is real BLS data; the <b>part-level prices are synthetic</b>, so accuracy figures describe the pipeline, not real prices. ":""}<a href="#" data-act="go:fc-validation">How reliable is this forecast?</a>`,"info")));
   const k=document.createElement("div"); k.className="pd-kw"; k.innerHTML=`<div class="pd-kpis k4">${kpiCards()}</div>`; wrap.appendChild(k);
   const bb=buyerBrief(); if(bb){ const d=el(`<div style="margin-top:16px">${bb}</div>`); wrap.appendChild(d); }
   const walk=walkList(P.walkSteps(P.PARTS,"sop_to_fc"),{title:"Why the forecast moved",subtitle:"SOP to the forecast month. Click a reason to see those parts.",actFor:s=>"mat:sop_to_fc|"+s.id,clear:"set:material.bridge=null"});
   /* two rows of two panels; the panels in a row share one height */
-  [[priceChart(state.dash.view),donutPanel()],[walk,horizonChart()]].forEach(pair=>{ const g=document.createElement("div"); g.className="fc-pair"; g.innerHTML=pair.join(""); wrap.appendChild(g); });
+  [[priceChart(state.dash.view),walk]].forEach(pair=>{ const g=document.createElement("div"); g.className="fc-pair"; g.innerHTML=pair.join(""); wrap.appendChild(g); });
   wrap.appendChild(el(`<div style="margin-top:16px">${topParts(7)}</div>`));
   wrap.appendChild(el(`<div style="margin-top:16px">${riskStrip()}</div>`));
   wrap.appendChild(el(`<div style="margin-top:16px">${U.alertsStrip(true)}</div>`));
@@ -8453,7 +8456,6 @@ U.v.material=function(){
   wrap.appendChild(header("Material Cost Dashboard","Track part price from Nomination to SOP, and walk Budget (BG) to Forecast (FC) with drill-down."));
   const f=matFilter(s), scoped=s.project!=="all"||s.vendor!=="all"||s.category!=="all"||s.material!=="all"||s.q.trim().length>0;
   const sig=[s.project,s.vendor,s.category,s.material,s.q,s.walk,s.bridge].join("|"); if(s._sig!==sig){ s._sig=sig; s.limit=12; }
-  wrap.appendChild(el(note(esc(R.materialCost.disclaimer.replace(/\(No commercial file at[^)]*\)\.?/,"").trim())+" Basis: <b>cost per vehicle</b> (piece price × quantity per vehicle).","warn")));
   const fb=el(`<div style="margin-top:14px">${filterBar(s,f.length)}</div>`); wrap.appendChild(fb);
   const bg=P.cost(f,p=>p.nom), sop=P.cost(f,p=>p.cur), fc=P.cost(f,p=>p.fcEnd), vp=bg?(fc/bg-1)*100:0, hint=l=>scoped?`${f.length} parts · ${esc(l)}`:esc(l);
   const k=document.createElement("div"); k.className="grid grid-4"; k.style.marginTop="14px";
@@ -8539,8 +8541,7 @@ function tree(){
   const cs=P.annualSpend(P.PARTS,p=>p.cur), fs=P.annualSpend(P.PARTS,p=>p.fcEnd), pc=cs?(fs/cs-1)*100:0;
   const boxes=H.order.map((l,i)=>`${i>0?'<svg class="ht-sep" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg>':""}<div class="ht-lv" draggable="true" data-i="${i}" title="Drag the box to reorder, or use the arrow to pick a level"><span class="mut">⋮⋮</span><span class="ht-t t-${l}">${lvIcon(l)}</span>${LEVELS[l].label}<select aria-label="Level ${i+1}" data-lv="${i}">${DEFAULT_ORDER.map(x=>`<option value="${x}" ${x===l?"selected":""}>${LEVELS[x].label}</option>`).join("")}</select><svg class="ht-dd" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>`).join("");
   return `<div class="panel"><div class="panel-body"><div class="fb-r" style="justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px"><div class="fc-bigs" style="padding:0;gap:26px">${U.metric("Current annual spend",spend(cs))}${U.metric("Forecast annual spend (+"+P.NF+" mo)",spend(fs))}${U.metric("Projected change",sgn(pc,2),pc>=0?"red":"green")}${U.metric("Projects",String(P.PROGS.length))}</div>
-      <label class="small mut">Show parts with confidence <select data-set="hier.minConf" style="margin-left:6px;height:32px;border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:0 8px"><option value="all">All</option><option value="medium" ${H.minConf==="medium"?"selected":""}>Medium and above</option><option value="high" ${H.minConf==="high"?"selected":""}>High only</option></select></label></div>
-      <p class="fc-note" style="margin-top:12px"><b>Confidence is a signal-to-error ratio, not a probability.</b> It compares the size of the predicted move against the model's typical error at this horizon. <b style="color:var(--ok)">High</b> means the move is at least 2× that error and the direction is worth acting on; <b>low</b> means it sits inside the noise and the sign should not be trusted.</p></div></div>
+      <label class="small mut">Show parts with confidence <select data-set="hier.minConf" style="margin-left:6px;height:32px;border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:0 8px"><option value="all">All</option><option value="medium" ${H.minConf==="medium"?"selected":""}>Medium and above</option><option value="high" ${H.minConf==="high"?"selected":""}>High only</option></select></label></div></div></div>
     <div class="panel" style="margin-top:14px"><div class="panel-body" style="padding-bottom:6px"><div class="ht-lvs">${boxes}<button type="button" class="btn btn-sm" id="ht-reset" style="margin-left:auto">${Icons.svg("refresh")} Reset</button></div>
       <p class="small mut" style="margin-top:10px">Explore annual spend on the tracked parts (piece price × quantity per vehicle × planned annual volume) across your hierarchy. Drag any level box, or use its menu, to regroup the tree. Spend below the project, vendor and vertical level is estimated by price share. Click a part name for its price path and forecast drivers.</p></div>
       <div class="ht-scroll"><div class="ht-in"><div class="ht-row ht-head"><span>Name</span><span class="r">Current annual spend</span><span class="r">Forecast annual spend</span><span class="r">Variance</span><span>Confidence / Drivers</span></div>${groups.map(g=>renderNode(g,0,H)).join("")}</div></div></div>`;
@@ -8585,34 +8586,44 @@ U.v.hierarchy=function(){
 const U=PocUI, P=PocCore, C=PocCharts, R=P.RAW, esc=C.esc, nf=C.nf;
 const {spend,cur,inr,sgn,ml,panel,note,el,wire,header,state,varCell,pill,seg,table,sevDots}=U;
 const sp2=(v,d=2)=>(v>0?"+":v<0?"−":"")+Math.abs(v).toFixed(d)+"%";
+/* page shell and KPI card shared with the Forecast Dashboard */
+function board(title,sub,meta){
+  const wrap=document.createElement("div"); wrap.className="v8-page v8-board fc-dash";
+  const hd=header(title,sub), m=document.createElement("div"); m.className="pd-meta"; m.innerHTML=`<span>${meta}</span><span class="pd-ill">Illustrative data — synthetic scenario</span>`; hd.appendChild(m);
+  wrap.appendChild(hd); return wrap;
+}
+const kc=(ic,lb,vl,sub,o)=>{ o=o||{}; const chip=o.chg!=null?`<span class="ch"><b class="${o.chg>0?"bad":"good"}">${o.chg>0?"▲":o.chg<0?"▼":""} ${Math.abs(o.chg).toFixed(o.d==null?2:o.d)}%</b>${o.chgL?`<small>${esc(o.chgL)}</small>`:""}</span>`:"";
+  return `<div class="pd-kpi" ${o.tip?`title="${esc(o.tip)}"`:""}><div class="top"><span class="ic">${Icons.svg(ic)}</span><span class="lb">${lb}</span></div><div class="mid"><span class="vl ${o.tone||""}">${vl}</span>${chip}</div><div class="sb">${sub||""}</div></div>`; };
+const kpiRow=cards=>`<div class="pd-kw"><div class="pd-kpis k4">${cards.join("")}</div></div>`;
 
 /* ================================ COST IMPACT ================================ */
 const PRESETS=[{label:"Copper +10%",material:"Copper",commodityPct:10,fxPct:0},{label:"Rupee 5% weaker",commodityPct:0,fxPct:5},{label:"Aluminium +15% and rupee 8% weaker",material:"Aluminium",commodityPct:15,fxPct:8}];
 const CURRS=[["both","USD/INR + EUR/INR"],["USDINR","USD/INR"],["EURINR","EUR/INR"]];
 U.v.impact=function(){
-  const wrap=document.createElement("div"), s=state.impact;
-  wrap.appendChild(header("Forecasting & Cost Impact","What could happen to car cost if material prices or the rupee move? Pick a scenario, compare it to the base forecast, and drill to the parts exposed."));
+  const s=state.impact, wrap=board("Cost Impact","What could happen to car cost if material prices or the rupee move? Pick a scenario, compare it to the base forecast, and drill to the parts exposed.",
+    `Base forecast to <b>${esc(U.mlong(P.FM[P.NF-1]))}</b> · ${P.PARTS.length} parts`);
   const mats=uniq(P.PARTS.map(p=>p.material)), cars=P.PROGS.map(p=>p.name).sort();
   const host=el(`<div></div>`); wrap.appendChild(host);
-  host.innerHTML=`<div class="panel"><div class="panel-body"><div class="fc-ctrls">
+  host.innerHTML=`<div class="panel fc-scn"><div class="panel-header"><div class="ph-t"><h3>Scenario</h3><div class="ph-s">Pick the scope, then move a material price or the rupee</div></div><div class="fc-actions"><span class="mut small">Quick scenarios</span>${PRESETS.map((p,i)=>`<button type="button" class="fc-seg" data-preset="${i}">${esc(p.label)}</button>`).join("")}</div></div><div class="panel-body"><div class="fc-ctrls">
     <label>Car / model<select data-k="car"><option value="all">All cars</option>${cars.map(c=>`<option ${s.car===c?"selected":""}>${esc(c)}</option>`).join("")}</select></label>
     <label>Material / commodity<select data-k="material"><option value="all">All materials</option>${mats.map(m=>`<option ${s.material===m?"selected":""}>${esc(m)}</option>`).join("")}</select></label>
-    <label>Currency<select data-k="currency">${CURRS.map(([id,l])=>`<option value="${id}" ${s.currency===id?"selected":""}>${l}</option>`).join("")}</select></label></div>
-    <div class="fc-ctrls" style="margin-top:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+    <label>Currency<select data-k="currency">${CURRS.map(([id,l])=>`<option value="${id}" ${s.currency===id?"selected":""}>${l}</option>`).join("")}</select></label>
     <label><span id="l-cm">${s.material==="all"?"Commodity":esc(s.material)} price move</span><b id="v-cm">${sp2(s.commodityPct,0)}</b><input type="range" min="-20" max="30" step="1" value="${s.commodityPct}" data-k="commodityPct"><small class="mut" style="display:flex;justify-content:space-between"><span>−20%</span><span>+30%</span></small></label>
-    <label>Rupee move (positive = weaker rupee)<b id="v-fx">${sp2(s.fxPct,0)}</b><input type="range" min="-10" max="10" step="1" value="${s.fxPct}" data-k="fxPct"><small class="mut" style="display:flex;justify-content:space-between"><span>−10%</span><span>+10%</span></small></label></div>
-    <div class="fc-actions" style="margin-top:12px"><span class="mut small">Quick scenarios</span>${PRESETS.map((p,i)=>`<button type="button" class="fc-seg" data-preset="${i}">${esc(p.label)}</button>`).join("")}</div></div></div><div id="imp-out" style="margin-top:16px"></div>`;
+    <label>Rupee move (positive = weaker rupee)<b id="v-fx">${sp2(s.fxPct,0)}</b><input type="range" min="-10" max="10" step="1" value="${s.fxPct}" data-k="fxPct"><small class="mut" style="display:flex;justify-content:space-between"><span>−10%</span><span>+10%</span></small></label></div></div></div><div id="imp-out"></div>`;
   const out=host.querySelector("#imp-out");
   const draw=()=>{
     const r=P.impact({car:s.car,material:s.material,currency:s.currency,fxPct:s.fxPct,commodityPct:s.commodityPct}), tr=P.impactTrend(r.base,r.delta);
     const vp=r.base&&s.share?r.delta/(r.base/(s.share/100))*100:0, tone=r.delta>0?"red":r.delta<0?"green":"";
     const lo=Math.min(r.base,r.scenario)-Math.max(Math.abs(r.delta)*3,r.base*0.02);
-    const st=(l,v,sub,t)=>`<div class="kpi-card"><div class="kpi-label">${l}</div><div class="kpi-value ${t?"var-"+(t==="red"?"up":"dn"):""}" style="font-size:24px">${v}</div><div class="mut small">${sub||""}</div></div>`;
-    out.innerHTML=`<div class="grid grid-4">${st("Base forecast cost per vehicle (+"+P.NF+" months)",spend(r.base),s.car==="all"?"All cars":esc(s.car))}${st("Scenario cost",spend(r.scenario),"After the moves above")}${st("Impact on material cost",spend(r.delta,true),sp2(r.deltaPct),tone)}${st("Impact on overall vehicle cost",sp2(vp),"If material is "+s.share+"% of vehicle cost",tone)}</div>
-     <div class="fc-cols" style="margin-top:16px">${panel("Forecast trend: base vs scenario",C.line({labels:tr.map(t=>t.label.replace(/ \d{4}/,x=>" "+x.trim().slice(2))),height:250,mLeft:64,yFmt:v=>spend(v),series:[{name:"Base forecast",data:tr.map(t=>t.base),color:C.C.faint,width:2.5},{name:"Scenario",data:tr.map(t=>t.scenario),color:r.delta>0?C.C.red:C.C.ok,dash:"6 4",width:2.5,dots:true}]})+`<div class="mut small">The scenario impact is assumed to phase in evenly over the ${P.NF} months.</div>`)}
-      ${panel("Impact bridge: base to scenario",C.waterfall({steps:[{label:"Base forecast",value:r.base,kind:"total"},{label:"FX effect",value:r.fx,kind:"bridge"},{label:"Commodity effect",value:r.commodity,kind:"bridge"},{label:"Scenario",value:r.scenario,kind:"total"}],floor:lo,height:250,fmt:v=>spend(v)})+`<div class="mut small">FX ${spend(r.fx,true)} · Commodity ${spend(r.commodity,true)}. Axis starts above zero so the effects are visible.</div>`)}</div>
-     ${panel("Exposure by vertical, then part",table(["Vertical",{t:"Base",r:1},{t:"FX",r:1},{t:"Commodity",r:1},{t:"Impact",r:1},{t:"Impact %",r:1}],r.categories.map(c=>{ const open=s.openCat===c.name; return `<tr class="clk" data-cat="${esc(c.name)}"><td><b>${open?"▾":"▸"} ${esc(c.name)}</b></td><td class="r">${spend(c.base)}</td><td class="r">${spend(c.fx,true)}</td><td class="r">${spend(c.commodity,true)}</td><td class="r"><b>${spend(c.delta,true)}</b></td><td class="r"><b class="var ${c.deltaPct>0?"up":c.deltaPct<0?"dn":""}">${sp2(c.deltaPct)}</b></td></tr>`+(open?c.parts.slice(0,8).map(p=>`<tr class="clk sub" data-act="part:${esc(p.part.id)}"><td style="padding-left:38px">${esc(p.part.name)} <small class="mut">· ${esc(p.part.material)} · ${esc(p.part.progCode)}</small></td><td class="r">${spend(p.base)}</td><td class="r">${spend(p.fx,true)}</td><td class="r">${spend(p.commodity,true)}</td><td class="r">${spend(p.delta,true)}</td><td class="r mut">open</td></tr>`).join(""):""); }).join("")),{noPad:true,style:"margin-top:16px",sub:"Click a vertical to see its parts"})}
-     <div class="fc-note warn" style="margin-top:16px"><b>How these numbers are built</b><ul class="fc-list"><li><b>FX effect</b> comes from the model's own FX scenarios, per vertical. A single currency pair is assumed to carry half of the combined effect.</li><li><b>Commodity effect is illustrative.</b> The data has no commodity sensitivity, so each material uses an assumed share of part cost and supplier pass-through${s.material!=="all"&&P.MATERIAL_ASSUMPTIONS[s.material]?` (${esc(s.material)}: ${Math.round(P.MATERIAL_ASSUMPTIONS[s.material].share*100)}% share, ${Math.round(P.MATERIAL_ASSUMPTIONS[s.material].passThrough*100)}% passed on)`:""}. Replace with contract-indexed values when available.</li><li><b>Overall vehicle cost</b> assumes material is <input type="number" id="imp-share" min="10" max="90" value="${s.share}" style="width:58px;height:26px;text-align:center;border:1px solid var(--line);border-radius:6px;background:var(--panel)"> % of vehicle cost.</li></ul></div>`;
+    const tn=tone==="red"?"bad":tone==="green"?"good":"";
+    out.innerHTML=kpiRow([kc("calculator","Base forecast cost per vehicle",spend(r.base),(s.car==="all"?"All cars":esc(s.car))+" · +"+P.NF+" months"),
+      kc("target","Scenario cost per vehicle",spend(r.scenario),"After the moves above",{chg:r.deltaPct,d:2,chgL:"vs base"}),
+      kc("coins","Impact on material cost",spend(r.delta,true),sp2(r.deltaPct)+" of the base forecast",{tone:tn}),
+      kc("trend-up","Impact on overall vehicle cost",sp2(vp),"If material is "+s.share+"% of vehicle cost",{tone:tn})])+`
+     <div class="fc-pair eq">${panel("Forecast trend: base vs scenario",C.line({labels:tr.map(t=>t.label.replace(/ \d{4}/,x=>" "+x.trim().slice(2))),height:250,mLeft:64,yFmt:v=>spend(v),series:[{name:"Base forecast",data:tr.map(t=>t.base),color:C.C.faint,width:2.5},{name:"Scenario",data:tr.map(t=>t.scenario),color:r.delta>0?C.C.red:C.C.ok,dash:"6 4",width:2.5,dots:true}]})+`<div class="mut small">The scenario impact is assumed to phase in evenly over the ${P.NF} months.</div>`,{sub:"Cost per vehicle over the forecast horizon"})}
+      ${panel("Impact bridge: base to scenario",C.waterfall({steps:[{label:"Base forecast",value:r.base,kind:"total"},{label:"FX effect",value:r.fx,kind:"bridge"},{label:"Commodity effect",value:r.commodity,kind:"bridge"},{label:"Scenario",value:r.scenario,kind:"total"}],floor:lo,height:250,fmt:v=>spend(v)})+`<div class="mut small">FX ${spend(r.fx,true)} · Commodity ${spend(r.commodity,true)}. Axis starts above zero so the effects are visible.</div>`,{sub:"How the FX and commodity moves add up"})}</div>
+     ${panel("Exposure by vertical, then part",table(["Vertical",{t:"Base",r:1},{t:"FX",r:1},{t:"Commodity",r:1},{t:"Impact",r:1},{t:"Impact %",r:1}],r.categories.map(c=>{ const open=s.openCat===c.name; return `<tr class="clk" data-cat="${esc(c.name)}"><td><b>${open?"▾":"▸"} ${esc(c.name)}</b></td><td class="r">${spend(c.base)}</td><td class="r">${spend(c.fx,true)}</td><td class="r">${spend(c.commodity,true)}</td><td class="r"><b>${spend(c.delta,true)}</b></td><td class="r"><b class="var ${c.deltaPct>0?"up":c.deltaPct<0?"dn":""}">${sp2(c.deltaPct)}</b></td></tr>`+(open?c.parts.slice(0,8).map(p=>`<tr class="clk sub" data-act="part:${esc(p.part.id)}"><td style="padding-left:38px">${esc(p.part.name)} <small class="mut">· ${esc(p.part.material)} · ${esc(p.part.progCode)}</small></td><td class="r">${spend(p.base)}</td><td class="r">${spend(p.fx,true)}</td><td class="r">${spend(p.commodity,true)}</td><td class="r">${spend(p.delta,true)}</td><td class="r mut">open</td></tr>`).join(""):""); }).join("")),{noPad:true,sub:"Click a vertical to see its parts"})}
+     <div class="fc-note warn" style="margin:16px 0 0"><b>How these numbers are built</b><ul class="fc-list"><li><b>FX effect</b> comes from the model's own FX scenarios, per vertical. A single currency pair is assumed to carry half of the combined effect.</li><li><b>Commodity effect is illustrative.</b> The data has no commodity sensitivity, so each material uses an assumed share of part cost and supplier pass-through${s.material!=="all"&&P.MATERIAL_ASSUMPTIONS[s.material]?` (${esc(s.material)}: ${Math.round(P.MATERIAL_ASSUMPTIONS[s.material].share*100)}% share, ${Math.round(P.MATERIAL_ASSUMPTIONS[s.material].passThrough*100)}% passed on)`:""}. Replace with contract-indexed values when available.</li><li><b>Overall vehicle cost</b> assumes material is <input type="number" id="imp-share" min="10" max="90" value="${s.share}" style="width:58px;height:26px;text-align:center;border:1px solid var(--line);border-radius:6px;background:var(--panel)"> % of vehicle cost.</li></ul></div>`;
     out.querySelectorAll("[data-cat]").forEach(t=>t.onclick=()=>{ s.openCat=s.openCat===t.dataset.cat?null:t.dataset.cat; draw(); });
     out.querySelector("#imp-share").onchange=e=>{ s.share=Math.min(90,Math.max(10,+e.target.value||55)); draw(); };
     wire(out);
@@ -8626,23 +8637,31 @@ const uniq=a=>[...new Set(a.filter(Boolean))].sort((x,y)=>x.localeCompare(y));
 
 /* ================================ FX IMPACT ================================ */
 U.v.fx=function(){
-  const wrap=document.createElement("div"), fx=R.fxAnalysis, s=state.fx;
-  wrap.appendChild(header("FX Impact","How currency moves reach part prices, and whether that effect can be trusted."));
+  const fx=R.fxAnalysis, s=state.fx, wrap=board("FX Impact","How currency moves reach part prices, and whether that effect can be trusted.",
+    `ECB reference rates to <b>${esc(U.mlong(P.MONTHS[P.NH-1]))}</b>`);
   const sorted=fx.scenarios.slice().sort((a,b)=>a.shockPct-b.shockPct), largest=sorted[sorted.length-1], lr=fx.learning, co=fx.collinearity, sn=fx.signalToNoise, pv=fx.provenance;
   const levels=[["category","Vertical"],["vendor","Vendor"],["project","Project"]];
   const levelRows=(largest.byLevel[s.level]||[]);
   let h="";
-  h+=`<div class="fc-cols">${pv.pairs.map(p=>`<div class="kpi-card"><div class="kpi-label">${esc(p.base)}/${esc(p.quote)}<span class="pill ${p.isReal?"blue":"amber"}">${p.isReal?"real ECB":"fallback"}</span></div><div class="kpi-value">${p.lastRate.toFixed(2)}</div><div class="kpi-trend2"><span class="var ${p.totalMovePct>=0?"up":"dn"}">${sgn(p.totalMovePct,2)}</span><span class="mut">over the window · from ${p.firstRate.toFixed(2)}</span></div></div>`).join("")}</div>`;
-  h+=panel("Exchange-rate path (ECB reference)",C.line({labels:P.MONTHS.map(ml),height:210,mLeft:48,maxX:9,yFmt:v=>nf(v,0),series:[{name:"EUR/INR",data:P.macro.eurinr,color:C.C.brand},{name:"USD/INR",data:P.macro.usdinr,color:C.C.info}]}),{style:"margin-top:16px",right:'<span class="pill blue">real data</span>'});
-  h+=panel("Price Response to an FX Shock",C.combo({items:sorted.map(x=>({label:(x.shockPct>0?"+":"")+x.shockPct+"%",value:x.overallPriceChangePct,color:x.overallPriceChangePct>=0?C.C.red:C.C.ok,text:x.overallPriceChangePct.toFixed(3)+"%"})),line:{name:"Implied pass-through",data:sorted.map(x=>x.impliedElasticity),color:C.C.amber,fmt:v=>v.toFixed(2)},barName:"Cost per vehicle change",barColor:C.C.red,height:250,yFmt:v=>v.toFixed(1)+"%"})+
-    `<div class="fc-note warn" style="margin:10px 0 0"><b>Read this with care.</b> Positive shocks respond in the right direction but the response <i>saturates</i>, and negative shocks are incoherent. Both are the tree-extrapolation limit: a shocked feature moves outside the training range, where a tree is flat.</div>`,{style:"margin-top:16px",sub:"A positive shock means the rupee weakens, so imported input costs rise"});
-  h+=panel("Where a "+esc(largest.name)+" Move Lands",C.bars({signed:true,items:levelRows.map(r=>({label:r.name,value:r.changePct,text:sgn(r.changePct,3),onclick:s.level==="vendor"?"filter:vendor="+r.name:s.level==="category"?"filter:cat="+r.name:""})),fmt:v=>sgn(v,2)}),{style:"margin-top:16px",sub:"Same shock, broken down by "+(s.level==="category"?"vertical":s.level),right:seg(levels,s.level,"set:fx.level=%v")});
-  if(lr&&lr.available) h+=`<div class="panel" style="margin-top:16px"><div class="panel-body"><div class="fb-r" style="align-items:flex-start;gap:12px"><span style="color:${lr.verdict==="recovered"?"var(--ok)":"var(--amber)"}">${Icons.svg(lr.verdict==="recovered"?"check-circle":"alert")}</span><div style="min-width:0;flex:1"><h3 style="margin:0;text-transform:capitalize;font-size:15px">FX structure: ${esc(lr.verdict)}</h3><p class="small" style="margin:6px 0">The generator built each vertical with a known FX sensitivity. Correlating the model's revealed response against those true betas gives <b>Spearman ${lr.spearman.toFixed(3)}</b> across ${lr.nCategories} verticals. The true betas are never features — recovering them is the test, not the input.</p>
-    ${lr.rows&&lr.rows.length?table(["Vertical",{t:"True beta",r:1},{t:"Model response",r:1}],lr.rows.map(r=>`<tr><td>${esc(r.category)}</td><td class="r">${r.trueBeta.toFixed(4)}</td><td class="r"><b>${sgn(r.modelledChangePct,3)}</b></td></tr>`).join("")):""}</div></div></div></div>`;
+  h+=kpiRow(pv.pairs.map(p=>kc("swap",`${esc(p.base)}/${esc(p.quote)}`,p.lastRate.toFixed(2),`From ${p.firstRate.toFixed(2)} over the window · ${p.isReal?"real ECB":"fallback"}`,{chg:p.totalMovePct,chgL:"over window"}))
+    .concat([kc("line-chart","Largest shock response",sgn(largest.overallPriceChangePct,3),esc(largest.name)+" · cost per vehicle",{tone:largest.overallPriceChangePct>0?"bad":"good"}),
+      kc("target","FX signal-to-noise","SNR "+sn.snr,co.separable?"Detectable and attributable":"Detectable, not attributable to FX alone")]));
+  h+=`<div class="fc-pair eq">`;
+  h+=panel("Exchange-rate path (ECB reference)",C.line({labels:P.MONTHS.map(ml),width:520,height:250,mLeft:48,maxX:7,yFmt:v=>nf(v,0),series:[{name:"EUR/INR",data:P.macro.eurinr,color:C.C.brand},{name:"USD/INR",data:P.macro.usdinr,color:C.C.info}]}),{sub:"Monthly EUR/INR and USD/INR",right:'<span class="pill blue">real data</span>'});
+  h+=panel("Price Response to an FX Shock",C.combo({items:sorted.map(x=>({label:(x.shockPct>0?"+":"")+x.shockPct+"%",value:x.overallPriceChangePct,color:x.overallPriceChangePct>=0?C.C.red:C.C.ok,text:x.overallPriceChangePct.toFixed(3)+"%"})),line:{name:"Implied pass-through",data:sorted.map(x=>x.impliedElasticity),color:C.C.amber,fmt:v=>v.toFixed(2)},barName:"Cost per vehicle change",barColor:C.C.red,height:250,yFmt:v=>v.toFixed(1)+"%"}),{sub:"A positive shock means the rupee weakens, so imported input costs rise"});
+  h+=`</div>`;
+  h+=`<div class="fc-note warn" style="margin:0 0 16px"><b>Read this with care.</b> Positive shocks respond in the right direction but the response <i>saturates</i>, and negative shocks are incoherent. Both are the tree-extrapolation limit: a shocked feature moves outside the training range, where a tree is flat.</div>`;
+  h+=`<div class="fc-pair eq${lr&&lr.available?"":" one"}">`+panel("Where a "+esc(largest.name)+" Move Lands",C.bars({signed:true,items:levelRows.map(r=>({label:r.name,value:r.changePct,text:sgn(r.changePct,3),onclick:s.level==="vendor"?"filter:vendor="+r.name:s.level==="category"?"filter:cat="+r.name:""})),fmt:v=>sgn(v,2)}),{sub:"Same shock, broken down by "+(s.level==="category"?"vertical":s.level),right:seg(levels,s.level,"set:fx.level=%v")});
+  if(lr&&lr.available){ const ok=lr.verdict==="recovered";
+    h+=panel(`<span style="color:${ok?"var(--ok)":"var(--amber)"};display:inline-flex;vertical-align:-2px;margin-right:6px">${Icons.svg(ok?"check-circle":"alert")}</span>FX structure: <span style="text-transform:capitalize">${esc(lr.verdict)}</span>`,
+      `<p class="small" style="margin:0 0 12px">The generator built each vertical with a known FX sensitivity. Correlating the model's revealed response against those true betas gives <b>Spearman ${lr.spearman.toFixed(3)}</b> across ${lr.nCategories} verticals. The true betas are never features — recovering them is the test, not the input.</p>`+
+      (lr.rows&&lr.rows.length?table(["Vertical",{t:"True beta",r:1},{t:"Model response",r:1}],lr.rows.map(r=>`<tr><td>${esc(r.category)}</td><td class="r">${r.trueBeta.toFixed(4)}</td><td class="r"><b>${sgn(r.modelledChangePct,3)}</b></td></tr>`).join("")):""),
+      {cls:"fx-struct",sub:"Does the model recover the designed FX sensitivity?",right:`<span class="pill ${ok?"blue":"amber"}">Spearman ${lr.spearman.toFixed(2)}</span>`}); }
+  h+=`</div>`;
   h+=panel("Detectable vs Attributable",`<div class="fc-cols"><div class="fc-box ok"><div class="fb-h">${Icons.svg("trend-up")} Detectable — yes</div><div class="fc-big" style="font-size:26px">SNR ${sn.snr}</div><p class="small">The most-vs-least exposed vertical differ by <b>${sn.signalPct.toFixed(2)}%</b> in price, against <b>${sn.categoryMeanNoisePct.toFixed(3)}%</b> of noise on a vertical mean. The effect is comfortably large enough to see.</p></div>
     <div class="fc-box ${co.separable?"ok":"bad"}"><div class="fb-h">${Icons.svg("alert")} Attributable — ${co.separable?"yes":"no"}</div><div class="fc-big" style="font-size:26px">r = ${co.maxCumulativeVsTime}</div><p class="small">The cumulative FX path correlates <b>${co.maxCumulativeVsTime}</b> with elapsed time. So "prices rose because FX moved" and "prices rose because time passed" are the same statement here — no estimator can separate them.</p></div></div>
     ${table(["Pair",{t:"Cumulative vs time",r:1},{t:"Rising months",r:1}],co.byPair.map(r=>`<tr><td><b>${esc(r.pair)}</b></td><td class="r var up">${r.cumulativeVsTime.toFixed(3)}</td><td class="r">${r.risingMonthsPct}%</td></tr>`).join(""))}
-    <div class="mut small" style="margin-top:8px">Currency pairs correlate <b>${co.crossPairLevelCorr}</b> on levels but only <b>${co.crossPairReturnCorr}</b> on monthly returns — which is why only stationary returns are exposed as model features, and why exposure is identified across parts within a month rather than over time. Separating FX properly needs a window containing reversals, or currencies that genuinely diverge.</div>`,{style:"margin-top:16px",sub:"Two different questions that are easy to conflate"});
+    <div class="mut small" style="margin-top:8px">Currency pairs correlate <b>${co.crossPairLevelCorr}</b> on levels but only <b>${co.crossPairReturnCorr}</b> on monthly returns — which is why only stationary returns are exposed as model features, and why exposure is identified across parts within a month rather than over time. Separating FX properly needs a window containing reversals, or currencies that genuinely diverge.</div>`,{sub:"Two different questions that are easy to conflate"});
   h+=panel("Designed FX Exposure by Vertical",table(["Vertical","Material",{t:"EUR beta",r:1},{t:"USD beta",r:1},{t:"Total",r:1},{t:"Lag",r:1}],fx.trueExposure.map(r=>`<tr><td><b>${esc(r.category)}</b></td><td class="mut">${esc(r.material)}</td><td class="r" style="color:var(--info)">${r.eurBeta.toFixed(4)}</td><td class="r" style="color:var(--amber)">${r.usdBeta.toFixed(4)}</td><td class="r"><b>${r.totalBeta.toFixed(4)}</b></td><td class="r mut">${r.lagMonths}mo</td></tr>`).join(""))+
     `<div class="mut small" style="padding:10px 16px">Steel-heavy verticals carry almost no EUR exposure but full USD exposure: a locally-bought steel coil is still priced off a global benchmark, so localisation does not protect against it. That is why the two channels are modelled separately rather than blended into one elasticity.</div>`,{noPad:true,style:"margin-top:16px",sub:"Two channels: direct import invoicing (EUR) and USD-benchmarked commodities",right:'<span class="pill">ground truth</span>'});
   wrap.appendChild(el(`<div>${h}</div>`)); wire(wrap); return wrap;
@@ -11327,7 +11346,7 @@ const P=PocCore, C=PocCharts, U=PocUI, S=SrmData, V=V8Charts, esc=C.esc, nf=C.nf
 const TODAY_STR=(typeof TODAY!=="undefined"?TODAY:"2026-07-29");
 let MODEL=null;
 const model=()=>MODEL||(MODEL=S.build({today:TODAY_STR,parts:P.PARTS,vendors:P.VENDS,programmes:DATA.projects.map(p=>({code:p.code,name:p.name,sop:p.sop}))}));
-const F={project:"",family:"",supplier:"",brand:"",sopYear:""}; let DRILL=null; let PCOLS=2; let MSEL=-1;   // MSEL: milestone picked on Status Tracking (-1 = next open one)
+const F={project:"",family:"",supplier:"",sopYear:""}; let DRILL=null; let PCOLS=2; let MSEL=-1;   // MSEL: milestone picked on Status Tracking (-1 = next open one)
 const MS=S.MS, DAY=S.DAY, fmtDate=V.fmtDate;
 const pct0=v=>v==null?"—":Math.round(v)+"%";
 const chipCls={ok:"chip-green",risk:"chip-amber",delayed:"chip-red",notstarted:"chip-gray"};
@@ -11337,12 +11356,10 @@ function weekLabel(t){ const d=new Date(t); const x=new Date(Date.UTC(d.getUTCFu
 
 /* ------------------------------------------------------------ shared context + filter bar */
 function projectOf(code){ return (typeof DATA!=="undefined"&&DATA.projects||[]).find(x=>x.code===code)||null; }
-function inBrand(code){ if(!F.brand) return true; const p=projectOf(code); return !!(p&&p.brand===F.brand); }
-/* Brand and SOP year are not part of SrmData.scope. Brand is the project master; SOP year is the part's own SOP (facelift uses the project date). */
+/* SOP year is not part of SrmData.scope; it is the part's own SOP (facelift uses the project date). */
 function applyExtra(ev){
-  if(!F.brand&&!F.sopYear) return ev;
+  if(!F.sopYear) return ev;
   return ev.filter(e=>{
-    if(F.brand&&!inBrand(e.pt.prog)) return false;
     if(F.sopYear&&String(new Date(e.pt.sop).getUTCFullYear())!==String(F.sopYear)) return false;
     return true;
   });
@@ -11357,16 +11374,13 @@ function suppliers(m,ev){
     return {name,n:l.length,started:s.started,counts:s.counts,readiness:s.readiness,toolReadiness:s.toolReadiness,delivery:v.delivery,quality:v.quality,owner:v.owner,origin:v.origin,list:l}; });
 }
 function trend(m,name){ const out=[]; for(let k=5;k>=0;k--){ const t=m.today-k*30*DAY; const s=S.summary(S.evaluate(m,t).filter(e=>e.pt.vendor===name)); out.push(s.readiness); } return out; }
-function brandOptions(){ return [...new Set((typeof DATA!=="undefined"&&DATA.projects||[]).map(p=>p.brand).filter(Boolean))].sort(); }
 function sopYearOptions(m){ return [...new Set(m.parts.map(p=>new Date(p.sop).getUTCFullYear()))].sort((a,b)=>a-b); }
-function projectsForFilters(m){ return m.programmes.filter(p=>inBrand(p.code)); }
-function filtersOn(){ return !!(F.project||F.family||F.supplier||F.brand||F.sopYear); }
+function filtersOn(){ return !!(F.project||F.family||F.supplier||F.sopYear); }
 function filterSpec(m){
-  const projs=projectsForFilters(m), years=sopYearOptions(m), brands=brandOptions();
+  const projs=m.programmes, years=sopYearOptions(m);
   return [
     ["project","Project",[["","All projects ("+projs.length+")"]].concat(projs.map(p=>[p.code,p.name])),"Vehicle programme"],
     ["supplier","Supplier",[["","All suppliers ("+Object.keys(m.vend).length+")"]].concat(Object.keys(m.vend).sort().map(v=>[v,v]))],
-    ["brand","Brand",[["","All brands"]].concat(brands.map(b=>[b,b])),"Brand on the project master. The vehicle is the project."],
     ["family","Vertical",[["","All verticals"]].concat(S.FAMILIES.map(f=>[f,f]))],
     ["sopYear","SOP Year",[["","All SOP years"]].concat(years.map(y=>[String(y),String(y)])),"Year of the part SOP date. Facelift parts use the project SOP; model-year and AEKO parts use their own date."]
   ];
@@ -11375,11 +11389,9 @@ function bindFilters(d){
   d.addEventListener("change",e=>{
     const k=e.target.dataset&&e.target.dataset.f; if(!k||k==="reset") return;
     F[k]=e.target.value; DRILL=null;
-    if(k==="brand"&&F.project&&!inBrand(F.project)) F.project="";
-    if(k==="project"&&F.project&&F.brand&&!inBrand(F.project)) F.brand="";
     Router.render();
   });
-  d.addEventListener("click",e=>{ if(e.target.closest('[data-f="reset"]')){ F.project=F.family=F.supplier=F.brand=F.sopYear=""; DRILL=null; Router.render(); } });
+  d.addEventListener("click",e=>{ if(e.target.closest('[data-f="reset"]')){ F.project=F.family=F.supplier=F.sopYear=""; DRILL=null; Router.render(); } });
 }
 function filterSelect(k,label,opts,tip){
   return `<label class="v8-f"><span${tip?` title="${esc(tip)}"`:""}>${label}</span><select data-f="${k}" aria-label="${esc(label)}">${opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(F[k])?" selected":""}>${esc(o[1])}</option>`).join("")}</select></label>`;
@@ -11407,7 +11419,7 @@ const delta=(a,b,unit,good)=>{ if(a==null||b==null) return ""; const d=a-b; if(M
 
 /* ------------------------------------------------------------ project milestone status (facelift parts of each project) */
 function progMilestones(m,ev){
-  return m.programmes.filter(p=>(!F.project||p.code===F.project)&&inBrand(p.code)).map(p=>{
+  return m.programmes.filter(p=>!F.project||p.code===F.project).map(p=>{
     const evp=ev.filter(e=>e.pt.prog===p.code&&e.pt.changeType==="Facelift");
     return {p,evp,ms:MS.map((d,i)=>{ const R=p.sop-d.off*DAY, st=S.milestoneStatus(evp,i); return Object.assign({id:d.id,R,need:d.need,future:R>=m.today},st,{fc:st.avgSlip==null?null:R+Math.max(0,st.avgSlip)*DAY}); })};
   });
@@ -11552,7 +11564,7 @@ function sixMonths(today){
 function driverMs(e){ const fut=(e.milestones||[]).filter(k=>k.future&&k.st===e.status); return fut[0]||e.next; }
 function attention(ev){ return ev.filter(e=>e.started&&(e.status==="risk"||e.status==="delayed")); }
 function overviewFilters(m){
-  const icons={project:"car",supplier:"building",brand:"flag",family:"layers",sopYear:"calendar"};
+  const icons={project:"car",supplier:"building",family:"layers",sopYear:"calendar"};
   const d=document.createElement("div"); d.className="pd-fbar";
   const pic=F.project&&window.V8Art?V8Art.car(F.project):""; /* the project's car, or the model line-up; an empty frame of the same size keeps the filters in place */
   d.innerHTML=`<div class="pd-carbox solo">${pic||(window.V8Art&&V8Art.lineup())||'<span class="va-car" aria-hidden="true"></span>'}</div>`+filterSpec(m).map(([k,label,opts,tip])=>`<label class="pd-f"><span${tip?` title="${esc(tip)}"`:""}>${esc(label)}</span><span class="pd-sel">${Icons.svg(icons[k]||"filter")}<select data-f="${k}" aria-label="${esc(label)}">${opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(F[k])?" selected":""}>${esc(o[1])}</option>`).join("")}</select></span></label>`).join("")+
@@ -11929,7 +11941,7 @@ Object.assign(U.actions,{
   sdrill:v=>{ DRILL={prev:F.supplier}; F.supplier=v; Router.go("srm-tooling-dash","srm"); },
   sfg:v=>{ const [kv,scr]=v.split("|"), [k,val]=kv.split("="); F[k]=val; Router.go(scr,"srm"); },
   sms:v=>{ MSEL=+v; Router.render(); },
-  sml:v=>{ const [code,mi]=v.split("|"); if(code&&F.brand&&!inBrand(code)) F.brand=""; if(code) F.project=code; MSEL=+mi; Router.go("srm-status-dash","srm"); },
+  sml:v=>{ const [code,mi]=v.split("|"); if(code) F.project=code; MSEL=+mi; Router.go("srm-status-dash","srm"); },
   srmpart:v=>{ openSrmPart(v); },
   smd:v=>{ const [code,mi]=v.split("|"); openMilestoneDrawer(code,+mi); },
 });
@@ -11940,7 +11952,7 @@ const at=NAV.srm.findIndex(x=>x.sep==="SRM Dashboards");
 NAV.srm.splice(at+1,0,{id:"srm-overview",label:"Overview",icon:"📊"},{id:"srm-tooling-dash",label:"Part Readiness",icon:"🛠"},{id:"srm-status-dash",label:"Status Tracking",icon:"📍"},{id:"srm-performance-dash",label:"Supplier Performance",icon:"📈"});
 Object.assign(NAV_ICONS,{"srm-overview":"layout","srm-performance-dash":"trend-up"});
 Object.assign(NAV_SHORT,{"srm-performance-dash":"Performance"});
-const dash=MODULE_TREE.srm.find(g=>g[0]==="Dashboards"); if(dash) dash[1]=SRM_IDS.concat(["reports-srm"]);
+const dash=MODULE_TREE.srm.find(g=>g[0]==="Dashboards"); if(dash) dash[1]=SRM_IDS.slice();
 NAV_HIDDEN.delete("srm-performance-dash");
 const _nl2=navLabel; navLabel=function(mod,s){ return SRM_LABEL[s]||_nl2(mod,s); };
 Object.assign(SCREENS.srm,{"srm-overview":buildOverview,"srm-tooling-dash":buildParts,"srm-status-dash":buildStatus,"srm-performance-dash":buildPerformance});
@@ -13714,7 +13726,7 @@ function buildRegister(){
 function buildDetail(){
   const all=register(), r=all.find(x=>x.id===UI.sel)||all[0], w=document.createElement("div"); w.className="v8-page v8-board tc-page tcd tcm tcm-det";
   const hd=U.header(r.wf+" — "+r.part,r.desc+" · "+carName(r.project));
-  const fromS=UI.from&&UI.from!=="tc-change"?UI.from:"change-register", fromL=navLabel("techchange",fromS); const bc=hd.querySelector(".breadcrumb"); if(bc) bc.innerHTML=`Technical Change <b>›</b> <a href="#" data-act="tcm:go=${esc(fromS)}">${esc(fromL)}</a> <b>›</b> ${esc(r.wf)} — ${esc(r.part)}`;
+  const fromS=UI.from&&UI.from!=="tc-change"?UI.from:"change-register", fromL=navLabel("techchange",fromS), fromG=(Nav.tree("techchange").find(g=>g.items.some(i=>i.id===fromS))||{}).title; const bc=hd.querySelector(".breadcrumb"); if(bc) bc.innerHTML=`Technical Change <b>›</b> ${fromG?esc(fromG)+" <b>›</b> ":""}<a href="#" data-act="tcm:go=${esc(fromS)}">${esc(fromL)}</a> <b>›</b> ${esc(r.wf)} — ${esc(r.part)}`;
   const meta=document.createElement("div"); meta.className="pd-meta"; meta.innerHTML=`<span>Data as of <b>${esc(fmtDate(T0))}</b></span><span class="pd-ill">Illustrative prototype data</span>`; hd.appendChild(meta); w.appendChild(hd);
   /* action bar */
   add(w,`<div class="tcm-dh"><span class="chips">${stChip(r.life)}${r.active?rkChip(r.rk.level," risk"):""}${r.active?prChip(r.priority," priority"):""}<span class="chip chip-gray"><span class="chip-dot"></span>${esc(r.category)}</span><span class="chip chip-gray"><span class="chip-dot"></span>${esc(r.form)}</span></span>${r.live?`<button type="button" class="btn btn-primary btn-sm" data-act="tc:open=${esc(r.live)}">Open in the change workflow</button>`:`<span class="tcm-mute">Generated register record — no workflow behind it</span>`}</div>`);
@@ -14113,7 +14125,7 @@ const pad = (n,w)=>String(n).padStart(w,"0");
 /* ---------------------------------------------------------------- navigation + screens */
 const FC_LABEL = {"fc-outlook":"Forecast Dashboard","fc-forecast":"Forecast Detail","fc-material":"Material Cost Forecast","fc-hierarchy":"Hierarchy Drill-down","fc-parts":"Parts","fc-impact":"Cost Impact","fc-fx":"FX Impact","fc-geo":"Geo Risk","fc-alerts":"Alerts",
   "fc-validation":"Real-Data Validation","fc-futuretest":"Simulated-Future Test","fc-data":"Data Sources","fc-faq":"Technical FAQ"};
-const V8DROP = ["fc-parts","fc-geo","fc-alerts"];   // these three pages (and Reports) are no longer part of Forecast & risk
+const V8DROP = ["fc-forecast","fc-parts","fc-geo","fc-alerts"];   // these pages (and Reports) are no longer part of Forecast & risk
 const FC_IDS = ["fc-outlook","fc-forecast","fc-material","fc-hierarchy","fc-parts","fc-impact","fc-fx","fc-geo","fc-alerts"].filter(id=>!V8DROP.includes(id));
 const MODEL_IDS = ["fc-validation","fc-futuretest","fc-data","fc-faq"];
 const FC_ITEMS = FC_IDS.map(id=>({id,label:FC_LABEL[id],icon:"📈"}));
@@ -14320,7 +14332,7 @@ Router.render();
   const same=(a,b)=>a&&b&&a.m===b.m&&a.s===b.s;
   const goOrig=Router.go.bind(Router), renderOrig=Router.render.bind(Router);
   Router.go=function(screen,module){
-    const from={m:this.module,s:this.screen}, to={m:module||this.module,s:screen};
+    const h1=document.querySelector("#content .page-header h1"), from={m:this.module,s:this.screen,t:h1?h1.textContent.trim():""}, to={m:module||this.module,s:screen};
     if(!skip&&!same(from,to)&&from.s){ if(!same(HIST[HIST.length-1],from)) HIST.push(from); if(HIST.length>40) HIST.shift(); }
     skip=false; return goOrig(screen,module);
   };
@@ -14334,7 +14346,26 @@ Router.render();
     b.addEventListener("click",()=>{ const j=target(); if(j<0) return; const x=HIST[j]; HIST.length=j; skip=true; Router.go(x.s,x.m); });
     inner.insertBefore(b,inner.firstChild);
   }
-  Router.render=function(){ const r=renderOrig.apply(this,arguments); try{ addBack(); }catch(e){ console.warn("back link",e); } return r; };
+  /* Breadcrumb = the full path in the sidebar: Module › sub-section › page. A page that is not in the sidebar (a detail page)
+     hangs off the sidebar page it was opened from, through any detail pages in between (taken from the history above).
+     Breadcrumbs a screen writes itself (more than one level already) are left alone. */
+  const E=t=>String(t).replace(/[<>&"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]));
+  const place=(m,sc)=>{ try{ for(const g of Nav.tree(m)){ const it=g.items.find(i=>i.id===sc); if(it) return {group:g.title,label:NAV_SHORT[it.id]||it.label}; } }catch(e){} return null; };
+  function crumbs(){
+    const c=document.getElementById("content"); if(!c) return; const hd=c.querySelector(".page-header:not(.hero)"), bc=hd&&hd.querySelector(".breadcrumb"); if(!bc||bc.querySelectorAll("b").length>1) return;
+    const m=Router.module, mod=(MODULES.find(x=>x.id===m)||{}).label||m, h1=hd.querySelector("h1"), title=h1?h1.textContent.trim():"";
+    const sep=" <b>›</b> ", parts=[E(mod)], here=place(m,Router.screen);
+    if(here){ parts.push(E(here.group),E(here.label)); }
+    else{
+      const chain=[]; let root=null;
+      for(let i=HIST.length-1;i>=0;i--){ const h=HIST[i]; if(h.m!==m||h.s==="home"||h.s===Router.screen) break; const pl=place(m,h.s); if(pl){ root={s:h.s,...pl}; break; } if(h.t&&!chain.some(x=>x.t===h.t)) chain.unshift(h); }
+      if(root){ parts.push(E(root.group),`<a href="#" data-bc="${E(root.s)}">${E(root.label)}</a>`); chain.forEach(h=>parts.push(E(h.t))); }
+      parts.push(E(title));
+    }
+    bc.innerHTML=parts.join(sep);
+    bc.querySelectorAll("[data-bc]").forEach(a=>a.addEventListener("click",e=>{ e.preventDefault(); Router.go(a.dataset.bc,m); }));
+  }
+  Router.render=function(){ const r=renderOrig.apply(this,arguments); try{ addBack(); }catch(e){ console.warn("back link",e); } try{ crumbs(); }catch(e){ console.warn("breadcrumb",e); } return r; };
 })();
 </script>
 <script>
@@ -14374,7 +14405,7 @@ const ST={tab:"all"};
 /* ------------------------------------------------------------ pieces */
 function hero(view,sub,period){
   const u=user(), mod=(MODULES.find(m=>m.id===Router.module)||{}).label||"";
-  return `<div class="page-header hero"><div><div class="breadcrumb">${esc(mod)} <b>›</b> Home</div><span class="hi">${esc(dateLine())}</span><h1>${greet()}, ${esc(u.name)}</h1></div>
+  return `<div class="page-header hero"><div><div class="breadcrumb">Home</div><span class="hi">${esc(dateLine())}</span><h1>${greet()}, ${esc(u.name)}</h1></div>
     ${period?`<div class="hm-hero-ac"><span class="hm-asof rh-per">${ic("calendar")}${period}</span></div>`:""}</div>`;
 }
 /* KPI cards use the site's own .pd-kpi card; a card only gets data-go where its target screen really shows that figure */
