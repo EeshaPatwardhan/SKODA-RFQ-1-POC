@@ -11271,7 +11271,7 @@ function onDoc(e){ if(POP&&!POP.contains(e.target)&&!(e.target.closest&&e.target
 function onKey(e){ if(e.key==="Escape") closePop(); }
 
 function create(o){
-  const cols=o.columns, rows=o.rows, st={f:{},page:0,size:o.pageSize||10,sort:o.sort?{key:o.sort.key,dir:o.sort.dir||"asc"}:null}, FILT=o.filter!==false;
+  const cols=o.columns, rows=o.rows, st={f:o.filters?Object.fromEntries(Object.entries(o.filters).map(([k,v])=>[k,new Set(v)])):{},page:0,size:o.pageSize||10,sort:o.sort?{key:o.sort.key,dir:o.sort.dir||"asc"}:null}, FILT=o.filter!==false;
   const root=document.createElement("div"); root.className="ft"+(cols.some(c=>c.w)?" ft-fixed":""); root.id=o.id||"";
   const val=(c,r)=>{ const v=c.get(r); return v==null||v===""?"—":String(v); };
   const passes=(r,skip)=>cols.every(c=>c.key===skip||!st.f[c.key]||st.f[c.key].has(val(c,r)));
@@ -12558,7 +12558,7 @@ function decisionsFor(match){
 }
 const stChip=s=>`<span class="chip ${({Pending:"chip-amber",Approved:"chip-green",Rejected:"chip-red",Open:"chip-blue"})[s]||"chip-gray"}"><span class="chip-dot"></span>${esc(s)}</span>`;
 function decisionsTable(list){
-  return list.length?U.table(["Type","Reference","Subject","Stage","Status"],list.slice(0,6).map(d=>`<tr class="v8-row" data-act="go:approvals" role="button" tabindex="0"><td><b>${esc(d.kind)}</b></td><td>${Components.wfChip(d.wf)}</td><td>${esc(d.subject)}</td><td>${esc(d.stage)}</td><td>${stChip(d.status)}</td></tr>`).join(""))+(list.length>6?`<div class="mut small" style="margin-top:6px">+${list.length-6} more</div>`:""):empty("No commercial decision is linked to this selection.");
+  return list.length?U.table(["Type","Reference","Subject","Stage","Status"],list.slice(0,6).map(d=>`<tr class="v8-row" data-act="${d.kind==="Technical change"?"tcm:wf="+esc(d.wf):"go:approvals"}" title="${d.kind==="Technical change"?"Open "+esc(d.wf)+" in the Technical Change register":"Open in Approvals"}" role="button" tabindex="0"><td><b>${esc(d.kind)}</b></td><td>${Components.wfChip(d.wf)}</td><td>${esc(d.subject)}</td><td>${esc(d.stage)}</td><td>${stChip(d.status)}</td></tr>`).join(""))+(list.length>6?`<div class="mut small" style="margin-top:6px">+${list.length-6} more</div>`:""):empty("No commercial decision is linked to this selection.");
 }
 function notesPanel(p){
   const vs=versionsOf(p.id), dp=dpOf(p.id);
@@ -13722,8 +13722,8 @@ function buildImpl(){
 /* ------------------------------------------------------------ 5 · Change Register (+ detail) */
 function buildRegister(){
   const {all,rows}=view(), w=shell("Change Register","Every technical change with its status, stage, risk, financial impact and dates. Click a row for the change detail.");
-  const list=UI.od?rows.filter(r=>r.overdue>0):rows;
-  const ft=FTable.create({id:"tcm-reg",pageSize:10,sortable:true,rows:list,rowAct:r=>"tcm:open="+r.id,empty:"No change matches these filters.",columns:[
+  const list=UI.od?rows.filter(r=>r.overdue>0):rows, pick=UI.wf; UI.wf=null;
+  const ft=FTable.create({id:"tcm-reg",pageSize:10,sortable:true,rows:list,filters:pick?{id:[pick]}:null,rowAct:r=>"tcm:open="+r.id,empty:"No change matches these filters.",columns:[
     {key:"id",w:"14%",label:"Change ID",get:r=>r.wf,html:r=>`<b>${esc(r.wf)}</b><small class="v8-sm">${esc(r.form)}${r.live?" · live workflow":""}</small>`},
     {key:"proj",w:"9%",label:"Project",get:r=>shortP(r.project)},
     {key:"desc",w:"20%",label:"Description",get:r=>r.part+" — "+r.desc,html:r=>`<b>${esc(r.part)}</b><small class="v8-sm">${esc(r.desc)}</small>`},
@@ -13796,6 +13796,7 @@ Object.assign(U.actions,{tcm:v=>{ const i=v.indexOf("="), k=v.slice(0,i), a=v.sl
   else if(k==="scroll"){ const el=document.getElementById(a); if(el){ el.scrollIntoView({behavior:"smooth",block:"start"}); el.classList.remove("pd-flash"); void el.offsetWidth; el.classList.add("pd-flash"); setTimeout(()=>el.classList.remove("pd-flash"),1800); } }
   else if(k==="tab"){ UI.ovTab=a; Router.render(); }
   else if(k==="kpi"){ F.status=a; go("change-register"); }
+  else if(k==="wf"){ F.project=F.type=F.status=F.year=""; UI.od=false; UI.wf=a; go("change-register"); }   // from Procurement: the register filtered on one Change ID
   else if(k==="od"){ UI.od=a==="1"; if(Router.screen!=="change-register") go("change-register"); else Router.render(); }
   else if(k==="open"){ if(Router.screen!=="tc-change") UI.from=Router.screen; UI.sel=a; go("tc-change"); }
   else if(k==="sheet"){ T.ctx.activeId=a; go("impact-analysis"); }
