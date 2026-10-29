@@ -330,8 +330,8 @@ function buildOverview(){
   /* production impact */
   const act=rows.filter(r=>r.active), lv=l=>act.filter(r=>r.rk.level===l).length, ns=nextSop(), prodN=prodOf(rows).length, anyProd=DATA.projects.some(p=>p.sop&&p.sop<=T0);
   const nsRows=ns?act.filter(r=>r.project===ns.code):[], dep=act.filter(r=>r.deps.supplier||r.deps.validation||r.deps.tooling);
-  const rb=act.length?`<div class="tcm-rbar">${["High","Medium","Low"].map(l=>lv(l)?`<i style="flex:${lv(l)};background:${LV[l]}" title="${l} risk: ${lv(l)}">${lv(l)}</i>`:"").join("")}</div><div class="tcm-lg"><span><i style="background:var(--red)"></i>High ${lv("High")}</span><span><i style="background:var(--c-amber)"></i>Medium ${lv("Medium")}</span><span><i style="background:var(--ok)"></i>Low ${lv("Low")}</span><span class="m">active changes</span></div>`:"";
-  const prodBody=act.length?rb+`<div class="tcm-facts"><div><span>High-risk changes</span><b class="${lv("High")?"bad":""}">${lv("High")}</b><em>${pc(lv("High"),act.length)}% of ${act.length} active</em></div>
+  const rb=act.length?`<div class="tcm-rbar">${["High","Medium","Low"].map(l=>lv(l)?`<i style="flex:${lv(l)};background:${LV[l]}" title="${l} risk: ${lv(l)}">${lv(l)}</i>`:"").join("")}</div><div class="tcm-lg"><span title="Two or more of the five warning signs apply"><i style="background:var(--red)"></i>High ${lv("High")}</span><span title="One warning sign applies"><i style="background:var(--c-amber)"></i>Medium ${lv("Medium")}</span><span title="No warning sign applies"><i style="background:var(--ok)"></i>Low ${lv("Low")}</span><span class="m">production risk of active changes</span></div>`:"";
+  const prodBody=act.length?rb+`<div class="tcm-facts"><div><span>High-risk changes</span><b class="${lv("High")?"bad":""}">${lv("High")}</b><em>two or more of 5 warning signs · ${pc(lv("High"),act.length)}% of ${act.length} active</em></div>
     <div><span>Affecting in-production vehicles</span><b>${anyProd?prodN:"0"}</b><em>${anyProd?"projects past SOP":ns?`no project is in production yet · first SOP ${esc(shortP(ns.code))} ${esc(D(ns.sop))}`:"none recorded"}</em></div>
     <div><span>Need implementation before ${ns?esc(shortP(ns.code))+" SOP":"next SOP"}</span><b class="${nsRows.filter(r=>r.sopCrit).length?"bad":""}">${nsRows.length}</b><em>${nsRows.filter(r=>r.sopCrit).length} planned inside the ${SOP_BUFFER}-day window or later</em></div>
     <div><span>Unresolved supplier / validation / tooling</span><b class="${dep.length?"warn":""}">${dep.length}</b><em>${dep.filter(r=>r.deps.supplier).length} offer · ${dep.filter(r=>r.deps.validation).length} validation · ${dep.filter(r=>r.deps.tooling).length} tooling</em></div></div>`:empty("No active change in this selection.");
@@ -339,7 +339,7 @@ function buildOverview(){
     panel("Changes by status","The six statuses are mutually exclusive: every change is in exactly one. Click a slice or a row to filter the page.",stBody),
     panel("Changes by type","Change categories present in the register. Click a bar to filter the page.",n?typeBars(rows):empty("No change matches the filters.")),
     panel("Changes by project","Status of every change per project. Click a project to filter the page.",n?projectStack(rows):empty("No change matches the filters.")),
-    panel("Production impact","Risk is counted from indicators (price up, late milestone, high-risk supplier, inside the pre-SOP window, more than 7 days overdue): High = two or more, Medium = one. Never from the open status alone. In-production = project SOP date reached. Pre-SOP window = "+SOP_BUFFER+" days before the project's SOP.",prodBody)]);
+    panel(`Production impact<span class="pd-i" data-pi="1" tabindex="0" aria-label="What production risk means">${Icons.svg("info")}</span>`,"",prodBody)]);
   const hl=hiList(rows), ol=overdueList(rows), tab=UI.ovTab==="od"?"od":"hi", cur=tab==="od"?ol:hl, none=tab==="od"?"No change is past its due date. A change is only marked overdue when its due date is known.":"No active change in this selection has a priced impact yet.";
   const segs=`<div class="fc-segs tight"><button type="button" class="fc-seg ${tab==="hi"?"on":""}" data-act="tcm:tab=hi">High-impact changes <span class="count-pill">${hl.length}</span></button><button type="button" class="fc-seg ${tab==="od"?"on":""}" data-act="tcm:tab=od">Overdue changes <span class="count-pill">${ol.length}</span></button></div>`;
   const tip2=tab==="od"?`Past the due date of the current step: ${AP_SLA} days per approval step, evaluation stages 3–10 days, ${RETURN_SLA} days for rework, planned date for implementation. No date → not overdue. Ranked by priority, then days overdue.`:"Active changes ranked by an explicit score: production risk (High 2, Medium 1) + financial materiality (≥ ₹2 Cr/yr 2, ≥ ₹50 L/yr 1), maximum 4; ties by size of impact. Impact: + saving, − additional cost.";
@@ -555,13 +555,23 @@ MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
     const f=fin(view().rows.filter(r=>r.project===code));
     return `<div class="hd"><b>${esc(carName(code))}</b></div><div class="nv"><div><span><i style="background:var(--red)"></i>Additional cost</span><b class="bad">${f.cost?esc(money(f.cost)):"—"}</b></div><div><span><i style="background:var(--ok)"></i>Savings</span><b class="good">${f.sav?esc(money(f.sav)):"—"}</b></div><div class="tot"><span>Net impact</span><b class="${f.net>=0?"good":"bad"}">${esc(sg(f.net))}</b></div></div>`;
   };
+  const piHtml=()=>{
+    const act=view().rows.filter(r=>r.active), cn=k=>act.filter(r=>r.rk.factors.some(f=>f.k===k&&f.hit)).length, lv=l=>act.filter(r=>r.rk.level===l).length;
+    const signs=[["Cost","Price up","The piece price rises by more than 3%"],["Delay","Late milestone","Next milestone within 90 days and the supplier's commitment is late"],["Supplier","High-risk supplier","The supplier's risk rating is High"],["SOP","Close to SOP","Planned inside the "+SOP_BUFFER+" days before the project's SOP, or after it"],["Overdue","Overdue","More than 7 days past the due date"]];
+    return `<div class="hd"><b>Production risk</b><span>How likely an active change is to hurt production, supplier readiness or an SOP date</span></div>
+      <div class="pi-h">Five warning signs</div>
+      <ul class="pi-l">${signs.map(s=>`<li><span><b>${esc(s[1])}</b>${esc(s[2])}</span><em>${cn(s[0])}</em></li>`).join("")}</ul>
+      <div class="pi-h">Rating</div>
+      <div class="gk pi-g"><div><em>High</em><b class="bad">${lv("High")}</b><small>two or more signs</small></div><div><em>Medium</em><b class="warn">${lv("Medium")}</b><small>one sign</small></div><div><em>Low</em><b>${lv("Low")}</b><small>no sign</small></div></div>
+      <div class="ft">Counts are active changes (${act.length}) in the current selection. Closed changes carry no risk, and the status Open alone never creates risk.</div>`;
+  };
   const show=el=>{
-    const d=el.dataset, r=(d.gp||d.np)?null:register().find(x=>x.id===(d.gm||d.rk)); if(!d.gp&&!d.np&&!r) return; hide(); owner=el;
-    tip=document.createElement("div"); tip.className="tcm-tip"+(d.np?" s":d.gp||d.gm?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.np?npHtml(d.np):d.gm?gHtml(r):html(r); document.body.appendChild(tip);
+    const d=el.dataset, r=(d.gp||d.np||d.pi)?null:register().find(x=>x.id===(d.gm||d.rk)); if(!d.gp&&!d.np&&!d.pi&&!r) return; hide(); owner=el;
+    tip=document.createElement("div"); tip.className="tcm-tip"+(d.np?" s":d.gp||d.gm||d.pi?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.np?npHtml(d.np):d.pi?piHtml():d.gm?gHtml(r):html(r); document.body.appendChild(tip);
     const b=el.getBoundingClientRect(), t=tip.getBoundingClientRect(); let x=b.left+b.width/2-t.width/2, y=b.bottom+8;
     if(y+t.height>innerHeight-8) y=b.top-t.height-8; x=Math.max(8,Math.min(x,innerWidth-t.width-8)); tip.style.left=x+"px"; tip.style.top=Math.max(8,y)+"px";
   };
-  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk], .tcm-dm[data-gm], .tcm-gp[data-gp], .tcm-div .r[data-np]");
+  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk], .tcm-dm[data-gm], .tcm-gp[data-gp], .tcm-div .r[data-np], .pd-i[data-pi]");
   document.addEventListener("mouseover",e=>{ const el=find(e); if(el&&el!==owner) show(el); else if(!el&&owner&&!(e.target.closest&&e.target.closest(".tcm-tip"))) hide(); });
   document.addEventListener("focusin",e=>{ const el=find(e); if(el) show(el); });
   document.addEventListener("focusout",e=>{ if(find(e)) hide(); });

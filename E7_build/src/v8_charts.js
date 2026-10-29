@@ -77,7 +77,7 @@ function gantt(rows,o){
     r.ms.forEach((m,j)=>{
       const x=X(m.t), up=j%2===0, col=COL[m.st]||COL.ok;
       if(o.forecast&&m.fc!=null&&Math.abs(m.fc-m.t)>2*864e5){ const xf=X(m.fc); g+=`<line x1="${x}" x2="${xf}" y1="${cy}" y2="${cy}" stroke="${col}" stroke-width="2" stroke-dasharray="3 2"/><path d="M${xf} ${cy-6}L${xf+6} ${cy}L${xf} ${cy+6}L${xf-6} ${cy}Z" fill="var(--panel)" stroke="${col}" stroke-width="2"><title>${esc(m.id)} forecast ${fmtDate(m.fc)}</title></path>`; }
-      g+=`<path d="M${x} ${cy-8}L${x+8} ${cy}L${x} ${cy+8}L${x-8} ${cy}Z" fill="${col}" stroke="var(--panel)" stroke-width="1.5"><title>${esc(m.title||m.id+" · "+fmtDate(m.t))}</title></path>`;
+      g+=`<path d="M${x} ${cy-8}L${x+8} ${cy}L${x} ${cy+8}L${x-8} ${cy}Z" fill="${col}" stroke="var(--panel)" stroke-width="1.5"${m.click?` data-act="${esc(m.click)}" role="button" tabindex="0"`:""}${m.tip?` data-sc-tip="${esc(JSON.stringify(m.tip))}"`:""}>${m.tip?"":`<title>${esc(m.title||m.id+" · "+fmtDate(m.t))}</title>`}</path>`;
       g+=`<text x="${x}" y="${up?cy-13:cy+23}" text-anchor="middle" class="v8-t" font-size="10" font-weight="650">${esc(m.id)}</text>`;
     });
   });
@@ -97,10 +97,22 @@ function scatter(points,o){
   for(let v=Math.ceil(x0/10)*10;v<=x1;v+=10) g+=`<line y1="${m.t}" y2="${H-m.b}" x1="${X(v)}" x2="${X(v)}" stroke="${COL.line}" stroke-dasharray="2 4"/><text x="${X(v)}" y="${H-m.b+14}" text-anchor="middle" class="v8-t" font-size="10" fill="${COL.muted}">${v}</text>`;
   g+=`<text x="${(m.l+W-m.r)/2}" y="${H-6}" text-anchor="middle" class="v8-t" font-size="11" fill="${COL.muted}">${esc(o.xLabel||"")}</text><text transform="translate(12 ${(m.t+H-m.b)/2}) rotate(-90)" text-anchor="middle" class="v8-t" font-size="11" fill="${COL.muted}">${esc(o.yLabel||"")}</text>`;
   points.slice().sort((a,b)=>b.r-a.r).forEach(p=>{ const r=6+p.r/rMax*9;
-    g+=`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="${r}" fill="${p.color}" fill-opacity=".72" stroke="${p.color}" stroke-width="1.5" ${p.click?`data-act="${esc(p.click)}" style="cursor:pointer"`:""}><title>${esc(p.title||p.label)}</title></circle>`;
+    g+=`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="${r}" fill="${p.color}" fill-opacity=".72" stroke="${p.color}" stroke-width="1.5" ${p.click?`data-act="${esc(p.click)}" style="cursor:pointer"`:""}${p.tip?` data-sc-tip="${esc(JSON.stringify(p.tip))}"`:""}>${p.tip?"":`<title>${esc(p.title||p.label)}</title>`}</circle>`;
     if(p.showLabel) g+=`<text x="${X(p.x)+r+3}" y="${Y(p.y)+3}" class="v8-t" font-size="10">${esc(p.label)}</text>`; });
   return `<div class="v8-scatter-wrap">${g}</svg></div>`;
 }
 
+/* hover card for scatter bubbles: tip = {t:title, s:subtitle, b:[badge text, colour], r:[[label,value]…], f:footer} */
+(function(){
+  let card=null;
+  const hide=()=>{ if(card){ card.remove(); card=null; } };
+  const place=e=>{ if(!card) return; const w=card.offsetWidth, h=card.offsetHeight; let x=e.clientX+16, y=e.clientY+16; if(x+w>innerWidth-8) x=e.clientX-w-16; if(y+h>innerHeight-8) y=innerHeight-h-8; card.style.left=Math.max(8,x)+"px"; card.style.top=Math.max(8,y)+"px"; };
+  document.addEventListener("mouseover",e=>{ const c=e.target.closest&&e.target.closest("[data-sc-tip]"); if(!c){ hide(); return; } let d; try{ d=JSON.parse(c.getAttribute("data-sc-tip")); }catch(_){ return; }
+    hide(); card=document.createElement("div"); card.className="v8-sctip";
+    card.innerHTML=`<div class="h"><div><b>${esc(d.t)}</b>${d.s?`<small>${esc(d.s)}</small>`:""}</div>${d.b?`<span class="bd" style="background:color-mix(in srgb,${d.b[1]} 16%,transparent);color:${d.b[1]}">${esc(d.b[0])}</span>`:""}</div>${(d.g||[]).map(g=>`<div class="g"><div class="gh"><span>${esc(g.h)}</span><b>${esc(g.n)}</b></div><div class="gb">${g.s.filter(x=>x[1]).map(x=>`<i style="flex:${x[1]};background:${x[2]}"></i>`).join("")}</div><div class="gl">${g.s.filter(x=>x[1]).map(x=>`<span><i style="background:${x[2]}"></i>${esc(x[1])} ${esc(x[0])}</span>`).join("")}</div></div>`).join("")}<dl>${(d.r||[]).map(r=>r[2]==="h"?`<div class="hd"><dt>${esc(r[0])}</dt></div>`:`<div><dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd></div>`).join("")}</dl>${d.f?`<div class="f">${esc(d.f)}</div>`:""}`;
+    document.body.appendChild(card); place(e); });
+  document.addEventListener("mousemove",place);
+  document.addEventListener("scroll",hide,true);
+})();
 return {COL,LABEL,band,legend,stacked,funnel,heat,gauge,ring,gantt,scatter,fmtDate,monY};
 })();

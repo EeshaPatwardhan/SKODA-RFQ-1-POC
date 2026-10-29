@@ -11,7 +11,7 @@ const P=PocCore, C=PocCharts, U=PocUI, S=SrmData, V=V8Charts, esc=C.esc, nf=C.nf
 const TODAY_STR=(typeof TODAY!=="undefined"?TODAY:"2026-07-29");
 let MODEL=null;
 const model=()=>MODEL||(MODEL=S.build({today:TODAY_STR,parts:P.PARTS,vendors:P.VENDS,programmes:DATA.projects.map(p=>({code:p.code,name:p.name,sop:p.sop}))}));
-const F={project:"",family:"",supplier:"",brand:"",sopYear:""}; let MSEL=-1;   // MSEL: milestone picked on Status Tracking (-1 = next open one)
+const F={project:"",family:"",supplier:"",brand:"",sopYear:""}; let DRILL=null; let PCOLS=2; let MSEL=-1;   // MSEL: milestone picked on Status Tracking (-1 = next open one)
 const MS=S.MS, DAY=S.DAY, fmtDate=V.fmtDate;
 const pct0=v=>v==null?"—":Math.round(v)+"%";
 const chipCls={ok:"chip-green",risk:"chip-amber",delayed:"chip-red",notstarted:"chip-gray"};
@@ -58,12 +58,12 @@ function filterSpec(m){
 function bindFilters(d){
   d.addEventListener("change",e=>{
     const k=e.target.dataset&&e.target.dataset.f; if(!k||k==="reset") return;
-    F[k]=e.target.value;
+    F[k]=e.target.value; DRILL=null;
     if(k==="brand"&&F.project&&!inBrand(F.project)) F.project="";
     if(k==="project"&&F.project&&F.brand&&!inBrand(F.project)) F.brand="";
     Router.render();
   });
-  d.addEventListener("click",e=>{ if(e.target.closest('[data-f="reset"]')){ F.project=F.family=F.supplier=F.brand=F.sopYear=""; Router.render(); } });
+  d.addEventListener("click",e=>{ if(e.target.closest('[data-f="reset"]')){ F.project=F.family=F.supplier=F.brand=F.sopYear=""; DRILL=null; Router.render(); } });
 }
 function filterSelect(k,label,opts,tip){
   return `<label class="v8-f"><span${tip?` title="${esc(tip)}"`:""}>${label}</span><select data-f="${k}" aria-label="${esc(label)}">${opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(F[k])?" selected":""}>${esc(o[1])}</option>`).join("")}</select></label>`;
@@ -96,9 +96,16 @@ function progMilestones(m,ev){
     return {p,evp,ms:MS.map((d,i)=>{ const R=p.sop-d.off*DAY, st=S.milestoneStatus(evp,i); return Object.assign({id:d.id,R,need:d.need,future:R>=m.today},st,{fc:st.avgSlip==null?null:R+Math.max(0,st.avgSlip)*DAY}); })};
   });
 }
+/* hover card for a milestone diamond on the project timeline */
+function msTip(x,k){
+  const st=k.n?k.st:"notstarted", lbl={ok:"On track",risk:"At risk",delayed:"Delayed",notstarted:"Not started"}, col={ok:"var(--ok)",risk:"var(--c-amber)",delayed:"var(--red)",notstarted:"var(--faint)"};
+  const d=Math.round((k.R-model().today)/DAY), when=d>0?"in "+d+" days":d===0?"today":Math.abs(d)+" days ago", sl=Math.round(k.avgSlip||0);
+  return {t:`${k.id} · ${short(x.p.name)}`,s:k.need,b:[lbl[st],col[st]],
+    r:k.n?[["Required by",fmtDate(k.R)+" · "+when],["Supplier commitment",k.fc?fmtDate(k.fc):"—"],["Parts late",`${k.bad} of ${k.n}`],["Average slip",(sl>0?"+":"")+sl+" d"]]:[["Required by",fmtDate(k.R)+" · "+when],["Facelift parts","none started"]],f:"Click for details"};
+}
 function ganttRows(pm,forecast){
   return pm.map(x=>({label:short(x.p.name),sub:"SOP "+fmtDate(x.p.sop),start:x.p.sop-500*DAY,end:x.p.sop,
-    ms:x.ms.map(k=>({id:k.id,t:k.R,st:k.st,fc:forecast?k.fc:null,title:`${x.p.name} · ${k.id} (${k.need}) · plan ${fmtDate(k.R)}${k.n?` · ${V.LABEL[k.st]} · ${k.bad} of ${k.n} parts late, avg slip ${Math.round(k.avgSlip)} d`:""}`}))}));
+    ms:x.ms.map((k,i)=>({id:k.id,t:k.R,st:k.st,fc:forecast?k.fc:null,tip:msTip(x,k),click:"smd:"+x.p.code+"|"+i,title:`${x.p.name} · ${k.id} (${k.need}) · plan ${fmtDate(k.R)}${k.n?` · ${V.LABEL[k.st]} · ${k.bad} of ${k.n} parts late, avg slip ${Math.round(k.avgSlip)} d`:""}`}))}));
 }
 function msCounts(pm){ const c={ok:0,risk:0,delayed:0,notstarted:0}; pm.forEach(x=>x.ms.forEach(k=>{ if(k.future) c[k.st]++; })); return c; }
 
@@ -108,20 +115,20 @@ function insights(m,ev,sm,sup){
   /* 1 · biggest cluster of parts that will miss a milestone */
   let best=null; S.FAMILIES.forEach(f=>MS.forEach((d,i)=>{ const l=started.filter(e=>e.pt.family===f&&e.milestones[i].future&&e.milestones[i].st!=="ok"); if(!best||l.length>best.l.length) best={f,d,i,l}; }));
   if(best&&best.l.length){ const bv={}; best.l.forEach(e=>{ bv[e.pt.vendor]=(bv[e.pt.vendor]||0)+1; }); const top=Object.entries(bv).sort((a,b)=>b[1]-a[1])[0];
-    out.push({k:"risk",t:`${best.l.length} ${best.f} parts at risk of missing ${best.d.id}`,s:`Mostly ${top[0]} (${top[1]} parts) — required: ${best.d.need.toLowerCase()}.`,a:`sfg:family=${best.f}|srm-tooling-dash`,q:`SRM: which ${best.f} parts are at risk of missing ${best.d.id}?`}); }
+    out.push({k:"risk",pri:"High",n:best.l.length,nl:"parts at risk",ni:"package",tags:[["building",top[0]],["layers",best.f],["flag",best.d.id]],t:`${best.l.length} ${best.f} parts at risk of missing ${best.d.id}`,s:`Mostly ${top[0]} (${top[1]} parts) — required: ${best.d.need.toLowerCase()}.`,a:"sgo:srm-tooling-dash",q:`SRM: which ${best.f} parts are at risk of missing ${best.d.id}?`}); }
   /* 2 · suppliers needing attention */
   const weak=sup.filter(x=>x.started>=5&&x.readiness!=null&&x.readiness<60).sort((a,b)=>a.readiness-b.readiness);
-  if(weak.length) out.push({k:"warn",t:`${weak.length} supplier${weak.length===1?"":"s"} below 60% readiness`,s:weak.slice(0,3).map(x=>`${x.name} ${Math.round(x.readiness)}%`).join(" · "),a:"sgo:srm-performance-dash",q:"SRM: which suppliers need attention on readiness?"});
+  if(weak.length) out.push({k:"warn",pri:"Medium",n:weak.length,nl:weak.length===1?"supplier":"suppliers",ni:"users",tags:[["building",weak.length>1?"Multiple suppliers":weak[0].name],["gauge","Below 60%"],["target","Readiness"]],t:`${weak.length} supplier${weak.length===1?"":"s"} below 60% readiness`,s:weak.slice(0,3).map(x=>`${x.name} ${Math.round(x.readiness)}%`).join(" · "),a:"sgo:srm-performance-dash",q:"SRM: which suppliers need attention on readiness?"});
   /* 3 · tooling */
   const tl=ev.filter(e=>e.tool&&(e.tool.st==="risk"||e.tool.st==="delayed")); if(tl.length){ const bv={}; tl.forEach(e=>{ bv[e.pt.vendor]=(bv[e.pt.vendor]||0)+1; }); const top=Object.entries(bv).sort((a,b)=>b[1]-a[1])[0];
-    out.push({k:"warn",t:`${tl.length} parts have tooling behind plan`,s:`${tl.reduce((a,e)=>a+e.pt.tools,0)} tools in all. ${top[0]} has the most parts (${top[1]}); ${tl.filter(e=>e.tool.st==="delayed").length} parts are more than ${S.TH.delayed} days behind.`,a:"sgo:srm-tooling-dash",q:"SRM: tooling readiness — which tools are behind plan?"}); }
+    out.push({k:"warn",pri:"Medium",n:tl.length,nl:"parts",ni:"wrench",tags:[["building",top[0]],["wrench","Tooling"],["clock","> "+S.TH.delayed+" days"]],t:`${tl.length} parts have tooling behind plan`,s:`${tl.reduce((a,e)=>a+e.pt.tools,0)} tools in all. ${top[0]} has the most parts (${top[1]}); ${tl.filter(e=>e.tool.st==="delayed").length} parts are more than ${S.TH.delayed} days behind.`,a:"sgo:srm-tooling-dash",q:"SRM: tooling readiness — which tools are behind plan?"}); }
   /* 4 · project with the largest delayed share */
   const pr=m.programmes.map(p=>{ const l=started.filter(e=>e.pt.prog===p.code); return {p,n:l.length,d:l.filter(e=>e.status==="delayed").length}; }).filter(x=>x.n>=10).sort((a,b)=>b.d/b.n-a.d/a.n)[0];
-  if(pr&&pr.d) out.push({k:"info",t:`${short(pr.p.name)}: ${Math.round(pr.d/pr.n*100)}% of started parts delayed`,s:`${pr.d} of ${pr.n} parts forecast more than ${S.TH.delayed} days late on a milestone.`,a:`sfg:project=${pr.p.code}|srm-status-dash`,q:`SRM: milestone status for ${pr.p.name}`});
+  if(pr&&pr.d) out.push({k:"info",pri:pr.d/pr.n>=.2?"High":"Medium",n:Math.round(pr.d/pr.n*100)+"%",nl:"of parts delayed",ni:"alert",tags:[["car",short(pr.p.name)],["calendar","Milestones"],["clock","> "+S.TH.delayed+" days"]],t:`${short(pr.p.name)}: ${Math.round(pr.d/pr.n*100)}% of started parts delayed`,s:`${pr.d} of ${pr.n} parts forecast more than ${S.TH.delayed} days late on a milestone.`,a:"sgo:srm-status-dash",q:`SRM: milestone status for ${pr.p.name}`});
   /* 5 · where readiness risk meets the price forecast (POC) */
   const both=started.filter(e=>(e.status==="risk"||e.status==="delayed")&&e.pt.chgH>5);
   if(both.length){ const top=both.slice().sort((a,b)=>b.pt.chgH-a.pt.chgH)[0], av=both.reduce((s,e)=>s+e.pt.chgH,0)/both.length;
-    out.push({k:"save",t:`${both.length} at-risk parts also forecast to rise >5%`,s:`Average ${U.sgn(av)}; largest ${top.pt.name} (${short(top.pt.progName)}, ${U.sgn(top.pt.chgH)}) — late delivery and a price rise on the same parts compound the cost risk.`,a:"go:fc-parts",q:"SRM: which at-risk parts also have a forecast price rise?"}); }
+    out.push({k:"save",pri:"Medium",n:both.length,nl:"parts also rising",ni:"trend-up",tags:[["package",top.pt.name],["trend-up",U.sgn(av)+" avg"],["building",top.pt.vendor]],t:`${both.length} at-risk parts also forecast to rise >5%`,s:`Average ${U.sgn(av)}; largest ${top.pt.name} (${short(top.pt.progName)}, ${U.sgn(top.pt.chgH)}) — late delivery and a price rise on the same parts compound the cost risk.`,a:"go:fc-parts",q:"SRM: which at-risk parts also have a forecast price rise?"}); }
   return out.slice(0,5);
 }
 const insightHtml=list=>list.length?`<div class="v8-ins">${list.map(i=>`<div class="v8-in ${i.k}"><span class="d"></span><div><b>${esc(i.t)}</b><p>${esc(i.s)}</p></div><div class="b"><button type="button" class="btn btn-sm" data-act="ask:${esc(i.q)}" title="Ask AIS about this">✨ Ask AIS</button></div></div>`).join("")}</div>`:`<div class="mut small">Nothing stands out for this selection.</div>`;
@@ -155,7 +162,7 @@ function supplierRank(sup){
   if(!ranked.length) return `<div class="mut small">No supplier has five or more started parts in this selection.</div>`;
   const avg=ranked.reduce((s,x)=>s+x.readiness,0)/ranked.length, band=v=>v>=80?"ok":v>=60?"risk":"delayed";
   const n80=ranked.filter(x=>x.readiness>=80).length, n60=ranked.filter(x=>x.readiness<60).length;
-  const row=(x,rk)=>`<button type="button" class="sr-r" data-act="sfg:supplier=${esc(x.name)}|srm-tooling-dash" title="Open ${esc(x.name)}'s parts"><span class="rk">${rk}</span><span class="nm"><b>${esc(x.name)}</b><small>${x.started} parts${x.counts.delayed?` · ${x.counts.delayed} delayed`:""}</small></span><span class="bar"><i class="${band(x.readiness)}" style="width:${x.readiness.toFixed(1)}%"></i><u style="left:${avg.toFixed(1)}%"></u></span><span class="v ${band(x.readiness)}">${Math.round(x.readiness)}%</span></button>`;
+  const row=(x,rk)=>`<button type="button" class="sr-r" data-act="sgo:srm-tooling-dash" title="Open Part Readiness"><span class="rk">${rk}</span><span class="nm"><b>${esc(x.name)}</b><small>${x.started} parts${x.counts.delayed?` · ${x.counts.delayed} delayed`:""}</small></span><span class="bar"><i class="${band(x.readiness)}" style="width:${x.readiness.toFixed(1)}%"></i><u style="left:${avg.toFixed(1)}%"></u></span><span class="v ${band(x.readiness)}">${Math.round(x.readiness)}%</span></button>`;
   const top=ranked.slice(0,5), bot=ranked.length>5?ranked.slice(-Math.min(5,ranked.length-5)).reverse():[];
   return `<div class="sf-hl"><div><b>${Math.round(avg)}%</b><span>average readiness</span></div><div><b class="good">${n80}</b><span>at 80% or more</span></div><div><b class="${n60?"bad":"good"}">${n60}</b><span>below 60%</span></div></div>
     <div class="sr"><div class="sr-g">Highest</div>${top.map((x,i)=>row(x,i+1)).join("")}${bot.length?`<div class="sr-g">Needs attention</div>${bot.map((x,i)=>row(x,ranked.length-i)).join("")}`:""}</div>
@@ -231,7 +238,8 @@ function attention(ev){ return ev.filter(e=>e.started&&(e.status==="risk"||e.sta
 function overviewFilters(m){
   const icons={project:"car",supplier:"building",brand:"flag",family:"layers",sopYear:"calendar"};
   const d=document.createElement("div"); d.className="pd-fbar";
-  d.innerHTML=filterSpec(m).map(([k,label,opts,tip])=>`<label class="pd-f"><span${tip?` title="${esc(tip)}"`:""}>${esc(label)}</span><span class="pd-sel">${Icons.svg(icons[k]||"filter")}<select data-f="${k}" aria-label="${esc(label)}">${opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(F[k])?" selected":""}>${esc(o[1])}</option>`).join("")}</select></span></label>`).join("")+
+  const pic=F.project&&window.V8Art?V8Art.car(F.project):""; /* the project's car, or the model line-up; an empty frame of the same size keeps the filters in place */
+  d.innerHTML=`<div class="pd-carbox solo">${pic||(window.V8Art&&V8Art.lineup())||'<span class="va-car" aria-hidden="true"></span>'}</div>`+filterSpec(m).map(([k,label,opts,tip])=>`<label class="pd-f"><span${tip?` title="${esc(tip)}"`:""}>${esc(label)}</span><span class="pd-sel">${Icons.svg(icons[k]||"filter")}<select data-f="${k}" aria-label="${esc(label)}">${opts.map(o=>`<option value="${esc(o[0])}"${String(o[0])===String(F[k])?" selected":""}>${esc(o[1])}</option>`).join("")}</select></span></label>`).join("")+
     `<button type="button" class="pd-reset" data-f="reset" title="Reset filters" aria-label="Reset filters">${Icons.svg("refresh")}</button>`;
   bindFilters(d); return d;
 }
@@ -246,14 +254,14 @@ function share100(vals){
   return out;
 }
 /* pages a list that is already in the DOM: hides rows outside the page and adds a pager footer to the panel body (page 1 again when the filters redraw the screen) */
-function ovPaginate(panel,rowSel,size,unit){
+function ovPaginate(panel,rowSel,size,unit,hostSel){
   const rows=[...panel.querySelectorAll(rowSel)], body=panel.querySelector(".panel-body"); if(!body||rows.length<=size) return;
   const pages=Math.ceil(rows.length/size), foot=document.createElement("div"); foot.className="ov-pg"; let p=0;
   const draw=()=>{ rows.forEach((r,i)=>{ r.hidden=Math.floor(i/size)!==p; });
     const nums=pages<=5?Array.from({length:pages},(_,i)=>`<button type="button" data-p="${i}" class="${i===p?"on":""}"${i===p?' aria-current="page"':""} aria-label="Page ${i+1}">${i+1}</button>`).join(""):`<span class="of">Page ${p+1} of ${pages}</span>`;
     foot.innerHTML=`<span class="rg">${p*size+1}–${Math.min(rows.length,(p+1)*size)} of ${rows.length}${unit?" "+unit:""}</span><div class="ft-pg"><button type="button" data-p="${p-1}" ${p<=0?"disabled":""} aria-label="Previous page">‹</button>${nums}<button type="button" data-p="${p+1}" ${p>=pages-1?"disabled":""} aria-label="Next page">›</button></div>`; };
   foot.addEventListener("click",e=>{ const b=e.target.closest("[data-p]"); if(b&&!b.disabled){ p=+b.dataset.p; draw(); } });
-  body.appendChild(foot); draw();
+  const host=hostSel&&panel.querySelector(hostSel); if(host) foot.classList.add("hd"); (host||body).appendChild(foot); draw();
 }
 function milestoneHealth(m,ev){
   const seen=new Set(ev.map(e=>e.pt.prog));
@@ -264,20 +272,20 @@ function milestoneHealth(m,ev){
     return {p,all:l.length,n,ns:l.length-n,c,dshare:n?c.delayed/n:0,rshare:n?c.risk/n:0};
   }).sort((a,b)=>b.dshare-a.dshare||b.rshare-a.rshare||short(a.p.name).localeCompare(short(b.p.name)));
   if(!rows.length) return `<div class="ov-empty">No parts in this selection.</div>`;
-  const KS=["ok","risk","delayed"];
+  const KS=["ok","risk","delayed"], LB={ok:"On track",risk:"At risk",delayed:"Delayed"};
   const body=rows.map(r=>{
-    const tip=`${short(r.p.name)} · ${r.n} started of ${r.all} · On track ${r.c.ok} · At risk ${r.c.risk} · Delayed ${r.c.delayed} · Not started ${r.ns}`;
     const pc=share100(KS.map(k=>r.c[k]));
-    const bar=!r.n?`<span class="ov-nil">No started parts</span>`:`<span class="ov-stk">${KS.map((k,i)=>{ const c=r.c[k]; if(!c) return ""; const w=c/r.n*100; return `<i class="${k}" style="width:${w.toFixed(2)}%" title="${esc(V.LABEL[k]+": "+c+" parts")}">${w>=12?pc[i]+"%":""}</i>`; }).join("")}</span>`;
-    return `<button type="button" class="mh-r" data-act="sfg:project=${esc(r.p.code)}|srm-status-dash" title="${esc(tip)} · Open status tracking"><span class="pj"><b>${esc(short(r.p.name))}</b></span>${bar}<span class="pn" title="${esc(r.n+" started · "+r.ns+" not started")}"><b>${r.n}</b></span></button>`;
+    const tip={t:short(r.p.name),s:"SOP "+fmtDate(r.p.sop)+" · "+r.all+" parts in scope",r:[["Started parts",r.n],["On track",r.c.ok],["At risk",r.c.risk],["Delayed",r.c.delayed],["Not started",r.ns]],f:"Click to open status tracking"};
+    const cells=KS.map((k,i)=>`<span class="cl"><em class="${k}">${r.n?pc[i]+"%":"—"}</em></span>`).join("");
+    return `<button type="button" class="mh-r" data-act="sgo:srm-status-dash" data-sc-tip="${esc(JSON.stringify(tip))}"><span class="pj"><b>${esc(short(r.p.name))}</b></span>${cells}<span class="cl pn"><em class="pt">${r.n}</em></span></button>`;
   }).join("");
-  return `<div class="mh-h"><span>Project</span><span>Status distribution</span><span class="r">Parts</span></div>${body}`;
+  return `<div class="mh-h"><span>Project</span>${KS.map(k=>`<span><i class="${k}"></i>${LB[k]}</span>`).join("")}<span>Parts</span></div>${body}`;
 }
 function supplierTable(sup){
   const ranked=sup.filter(x=>x.started>=5&&x.readiness!=null).sort((a,b)=>a.readiness-b.readiness||b.counts.delayed-a.counts.delayed||a.name.localeCompare(b.name));
   if(!ranked.length) return `<div class="ov-empty">No supplier has five or more started parts in this selection. That is the same cutoff as the suppliers KPI.</div>`;
   const band=v=>v>=80?"ok":v>=60?"risk":"delayed";
-  const rows=ranked.map((x,i)=>`<tr class="ov-go" data-act="sfg:supplier=${esc(x.name)}|srm-tooling-dash" role="button" tabindex="0" title="Open ${esc(x.name)}'s parts"><td class="rk">${i+1}</td><td class="nm"><b title="${esc(x.name)}">${esc(x.name)}</b></td><td class="num" title="Started parts">${x.started}</td><td class="rd"><span class="ov-mini"><i class="${band(x.readiness)}" style="width:${Math.max(0,Math.min(100,x.readiness)).toFixed(1)}%"></i></span><span class="pc">${Math.round(x.readiness)}%</span></td><td class="num ${x.counts.risk?"warn":"zero"}">${x.counts.risk}</td><td class="num ${x.counts.delayed?"bad":"zero"}">${x.counts.delayed}</td></tr>`).join("");
+  const rows=ranked.map((x,i)=>`<tr class="ov-go" data-act="sgo:srm-tooling-dash" role="button" tabindex="0" title="Open Part Readiness"><td class="rk">${i+1}</td><td class="nm"><b title="${esc(x.name)}">${esc(x.name)}</b></td><td class="num" title="Started parts">${x.started}</td><td class="rd"><span class="ov-mini"><i class="${band(x.readiness)}" style="width:${Math.max(0,Math.min(100,x.readiness)).toFixed(1)}%"></i></span><span class="pc">${Math.round(x.readiness)}%</span></td><td class="num ${x.counts.risk?"warn":"zero"}">${x.counts.risk}</td><td class="num ${x.counts.delayed?"bad":"zero"}">${x.counts.delayed}</td></tr>`).join("");
   return `<table class="ov-tbl ov-sup"><thead><tr><th title="1 = lowest readiness">#</th><th>Supplier</th><th class="r" title="Started parts">Parts</th><th>Readiness</th><th class="r">At risk</th><th class="r">Delayed</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 function stageBars(ev){
@@ -309,10 +317,10 @@ function timeline(m,pm){
       const next=i<5?hz.months[i+1]:hz.end, hit=r.items.filter(({k})=>k.R>=t&&k.R<next);
       return `<div class="mo${i===0?" now":""}">${hit.map(({k,i:mi})=>{
         const tip=`${r.x.p.name} · ${k.id} (${k.need}) · ${fmtDate(k.R)} · ${V.LABEL[k.st]||k.st} · ${k.bad} of ${k.n} facelift parts late`;
-        return `<button type="button" class="ov-ms ${esc(k.st)}" data-act="sml:${esc(r.x.p.code)}|${mi}" title="${esc(tip)}"><i></i><span>${esc(k.id)}</span></button>`;
+        return `<button type="button" class="ov-ms ${esc(k.st)}" data-act="sgo:srm-status-dash" title="${esc(tip)}"><i></i><span>${esc(k.id)}</span></button>`;
       }).join("")}</div>`;
     }).join("");
-    return `<div class="ov-tl-r"><button type="button" class="pj" data-act="sfg:project=${esc(r.x.p.code)}|srm-status-dash" title="Open status tracking"><b>${esc(short(r.x.p.name))}</b><small>SOP ${esc(fmtDate(r.x.p.sop))}</small></button>${cells}</div>`;
+    return `<div class="ov-tl-r"><button type="button" class="pj" data-act="sgo:srm-status-dash" title="Open status tracking"><b>${esc(short(r.x.p.name))}</b><small>SOP ${esc(fmtDate(r.x.p.sop))}</small></button>${cells}</div>`;
   }).join("");
   return `<div class="ov-leg ov-leg-in"><span><i class="ok"></i>On track</span><span><i class="risk"></i>At risk</span><span><i class="delayed"></i>Delayed</span></div><div class="ov-tl">${head}${body}</div>`;
 }
@@ -339,28 +347,59 @@ function riskTable(m,ev,end){
 function actionTable(m,ev){
   const all=attention(ev).slice().sort((a,b)=>S.RANK[b.status]-S.RANK[a.status]||(a.next&&b.next?a.next.R-b.next.R:0)||a.readiness-b.readiness);
   if(!all.length) return {n:0,shown:0,html:`<div class="ov-empty">No part needs an action for this selection.</div>`};
-  const rows=all.slice(0,OV_LIST);
+  const rows=all.slice(0,OV_LIST), lbl={risk:"At risk",delayed:"Delayed"}, col={risk:"var(--c-amber)",delayed:"var(--red)"};
   const body=rows.map((e,i)=>{
-    const due=e.next, drv=driverMs(e), own=m.vend[e.pt.vendor]?m.vend[e.pt.vendor].owner:"—";
-    const when=due?(()=>{ const d=Math.round((due.R-m.today)/DAY); return d>0?"in "+d+" d":d===0?"today":Math.abs(d)+" d ago"; })():"";
-    const tip=drv&&due&&drv.id!==due.id?`Next gate ${due.id}. Status is set by ${drv.id}, ${Math.round(drv.dm)} days from its required date.`:"Required date of the next milestone";
-    return `<button type="button" class="ov-li" data-act="srmpart:${esc(e.pt.id)}" title="${esc(tip)}"><span class="rk">${i+1}</span><span class="bd"><b title="${esc(S.nextAction(e))}">${esc(S.nextAction(e))}</b><small>${esc(e.pt.name)} · ${esc(short(e.pt.progName))} · ${esc(own)}</small></span><span class="ed">${chip(e.status)}<small>${due?esc(fmtDate(due.R))+" · "+esc(when):"—"}</small></span></button>`;
-  }).join("");
-  return {n:all.length,shown:rows.length,html:`<div class="ov-li-h"><span></span><span>Action · part · owner</span><span>Status · due</span></div><div class="ov-lis">${body}</div>`};
+    const due=e.next, drv=driverMs(e), own=m.vend[e.pt.vendor]?m.vend[e.pt.vendor].owner:"—", d=due?Math.round((due.R-m.today)/DAY):null;
+    const when=d==null?"":d>0?"in "+d+" d":d===0?"today":Math.abs(d)+" d ago", act=S.nextAction(e);
+    const rr=[["Owner",own]]; if(due) rr.push(["Next milestone",due.id+" · "+fmtDate(due.R)]);
+    if(drv){ const dm=Math.round(drv.dm); rr.push(["Late milestone",drv.id+" "+(dm>0?"+":"")+dm+" d"]); }
+    if(e.tool&&(e.tool.st==="risk"||e.tool.st==="delayed")) rr.push(["Tooling",e.tool.st==="delayed"?"Delayed":"At risk"]);
+    rr.push(["Part SOP",fmtDate(e.pt.sop)]);
+    const tip={t:e.pt.name,s:short(e.pt.progName)+" · "+e.pt.vendor,b:[lbl[e.status],col[e.status]],r:rr,f:"Click for part detail"};
+    return `<tr class="ov-go" data-act="srmpart:${esc(e.pt.id)}" role="button" tabindex="0" data-sc-tip="${esc(JSON.stringify(tip))}"><td class="rk">${i+1}</td><td class="act"><b title="${esc(act)}">${esc(act)}</b></td><td class="pt"><b>${esc(e.pt.name)}</b><small>${esc(short(e.pt.progName))}</small></td><td class="sp">${esc(e.pt.vendor)}</td><td class="ow">${esc(own)}</td><td class="du">${due?`<b>${esc(fmtDate(due.R))}</b><small>${esc(when)}</small>`:"—"}</td><td class="st">${chip(e.status)}</td></tr>`; }).join("");
+  return {n:all.length,shown:rows.length,html:`<table class="ov-tbl ov-aq"><thead><tr><th>#</th><th>Next action</th><th>Part</th><th>Supplier</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody>${body}</tbody></table>`};
+}
+/* Open actions: every at-risk / delayed part, one row each, with a value filter on every column heading and paging (FTable) */
+function actionPanel(m,ev){
+  const all=attention(ev).slice().sort((a,b)=>S.RANK[b.status]-S.RANK[a.status]||(a.next&&b.next?a.next.R-b.next.R:0)||a.readiness-b.readiness);
+  const info=ovInfo("One row per at-risk or delayed part: delayed first, then the nearest next milestone. The action is that milestone's standard next step. Hover a row for the late milestone, tooling and part SOP date. Use the heading of any column to filter.");
+  const head=`Open actions — highest priority <span class="count-pill">${all.length}</span> ${info}`, btn=`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`;
+  if(!all.length) return U.el(U.panel(head,`<div class="ov-empty">No part needs an action for this selection.</div>`,{noPad:true,right:btn}));
+  const lbl={risk:"At risk",delayed:"Delayed"}, col={risk:"var(--c-amber)",delayed:"var(--red)"};
+  const splitAct=a=>{ const k="Escalate — recovery call: "; return a.startsWith(k)?{type:"Escalate — recovery call",step:a.charAt(k.length).toUpperCase()+a.slice(k.length+1)}:{type:a==="No open milestone"?"—":"Follow up",step:a}; };
+  const rows=all.map(e=>{
+    const due=e.next, drv=driverMs(e), own=m.vend[e.pt.vendor]?m.vend[e.pt.vendor].owner:"—", d=due?Math.round((due.R-m.today)/DAY):null;
+    const when=d==null?"":d>0?"in "+d+" d":d===0?"today":Math.abs(d)+" d ago";
+    const rr=[["Owner",own]]; if(due) rr.push(["Next milestone",due.id+" · "+fmtDate(due.R)]);
+    if(drv){ const dm=Math.round(drv.dm); rr.push(["Late milestone",drv.id+" "+(dm>0?"+":"")+dm+" d"]); }
+    if(e.tool&&(e.tool.st==="risk"||e.tool.st==="delayed")) rr.push(["Tooling",e.tool.st==="delayed"?"Delayed":"At risk"]);
+    rr.push(["Part SOP",fmtDate(e.pt.sop)]);
+    return {e,due,own,when,...splitAct(S.nextAction(e)),tip:{t:e.pt.name,s:short(e.pt.progName)+" · "+e.pt.vendor,b:[lbl[e.status],col[e.status]],r:rr,f:"Click for part detail"}};
+  });
+  const cell=(r,inner,cls)=>`<span class="oa-t${cls?" "+cls:""}" data-sc-tip="${esc(JSON.stringify(r.tip))}">${inner}</span>`;
+  const plain=(key,label,f,w)=>({key,label,w,get:f,html:r=>cell(r,esc(f(r)))});
+  const ft=FTable.create({id:"ov-actions",hideSum:true,sortable:true,pageSize:10,rowAct:r=>"srmpart:"+r.e.pt.id,empty:"No action matches these filters.",rows,columns:[
+    plain("type","Action",r=>r.type,"14%"),plain("step","Next step",r=>r.step,"25%"),
+    {key:"part",label:"Part",w:"14%",get:r=>r.e.pt.name,html:r=>cell(r,`<b>${esc(r.e.pt.name)}</b>`)},
+    plain("proj","Project",r=>short(r.e.pt.progName),"8%"),plain("sup","Supplier",r=>r.e.pt.vendor,"13%"),plain("own","Owner",r=>r.own,"8%"),
+    {key:"due",label:"Due",w:"9%",get:r=>r.due?fmtDate(r.due.R):"—",order:r=>r.due?r.due.R:9e15,html:r=>r.due?cell(r,`${esc(fmtDate(r.due.R))}<small class="v8-sm">${esc(r.when)}</small>`,"nw"):"—"},
+    {key:"st",label:"Status",w:"9%",get:r=>S.STATUS[r.e.status],order:r=>-S.RANK[r.e.status],html:r=>cell(r,chip(r.e.status))}]});
+  const pn=U.el(U.panel(head,"",{right:btn,sub:"Delayed first, then nearest milestone"}));
+  pn.querySelector(".panel-body").appendChild(ft); return pn;
 }
 function insightPanel(list){
   if(!list.length) return `<div class="ov-empty">Nothing stands out for this selection.</div>`;
-  const ic={risk:"alert",warn:"alert",info:"info",save:"trend-up"};
-  return `<div class="ov-ins">${list.map(i=>`<div class="ov-in ${i.k}" ${i.a?`data-act="${esc(i.a)}" role="button" tabindex="0"`:""}><span class="ic">${Icons.svg(ic[i.k]||"info")}</span><div><b>${esc(i.t)}</b><p>${esc(i.s)}</p>${i.q?`<button type="button" class="ov-ask" data-act="ask:${esc(i.q)}" data-no-icon>Ask AIS</button>`:""}</div></div>`).join("")}</div>`;
+  const spark=Icons.svg("sparkles");
+  return `<div class="ov-ins">${list.map(i=>`<div class="ov-in ${i.pri==="High"?"bad":"warn"}" ${i.a?`data-act="${esc(i.a)}" role="button" tabindex="0"`:""}><span class="ic">${Icons.svg("alert")}</span><div class="bd" title="${esc(i.s)}"><b>${esc(i.t)}</b><div class="tags"><span class="pri">${esc(i.pri||"Medium")} priority</span>${(i.tags||[]).slice(0,1).map(([ic,l])=>`<span class="tg">${Icons.svg(ic)}${esc(l)}</span>`).join("")}</div></div><div class="stat"><span class="si">${Icons.svg(i.ni||"info")}</span><div><b>${esc(i.n==null?"":i.n)}</b><small>${esc(i.nl||"")}</small></div></div>${i.q?`<button type="button" class="ask" data-act="ask:${esc(i.q)}" data-no-icon aria-label="Ask AIS" title="Ask AIS">${spark}</button>`:`<span></span>`}</div>`).join("")}</div>`;
 }
 function buildOverview(){
   const {m,ev,ev7,sm,sm7}=ctx(), w=document.createElement("div"); w.className="v8-page v8-board ov-page";
   const hd=U.header("Overview","Supplier readiness, milestone health and the risks that can affect upcoming SOP dates. Every figure follows the filters.");
-  const h1=hd.querySelector("h1"); if(h1) h1.textContent="Supplier Readiness Management (SRM) – Overview";
+  const h1=hd.querySelector("h1"); if(h1) h1.textContent="Supplier Readiness Management (SRM)";
   hd.appendChild(srmMeta(m));
   w.appendChild(hd); w.appendChild(overviewFilters(m));
   const sup=suppliers(m,ev), pm=progMilestones(m,ev), mc=msCounts(pm), weak=sup.filter(x=>x.started>=5&&x.readiness!=null&&x.readiness<60).length;
-  const hz=sixMonths(m.today), risks=riskTable(m,ev,hz.end), acts=actionTable(m,ev), gates=mc.risk+mc.delayed;
+  const gates=mc.risk+mc.delayed;
   add(w,`<div class="pd-kw"><div class="pd-kpis k5">${[
     ovKpi({icon:"users",label:"Suppliers in scope",value:nf(sm.suppliers,0),sub:weak?`<span class="bad">${weak} below 60% readiness</span>`:`<span class="good">None below 60% readiness</span>`,act:"sgo:srm-performance-dash",tip:"Suppliers with parts in the current filter. Below 60% counts only suppliers with at least 5 started parts."}),
     ovKpi({icon:"package",label:"Parts in scope",value:nf(sm.n,0),sub:`${nf(sm.started,0)} started · ${nf(sm.counts.notstarted,0)} not started`,act:"sgo:srm-tooling-dash",tip:"Parts in the current filter. Not started means nomination is not yet due."}),
@@ -372,18 +411,12 @@ function buildOverview(){
   r1.appendChild(U.el(U.panel("Milestone health by project "+ovInfo("Each started part is counted once, by its worst upcoming milestone. The bar excludes parts that have not started. Click a project to open status tracking."),milestoneHealth(m,ev),{noPad:true,sub:"Share of started parts by milestone status",right:ovLeg})));
   const pSup=U.el(U.panel("Supplier readiness "+ovInfo("Lowest readiness first. A supplier needs at least 5 started parts before it is ranked — the same rule as the suppliers KPI."),supplierTable(sup),{noPad:true,sub:"Click a supplier to view its parts",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-performance-dash">View all</button>`}));
   r1.appendChild(pSup); ovPaginate(pSup,"tbody tr",7,"suppliers");
-  const r2=add(w,`<div class="ov-row two"></div>`);
+  const r2=add(w,`<div class="ov-row s12"></div>`);
   r2.appendChild(U.el(U.panel("Readiness by stage "+ovInfo("How many parts are at each readiness stage today. This is not a cumulative count of parts that have passed the stage."),stageBars(ev),{noPad:true,sub:"Share of parts in scope"})));
-  r2.appendChild(U.el(U.panel("Readiness by origin "+ovInfo("Domestic or international, from the supplier master. A map is not shown: every supplier country on the master is India, and plant names are illustrative."),originPanel(m,ev,ev7),{noPad:true,sub:"Weaker origin first"})));
-  const r3=add(w,`<div class="ov-row two"></div>`);
-  const pRisk=U.el(U.panel("Top risks to production readiness "+ovInfo("Delayed parts first, then the earliest part SOP. Impact is High for delayed and Medium for at risk — the same split as open actions. It is not a separate production-loss estimate."),risks.html,{noPad:true,sub:risks.n?`Top ${risks.shown} of ${risks.n} · delayed first, then earliest SOP`:"No delayed or at-risk parts",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`}));
-  r3.appendChild(pRisk); ovPaginate(pRisk,".ov-lis > .ov-li",5);
-  const pAct=U.el(U.panel("Open actions — highest priority "+ovInfo("One row per part. Delayed first, then the nearest next milestone. The action text is that milestone's standard next step."),acts.html,{noPad:true,sub:acts.n?`Top ${acts.shown} of ${acts.n} · delayed first`:"Nothing open",right:`<button type="button" class="btn btn-sm" data-act="sgo:srm-tooling-dash">View all</button>`}));
-  r3.appendChild(pAct); ovPaginate(pAct,".ov-lis > .ov-li",5);
-  const r4=add(w,`<div class="ov-row two"></div>`);
-  r4.appendChild(U.el(U.panel("Upcoming key milestones "+ovInfo("Project facelift gates whose required date falls in the next six calendar months. Colour uses the existing gate rule. Click a gate to open it on status tracking."),timeline(m,pm),{noPad:true,sub:"Next 6 months · facelift gates"})));
-  const pIns=U.el(U.panel("Key insights "+ovInfo("Existing rules only: the largest cluster missing a milestone, suppliers under 60% readiness, tooling behind plan, the project with the highest delayed share, and at-risk parts whose price forecast rises more than 5%."),insightPanel(insights(m,ev,sm,sup)),{noPad:true,sub:"Recommendations · click a card to open the view"}));
-  r4.appendChild(pIns); ovPaginate(pIns,".ov-ins > .ov-in",3);
+  const pIns=U.el(U.panel("Key insights "+ovInfo("Existing rules only: the largest cluster missing a milestone, suppliers under 60% readiness, tooling behind plan, the project with the highest delayed share, and at-risk parts whose price forecast rises more than 5%."),insightPanel(insights(m,ev,sm,sup)),{noPad:true,sub:"Recommendations · click a card to open the view",right:`<div class="ov-pgh"></div>`}));
+  r2.appendChild(pIns); ovPaginate(pIns,".ov-ins > .ov-in",3,"",".ov-pgh");
+  const r3=add(w,`<div class="ov-row one"></div>`);
+  r3.appendChild(actionPanel(m,ev));
   U.wire(w); return w;
 }
 
@@ -397,7 +430,7 @@ function typeBars(ev){
   const sum=`<div class="pv-sum">${CT.map((t,i)=>`<div class="${CT_CLS[i]}"><i></i><b>${tot[t]}</b><span>${t}</span><em>${Math.round(tot[t]/all*100)}%</em></div>`).join("")}</div>`;
   const mx=Math.max(1,...rows.map(r=>r.n));
   const body=rows.map(r=>`<div class="pv-r"><span class="n">${esc(r.label)}</span><span class="bar" style="width:${(r.n/mx*100).toFixed(1)}%">${CT.map((t,i)=>r.c[t]?`<i class="${CT_CLS[i]}" style="flex:${r.c[t]}" title="${esc(r.label)} · ${t}: ${r.c[t]} of ${r.n} parts">${r.c[t]/r.n>=.14?r.c[t]:""}</i>`:"").join("")}</span><span class="t">${r.n}</span></div>`).join("");
-  return `${sum}<div class="pv"><div class="pv-h"><span>Vertical</span><span>Parts, by why they are in SRM scope</span><span class="r">Parts</span></div>${body}</div>`;
+  return `${sum}<div class="pv"><div class="pv-h"><span>Vertical</span><span>Parts by change type</span><span class="r">Parts</span></div>${body}</div>`;
 }
 /* tools by how far the build has got, coloured by plan status; counts TOOLS (a part can need several), not parts */
 function toolStages(ev){
@@ -410,6 +443,26 @@ function toolStages(ev){
     <div class="tl-key"><span><i class="ok"></i>On plan</span><span><i class="risk"></i>${S.TH.risk}–${S.TH.delayed} days late</span><span><i class="delayed"></i>over ${S.TH.delayed} days late</span><span><i class="notstarted"></i>not yet due</span></div>
     <div class="pd-note" style="margin-top:8px">Stage = how far the tool has actually got (Design under 25%, Build under 65%, then Trial, then Approved). “Not started” tools are not yet due to start.</div>`;
 }
+/* Tools by stage: a numbered stage track, one card per stage (tools, parts, status mix, one status pill) and a hover card with the status of the tools and parts at that stage */
+const STAGE_SVG={
+  "Not started":'<path d="M7 3h7l4 4v14H7zM14 3v4h4M9.5 12h5M9.5 16h5"/>',
+  Design:'<path d="M4 20l1-4L16 5l3 3L8 19zM14 7l3 3"/>',
+  Trial:'<path d="M9 3h6M10 3v6L5 19a1 1 0 0 0 1 2h12a1 1 0 0 0 1-2l-5-10V3M7.5 15h9"/>'};
+const stageIcon=s=>STAGE_SVG[s]?`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${STAGE_SVG[s]}</svg>`:Icons.svg(s==="Build"?"settings":"check-circle");
+function toolStagesPanel(ev){
+  const ST=["Not started","Design","Build","Trial","Approved"], K=["ok","risk","delayed","notstarted"];
+  const rows=ST.map(s=>{ const l=ev.filter(e=>e.tool&&e.tool.stage===s), c={ok:0,risk:0,delayed:0,notstarted:0}; l.forEach(e=>{ c[e.tool.st]=(c[e.tool.st]||0)+e.pt.tools; }); return {s,l,c,tools:K.reduce((a,k)=>a+c[k],0),parts:l.length}; });
+  const total=rows.reduce((a,r)=>a+r.tools,0)||1, partsN=rows.reduce((a,r)=>a+r.parts,0), behind=rows.reduce((a,r)=>a+r.c.risk+r.c.delayed,0), appr=rows.find(r=>r.s==="Approved").tools;
+  const stat=(v,l,c)=>`<div class="ts-st"><b${c?` class="${c}"`:""}>${v}</b><span>${l}</span></div>`;
+  const stats=`<div class="ts-stats">${stat(nf(total,0),`tools on ${partsN} parts`)}${stat(Math.round(appr/total*100)+"%",`approved (${appr})`,"good")}${stat(nf(behind,0),"behind plan",behind?"bad":"")}</div>`;
+  const tone=r=>r.s==="Not started"?"ns":r.s==="Approved"?"done":r.tools&&r.c.delayed/r.tools>=.2?"bad":r.c.delayed||r.c.risk?"warn":"good";
+  const cols=rows.map((r,i)=>{
+    const ps=S.summary(r.l), rdy=ps.readiness==null?"—":Math.round(ps.readiness)+"%";
+    const tip={t:r.s+" stage",g:[{h:"Tools",n:r.tools,s:[["on plan",r.c.ok,"var(--ok)"],["at risk",r.c.risk,"var(--c-amber)"],["delayed",r.c.delayed,"var(--red)"],["not yet due",r.c.notstarted,"var(--faint)"]]},{h:"Parts",n:r.parts,s:[["on track",ps.counts.ok,"var(--ok)"],["at risk",ps.counts.risk,"var(--c-amber)"],["delayed",ps.counts.delayed,"var(--red)"],["not started",ps.counts.notstarted,"var(--faint)"]]}]};
+    const behindN=r.c.risk+r.c.delayed;
+    return `<div class="ts-col ${tone(r)}"><div class="ts-nd"><i>${i+1}</i><span>${r.s}</span></div><div class="ts-card" tabindex="0" data-sc-tip="${esc(JSON.stringify(tip))}"><div class="ts-top"><span class="ts-ic">${stageIcon(r.s)}</span><div class="ts-big"><b>${nf(r.tools,0)}</b><small>tools</small></div></div><dl class="ts-rows"><div><dt>${r.s==="Not started"?"Not yet due":"On plan"}</dt><dd class="${(r.s==="Not started"?r.c.notstarted:r.c.ok)?"":"zero"}">${r.s==="Not started"?r.c.notstarted:r.c.ok}</dd></div><div><dt>Behind plan</dt><dd class="${behindN?(tone(r)==="bad"?"bad":"warn"):"zero"}">${behindN}</dd></div></dl></div></div>`; }).join("");
+  return U.panel("Tools by stage",`<div class="ts"><div class="ts-cols">${cols}</div></div>`,{noPad:true,sub:"How far each tool has got, and whether that is on plan",right:stats});
+}
 const PARTS_COLS=()=>{ const m=model(), mon=t=>new Date(t).toLocaleDateString("en-GB",{month:"short",year:"numeric",timeZone:"UTC"}); return [
   {key:"part",label:"Part",get:r=>r.e.pt.name,html:r=>`<b>${esc(r.e.pt.name)}</b><small class="v8-sm">${esc(r.e.pt.id)}</small>`},
   {key:"project",label:"Project",get:r=>short(r.e.pt.progName)},
@@ -421,6 +474,34 @@ const PARTS_COLS=()=>{ const m=model(), mon=t=>new Date(t).toLocaleDateString("e
   {key:"status",label:"Status",get:r=>S.STATUS[r.e.status],order:r=>-S.RANK[r.e.status],html:r=>chip(r.e.status)},
   {key:"action",label:"Suggested next action",get:r=>S.nextAction(r.e),html:r=>`<span class="na">${esc(S.nextAction(r.e))}</span>`},
   {key:"owner",label:"Owner",get:r=>m.vend[r.e.pt.vendor].owner}]; };
+/* line icons for the verticals and change types (the platform icon set has no engine / seat / disc …) */
+const VICON={Powertrain:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>',
+  Electrical:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+  Lighting:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/>',
+  Sensors:'<circle cx="12" cy="12" r="2"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M4.9 4.9a10 10 0 0 0 0 14.2M19.1 4.9a10 10 0 0 1 0 14.2"/>',
+  HVAC:'<circle cx="12" cy="12" r="1.6"/><path d="M12 10.4C12 6 14 3 17 4c2 .8 1.5 3.8-1 5.5M13.6 12c4.4 0 7.4 2 6.4 5-.8 2-3.8 1.5-5.5-1M12 13.6c0 4.4-2 7.4-5 6.4-2-.8-1.5-3.8 1-5.5M10.4 12C6 12 3 10 4 7c.8-2 3.8-1.5 5.5 1"/>',
+  "Interior Trim":'<path d="M7 4h3l1 8h6a2 2 0 0 1 2 2v3H9a2 2 0 0 1-2-2zM9 20h10"/>',
+  Braking:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 5v2M12 17v2M5 12h2M17 12h2"/>',
+  Fasteners:'<path d="M8 3h8v4H8zM10 7v14M14 7v14M10 11h4M10 15h4M10 19h4"/>'};
+const vIcon=f=>VICON[f]?`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${VICON[f]}</svg>`:Icons.svg(f==="Chassis"||f==="Body Stampings"?"car":"layers");
+const CT_ICON=["car","calendar","settings"];
+/* popup: one vertical split by change type (why its parts are in SRM scope), with the status mix and readiness of each group */
+function openScopeModal(fam,evScope){
+  const l=evScope.filter(e=>e.pt.family===fam), n=l.length||1;
+  const bk=document.createElement("div"); bk.className="fc-modal-bk"; document.body.appendChild(bk);
+  const close=()=>{ bk.remove(); document.removeEventListener("keydown",esck); }, esck=e=>{ if(e.key==="Escape") close(); };
+  document.addEventListener("keydown",esck); bk.onclick=e=>{ if(e.target===bk) close(); };
+  const rows=CT.map((t,i)=>{ const g=l.filter(e=>e.pt.changeType===t); return {t,i,k:g.length,s:S.summary(g)}; });
+  const pc=share100(rows.map(r=>r.k)), band=v=>v>=80?"ok":v>=60?"risk":"delayed";
+  const bar=`<div class="sm-bar">${rows.map((r,i)=>r.k?`<i class="${CT_CLS[r.i]}" style="flex:${r.k}" data-n="${r.k}" data-p="${pc[i]}%" title="${esc(r.t)}: ${r.k} of ${l.length} parts">${r.k/n>=.06?r.k:""}</i>`:"").join("")}</div>`;
+  const leg=rows.map((r,i)=>`<div class="lg"><span class="dot ${CT_CLS[r.i]}"></span><div><b>${r.k} parts</b><span>${esc(r.t)}</span><small>${pc[i]}% of total</small></div></div>`).join("");
+  const body=rows.map(r=>`<tr><td><span class="vn"><span class="vt">${Icons.svg(CT_ICON[r.i])}</span><span><b>${esc(r.t)}</b><small>${esc(CT_WHY[r.t])}</small></span></span></td><td class="num">${r.k}</td><td class="num ok">${r.s.counts.ok}</td><td class="num ${r.s.counts.risk?"warn":"zero"}">${r.s.counts.risk}</td><td class="num ${r.s.counts.delayed?"bad":"zero"}">${r.s.counts.delayed}</td><td class="num mut">${r.s.counts.notstarted}</td><td class="rd">${r.s.readiness==null?"—":`<span class="ov-mini"><i class="${band(r.s.readiness)}" style="width:${Math.max(0,Math.min(100,r.s.readiness)).toFixed(1)}%"></i></span><span class="pc">${Math.round(r.s.readiness)}%</span>`}</td></tr>`).join("");
+  bk.innerHTML=`<div class="fc-modal sm" role="dialog" aria-modal="true" aria-label="${esc(fam)} by change type"><div class="sm-hd"><span class="sm-ic">${vIcon(fam)}</span><div><h2>${esc(fam)} <span class="count-pill">${l.length} parts</span></h2><p>Why these parts are in SRM scope, and how ready each group is</p></div><button class="sm-x" data-c="1" aria-label="Close">${Icons.svg("x")}</button></div>`+
+    `<div class="sm-b"><section class="sm-sec"><div class="sm-sh"><div><h3>Scope breakdown</h3><p>Distribution of ${l.length} parts by change type.</p></div><div class="fc-segs tight" role="group" aria-label="Bar labels"><button type="button" class="fc-seg on" data-m="n">Parts</button><button type="button" class="fc-seg" data-m="p">Percentage</button></div></div>${bar}<div class="sm-leg">${leg}</div></section>`+
+    `<section class="sm-sec"><div class="sm-sh"><div><h3>Readiness by change type</h3><p>Status distribution and readiness for each change type.</p></div></div><table class="sm-tbl"><thead><tr><th>Change type</th><th class="r">Parts</th><th class="r">On track</th><th class="r">At risk</th><th class="r">Delayed</th><th class="r">Not started</th><th>Readiness</th></tr></thead><tbody>${body}</tbody></table></section></div></div>`;
+  bk.querySelector("[data-c]").onclick=close;
+  bk.addEventListener("click",e=>{ const b=e.target.closest("[data-m]"); if(!b) return; bk.querySelectorAll("[data-m]").forEach(x=>x.classList.toggle("on",x===b)); bk.querySelectorAll(".sm-bar i").forEach(i=>{ if(i.textContent!=="") i.textContent=b.dataset.m==="p"?i.dataset.p:i.dataset.n; }); });
+}
 function buildParts(){
   const {m,ev,sm}=ctx(), w=page("Part Readiness","Tooling and part readiness by vertical, supplier and stage — pick a part for its commitments."), sup=suppliers(m,ev);
   /* the two scope panels always show every vertical (the Vertical filter would leave one row); project and supplier filters still apply */
@@ -431,13 +512,23 @@ function buildParts(){
     scard("alert","At risk",sm.counts.risk,`${S.TH.risk}–${S.TH.delayed} days late`,{tone:sm.counts.risk?"warn":""}),
     scard("clock","Delayed",sm.counts.delayed,`more than ${S.TH.delayed} days late`,{tone:sm.counts.delayed?"bad":""}),
     scard("wrench","Tooling readiness",pct0(sm.toolReadiness),`${sm.toolN} parts with tooling · ${sm.toolSum} tools`,{tone:bandCls(sm.toolReadiness)})]);
-  const g1=add(w,`<div class="v8-g v8-g21"></div>`);
   const famRows=S.FAMILIES.map(f=>{ const l=evScope.filter(e=>e.pt.family===f), s=S.summary(l); return {f,s}; }).filter(r=>r.s.n);
-  g1.appendChild(U.el(U.panel("Scope parts overview",U.table(["Vertical","Parts","On track","At risk","Delayed","Not started","Readiness"],famRows.map(r=>`<tr><td><b>${esc(r.f)}</b></td><td>${r.s.n}</td><td>${r.s.counts.ok}</td><td>${r.s.counts.risk}</td><td>${r.s.counts.delayed}</td><td>${r.s.counts.notstarted}</td><td class="v8-rcell">${readBar(r.s.readiness)}</td></tr>`).join("")+`<tr class="v8-tot"><td><b>Total</b></td><td>${smScope.n}</td><td>${smScope.counts.ok}</td><td>${smScope.counts.risk}</td><td>${smScope.counts.delayed}</td><td>${smScope.counts.notstarted}</td><td class="v8-rcell">${readBar(smScope.readiness)}</td></tr>`),{noPad:true,sub:"All verticals (the Vertical filter does not apply here) · readiness = average of the started parts"})));
-  g1.appendChild(U.el(U.panel("Parts by vertical",typeBars(evScope),{sub:"Why each part is in SRM scope: the project facelift, a model-year change, or an AEKO running change"})));
-  const g2=add(w,`<div class="v8-g v8-g2"></div>`);
-  g2.appendChild(U.el(U.panel("Tooling readiness",V.gauge(sm.toolReadiness,{sub:sm.toolN+" parts with tooling",aria:"Tooling readiness"})+V.legend().replace(/<span><i[^>]*><\/i>Not started<\/span>/,"")+`<div class="v8-tl">${["ok","risk","delayed"].map(k=>`<div><b>${sm.toolCounts[k]}</b><span>${V.LABEL[k]}</span></div>`).join("")}</div>`,{sub:"Plan attainment of tool build and trial · counted per part"})));
-  g2.appendChild(U.el(U.panel("Tools by stage",toolStages(ev),{sub:"How far each tool has got, and whether that is on plan"})));
+  const rdTone=v=>v==null?"":v>=80?"good":v>=60?"warn":"bad", rdBand=v=>v>=80?"ok":v>=60?"risk":"delayed";
+  const vRow=({f,s})=>`<tr data-vert="${esc(f)}" role="button" tabindex="0" title="Show ${esc(f)} by change type"><td class="nm"><span class="vn"><span class="vt">${vIcon(f)}</span><b>${esc(f)}</b></span></td><td class="num">${s.n}</td><td class="num">${s.counts.ok}</td><td class="num ${s.counts.risk?"warn":"zero"}">${s.counts.risk}</td><td class="num ${s.counts.delayed?"bad":"zero"}">${s.counts.delayed}</td><td class="num">${s.counts.notstarted}</td><td class="num rdv ${rdTone(s.readiness)}">${s.readiness==null?"—":Math.round(s.readiness)+"%"}</td><td class="go">${Icons.svg("chevron-right")}</td></tr>`;
+  const vTable=rows=>`<div class="pr-card"><table class="pr-tbl"><colgroup><col class="c1"><col><col><col><col><col><col><col class="cg"></colgroup><thead><tr><th>Vertical</th><th class="r">Parts</th><th class="r">On track</th><th class="r">At risk</th><th class="r">Delayed</th><th class="r">Not started</th><th class="r">Readiness</th><th></th></tr></thead><tbody>${rows.map(vRow).join("")}</tbody></table></div>`;
+  const half=Math.ceil(famRows.length/2);
+  const drawGrid=()=>PCOLS===1?`<div class="pr-grid one">${vTable(famRows)}</div>`:`<div class="pr-grid">${vTable(famRows.slice(0,half))}${vTable(famRows.slice(half))}</div>`;
+  const tot=smScope, st=(n,l,c)=>`<div class="st"><b${c?` class="${c}"`:""}>${n}</b><span>${l}</span></div>`;
+  const totalStrip=`<div class="pr-ts"><div class="tt">Total</div>${st(tot.n,"parts")}${st(tot.counts.ok,"on track")}${st(tot.counts.risk,"at risk",tot.counts.risk?"warn":"")}${st(tot.counts.delayed,"delayed",tot.counts.delayed?"bad":"")}${st(tot.counts.notstarted,"not started")}<div class="ov"><span class="ov-mini"><i class="${rdBand(tot.readiness)}" style="width:${Math.max(0,Math.min(100,tot.readiness||0)).toFixed(1)}%"></i></span><div><b>${tot.readiness==null?"—":Math.round(tot.readiness)+"%"}</b><span>overall readiness</span></div></div></div>`;
+  const colsCtl=`<div class="fc-segs tight pr-cols" role="group" aria-label="Table layout"><button type="button" class="fc-seg" data-cols="2">2 columns</button><button type="button" class="fc-seg" data-cols="1">1 column</button></div>`;
+  const leg=`<div class="ov-leg pr-leg"><span><i class="ok"></i>On track</span><span><i class="risk"></i>At risk</span><span><i class="delayed"></i>Delayed</span><span><i class="ns"></i>Not started</span></div>`;
+  const prPanel=U.el(U.panel("Readiness by vertical",`<div class="pr-body"><div class="pr-host">${drawGrid()}</div>${totalStrip}</div>`,{noPad:true,sub:"Select a vertical to view its change-type breakdown",right:`<div class="pr-hr">${leg}${colsCtl}</div>`}));
+  const prSync=()=>prPanel.querySelectorAll("[data-cols]").forEach(b=>{ const on=+b.dataset.cols===PCOLS; b.classList.toggle("on",on); b.setAttribute("aria-pressed",on); });
+  prPanel.addEventListener("click",e=>{ const c=e.target.closest("[data-cols]"); if(c){ PCOLS=+c.dataset.cols; prPanel.querySelector(".pr-host").innerHTML=drawGrid(); prSync(); return; } const r=e.target.closest("[data-vert]"); if(r) openScopeModal(r.dataset.vert,evScope); });
+  prPanel.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ const r=e.target.closest&&e.target.closest("[data-vert]"); if(r){ e.preventDefault(); openScopeModal(r.dataset.vert,evScope); } } });
+  prSync(); w.appendChild(prPanel);
+  const g2=add(w,`<div class="v8-g"></div>`);
+  g2.appendChild(U.el(toolStagesPanel(ev)));
   const rows=ev.filter(e=>e.started&&(e.status==="risk"||e.status==="delayed")).sort((a,b)=>S.RANK[b.status]-S.RANK[a.status]||(a.next&&b.next?a.next.R-b.next.R:0)||a.readiness-b.readiness).map(e=>({e}));
   const t=FTable.create({id:"srm-risk-parts",columns:PARTS_COLS(),rows,pageSize:10,rowAct:r=>"srmpart:"+r.e.pt.id,empty:"No at-risk or delayed part matches these filters."});
   add(w,U.panel(`At-risk parts <span class="count-pill">${rows.length}</span>`,"",{style:"margin-top:16px",sub:"Delayed first, then at risk, nearest milestone first · filter any column from its heading · click a row for the part's detail"}));
@@ -446,6 +537,23 @@ function buildParts(){
 }
 
 /* ------------------------------------------------------------ 3 · Status tracking (milestones) */
+/* side drawer for one milestone of one project (opened from a diamond on the project timeline): status by vertical + average slip by supplier, for that project's facelift parts */
+function openMilestoneDrawer(code,mi){
+  const m=model(), x=progMilestones(m,ctx().ev).find(r=>r.p.code===code); if(!x) return;
+  const k=x.ms[mi], evp=x.evp, st=k.n?k.st:"notstarted", pn=short(x.p.name);
+  const dd=Math.round((k.R-m.today)/DAY), when=dd>0?"in "+dd+" days":dd===0?"today":Math.abs(dd)+" days ago", sl=Math.round(k.avgSlip||0);
+  const stOf=e=>e.started&&e.milestones[mi].future?e.milestones[mi].st:(e.started?"ok":"notstarted");
+  const sup=suppliers(m,evp).map(s=>{ const l=s.list.filter(e=>e.started&&e.milestones[mi].future); return {name:s.name,n:l.length,v:l.length?l.reduce((a,e)=>a+e.milestones[mi].dm,0)/l.length:0}; }).filter(r=>r.n).sort((a,b)=>b.v-a.v);
+  const card=(l,v,s)=>`<div class="dr-c"><span>${l}</span><b>${v}</b><small>${s}</small></div>`;
+  const cards=`<div class="dr-cards">${card("Required by",esc(fmtDate(k.R)),when)}${card("Parts late",k.n?`${k.bad} of ${k.n}`:"—",k.n?"started facelift parts":"none started")}${card("Average slip",k.n?(sl>0?"+":"")+sl+" d":"—",k.fc?"supplier commitment "+esc(fmtDate(k.fc)):"")}</div>`;
+  const body=!k.n?`<div class="dr-sec"><p class="mut small">No facelift part of ${esc(pn)} has started yet, so there is no status to break down.</p></div>`
+    :`<div class="dr-sec"><h4>Status by vertical</h4>${statusBars(verticalRows(evp,stOf))}<div class="mut small" style="margin-top:8px">Parts whose date has passed count as met.</div></div>
+      <div class="dr-sec"><h4>Average slip by supplier</h4>${sup.length?C.bars({signed:true,fmt:v=>(v>0?"+":"")+Math.round(v)+" d",items:sup.slice(0,8).map(r=>({label:r.name,value:r.v,note:r.n+(r.n===1?" part":" parts"),color:r.v>S.TH.delayed?V.COL.delayed:r.v>S.TH.risk?V.COL.risk:V.COL.ok}))}):`<div class="mut small">This milestone date has passed, so slip is only shown for upcoming milestones.</div>`}<div class="mut small" style="margin-top:8px">Days later (+) or earlier (−) than required, for parts with the milestone still ahead.</div></div>`;
+  const html=`<div class="dr"><div class="dr-hd"><div><div class="dr-n">${esc(k.id)} · ${esc(pn)}</div><div class="dr-tags"><span>${esc(k.need)}</span><span>SOP ${esc(fmtDate(x.p.sop))}</span><span>${evp.length} facelift parts</span></div></div>${chip(st)}</div>${cards}${body}</div>`;
+  Drawer.open(`${k.id} · ${pn}`,"",null);
+  const bd=document.getElementById("drawer-body"); bd.innerHTML=html; U.wire(bd);
+  document.querySelector("#drawer .drawer-footer").style.display="none"; document.getElementById("drawer").classList.add("fcwide");
+}
 function buildStatus(){
   const {m,ev,sm}=ctx(), w=page("Status Tracking","Milestone chain per project — required date versus what suppliers have committed."), pm=progMilestones(m,ev), mc=msCounts(pm);
   const started=ev.filter(e=>e.started), nextSlip=started.length?started.reduce((s,e)=>s+(e.next?e.next.dm:0),0)/started.length:null;
@@ -456,18 +564,9 @@ function buildStatus(){
     scard("alert","At risk",mc.risk,"some parts forecast late",{tone:mc.risk?"warn":""}),
     scard("clock","Delayed",mc.delayed,"20%+ of parts late",{tone:mc.delayed?"bad":""}),
     scard("activity","Avg slip at next milestone",nextSlip==null?"—":(nextSlip>0?"+":"")+Math.round(nextSlip)+" d",`over ${started.length} started parts`)]);
-  add(w,U.panel("Project timeline — plan vs forecast",V.gantt(ganttRows(pm,true),{today:m.today,rowH:50,width:980}),{sub:"Solid diamond = required date · hollow diamond = date the supplier commitments point to (shown when it slips more than 2 days)"}));
+  add(w,U.panel("Project timeline",V.gantt(ganttRows(pm,false),{today:m.today,rowH:50,width:980}),{sub:"Required date of each milestone per project, coloured by status · the red line is today"}));
   w.lastChild.style.marginTop="16px";
   /* matrix */
-  add(w,U.panel("Milestone matrix",U.table(["Project"].concat(MS.map(x=>x.id)),pm.map(x=>`<tr><td><b>${esc(short(x.p.name))}</b><small class="v8-sm">SOP ${esc(fmtDate(x.p.sop))}</small></td>${x.ms.map(k=>`<td>${k.n?`<div class="v8-mc">${esc(fmtDate(k.R))}</div>${chip(k.st)}<small class="v8-sm">${k.bad} of ${k.n} parts late · ${k.avgSlip>0?"+":""}${Math.round(k.avgSlip)} d avg</small>`:`<div class="v8-mc">${esc(fmtDate(k.R))}</div>${chip("notstarted")}`}</td>`).join("")}</tr>`).join("")),{noPad:true,style:"margin-top:16px",sub:"Status of each milestone from the facelift parts of the project"}));
-  /* selected milestone: by vertical + slip by supplier */
-  const mi=MSEL>=0?MSEL:Math.max(0,MS.findIndex((d,i)=>pm.some(x=>x.ms[i].future&&x.ms[i].n)));
-  const seg=`<div class="fc-segs tight">${MS.map((d,i)=>`<button type="button" class="fc-seg ${i===mi?"on":""}" data-act="sms:${i}">${esc(d.id)}</button>`).join("")}</div>`;
-  const g=add(w,`<div class="v8-g v8-g2" style="margin-top:16px"></div>`);
-  const stOf=(e)=>e.started&&e.milestones[mi].future?e.milestones[mi].st:(e.started?"ok":"notstarted");
-  g.appendChild(U.el(U.panel(`${esc(MS[mi].id)} — status by vertical`,seg+statusBars(verticalRows(ev,stOf)),{sub:MS[mi].need+" · parts whose date has passed count as met"})));
-  const sl=suppliers(m,ev).map(s=>({name:s.name,v:s.list.filter(e=>e.started&&e.milestones[mi].future).reduce((a,e,_,l)=>a+e.milestones[mi].dm/l.length,0),n:s.list.filter(e=>e.started&&e.milestones[mi].future).length})).filter(x=>x.n>=3).sort((a,b)=>b.v-a.v);
-  g.appendChild(U.el(U.panel(`${esc(MS[mi].id)} — average slip by supplier`,C.bars({signed:true,fmt:v=>(v>0?"+":"")+Math.round(v)+" d",items:sl.slice(0,8).map(x=>({label:x.name,value:x.v,note:x.n+" parts",color:x.v>S.TH.delayed?V.COL.delayed:x.v>S.TH.risk?V.COL.risk:V.COL.ok}))}),{sub:"Days later (+) or earlier (−) than required, for parts with the milestone still ahead"})));
   /* upcoming */
   add(w,U.panel("Upcoming milestones",U.table(["Project","Milestone","Required","In","Status","Parts late"],upcoming.slice(0,8).map(({x,k})=>`<tr><td><b>${esc(short(x.p.name))}</b></td><td>${esc(k.id)}<small class="v8-sm">${esc(k.need)}</small></td><td>${esc(fmtDate(k.R))}</td><td>${Math.round((k.R-m.today)/DAY)} days</td><td>${chip(k.st)}</td><td>${k.n?k.bad+" of "+k.n:"—"}</td></tr>`).join("")),{noPad:true,style:"margin-top:16px"}));
   U.wire(w); return w;
@@ -475,6 +574,7 @@ function buildStatus(){
 
 /* ------------------------------------------------------------ 4 · Supplier performance */
 function buildPerformance(){
+  if(DRILL){ F.supplier=DRILL.prev; DRILL=null; }   // coming back from a supplier's parts: show every supplier again
   const {m,ev,sm}=ctx(), w=page("Supplier Performance","Readiness, delivery and quality per supplier — who is on track and who needs a conversation."), sup=suppliers(m,ev).filter(x=>x.n);
   const ravg=sup.filter(x=>x.readiness!=null), av=k=>sup.length?sup.reduce((s,x)=>s+x[k],0)/sup.length:null;
   const avgR=ravg.length?ravg.reduce((s,x)=>s+x.readiness,0)/ravg.length:null, low60=ravg.filter(x=>x.readiness<60);
@@ -484,14 +584,25 @@ function buildPerformance(){
     scard("clock","Avg delivery",pct0(av("delivery")),"on-time delivery, last 6 months"),
     scard("shield","Avg quality",pct0(av("quality")),"quality performance, last 6 months"),
     scard("alert","Below 60% readiness",low60.length,`<span class="bad">${esc(low60.map(x=>x.name).slice(0,2).join(", ")||"none")}</span>`,{tone:low60.length?"bad":""})]);
-  const g=add(w,`<div class="v8-g v8-g2"></div>`);
   const low=ravg.slice().sort((a,b)=>a.readiness-b.readiness).slice(0,5).map(x=>x.name);
-  g.appendChild(U.el(U.panel("Delivery vs quality",V.scatter(sup.map(x=>({x:x.delivery,y:x.quality,r:x.n,color:x.readiness==null?V.COL.notstarted:V.band(x.readiness),label:x.name,showLabel:low.includes(x.name),click:`sfg:supplier=${x.name}|srm-tooling-dash`,title:`${x.name}\nDelivery ${x.delivery}% · Quality ${x.quality}%\nReadiness ${x.readiness==null?"n/a":Math.round(x.readiness)+"%"} · ${x.n} parts`})),{xLabel:"Delivery performance %",yLabel:"Quality performance %"})+`<div class="v8-legend"><span><i style="background:${V.COL.ok}"></i>Readiness 80%+</span><span><i style="background:${V.COL.risk}"></i>60–79%</span><span><i style="background:${V.COL.delayed}"></i>&lt;60%</span><span>Bubble size = parts</span></div>`,{sub:"Click a bubble to open that supplier's parts"})));
-  const rk=ravg.slice().sort((a,b)=>b.readiness-a.readiness);
-  g.appendChild(U.el(U.panel("Readiness ranking",C.bars({max:100,fmt:v=>Math.round(v)+"%",items:rk.slice(0,10).map(x=>({label:x.name,value:x.readiness,color:V.band(x.readiness),note:x.started+" parts",onclick:`sfg:supplier=${x.name}|srm-tooling-dash`}))})+`<div class="v8-sub">Lowest</div>`+C.bars({max:100,fmt:v=>Math.round(v)+"%",items:rk.slice(-5).reverse().map(x=>({label:x.name,value:x.readiness,color:V.band(x.readiness),note:x.started+" parts",onclick:`sfg:supplier=${x.name}|srm-tooling-dash`}))}),{sub:"Top 10 and bottom 5"})));
-  const rows=sup.slice().sort((a,b)=>(a.readiness==null)-(b.readiness==null)||b.readiness-a.readiness).map(x=>{ const tr=trend(m,x.name).map(v=>v==null?0:v);
-    return `<tr class="v8-row" data-act="sfg:supplier=${esc(x.name)}|srm-tooling-dash" role="button" tabindex="0"><td><b>${esc(x.name)}</b><small class="v8-sm">${esc(x.origin)}</small></td><td>${x.n}</td><td>${x.counts.ok}</td><td>${x.counts.risk}</td><td>${x.counts.delayed}</td><td class="v8-rcell">${readBar(x.readiness)}</td><td>${C.spark(tr,{w:84,h:24,color:x.readiness==null?V.COL.notstarted:V.band(x.readiness)})}</td><td>${x.delivery}%</td><td>${x.quality}%</td><td>${esc(x.owner)}</td></tr>`; }).join("");
-  add(w,U.panel("All suppliers",U.table(["Supplier","Parts","On track","At risk","Delayed","Readiness","6-month trend","Delivery","Quality","SRM owner"],rows),{noPad:true,style:"margin-top:16px",sub:"Trend = readiness recomputed at each of the last six month-ends"}));
+  const rdTxt=x=>x.readiness==null?"Not started":Math.round(x.readiness)+"%";
+  const pts=sup.map(x=>({x:x.delivery,y:x.quality,r:x.n,color:x.readiness==null?V.COL.notstarted:V.band(x.readiness),label:x.name,showLabel:low.includes(x.name),click:"sgo:srm-tooling-dash",
+    tip:{t:x.name,s:`${originLabel(x.origin)} · ${x.n} parts`,b:[rdTxt(x)+" ready",x.readiness==null?V.COL.notstarted:V.band(x.readiness)],r:[["Delivery",x.delivery+"%"],["Quality",x.quality+"%"],["On track",x.counts.ok],["At risk",x.counts.risk],["Delayed",x.counts.delayed],["SRM owner",x.owner]],f:"Click to open Part Readiness"}}));
+  add(w,U.panel("Delivery vs quality",V.scatter(pts,{xLabel:"Delivery performance %",yLabel:"Quality performance %",width:1240,height:320})+`<div class="v8-legend"><span><i style="background:${V.COL.ok}"></i>Readiness 80%+</span><span><i style="background:${V.COL.risk}"></i>60–79%</span><span><i style="background:${V.COL.delayed}"></i>&lt;60%</span><span>Bubble size = parts</span></div>`,{}));
+  /* all suppliers: paged, with a value filter on every column heading */
+  const rdBand=x=>x.readiness==null?"Not started":x.readiness>=80?"80% or more":x.readiness>=60?"60–79%":"Under 60%", sBand=v=>v>=90?"90% or more":v>=80?"80–89%":"Below 80%";
+  const rows=sup.slice().sort((a,b)=>(a.readiness==null)-(b.readiness==null)||b.readiness-a.readiness).map(x=>{ const tr=trend(m,x.name).map(v=>v==null?0:v); return Object.assign({tr,slope:tr[tr.length-1]-tr[0]},x); });
+  const cnt=(key,label,f)=>({key,label,get:f,align:"r",order:f});
+  const ft=FTable.create({id:"srm-suppliers",hideSum:true,pageSize:10,rowAct:x=>"sgo:srm-tooling-dash",empty:"No supplier matches these filters.",rows,columns:[
+    {key:"sup",label:"Supplier",get:x=>x.name,html:x=>`<b>${esc(x.name)}</b><small class="v8-sm">${esc(originLabel(x.origin))}</small>`},
+    cnt("n","Parts",x=>x.n),cnt("ok","On track",x=>x.counts.ok),cnt("risk","At risk",x=>x.counts.risk),cnt("delayed","Delayed",x=>x.counts.delayed),
+    {key:"rd",label:"Readiness",get:rdBand,order:x=>x.readiness==null?-1:x.readiness,html:x=>readBar(x.readiness)},
+    {key:"tr",label:"6-month trend",get:x=>x.slope>=2?"Improving":x.slope<=-2?"Declining":"Steady",order:x=>x.slope,html:x=>C.spark(x.tr,{w:84,h:24,color:x.readiness==null?V.COL.notstarted:V.band(x.readiness)})},
+    {key:"del",label:"Delivery",get:x=>sBand(x.delivery),order:x=>x.delivery,html:x=>x.delivery+"%"},
+    {key:"q",label:"Quality",get:x=>sBand(x.quality),order:x=>x.quality,html:x=>x.quality+"%"},
+    {key:"own",label:"SRM owner",get:x=>x.owner}]});
+  add(w,U.panel(`All suppliers <span class="count-pill">${rows.length}</span>`,"",{}));
+  w.lastChild.querySelector(".panel-body").appendChild(ft);
   add(w,U.note("Delivery and quality scores are generated for this prototype (no supplier-scorecard feed yet); readiness and part counts come from the readiness model.","info"));
   U.wire(w); return w;
 }
@@ -499,10 +610,12 @@ function buildPerformance(){
 /* ------------------------------------------------------------ wiring: actions, navigation, screens */
 Object.assign(U.actions,{
   sgo:v=>{ Router.go(v,"srm"); },
+  sdrill:v=>{ DRILL={prev:F.supplier}; F.supplier=v; Router.go("srm-tooling-dash","srm"); },
   sfg:v=>{ const [kv,scr]=v.split("|"), [k,val]=kv.split("="); F[k]=val; Router.go(scr,"srm"); },
   sms:v=>{ MSEL=+v; Router.render(); },
   sml:v=>{ const [code,mi]=v.split("|"); if(code&&F.brand&&!inBrand(code)) F.brand=""; if(code) F.project=code; MSEL=+mi; Router.go("srm-status-dash","srm"); },
   srmpart:v=>{ openSrmPart(v); },
+  smd:v=>{ const [code,mi]=v.split("|"); openMilestoneDrawer(code,+mi); },
 });
 const SRM_LABEL={"srm-overview":"Overview","srm-tooling-dash":"Part Readiness","srm-status-dash":"Status Tracking","srm-performance-dash":"Supplier Performance"};
 const SRM_IDS=Object.keys(SRM_LABEL);
