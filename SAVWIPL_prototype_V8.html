@@ -12640,7 +12640,7 @@ function buildSupplier(){
   const catRows=Object.keys(byCat).map(k=>({k,c:costOf(byCat[k],lineCost),n:byCat[k].length})).sort((a,b)=>b.c-a.c), pal=["#0a6a4e","#1f7f5f","#2f8f6e","#4aa584","#6bb99b","#8fcdb3","#aadbc6","#c3e5d4","#9db7ad","#c9d3cf"];
   const slices=catRows.map((r,i)=>({label:r.k,value:r.c,color:pal[i%pal.length]}));
   const donut=C.donut(slices,{size:200,center:cr(annual),centerSub:"yearly spend",aria:"Spend by vertical"}).replace(/<ul class="pc-dl">[\s\S]*?<\/ul>/,"");
-  const catPanel=U.panel(ptitle("Spend by component category","This supplier's cost per vehicle by vertical in the selected project."),`<div class="pd-catv"><div class="dn">${donut}</div><div class="lg">${catRows.map((r,i)=>`<div class="o"><i style="background:${pal[i%pal.length]}"></i><span title="${esc(r.k)} · ${r.n} part${r.n===1?"":"s"}">${esc(r.k)}</span><b>${(r.c/cost*100).toFixed(0)}%</b></div>`).join("")}</div></div>`);
+  const catPanel=U.panel(ptitle("Spend by Vertical","This supplier's cost per vehicle by vertical in the selected project."),`<div class="pd-catv"><div class="dn">${donut}</div><div class="lg">${catRows.map((r,i)=>`<div class="o"><i style="background:${pal[i%pal.length]}"></i><span title="${esc(r.k)} · ${r.n} part${r.n===1?"":"s"}">${esc(r.k)}</span><b>${(r.c/cost*100).toFixed(0)}%</b></div>`).join("")}</div></div>`);
   /* parts supplied (filterable, paginated) */
   const prows=list.sort((a,b)=>lineCost(b)-lineCost(a)).map(p=>({p}));
   const ft=FTable.create({id:"sup-parts",pageSize:10,sortable:true,sort:{key:"vertical",dir:"asc"},rowAct:r=>"ppart:"+r.p.id,empty:"No part matches these filters.",rows:prows,columns:[
@@ -13451,7 +13451,9 @@ function approvalStats(rows){
     return {a,i,role:AP_ROLE[a],n:l.length,avg:l.length?w.reduce((x,y)=>x+y,0)/l.length:0,max:w.length?Math.max(...w):0,over:l.filter(r=>r.overdue>0).length,passed,esc:l.filter(r=>r.live&&CD[r.live].flow&&ApprovalEngine.escalationFor(CD[r.live].flow)).length}; });
 }
 const bottleneck=st=>st.filter(s=>s.n>=2).sort((a,b)=>b.over-a.over||b.avg-a.avg)[0]||null;
-const nextSop=()=>DATA.projects.filter(p=>p.sop&&p.sop>T0).sort((a,b)=>a.sop<b.sop?-1:1)[0]||null;
+/* SOP facts follow the Project filter: with a project chosen, only that project's SOP counts */
+const sopScope=p=>!F.project||p.code===F.project;
+const nextSop=()=>DATA.projects.filter(p=>sopScope(p)&&p.sop&&p.sop>T0).sort((a,b)=>a.sop<b.sop?-1:1)[0]||null;
 const prodOf=rows=>{ const proj=DATA.projects.filter(p=>p.sop&&p.sop<=T0).map(p=>p.code); return rows.filter(r=>r.active&&proj.includes(r.project)); };
 const impactNote="Annualised recurring change in piece cost = piece-price change × quantity per car × annual volume of the project. One-time tooling cost is kept apart and is not part of the net figure.";
 
@@ -13623,12 +13625,13 @@ function buildOverview(){
   const stBody=n?`${statusDonut(rows)}<div class="tcd-note">Each change has exactly one status; the six statuses add up to ${n}.</div>`:empty("No change matches the filters.");
 
   /* production impact */
-  const act=rows.filter(r=>r.active), lv=l=>act.filter(r=>r.rk.level===l).length, ns=nextSop(), prodN=prodOf(rows).length, anyProd=DATA.projects.some(p=>p.sop&&p.sop<=T0);
-  const nsRows=ns?act.filter(r=>r.project===ns.code):[], dep=act.filter(r=>r.deps.supplier||r.deps.validation||r.deps.tooling);
+  const act=rows.filter(r=>r.active), lv=l=>act.filter(r=>r.rk.level===l).length, prodN=prodOf(rows).length, anyProd=DATA.projects.some(p=>sopScope(p)&&p.sop&&p.sop<=T0);
+  /* each change is counted against its own project's SOP, so the line reads the same with or without a Project filter */
+  const preSop=act.filter(r=>r.sop&&r.sop>T0), late=preSop.filter(r=>r.sopCrit).length, dep=act.filter(r=>r.deps.supplier||r.deps.validation||r.deps.tooling);
   const rb=act.length?`<div class="tcm-rbar">${["High","Medium","Low"].map(l=>lv(l)?`<i style="flex:${lv(l)};background:${LV[l]}" title="${l} risk: ${lv(l)}">${lv(l)}</i>`:"").join("")}</div><div class="tcm-lg"><span title="Two or more of the five warning signs apply"><i style="background:var(--red)"></i>High ${lv("High")}</span><span title="One warning sign applies"><i style="background:var(--c-amber)"></i>Medium ${lv("Medium")}</span><span title="No warning sign applies"><i style="background:var(--ok)"></i>Low ${lv("Low")}</span><span class="m">production risk of active changes</span></div>`:"";
   const prodBody=act.length?rb+`<div class="tcm-facts"><div><span>High-risk changes</span><b class="${lv("High")?"bad":""}">${lv("High")}</b><em>two or more of 5 warning signs · ${pc(lv("High"),act.length)}% of ${act.length} active</em></div>
-    <div><span>Affecting in-production vehicles</span><b>${anyProd?prodN:"0"}</b><em>${anyProd?"projects past SOP":ns?`no project is in production yet · first SOP ${esc(shortP(ns.code))} ${esc(D(ns.sop))}`:"none recorded"}</em></div>
-    <div><span>Need implementation before ${ns?esc(shortP(ns.code))+" SOP":"next SOP"}</span><b class="${nsRows.filter(r=>r.sopCrit).length?"bad":""}">${nsRows.length}</b><em>${nsRows.filter(r=>r.sopCrit).length} planned inside the ${SOP_BUFFER}-day window or later</em></div>
+    <div><span>Affecting in-production vehicles</span><b>${anyProd?prodN:"0"}</b><em>${anyProd?"projects past SOP":"no project is in production yet"}</em></div>
+    <div><span>Need implementation before SOP</span><b class="${late?"bad":""}">${preSop.length}</b><em>${late} planned inside the ${SOP_BUFFER} days before their project's SOP, or later</em></div>
     <div><span>Unresolved supplier / validation / tooling</span><b class="${dep.length?"warn":""}">${dep.length}</b><em>${dep.filter(r=>r.deps.supplier).length} offer · ${dep.filter(r=>r.deps.validation).length} validation · ${dep.filter(r=>r.deps.tooling).length} tooling</em></div></div>`:empty("No active change in this selection.");
   grid(w,"g4",[
     panel("Changes by status","The six statuses are mutually exclusive: every change is in exactly one. Click a slice or a row to filter the page.",stBody),
