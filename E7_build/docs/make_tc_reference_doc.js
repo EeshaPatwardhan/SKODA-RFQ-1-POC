@@ -74,9 +74,9 @@ body.push(new Paragraph({ spacing: { after: 160 }, children: [new TextRun({ text
 body.push(new Paragraph({ spacing: { after: 500 }, border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: BRAND, space: 10 } }, children: [new TextRun({ text: "Glossary, business rules, KPI cards and visuals — reference document", font: FONT, size: 30, color: MUTED })] }));
 body.push(table(["Item", "Detail"], [
   ["Application", "SKODA AIS prototype V8 (SAVWIPL_prototype_V8.html) — Technical Change → Dashboards"],
-  ["Dashboards covered", "Overview · Change Impact · Approval Workflow · Implementation · Change Register · Change detail"],
+  ["Dashboards covered", "Overview · Change Impact · Implementation · Change Register · Change detail"],
   ["Data status", "**Illustrative prototype data.** 65 changes: 5 from the live Technical Change workflow, 60 generated register records. Reference (data) date: 29 July 2026."],
-  ["Version", "1.6 — 28 October 2026 (revision history in Appendix D)"],
+  ["Version", "1.7 — 29 October 2026 (revision history in Appendix D)"],
   ["Audience", "Management, product owners, reviewers and anyone who needs to explain a figure on these pages"],
 ], [2400, 7238]));
 body.push(gap());
@@ -86,8 +86,8 @@ body.push(note("**How to use this document.** Section 2 explains where the numbe
 body.push(H1("Contents"));
 [
   ["1", "Purpose and scope"], ["2", "Data foundation, filters and navigation"], ["3", "Glossary"], ["4", "Business rules and thresholds"],
-  ["5", "Dashboard reference"], ["5.1", "Overview"], ["5.2", "Change Impact"], ["5.3", "Approval Workflow"], ["5.4", "Implementation"],
-  ["5.5", "Change Register"], ["5.6", "Change detail page"], ["6", "Limitations and what is not available"],
+  ["5", "Dashboard reference"], ["5.1", "Overview"], ["5.2", "Change Impact"], ["5.3", "Implementation"],
+  ["5.4", "Change Register"], ["5.5", "Change detail page"], ["6", "Limitations and what is not available"],
   ["A", "Appendix A — Worked example of an annualised impact"], ["B", "Appendix B — Colours and status legend"], ["C", "Appendix C — Approval steps and approver roles"], ["D", "Appendix D — Revision history"],
 ].forEach(([n, t]) => body.push(new Paragraph({ spacing: { after: 70 }, indent: { left: n.includes(".") ? 500 : 0 }, children: [new TextRun({ text: n + "   ", bold: true, color: BRAND, font: FONT, size: 22 }), new TextRun({ text: t, font: FONT, size: 22, bold: !n.includes(".") })] })));
 
@@ -98,7 +98,7 @@ body.push(bullet("**Value** — how much does the change portfolio save or cost 
 body.push(bullet("**Decisions** — which changes are waiting for approval, where do they wait, and which step is the bottleneck?"));
 body.push(bullet("**Implementation** — which approved changes are on track, at risk or delayed, and how do they sit against each project's start of production (SOP)?"));
 body.push(bullet("**Risk** — which active changes could threaten production, quality, supplier readiness or an upcoming SOP?"));
-body.push(P("This document describes the dashboards as built. It covers the five dashboard pages under **Technical Change → Dashboards** and the **Change detail** page that opens when a change is clicked. The per-change workflow screens (Create Change, AI Extraction, Evaluation Sheet, Validation, Supplier Offers, MOD Sheet, Impact Sheet, Approval Chain, Implementation Tasks, Change History) are outside this document."));
+body.push(P("This document describes the dashboards as built. It covers the four dashboard pages under **Technical Change → Dashboards** and the **Change detail** page that opens when a change is clicked. The per-change workflow screens (Create Change, AI Extraction, Evaluation Sheet, Validation, Supplier Offers, MOD Sheet, Impact Sheet, Approval Chain, Implementation Tasks, Change History) are outside this document."));
 body.push(note("Every dashboard page carries the chip **Illustrative prototype data** and a **Data as of 29 Jul 2026** label. Figures are not actual SKODA results."));
 
 /* ---- 2 data ---- */
@@ -137,7 +137,7 @@ body.push(P("Every KPI card, chart, table and insight on the page follows the fi
 
 body.push(H2("2.4  Navigation: back link and breadcrumb"));
 body.push(P("Every page with a page header carries one subtle link above the breadcrumb: **‹ Back to <previous page>**. It is the same on all dashboards (Technical Change, Procurement, Forecast, SRM). It returns to the page you came from, whether you arrived by a click on a row, a KPI card or the menu, and each click steps one page further back. When the previous page belongs to another module the link names the module (for example 'Back to Technical Change › Overview'). The Home page and the first page of a session have no back link."));
-body.push(P("On the Change detail page the breadcrumb also shows the path, for example Technical Change › Approval Workflow › AEKO-2026-0169 — Wheel Nut; its middle part is a link to the page you came from."));
+body.push(P("On the Change detail page the breadcrumb also shows the path, for example Technical Change › Overview › AEKO-2026-0169 — Wheel Nut; its middle part is a link to the page you came from."));
 
 /* ---- 3 glossary ---- */
 body.push(H1("3  Glossary"));
@@ -149,16 +149,13 @@ const gl = [
   ["Approved (status)", "The change has passed all approval steps and is waiting for implementation. Counted separately from **Implemented**."],
   ["Approval step", "One of seven decision points of the approval chain: Engineering, Quality, SRM, Finance, Commodity, Management, Final confirmation. Each has an approver role (Appendix C)."],
   ["At risk (implementation)", "A change not yet implemented that is likely to miss its planned date or land too close to SOP (rule in section 4.4)."],
-  ["Bottleneck", "The approval step with the most overdue changes, then the longest average wait; at least two changes must be waiting there."],
   ["Change", "One engineering change request tracked in the register. Identified by its **workflow number** (Change ID)."],
   ["Change type (category)", "Why the change is made: Cost Reduction, Design Change, Supplier Change, Quality Improvement, Regulatory or Other. Different from the **request form**."],
   ["Current stage", "Where the change is today: a workflow stage for open changes (Intake … Impact), the approval step for pending ones, Implementation for approved ones, Closed for implemented ones."],
   ["Data as of", "The reference date of the data (29 Jul 2026). All 'today' calculations (days overdue, days to go) use it."],
   ["Days overdue", "Days between the due date of the current step and the data date. Only counted when a due date exists (section 4.3)."],
-  ["Decisions waiting", "Changes with status **Pending approval**, each counted once at the approval step it is waiting on."],
   ["Delayed", "A change not yet implemented whose planned implementation date is earlier than the data date."],
   ["Dependency (open)", "An unresolved item that can hold a change back: supplier offer outstanding, validation not complete, or tooling modification not yet released."],
-  ["Escalation", "A live approval flow that reached the escalation rule of the approval engine (four reminders, or an overdue milestone). Shown in the step hover card when present."],
   ["Forecast (not approved)", "Net annualised effect of changes that are Open (with a priced MOD sheet), Pending approval or Returned for rework. Kept apart from the headline because nothing is approved yet. Open changes that are still too early to have a price are not counted."],
   ["High-impact change", "An active change ranked high by the **priority score** (production risk plus financial materiality)."],
   ["Illustrative prototype data", "Generated data used to demonstrate the dashboards. Not SKODA actuals."],
@@ -297,7 +294,7 @@ body.push(H3("KPI cards"));
 body.push(table(["Card", "What it shows", "How it is calculated", "Click"], [
   ["Total changes", "Number of changes in the selection; second line gives the number of projects and how many are in the live workflow.", "Count of register rows after filters.", "Opens the Change Register."],
   ["Open changes", "Changes still being evaluated, validated, priced or analysed. Second line: % of total.", "Status = Open.", "Change Register filtered to Open."],
-  ["Pending approvals", "Changes waiting for a decision. Second line: how many are past the 3-day target (red), otherwise % of total.", "Status = Pending approval; overdue = waiting longer than 3 days at the current step.", "Opens Approval Workflow."],
+  ["Pending approvals", "Changes waiting for a decision. Second line: how many are past the 3-day target (red), otherwise % of total.", "Status = Pending approval; overdue = waiting longer than 3 days at the current step.", "Change Register filtered to Pending approval."],
   ["Approved changes", "Approved, waiting for implementation. Second line: % of total.", "Status = Approved (implemented changes are counted separately).", "Change Register filtered to Approved."],
   ["Implemented", "Closed changes. Second line: % of total.", "Status = Implemented.", "Opens Implementation."],
 ], [1700, 3000, 3200, 1738]));
@@ -348,31 +345,8 @@ body.push(table(["Visual", "Type", "What it shows and how it is built", "Interac
   ["Largest financial impacts", "Table with column filters", ["All priced, non-rejected changes by absolute annualised impact, 5 per page. Columns: Change (part and ID), Reason, Project, Type, Piece price, Impact / yr, One-time tooling, Status."], ["Click a column heading to sort; click its funnel to filter by value (counts shown); 'Rows per page' 10 / 25 / 50; pagination.", "Click a row to open the Change detail page."]],
 ], [1800, 1400, 3938, 2500]));
 
-/* ---- 5.3 Approval Workflow ---- */
-body.push(H2p("5.3  Approval Workflow"));
-body.push(P("**Purpose.** Where changes wait for a decision, how long they have waited, which step is the bottleneck and what happened to changes that left the chain without approval."));
-body.push(H3("Layout, top to bottom"));
-body.push(bullet("Header and filter bar; five KPI cards in one row."));
-body.push(bullet("Approval workflow status (seven steps and a summary row)."));
-body.push(bullet("Row: Rejected and returned for rework · Decisions waiting (same number of rows in each)."));
-body.push(H3("KPI cards"));
-body.push(table(["Card", "What it shows", "How it is calculated"], [
-  ["Waiting for decision", "Changes waiting at an approval step; each counted once.", "Status = Pending approval."],
-  ["Past 3-day target", "How many of them are overdue, and the % of those waiting.", "Waiting longer than 3 days at the current step."],
-  ["Average wait", "Average days waiting so far; second line gives the longest wait.", "Mean of days since each pending change reached its step. Completed decisions are not timed."],
-  ["Bottleneck step", "Name of the step; second line: how many wait there and how many are overdue.", "Step with the most overdue changes, then the longest average wait; needs at least two waiting."],
-  ["Rejected / returned", "Changes that left the chain without approval; second line gives the split.", "Status Rejected + Returned for rework."],
-], [1900, 4000, 3738]));
-body.push(H3("Visuals"));
-body.push(table(["Visual", "Type", "What it shows and how it is built", "Interaction"], [
-  ["Approval workflow status — steps", "Seven step circles on a connector line, one tile per step", ["Each circle has an icon and the step name: Engineering (gear), Quality (shield), SRM (people), Finance (database), Commodity (cart), Management (bar chart), Final confirmation (tick). Steps are joined by a thin line with a small chevron.", "The tile shows the number of changes waiting at the step now (each change at exactly one step, so the tiles add up to the Waiting for decision card) and either 'N overdue' (red) or 'On time' (green). A step with nothing waiting shows 0.", "The bottleneck step has an amber circle, ring and tile."], ["Hover or focus a step for a detail card: waiting now, longest wait, overdue and passed; the longest wait against the 3-day target; share of the queue; how many changes passed the step; escalations; and up to four waiting changes with owner and days.", "The card follows the page filters."]],
-  ["Approval workflow status — summary row", "Four figures and a card", "Waiting for a decision (with the note that each change is counted once); Approved through all steps; Rejected; Returned for rework; and an amber Bottleneck card naming the step, how many wait and how many are past target.", "None. The Bottleneck card is a plain note, not a link."],
-  ["Rejected and returned for rework", "Table", "Changes that left the chain without approval: Change (part, ID, project), Outcome, Stopped at (step), Since, Owner. Count badge in the title.", "Click a row to open the Change detail page."],
-  ["Decisions waiting", "Table", "Changes waiting for approval, longest wait first (overdue first). Columns: Change, Step, Approver, Waiting (a pill: red with 'N over' when late, grey 'on time'), Impact / yr. Shows as many rows as the Rejected panel and a 'View all N' button.", "Click a row to open the Change detail page. 'View all' opens the Change Register filtered to Pending approval."],
-], [1800, 1500, 3838, 2500]));
-
-/* ---- 5.4 Implementation ---- */
-body.push(H2p("5.4  Implementation"));
+/* ---- 5.3 Implementation ---- */
+body.push(H2p("5.3  Implementation"));
 body.push(P("**Purpose.** Planned implementation dates, which changes are late or at risk, and how the plan sits against each project's SOP."));
 body.push(H3("Layout, top to bottom"));
 body.push(bullet("Header and filter bar; five KPI cards in one row."));
@@ -392,8 +366,8 @@ body.push(table(["Visual", "Type", "What it shows and how it is built", "Interac
   ["Implementation register", "Table with column filters", "Changes with a planned date that are not yet implemented, delayed first then by date. Columns: Change, Reason, Project, Status (Delayed / At risk / On track), Planned, Days (late or to go), Project SOP, Open dependencies, Stage.", "Sort by heading; filter by value from the funnel (counts shown); 5 rows per page with pagination and rows-per-page; click a row to open the Change detail page."],
 ], [1800, 1500, 3838, 2500]));
 
-/* ---- 5.5 Change Register ---- */
-body.push(H2p("5.5  Change Register"));
+/* ---- 5.4 Change Register ---- */
+body.push(H2p("5.4  Change Register"));
 body.push(P("**Purpose.** The full list of changes with only the essential columns. Everything else is one click away on the Change detail page."));
 body.push(H3("Elements"));
 body.push(table(["Element", "What it shows and how it works"], [
@@ -405,11 +379,11 @@ body.push(table(["Element", "What it shows and how it works"], [
   ["Priority note", "A line under the table repeats the priority score rule (section 4.6)."],
 ], [2500, 7138]));
 
-/* ---- 5.6 Detail ---- */
-body.push(H2p("5.6  Change detail page"));
+/* ---- 5.5 Detail ---- */
+body.push(H2p("5.5  Change detail page"));
 body.push(P("**Purpose.** Everything about one change on one page. It opens from any table row, timeline diamond or insight pop-up."));
 body.push(H3("Navigation"));
-body.push(bullet("The breadcrumb shows the path you came by, for example **Technical Change › Approval Workflow › AEKO-2026-0169 — Wheel Nut**. The middle part is a link back to that page."));
+body.push(bullet("The breadcrumb shows the path you came by, for example **Technical Change › Overview › AEKO-2026-0169 — Wheel Nut**. The middle part is a link back to that page."));
 body.push(bullet("The subtle **Back to …** link above the breadcrumb returns to the page you came from (see section 2.4)."));
 body.push(bullet("For one of the five live changes the page offers 'Open in the change workflow'; for generated records it states that there is no workflow behind them."));
 body.push(H3("Elements"));
@@ -478,10 +452,11 @@ body.push(table(["Version", "Date", "Change"], [
   ["1.1", "27 Oct 2026", "Change Impact — Net impact by project: hover card per project showing additional cost, savings and net (section 5.2). Revision history added."],
   ["1.2", "28 Oct 2026", "Change detail — 'Where the change is' now shows the full lifecycle (Preparation, Approval, Implementation, Closed) with a detail row; approved changes are shown in Implementation, so a delayed approved change no longer looks complete. Glossary: Phase (lifecycle)."],
   ["1.3", "28 Oct 2026", "Navigation: one subtle back link ('Back to …') on every page header, replacing the separate back buttons of the Procurement detail pages and the Change detail page (section 2.4)."],
+  ["1.3.1", "28 Oct 2026", "Change Impact, Approval Workflow and Implementation now show five KPI cards in one row (dropped: One-time tooling, Approved, Tooling not released; sections 5.2–5.4). Approval workflow status redrawn smaller with the reference icons and connectors, no average wait, and a Bottleneck note that is no longer a link (section 5.3)."],
   ["1.4", "28 Oct 2026", "Change Impact — Forecast, not approved KPI card: clearer second line ('per year if all N priced changes are approved · M unpriced') and tooltip."],
   ["1.5", "28 Oct 2026", "Change Impact — the word 'Forecast' replaced by 'Not yet approved' (KPI card, Financial Impact by Status row, glossary and rules); card second line simplified to 'per year, from N changes not approved yet'."],
   ["1.6", "28 Oct 2026", "Change Impact — wording reverted to 'Forecast'; the KPI card is now labelled 'Open changes, forecasted' with the second line 'N priced · M not yet priced'."],
-  ["1.3", "28 Oct 2026", "Change Impact, Approval Workflow and Implementation now show five KPI cards in one row (dropped: One-time tooling, Approved, Tooling not released; sections 5.2–5.4). Approval workflow status redrawn smaller with the reference icons and connectors, no average wait, and a Bottleneck note that is no longer a link (section 5.3)."],
+  ["1.7", "29 Oct 2026", "The Approval Workflow dashboard page is removed (menu entry, page, and its panels: approval workflow status, rejected and returned for rework, decisions waiting). Links that pointed to it now open the Change Register filtered to Pending approval (Pending approvals card, Approval and Decisions insights). Sections 5.4–5.6 renumbered 5.3–5.5; glossary: Bottleneck, Decisions waiting, Escalation removed."],
 ], [1100, 1700, 6838]));
 body.push(P("Keep this table up to date: add a row each time a dashboard, KPI card, visual, rule or glossary term changes.", { spacing: { before: 120, after: 120 } }));
 

@@ -247,20 +247,6 @@ function gantt(rows,months,o){
   const tx=X(t0); g+=`<line x1="${tx}" x2="${tx}" y1="${top-6}" y2="${H-6}" stroke="var(--c-anchor)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${tx+4}" y="${H-10}" class="tcm-l s" style="fill:var(--c-anchor)">Today</text></svg>`;
   return g+`<div class="tcm-lg">${["On track","At risk","Delayed"].concat(o.all?["Implemented"]:[]).map(s=>`<span><i class="dm" style="background:${IMPLC[s]}"></i>${s}</span>`).join("")}<span class="m">Planned implementation date per change · dark bar = project SOP${later?` · ${later} later than ${months} months`:""}</span></div>`;
 }
-function approvalFlow(st,rows){
-  /* one circle per approval step with the changes waiting there now (each change is counted once), average wait and overdue count; the bottleneck is highlighted */
-  const bn=bottleneck(st), total=rows.filter(r=>r.life==="Pending approval").length, IC=["settings","shield","users","coins","package","bar-chart","check-circle"];
-  const steps=st.map((s,i)=>`<div class="af-s${bn&&bn.i===s.i?" bn":""}${s.n?"":" zero"}" data-st="${i}" tabindex="0"><div class="af-c">${Icons.svg(IC[i]||"check-circle")}</div><div class="af-nm">${esc(s.a)}</div><div class="af-t"><b>${s.n}</b>${s.over?`<em class="bad">${s.over} overdue</em>`:s.n?`<em class="ok">On time</em>`:`<em></em>`}</div></div>`).join('<div class="af-ar" aria-hidden="true"></div>');
-  const done=cnt(rows,"Approved")+cnt(rows,"Implemented");
-  return `<div class="af-row">${steps}</div>
-    <div class="af-foot"><div class="af-w"><div><b>${total}</b><span>waiting for a decision</span>${tip("Each change is counted once, at the approval step it is waiting on now.")}</div><small>Counted once, at the step they are waiting on</small></div>
-      <div class="af-o"><div><i style="background:var(--ok)"></i><b>${done}</b></div><span>Approved<br>through all steps</span></div>
-      <div class="af-o"><div><i style="background:var(--red)"></i><b>${cnt(rows,"Rejected")}</b></div><span>Rejected</span></div>
-      <div class="af-o"><div><i style="background:var(--faint)"></i><b>${cnt(rows,"Returned for rework")}</b></div><span>Returned for rework</span></div>
-      <button type="button" class="af-b${bn?"":" none"}"${bn?' data-act="tcm:scroll=tcm-decisions" title="Go to Decisions waiting"':" disabled"}><span class="ic">${Icons.svg("alert")}</span><div><em>${bn?"Bottleneck":"No bottleneck"}</em><b>${bn?`${esc(bn.a)} — ${bn.n} waiting, ${bn.over} past the ${AP_SLA}-day target`:"No approval step has two or more changes waiting"}</b></div>${bn?Icons.svg("chevron-right"):""}</button></div>`;
-}
-
-
 /* ------------------------------------------------------------ rule-based insights */
 /* Each insight: key, icon, up to three headline figures, a one-line action, the full text (issue / why / action) and the changes behind it (shown in the pop-up) */
 function insights(rows){
@@ -270,12 +256,12 @@ function insights(rows){
     out.push({k:"Approval",title:"Approval",icon:"clock",
       m:[{v:sl.n,l:"changes waiting",s:`${sl.avg.toFixed(1)} days on average`},{v:sl.over,l:"overdue",s:`vs ${AP_SLA}-day target`}],short:`Clear the ${sl.a.toLowerCase()} approval queue or delegate.`,
       issue:`${sl.a} approval is the slowest step: ${sl.n} changes waiting, ${sl.avg.toFixed(1)} days on average against a ${AP_SLA}-day target (${sl.over} overdue).`,why:"A change cannot be implemented, and its saving cannot start, until every approval step has cleared. This step holds the longest queue.",act:`Ask ${roleLabel(sl.role)} to clear the ${sl.a} queue first, or agree a delegate for this step.`,
-      list:l,col:{h:"Waiting",f:r=>dayDiff(r.stageSince,T0)+" days"+(r.overdue?` · ${r.overdue} over`:"")},go:"tcm:go=tc-approval",lab:"Approval Workflow"}); }
+      list:l,col:{h:"Waiting",f:r=>dayDiff(r.stageSince,T0)+" days"+(r.overdue?` · ${r.overdue} over`:"")},go:"tcm:kpi=Pending approval",lab:"Change Register"}); }
   const awaiting=rows.filter(r=>(r.life==="Pending approval"||r.life==="Returned for rework")&&r.ann!=null&&r.ann<0).sort((a,b)=>a.ann-b.ann);
   if(awaiting.length) out.push({k:"Decisions",title:"Decisions",icon:"file",
     m:[{v:awaiting.length,l:plural(awaiting.length,"change pending decision","changes pending decision"),s:`${money(sav(awaiting))}/yr potential savings`},{v:awaiting.filter(r=>r.overdue>0).length,l:"past",s:"target date"}],short:`Prioritise ${awaiting.slice(0,2).map(r=>r.wf).join(" and ")}.`,
     issue:`${awaiting.length} change${plural(awaiting.length,"","s")} with ${money(sav(awaiting))}/yr of savings ${plural(awaiting.length,"is","are")} waiting for a decision; ${awaiting.filter(r=>r.overdue>0).length} past the target date.`,why:"Savings only start after approval and implementation, so each day of waiting is a day of savings not realised.",act:`Decide ${awaiting.slice(0,2).map(r=>r.wf).join(" and ")} first — the largest savings waiting.`,
-    list:awaiting,col:{h:"Waiting at",f:r=>r.life==="Pending approval"?AP[r.apStep]:"Rework · "+AP[r.apStep]},go:"tcm:go=tc-approval",lab:"Approval Workflow"});
+    list:awaiting,col:{h:"Waiting at",f:r=>r.life==="Pending approval"?AP[r.apStep]:"Rework · "+AP[r.apStep]},go:"tcm:kpi=Pending approval",lab:"Change Register"});
   const late=rows.filter(r=>r.life==="Approved"&&r.impl&&r.impl.s==="Delayed").sort((a,b)=>b.impl.d-a.impl.d);
   if(late.length) out.push({k:"Implementation",title:"Implementation",icon:"settings",
     m:[{v:late.length,l:plural(late.length,"approved change delayed","approved changes delayed"),s:sav(late)?`${money(sav(late))}/yr savings not in effect`:"planned date passed"}],short:"Confirm tooling, PO and drawing release with buyer and SRM.",
@@ -335,7 +321,7 @@ function buildOverview(){
   add(w,`<div class="pd-kw"><div class="pd-kpis k5">${[
     kpi({icon:"file",label:"Total changes",value:n,sub:n?`${prj} project${prj===1?"":"s"} · ${live} in the live workflow`:"no change matches the filters",act:"tcm:go=change-register",tip:"Every change in the register that matches the filters. Click to open the Change Register."}),
     kpi({icon:"clipboard",label:"Open changes",value:cnt(rows,"Open"),sub:pc(cnt(rows,"Open"),n)+"% of total · not yet submitted for approval",act:"tcm:kpi=Open",tip:"Created and being evaluated, validated, priced or analysed — not yet submitted for approval. Click to see them in the Change Register."}),
-    kpi({icon:"clock",label:"Pending approvals",value:pend,sub:od?`${od} past the ${AP_SLA}-day target`:pc(pend,n)+"% of total · none overdue",stone:od?"bad":"",act:"tcm:go=tc-approval",tip:`Submitted and waiting at one approval step. Each is counted once. Target: ${AP_SLA} days per step. Click to open Approval Workflow.`}),
+    kpi({icon:"clock",label:"Pending approvals",value:pend,sub:od?`${od} past the ${AP_SLA}-day target`:pc(pend,n)+"% of total · none overdue",stone:od?"bad":"",act:"tcm:kpi=Pending approval",tip:`Submitted and waiting at one approval step. Each is counted once. Target: ${AP_SLA} days per step. Click to see them in the Change Register.`}),
     kpi({icon:"check-circle",label:"Approved changes",value:cnt(rows,"Approved"),sub:pc(cnt(rows,"Approved"),n)+"% of total · not yet implemented",act:"tcm:kpi=Approved",tip:"Approved and waiting for implementation. Implemented changes are counted separately. Click to see them in the Change Register."}),
     kpi({icon:"settings",label:"Implemented",value:cnt(rows,"Implemented"),sub:pc(cnt(rows,"Implemented"),n)+"% of total",act:"tcm:go=tc-impl",tip:"Implementation finished and the change is closed. Click to open Implementation."})].join("")}</div></div>`);
 
@@ -402,30 +388,6 @@ function buildImpact(){
   w.appendChild(tp);
   const lv=all.find(r=>r.live&&CD[r.live].stageIdx>=6);
   if(lv) add(w,`<div class="tcm-go"><span>The detailed, per-change impact sheet (MOD sheet comparison, risk factors and similar changes) stays in the workflow.</span><button type="button" class="btn btn-sm" data-act="tcm:sheet=${esc(lv.live)}">Open impact sheet · ${esc(lv.wf)}</button></div>`);
-  foot(w,all); U.wire(w); return w;
-}
-
-/* ------------------------------------------------------------ 3 · Approval Workflow */
-function buildApproval(){
-  const {all,rows}=view(), w=shell("Approval Workflow","Where changes wait for a decision, how long they have waited, and which step is the bottleneck."), st=approvalStats(rows), pend=rows.filter(r=>r.life==="Pending approval"), bn=bottleneck(st);
-  const waits=pend.map(r=>dayDiff(r.stageSince,T0)), avg=waits.length?waits.reduce((a,b)=>a+b,0)/waits.length:0, ov=pend.filter(r=>r.overdue>0).length;
-  add(w,`<div class="pd-kw"><div class="pd-kpis k6">${[
-    kpi({icon:"clock",label:"Waiting for decision",value:pend.length,sub:"each counted once, at its current step"}),
-    kpi({icon:"alert",label:`Past ${AP_SLA}-day target`,value:ov,tone:ov?"bad":"",sub:pend.length?pc(ov,pend.length)+"% of waiting":"none waiting"}),
-    kpi({icon:"gauge",label:"Average wait",value:pend.length?avg.toFixed(1)+" d":"—",sub:pend.length?`longest ${Math.max(...waits)} days`:"none waiting",tip:"Days since the change arrived at its current approval step. Completed decisions are not timed in the prototype."}),
-    kpi({icon:"flag",label:"Bottleneck step",value:bn?esc(bn.a):"—",tone:"txt",sub:bn?`${bn.n} waiting · ${bn.over} overdue`:"no step has 2+ waiting",tip:"Step with the most overdue changes, then the longest average wait (at least two waiting)."}),
-    kpi({icon:"check-circle",label:"Approved",value:cnt(rows,"Approved")+cnt(rows,"Implemented"),sub:"through all steps"}),
-    kpi({icon:"x-circle",label:"Rejected / returned",value:cnt(rows,"Rejected")+cnt(rows,"Returned for rework"),tone:cnt(rows,"Rejected")+cnt(rows,"Returned for rework")?"bad":"",sub:`${cnt(rows,"Rejected")} rejected · ${cnt(rows,"Returned for rework")} returned for rework`})].join("")}</div></div>`);
-  add(w,panel("Approval workflow status","The module's approval chain: Engineering → Quality → SRM → Finance → Commodity → Management → final confirmation by the AEKO Coordinator.",rows.length?approvalFlow(st,rows):empty("No change matches the filters."),{style:"margin-bottom:16px",sub:"Changes waiting for decision at each approval step"}));
-  const list=pend.slice().sort((a,b)=>b.overdue-a.overdue||dayDiff(b.stageSince,T0)-dayDiff(a.stageSince,T0));
-  const back=rows.filter(r=>r.life==="Rejected"||r.life==="Returned for rework");
-  const backBody=back.length?`<div class="pd-t tcm-back"><div class="h"><span>Change</span><span>Outcome</span><span>Stopped at</span><span class="ra">Since</span><span>Owner</span></div>${back.map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)}</b><small>${esc(r.wf)} · ${esc(shortP(r.project))}</small></span><span>${stChip(r.life)}</span><span class="s">${esc(AP[r.apStep])}</span><span class="v">${esc(D(r.stageSince))}</span><span class="s">${esc(r.owner)}</span></div>`).join("")}</div>`:empty("No change was rejected or returned for rework in this selection.");
-  const rejP=panel(`Rejected and returned for rework <span class="count-pill">${back.length}</span>`,"Changes that left the approval chain without approval.",backBody,{sub:"Rejected, or sent back to the requester for rework"});
-  const nShow=back.length||4;
-  const decP=panel("Decisions waiting","Every change waiting for an approval decision, longest wait first. Click a row for the change detail.",list.length?`<div class="pd-t tcm-pend"><div class="h"><span>Change</span><span>Step</span><span>Approver</span><span class="ra">Waiting</span><span class="ra">Impact / yr</span></div>${list.slice(0,nShow).map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)}</b><small>${esc(r.wf)} · ${esc(shortP(r.project))}</small></span><span class="s">${esc(AP[r.apStep])}</span><span class="s">${esc(r.owner)}</span><span class="wt"><span class="${r.overdue?"od":""}"><b>${dayDiff(r.stageSince,T0)} d</b>${r.overdue?`<small>${r.overdue} over</small>`:`<small>on time</small>`}</span></span><span class="v ${r.ann==null?"":r.ann>0?"bad":"good"}">${r.ann==null?"—":sg(-r.ann)}</span></div>`).join("")}</div>`:empty("No change is waiting for an approval decision in this selection."),{id:"tcm-decisions",sub:"Changes awaiting approval, sorted by longest waiting time",right:list.length?`<button type="button" class="btn btn-sm" data-act="tcm:kpi=Pending approval">View all${list.length>nShow?" "+list.length:""}${Icons.svg("chevron-right")}</button>`:""});
-  grid(w,"g2",[rejP,decP]);
-  const lv=all.filter(r=>r.live&&CD[r.live].stageIdx>=7);
-  if(lv.length) add(w,`<div class="tcm-go"><span>Sign-off, reminders and escalation for a live change happen in its approval chain.</span>${lv.map(r=>`<button type="button" class="btn btn-sm" data-act="tcm:chain=${esc(r.live)}">Approval chain · ${esc(r.wf)}</button>`).join("")}</div>`);
   foot(w,all); U.wire(w); return w;
 }
 
@@ -543,16 +505,16 @@ Object.assign(U.actions,{tcm:v=>{ const i=v.indexOf("="), k=v.slice(0,i), a=v.sl
   else if(k==="sheet"){ T.ctx.activeId=a; go("impact-analysis"); }
   else if(k==="chain"){ T.ctx.activeId=a; go("approval-workflow"); }
   else if(k==="impl"){ T.ctx.activeId=a; go("implementation"); } }});
-const NEW=[["tc-impact","Change Impact","bar-chart",buildImpact],["tc-approval","Approval Workflow","check-circle",buildApproval],["tc-impl","Implementation","flag",buildImpl],["change-register","Change Register","list",buildRegister],["tc-change","Change detail","file",buildDetail]];
+const NEW=[["tc-impact","Change Impact","bar-chart",buildImpact],["tc-impl","Implementation","flag",buildImpl],["change-register","Change Register","list",buildRegister],["tc-change","Change detail","file",buildDetail]];
 const at=NAV.techchange.findIndex(x=>x.id==="change-dashboard");
 NEW.forEach(([id,label,ic,fn],i)=>{ NAV.techchange.splice(at+1+i,0,{id,label,icon:"📊"}); NAV_ICONS[id]=ic; NAV_SHORT[id]=label; SCREENS.techchange[id]=fn; });
 NAV_HIDDEN.add("tc-change"); SCREENS.techchange["change-dashboard"]=buildOverview;
-const LAB={"change-dashboard":"Overview","tc-impact":"Change Impact","tc-approval":"Approval Workflow","tc-impl":"Implementation","change-register":"Change Register","tc-change":"Change detail","impact-analysis":"Impact Sheet","approval-workflow":"Approval Chain","implementation":"Implementation Tasks"};
+const LAB={"change-dashboard":"Overview","tc-impact":"Change Impact","tc-impl":"Implementation","change-register":"Change Register","tc-change":"Change detail","impact-analysis":"Impact Sheet","approval-workflow":"Approval Chain","implementation":"Implementation Tasks"};
 NAV.techchange.forEach(i=>{ if(LAB[i.id]) i.label=LAB[i.id]; }); Object.assign(NAV_SHORT,LAB);
 Object.assign(NAV_ICONS,{"change-dashboard":"layout"});
 const _nl=navLabel; navLabel=function(m,s){ return (m==="techchange"&&LAB[s])||_nl(m,s); };
 MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
-  ["Dashboards",["change-dashboard","tc-impact","tc-approval","tc-impl","change-register"]],
+  ["Dashboards",["change-dashboard","tc-impact","tc-impl","change-register"]],
   ["Change workflow",["intake","doc-upload","eval-sheet","validation","supplier-offers","mod-sheet","impact-analysis","approval-workflow","implementation","change-history"]],
   ["Approvals & reports",["approvals","reports-tc"]]);
 /* Production-risk card: hover or focus the risk label in the Overview table */
@@ -589,27 +551,17 @@ MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
       <div class="gk one"><div><em>Delayed</em><b class="bad">${c("Delayed")}</b></div><div><em>At risk</em><b class="warn">${c("At risk")}</b></div><div><em>On track</em><b>${c("On track")}</b></div><div><em>Implemented</em><b>${c("Implemented")}</b></div></div>
       <div class="gk"><div><em>Project SOP</em><b>${sop?esc(D(sop))+(sop>T0?` · in ${dayDiff(T0,sop)} days`:" · in production"):"—"}</b></div><div><em>Next planned</em><b>${up?esc(D(up.plannedImpl))+`<small>${esc(up.part)}</small>`:"none ahead"}</b></div><div><em>Inside the ${SOP_BUFFER}-day pre-SOP window</em><b>${l.filter(r=>r.sopCrit).length}</b></div></div>`;
   };
-  const stHtml=i=>{
-    const rows=view().rows, st=approvalStats(rows), s=st[i], bn=bottleneck(st), pendN=rows.filter(r=>r.life==="Pending approval").length;
-    const wl=rows.filter(r=>r.life==="Pending approval"&&r.apStep===i).sort((a,b)=>b.overdue-a.overdue||dayDiff(b.stageSince,T0)-dayDiff(a.stageSince,T0));
-    const gap=s.avg-AP_SLA, avgNote=!s.n?"nothing waiting":gap>0?`${gap.toFixed(1)} days over the ${AP_SLA}-day target`:`within the ${AP_SLA}-day target`;
-    return `<div class="hd"><b>${i+1}. ${esc(s.a)}${bn&&bn.i===i?' <span class="tcm-st" style="--c:var(--c-amber)"><i></i>Bottleneck</span>':""}</b><span>Approver role: ${esc(roleLabel(s.role))}</span></div>
-      <div class="gk one"><div><em>Waiting now</em><b>${s.n}</b></div><div><em>Avg wait</em><b class="${s.n&&gap>0?"warn":""}">${s.n?s.avg.toFixed(1)+" d":"—"}</b></div><div><em>Longest</em><b>${s.n?s.max+" d":"—"}</b></div><div><em>Overdue</em><b class="${s.over?"bad":""}">${s.over}</b></div></div>
-      <ul><li class="${s.n&&gap>0?"hit":"ok"}"><i>${s.n&&gap>0?"!":"✓"}</i><span>Average wait: ${esc(avgNote)}</span></li><li class="ok"><i>•</i><span>${pendN?Math.round(s.n/pendN*100):0}% of the ${pendN} change${pendN===1?"":"s"} waiting for a decision (${s.n} here)</span></li><li class="ok"><i>•</i><span>${s.passed} change${s.passed===1?" has":"s have"} passed this step${s.esc?` · ${s.esc} escalated`:""}</span></li></ul>
-      ${wl.length?`<div class="gk"><div style="grid-column:1/-1"><em>Waiting at this step</em>${wl.slice(0,4).map(r=>`<b>${esc(r.part)}<small>${esc(r.wf)} · ${esc(shortP(r.project))} · ${esc(r.owner)} · ${dayDiff(r.stageSince,T0)} d${r.overdue?` (${r.overdue} over)`:""}</small></b>`).join("")}${wl.length>4?`<small>+ ${wl.length-4} more</small>`:""}</div></div>`:""}
-      <div class="ft">Waiting time = days since the change reached the step · target ${AP_SLA} days per step</div>`;
-  };
   const npHtml=code=>{
     const f=fin(view().rows.filter(r=>r.project===code));
     return `<div class="hd"><b>${esc(carName(code))}</b></div><div class="nv"><div><span><i style="background:var(--red)"></i>Additional cost</span><b class="bad">${f.cost?esc(money(f.cost)):"—"}</b></div><div><span><i style="background:var(--ok)"></i>Savings</span><b class="good">${f.sav?esc(money(f.sav)):"—"}</b></div><div class="tot"><span>Net impact</span><b class="${f.net>=0?"good":"bad"}">${esc(sg(f.net))}</b></div></div>`;
   };
   const show=el=>{
-    const d=el.dataset, r=(d.gp||d.np||d.st!==undefined)?null:register().find(x=>x.id===(d.gm||d.rk)); if(!d.gp&&!d.np&&d.st===undefined&&!r) return; hide(); owner=el;
-    tip=document.createElement("div"); tip.className="tcm-tip"+(d.np?" s":d.gp||d.gm||d.st!==undefined?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.np?npHtml(d.np):d.st!==undefined?stHtml(+d.st):d.gm?gHtml(r):html(r); document.body.appendChild(tip);
+    const d=el.dataset, r=(d.gp||d.np)?null:register().find(x=>x.id===(d.gm||d.rk)); if(!d.gp&&!d.np&&!r) return; hide(); owner=el;
+    tip=document.createElement("div"); tip.className="tcm-tip"+(d.np?" s":d.gp||d.gm?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.np?npHtml(d.np):d.gm?gHtml(r):html(r); document.body.appendChild(tip);
     const b=el.getBoundingClientRect(), t=tip.getBoundingClientRect(); let x=b.left+b.width/2-t.width/2, y=b.bottom+8;
     if(y+t.height>innerHeight-8) y=b.top-t.height-8; x=Math.max(8,Math.min(x,innerWidth-t.width-8)); tip.style.left=x+"px"; tip.style.top=Math.max(8,y)+"px";
   };
-  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk], .tcm-dm[data-gm], .tcm-gp[data-gp], .af-s[data-st], .tcm-div .r[data-np]");
+  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk], .tcm-dm[data-gm], .tcm-gp[data-gp], .tcm-div .r[data-np]");
   document.addEventListener("mouseover",e=>{ const el=find(e); if(el&&el!==owner) show(el); else if(!el&&owner&&!(e.target.closest&&e.target.closest(".tcm-tip"))) hide(); });
   document.addEventListener("focusin",e=>{ const el=find(e); if(el) show(el); });
   document.addEventListener("focusout",e=>{ if(find(e)) hide(); });
@@ -627,7 +579,7 @@ MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
       <p>Approved + implemented changes: savings <b>${money(f.sav)}</b>/yr, additional cost <b>${money(f.cost)}</b>/yr, net <b>${sg(f.net)}</b>/yr (annualised, recurring; ${money(f.savI-f.costI)} of it implemented). One-time tooling ${U.cr(f.oneTime)} is not included.</p>
       <p>${od} change${od===1?" is":"s are"} past a due date${bn?`; the approval bottleneck is <b>${esc(bn.a)}</b> (${bn.n} waiting, ${bn.over} overdue)`:""}.</p>`;
     return R(html,{charts:[{kind:"bar",title:"Changes by status",unit:"currency",currencySymbol:"",source:"Technical Change register",orientation:"horizontal",series:[{key:"v",label:"Changes"}],rows:LIFE.map(l=>({label:l,values:{v:c(l)},tone:"neutral"}))}],
-      actions:[{l:"Overview",a:"goto:techchange/change-dashboard"},{l:"Approval Workflow",a:"goto:techchange/tc-approval"},{l:"Change Register",a:"goto:techchange/change-register"}],basis:"Technical Change register (5 live workflow changes + 60 illustrative records) · computed in this page"});
+      actions:[{l:"Overview",a:"goto:techchange/change-dashboard"},{l:"Change Register",a:"goto:techchange/change-register"}],basis:"Technical Change register (5 live workflow changes + 60 illustrative records) · computed in this page"});
   };
 })();
 window.V8TCM={register,fin,F,view};

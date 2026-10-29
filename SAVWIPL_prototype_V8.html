@@ -1742,7 +1742,7 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .ft-fixed .ft-t thead th.r .ft-h{justify-content:flex-end;} .ft-fixed .ft-t thead th.r .ft-h span{text-align:right;}
 .ft-fixed .ft-t tbody td{overflow-wrap:anywhere;}
 /* sortable tables: the label sorts, the funnel beside it filters */
-.ft-hd{display:flex;align-items:center;} .ft-hd .ft-sb{width:auto;flex:0 1 auto;padding-right:4px;} .ft-hd .ft-fb{width:auto;flex:none;padding:11px 12px 11px 4px;gap:4px;} .ft-hd .ft-fb svg{opacity:.7;} .ft-hd .ft-fb:hover svg{opacity:1;color:var(--brand);}
+.ft-hd{display:flex;align-items:center;} .ft-hd .ft-sb{width:auto;flex:0 1 auto;padding-right:4px;} .ft-hd .ft-fb{width:auto;flex:none;padding:11px 12px 11px 4px;gap:4px;} .ft-hd .ft-fb{position:relative;} .ft-hd .ft-fb i{position:absolute;top:5px;right:2px;min-width:14px;height:14px;font-size:9px;padding:0 3px;box-shadow:0 0 0 2px var(--raise);} .ft-hd .ft-fb svg{opacity:.7;} .ft-hd .ft-fb:hover svg{opacity:1;color:var(--brand);}
 .ft-sb{cursor:pointer;} .ft-sb:hover{color:var(--brand);} .ft-sb.on svg{color:var(--brand);}
 .ft-fixed .ft-t thead th.r .ft-hd{justify-content:flex-end;}
 /* heading menu (sortable tables): sort buttons above the value filter */
@@ -2415,6 +2415,32 @@ details.fc-more{margin:8px 0;} details.fc-more summary{cursor:pointer;font-size:
 .hm-jb span{flex:none;width:28px;height:28px;border-radius:8px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;} .hm-jb svg.i{width:15px;height:15px;} .hm-jb:hover{border-color:var(--brand);background:var(--brand-soft);}
 
 @media (max-width:900px){ .hm-hero-ac{margin-left:0;justify-content:flex-start;} }
+/* ---- Forecast Dashboard: same shell, cards and tables as the Procurement dashboards ---- */
+.fc-dash .fc-fbar{align-items:flex-end;} .fc-dash .fc-fbar .pd-f{flex:0 1 230px;min-width:170px;}
+.fc-dash .fc-fbar .pd-reset{margin:0;height:40px;} .fc-dash .fc-fbar .fc-fx{margin-left:auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
+.fc-dash .fc-chipbox{display:inline-flex;align-items:center;height:36px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--raise);color:var(--ink);font-size:13px;font-weight:600;}
+.fc-dash .fc-fbar .btn{height:36px;}
+.fc-dash .fc-note{margin:0 0 16px;border-radius:12px;font-size:12.5px;} .fc-dash .fc-note.info{background:var(--brand-soft);border:1px solid color-mix(in srgb,var(--brand) 14%,transparent);}
+.fc-dash .pd-kpis.k4{grid-template-columns:repeat(4,minmax(0,1fr));} .fc-dash .pd-kpis.k4 .pd-kpi{height:132px;justify-content:space-between;} .fc-dash .pd-kpis.k4 .mid{min-height:36px;align-items:center;}
+.fc-dash .pd-kpis.k4 .sb{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;overflow:hidden;min-height:2.6em;line-height:1.3;}
+@container (max-width:900px){ .fc-dash .pd-kpis.k4{grid-template-columns:repeat(2,minmax(0,1fr));} }
+@container (max-width:460px){ .fc-dash .pd-kpis.k4{grid-template-columns:minmax(0,1fr);} }
+.fc-dash .panel-header h3{font-size:15px;} .fc-dash .panel-header{padding-top:14px;padding-bottom:14px;}
+.fc-dash .bb-grid li{background:var(--raise);border:1px solid var(--line2);} .fc-dash .bb-grid li:hover{border-color:color-mix(in srgb,var(--brand) 35%,var(--line2));}
+.fc-dash .bb-ask{color:var(--brand);font-weight:600;} .fc-dash .bb-ask:hover{text-decoration:underline;color:var(--brand);}
+.fc-dash .fc-tiles > div{border:1px solid var(--line2);} .fc-dash .fc-tiles .amber{border-color:color-mix(in srgb,var(--amber) 18%,var(--line2));}
+.fc-dash table.mtable th{background:transparent;color:var(--ink);font-size:11px;font-weight:700;text-transform:none;letter-spacing:0;border-bottom:1px solid var(--line);}
+.fc-dash table.mtable td{padding:11px 16px;}
+.fc-dash .rr .bar{height:5px;} .fc-dash .rr .bar i{opacity:.85;}
+.fc-dash .dl{padding:3px 0;} .fc-dash .dl b{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600;}
+.fc-dash .v8-foot{margin-top:16px;}
+#mat-parts .ft-t{min-width:1000px;} #mat-parts .ft-t td,#mat-parts .ft-t thead th{white-space:nowrap;} #mat-parts .ft-t td.r{font-variant-numeric:tabular-nums;}
+#mat-parts .ft-t thead th{width:auto;} #mat-parts .ft-t td small{white-space:nowrap;}
+.fc-dash .fc-pair{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;margin-top:16px;align-items:stretch;}
+.fc-dash .fc-pair > .panel{display:flex;flex-direction:column;min-width:0;margin:0 !important;} .fc-dash .fc-pair > .panel > .panel-body{flex:1;display:flex;flex-direction:column;}
+.fc-dash .fc-pair > .panel > .panel-body > .fc-donut{flex:1;align-content:center;justify-content:center;} .fc-dash .fc-pair > .panel > .panel-body > .pc-wrap,.fc-dash .fc-pair > .panel > .panel-body > .pc-chart,.fc-dash .fc-pair > .panel > .panel-body > svg{margin-block:auto;}
+.fc-dash .fc-pair .panel-header{min-height:74px;align-items:flex-start;}
+@media (max-width:1180px){ .fc-dash .fc-pair{grid-template-columns:minmax(0,1fr);} }
 @media (max-width:560px){ .hm-st3{grid-template-columns:1fr;} .hm-search{flex-basis:100%;} .hm-tabs{padding:12px 14px 0;} .hm-list{padding:6px 6px 12px !important;} .hm-jump{grid-template-columns:1fr;} }
 @media (max-width:620px){
   .hm .pd-kpis{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px;}
@@ -8010,9 +8036,10 @@ function kpiCards(){
     }
     const val=k.format==="currency"?spend(value):k.format==="percent"?value.toFixed(1)+"%":nf(value,2);
     const IC={trending:"trend-up",package:"package",target:"target",alert:"alert"}[k.icon]||"trend-up";
-    const up=change!=null&&change>0;
-    return `<div class="kpi-card"><div class="kpi-label">${esc(k.label)}<span class="kpi-icon">${Icons.svg(IC)}</span></div><div class="kpi-value">${val}</div>
-      <div class="kpi-trend2">${change!=null&&k.direction!=="flat"?`<span class="var ${up?"up":"dn"}">${arrow(up)}${sgn(change,2)}</span>`:""}<span class="mut">${esc(label||"")}</span></div>${nt?`<div class="kpi-note">${esc(nt)}</div>`:""}</div>`;
+    const up=change!=null&&change>0, short=!!label&&label.length<=24, hasChg=change!=null&&k.direction!=="flat";
+    const chip=hasChg?`<span class="ch" title="${esc(label||"")}"><b class="${up?"bad":"good"}">${up?"▲":"▼"} ${Math.abs(change).toFixed(2)}%</b>${short?`<small>${esc(label)}</small>`:""}</span>`:"";
+    const sub=hasChg&&short?"":(label||"");
+    return `<div class="pd-kpi" title="${esc(nt)}"><div class="top"><span class="ic">${Icons.svg(IC)}</span><span class="lb">${esc(k.label)}</span></div><div class="mid"><span class="vl">${val}</span>${chip}</div><div class="sb">${esc(sub)}</div></div>`;
   }).join("");
 }
 
@@ -8051,7 +8078,7 @@ function priceChart(view){
     shade:hasF&&ti>=0&&ti<vis.length-1?[{from:ti,to:vis.length-1,color:"var(--amber-soft)",opacity:.7,label:"Next "+P.NF+" months",textColor:"var(--amber)"}]:[],
     marks,
     series:[{name:"Actual",data:vis.map(r=>r.actual),color:C.C.anchor,width:2.25},
-      {name:"Model fit (holdout)",data:vis.map(r=>r.fitted),color:C.C.info,dash:"5 3",width:1.75,dots:true,dotR:2.4,dotFill:C.C.info},
+      {name:"Model fit (holdout)",data:vis.map(r=>r.fitted),color:"#4aa584",dash:"5 3",width:1.75,dots:true,dotR:2.4,dotFill:"#4aa584"},
       {name:"Forecast",data:vis.map(r=>r.fl),color:"var(--c-amber)",width:3,dots:(i)=>vis[i].forecast!=null,dotR:4.5,labelAt:[fIdx[0],peak,fIdx[fIdx.length-1]].filter((v,i,a)=>v!=null&&v>=0&&a.indexOf(v)===i),labelFmt:v=>spend(v)}],
     band:{lo:vis.map(r=>r.lo),hi:vis.map(r=>r.hi),name:"Likely range",color:"#f59e0b"}});
   const change=lastActRow&&lastFcRow?(lastFcRow.forecast/lastActRow.actual-1)*100:null;
@@ -8073,7 +8100,7 @@ function horizonChart(){
 /* ---------- Cost per vehicle by vertical (donut) ---------- */
 function donutPanel(){
   const cats=R.categories, total=P.sum(cats,c=>c.value);
-  const pal=[C.C.info,C.C.ok,"#7c5cbf",C.C.amber,"#2a9d8f",C.C.red,"#be185d",C.C.faint,"#4d7c0f","#e76f51"];
+  const pal=["#0a6a4e","#1f7f5f","#2f8f6e","#4aa584","#6bb99b","#8fcdb3","#aadbc6","#c3e5d4","#9db7ad","#c9d3cf"];
   const slices=cats.map((c,i)=>({label:c.category,value:c.value,color:pal[i%pal.length]}));
   const lg=cats.map((c,i)=>`<div class="dl"><i style="background:${pal[i%pal.length]}"></i><span>${esc(c.category)}</span><span class="var ${c.forecastChange>=0?"up":"dn"} sm">${sgn(c.forecastChange,1)}</span><b>${c.share.toFixed(1)}%</b></div>`).join("");
   return panel("Cost per Vehicle by Vertical",`<div class="fc-donut">${C.donut(slices,{size:176,center:spend(total),centerSub:"Total",aria:"Cost per vehicle by vertical"}).replace(/<ul class="pc-dl">[\s\S]*?<\/ul>/,"")}<div class="dls">${lg}</div></div>`,{sub:"Share of total · forecast movement over horizon"});
@@ -8113,21 +8140,26 @@ U.walkList=walkList; U.priceChartHtml=priceChart;
    DASHBOARD
    ====================================================================== */
 U.v.outlook=function(){
-  const wrap=document.createElement("div");
-  wrap.appendChild(header("Forecast Dashboard","Forecast spare parts prices and plan procurement ahead of the curve — "+P.PARTS.length+" parts, "+P.NF+"-month horizon, from the forecasting POC."));
-  wrap.appendChild(el(U.toolbar()));
+  const wrap=document.createElement("div"); wrap.className="v8-page v8-board fc-dash";
+  const hd=header("Forecast Dashboard","Forecast spare parts prices and plan procurement ahead of the curve — "+P.PARTS.length+" parts, "+P.NF+"-month horizon, from the forecasting POC.");
+  const meta=document.createElement("div"); meta.className="pd-meta"; meta.innerHTML=`<span>Prices as of <b>${esc(U.mlong(P.MONTHS[P.NH-1]))}</b> · forecast to <b>${esc(U.mlong(P.FM[P.NF-1]))}</b></span><span class="pd-ill">Illustrative data — synthetic scenario</span>`; hd.appendChild(meta);
+  wrap.appendChild(hd);
+  const r=U.rangeOf(), opt=cur=>U.ALLM.map(m=>`<option value="${m}"${m===cur?" selected":""}>${esc(U.mlong(m))}</option>`).join(""),
+    fsel=(l,k,v)=>`<label class="pd-f"><span>${l}</span><span class="pd-sel">${Icons.svg("calendar")}<select data-set="range.${k}" aria-label="${l}">${opt(v)}</select></span></label>`;
+  wrap.appendChild(el(`<div class="pd-fbar fc-fbar">${fsel("From","start",r.start)}${fsel("To","end",r.end)}<button type="button" class="pd-reset" title="Reset the date range" aria-label="Reset the date range" onclick="PocUI.state.range.start=null;PocUI.state.range.end=null;Router.render()">${Icons.svg("refresh")}</button>
+    <div class="fc-fx"><span class="fc-chipbox">${P.PARTS.length} parts</span><button type="button" class="btn btn-sm" data-act="params:open">${Icons.svg("layers")} Parameters <span class="count-pill">${R.parameterCatalogue.total}</span></button><button type="button" class="btn btn-sm" data-act="export:all">${Icons.svg("download")} Export</button></div></div>`));
   const ops=R.meta.ops||R.drift||R.featureSelection;
   const synth=R.provenance.skuLayer==="synthetic";
   wrap.appendChild(el(note(`<b>${esc(P.model)}</b> model · history ${U.mlong(P.MONTHS[0])} – ${U.mlong(P.MONTHS[P.NH-1])} · forecast ${U.mlong(P.FM[0])} – ${U.mlong(P.FM[P.NF-1])}. ${synth?"The macro trend is real BLS data; the <b>part-level prices are synthetic</b>, so accuracy figures describe the pipeline, not real prices. ":""}<a href="#" data-act="go:fc-validation">How reliable is this forecast?</a>`,"info")));
-  const k=document.createElement("div"); k.className="grid grid-4"; k.style.marginTop="16px"; k.innerHTML=kpiCards(); wrap.appendChild(k);
+  const k=document.createElement("div"); k.className="pd-kw"; k.innerHTML=`<div class="pd-kpis k4">${kpiCards()}</div>`; wrap.appendChild(k);
   const bb=buyerBrief(); if(bb){ const d=el(`<div style="margin-top:16px">${bb}</div>`); wrap.appendChild(d); }
-  const g=document.createElement("div"); g.className="fc-main"; g.style.marginTop="16px";
-  g.innerHTML=`<div class="col">${priceChart(state.dash.view)}${walkList(P.walkSteps(P.PARTS,"sop_to_fc"),{title:"Why the forecast moved",subtitle:"SOP to the forecast month. Click a reason to see those parts.",actFor:s=>"mat:sop_to_fc|"+s.id,clear:"set:material.bridge=null"})}</div><div class="col">${donutPanel()}${horizonChart()}</div>`;
-  wrap.appendChild(g);
+  const walk=walkList(P.walkSteps(P.PARTS,"sop_to_fc"),{title:"Why the forecast moved",subtitle:"SOP to the forecast month. Click a reason to see those parts.",actFor:s=>"mat:sop_to_fc|"+s.id,clear:"set:material.bridge=null"});
+  /* two rows of two panels; the panels in a row share one height */
+  [[priceChart(state.dash.view),donutPanel()],[walk,horizonChart()]].forEach(pair=>{ const g=document.createElement("div"); g.className="fc-pair"; g.innerHTML=pair.join(""); wrap.appendChild(g); });
   wrap.appendChild(el(`<div style="margin-top:16px">${topParts(7)}</div>`));
   wrap.appendChild(el(`<div style="margin-top:16px">${riskStrip()}</div>`));
   wrap.appendChild(el(`<div style="margin-top:16px">${U.alertsStrip(true)}</div>`));
-  wrap.appendChild(el(`<div class="mut small" style="margin-top:14px">Part prices are illustrative piece prices in INR. Cost per vehicle = piece price × quantity per vehicle, summed over the tracked parts in scope and averaged across projects. Forecast shapes come from the forecasting POC. <a href="#" data-act="goadmin:fc-data">Data sources</a> · <a href="#" data-act="go:fc-faq">Technical FAQ</a></div>`));
+  wrap.appendChild(el(`<div class="v8-foot">Part prices are illustrative piece prices in INR. Cost per vehicle = piece price × quantity per vehicle, summed over the tracked parts in scope and averaged across projects. Forecast shapes come from the forecasting POC. <a href="#" data-act="goadmin:fc-data">Data sources</a> · <a href="#" data-act="go:fc-faq">Technical FAQ</a></div>`));
   wire(wrap); return wrap;
 };
 
@@ -8209,17 +8241,29 @@ function tracker(list,scoped){
      right:`<div class="fc-segs tight"><button class="fc-seg ${mode==="history"?"on":""}" data-act="set:material.track=history">History only</button><button class="fc-seg ${mode==="full"?"on":""}" data-act="set:material.track=full">Full horizon</button></div>`});
 }
 
-function partsTable(ranked,all,bridge,limit){
-  const shown=ranked.slice(0,limit), bl=bridge?P.BRIDGE_LABEL[bridge]:null;
-  const rows=shown.map(p=>{
+function partsTable(ranked,all,bridge){
+  const bl=bridge?P.BRIDGE_LABEL[bridge]:null;
+  const rows=ranked.map(p=>{
     let tb=bridge, bv=0;
     if(p.bridges){ const b=p.bridges.b2f; if(!tb){ tb=P.BK.slice().sort((a,c)=>Math.abs(b[c]||0)-Math.abs(b[a]||0))[0]; } bv=b[tb]||0; }
-    const chg=(p.fcEnd/p.nom-1)*100;
-    return `<tr class="clk" data-act="part:${esc(p.id)}"><td><b>${esc(p.name)}</b><small class="mut">${esc(p.id)} · ${esc(p.category)} · ${esc(p.vendorName)}</small></td><td>${esc(p.progName)}</td><td class="r">${p.qty}</td><td class="r">${cur(p.nom,false)}</td><td class="r">${cur(p.cur,false)}</td><td class="r">${cur(p.fcEnd,false)}</td><td class="r"><b class="var ${chg>=0?"up":"dn"}">${sgn(chg,2)}</b></td><td class="r"><b class="var ${bv>=0?"up":"dn"}">${bv>=0?"+":""}${cur(bv,false)}</b>${!bridge&&tb?`<small class="mut">${P.BRIDGE_LABEL[tb]}</small>`:""}</td></tr>`; }).join("");
-  return panel("Part drill-down",U.table(["Part","Project",{t:"Qty / vehicle",r:1},{t:"BG price",r:1},{t:"SOP price",r:1},{t:"FC price",r:1},{t:"Δ",r:1},{t:bl||"Top bridge",r:1}],rows||`<tr><td colspan="8"><div class="table-empty">${bridge?`No parts have a material ${bl} contribution under the current filters.`:"No parts match the current hierarchy filters."}</div></td></tr>`)+
-    (ranked.length>limit?`<div class="fc-more-row"><button class="btn btn-sm" data-act="set:material.limit=${limit+12}">Show more (${ranked.length-limit} remaining)</button></div>`:""),
-    {noPad:true,sub:bridge?`Parts where ${bl} is a material driver (${ranked.length} of ${all.length}) — click a row for detail`:"Piece-price BG → FC moves, largest first — click a row for Nomination→SOP→FC detail",
-     right:`<div class="fb-r">${bridge?`<button class="pill blue" data-act="set:material.bridge=null">Filter: ${bl} ×</button>`:""}<span class="mut small">${ranked.length} parts</span></div>`});
+    return {p,tb,bv,chg:(p.fcEnd/p.nom-1)*100}; });
+  const dirOf=v=>v>0?"Price up":v<0?"Price down":"Unchanged";
+  const ft=FTable.create({id:"mat-parts",pageSize:10,sortable:true,hideSum:true,rowAct:r=>"part:"+r.p.id,rows,empty:bridge?`No parts have a material ${bl} contribution under the current filters.`:"No parts match the current hierarchy filters.",columns:[
+    {key:"part",label:"Part",get:r=>r.p.name,html:r=>`<b>${esc(r.p.name)}</b><small class="v8-sm">${esc(r.p.id)}</small>`},
+    {key:"vert",label:"Vertical",get:r=>r.p.category},
+    {key:"sup",label:"Supplier",get:r=>r.p.vendorName},
+    {key:"proj",label:"Project",get:r=>r.p.progName},
+    {key:"qty",label:"Qty / veh.",align:"r",get:r=>r.p.qty,order:r=>r.p.qty},
+    {key:"bg",label:"BG price",align:"r",get:r=>cur(r.p.nom,false),order:r=>r.p.nom},
+    {key:"sop",label:"SOP price",align:"r",get:r=>cur(r.p.cur,false),order:r=>r.p.cur},
+    {key:"fc",label:"FC price",align:"r",get:r=>cur(r.p.fcEnd,false),order:r=>r.p.fcEnd},
+    {key:"chg",label:"Δ",align:"r",get:r=>dirOf(r.chg),order:r=>r.chg,html:r=>`<b class="var ${r.chg>=0?"up":"dn"}">${sgn(r.chg,2)}</b>`},
+    {key:"br",label:bl||"Top bridge",align:"r",get:r=>bridge?dirOf(r.bv):(r.tb?P.BRIDGE_LABEL[r.tb]:"—"),order:r=>r.bv,html:r=>`<b class="var ${r.bv>=0?"up":"dn"}">${r.bv>=0?"+":""}${cur(r.bv,false)}</b>${!bridge&&r.tb?`<small class="v8-sm">${P.BRIDGE_LABEL[r.tb]}</small>`:""}`}]});
+  const host=el(`<div style="margin-top:14px">${panel("Part drill-down","",{noPad:true,
+    sub:bridge?`Parts where ${bl} is a material driver (${ranked.length} of ${all.length}) — filter any column from its heading · click a row for detail`:"Piece-price BG → FC moves, largest first — filter any column from its heading · click a row for Nomination→SOP→FC detail",
+    right:`<div class="fb-r">${bridge?`<button class="pill blue" data-act="set:material.bridge=null">Filter: ${bl} ×</button>`:""}<span class="mut small">${ranked.length} parts</span></div>`})}</div>`);
+  host.querySelector(".panel-body").appendChild(ft);
+  return host;
 }
 
 U.v.material=function(){
@@ -8239,7 +8283,7 @@ U.v.material=function(){
   g.innerHTML=tracker(f,scoped)+`<div class="col"><div class="fc-segs tight" style="margin:0 0 10px"><span class="mut small" style="align-self:center;text-transform:uppercase;letter-spacing:.05em">Period</span>${Object.keys(W).map(id=>`<button class="fc-seg ${s.walk===id?"on":""}" data-act="set:material.walk=${id}" onclick="PocUI.state.material.bridge=null">${W[id].label}</button>`).join("")}</div>${U.walkList(P.walkSteps(f,s.walk),{title:wk.title,subtitle:wk.subtitle,activeId:s.bridge,actFor:(st,sel)=>"set:material.bridge="+(sel?"null":st.id),clear:"set:material.bridge=null"})}</div>`;
   wrap.appendChild(g);
   const ranked=(s.bridge?P.partsByBridge(f,s.bridge,"b2f"):f.slice().sort((a,b)=>Math.abs(b.fcEnd-b.nom)-Math.abs(a.fcEnd-a.nom)));
-  wrap.appendChild(el(`<div style="margin-top:14px">${partsTable(ranked,f,s.bridge,s.limit)}</div>`));
+  wrap.appendChild(partsTable(ranked,f,s.bridge));
   wire(wrap);
   const cl=wrap.querySelector("#mat-clear"); if(cl) cl.onclick=()=>{ Object.assign(s,{project:"all",vendor:"all",category:"all",material:"all",q:"",bridge:null}); Router.render(); };
   return wrap;
@@ -11055,7 +11099,7 @@ function create(o){
     const list=filtered(), pages=Math.max(1,Math.ceil(list.length/st.size)); if(st.page>=pages) st.page=pages-1;
     const from=st.page*st.size, shown=list.slice(from,from+st.size), n=activeN();
     const chips=Object.keys(st.f).filter(k=>st.f[k]).map(k=>{ const c=cols.find(x=>x.key===k), vs=[...st.f[k]]; return `<span class="ft-chip"><b>${esc(c.label)}</b> ${esc(vs.length<=2?vs.join(", "):vs.length+" selected")}<button type="button" data-clear="${esc(k)}" aria-label="Remove filter ${esc(c.label)}">×</button></span>`; }).join("");
-    root.innerHTML=`<div class="ft-bar"><span class="ft-sum"><b>${list.length}</b> of ${rows.length} rows${n?` · ${n} filter${n===1?"":"s"} on`:""}</span>${chips}${n?`<button type="button" class="ft-clr" data-clearall="1">Clear all filters</button>`:`${o.sortable?"":`<span class="ft-tip">${!FILT?"Click a column heading to sort it":"Click a column heading to filter it"}</span>`}`}</div>
+    root.innerHTML=`${o.hideSum&&!n?"":`<div class="ft-bar">${o.hideSum?"":`<span class="ft-sum"><b>${list.length}</b> of ${rows.length} rows${n?` · ${n} filter${n===1?"":"s"} on`:""}</span>`}${chips}${n?`<button type="button" class="ft-clr" data-clearall="1">Clear all filters</button>`:`${o.sortable?"":`<span class="ft-tip">${!FILT?"Click a column heading to sort it":"Click a column heading to filter it"}</span>`}`}</div>`}
       <div class="ft-sc"><table class="ft-t"><thead><tr>${cols.map(head).join("")}</tr></thead>
       <tbody>${shown.length?shown.map(r=>`<tr ${o.rowAct?`class="ft-row" data-act="${esc(o.rowAct(r))}" role="button" tabindex="0"`:""}>${cols.map(c=>`<td class="${c.align==="r"?"r":""}">${c.html?c.html(r):esc(val(c,r))}</td>`).join("")}</tr>`).join(""):`<tr><td colspan="${cols.length}"><div class="table-empty">${esc(o.empty||"No rows match these filters.")}</div></td></tr>`}</tbody></table></div>
       <div class="ft-foot"><span>${list.length?`${from+1}–${Math.min(list.length,from+st.size)} of ${list.length}`:"0 rows"}</span>${pages>1?pager(list.length,pages):""}<label class="ft-size">Rows per page <select aria-label="Rows per page">${[10,25,50].map(x=>`<option value="${x}" ${x===st.size?"selected":""}>${x}</option>`).join("")}</select></label></div>`;
@@ -13169,26 +13213,6 @@ function gantt(rows,months,o){
   const tx=X(t0); g+=`<line x1="${tx}" x2="${tx}" y1="${top-6}" y2="${H-6}" stroke="var(--c-anchor)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${tx+4}" y="${H-10}" class="tcm-l s" style="fill:var(--c-anchor)">Today</text></svg>`;
   return g+`<div class="tcm-lg">${["On track","At risk","Delayed"].concat(o.all?["Implemented"]:[]).map(s=>`<span><i class="dm" style="background:${IMPLC[s]}"></i>${s}</span>`).join("")}<span class="m">Planned implementation date per change · dark bar = project SOP${later?` · ${later} later than ${months} months`:""}</span></div>`;
 }
-function approvalFlow(st,rows){
-  /* one circle per approval step with the changes waiting there now (each change is counted once), average wait and overdue count; the bottleneck is highlighted */
-  const bn=bottleneck(st), total=rows.filter(r=>r.life==="Pending approval").length;
-  /* the reference icons: gear, shield, people, database, cart, bar chart, tick in a circle */
-  const SV=p=>'<svg class="i" viewBox="0 0 24 24" aria-hidden="true">'+p+'</svg>';
-  const IC=[Icons.svg("settings"),SV('<path d="M12 3 4 6v6c0 4.5 3.4 7.8 8 9 4.6-1.2 8-4.5 8-9V6z"/><path d="M12 3v18c4.6-1.2 8-4.5 8-9V6z" fill="currentColor" fill-opacity=".3" stroke="none"/>'),Icons.svg("users"),Icons.svg("database"),
-    SV('<circle cx="9.5" cy="20" r="1.4"/><circle cx="17.5" cy="20" r="1.4"/><path d="M2.5 3.5h3l2.3 11.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20.5 7H6"/>'),
-    SV('<path d="M4 20h16"/><rect x="5.5" y="11" width="3.4" height="9" rx=".8" fill="currentColor" stroke="none"/><rect x="10.3" y="4.5" width="3.4" height="15.5" rx=".8" fill="currentColor" stroke="none"/><rect x="15.1" y="8.5" width="3.4" height="11.5" rx=".8" fill="currentColor" stroke="none"/>'),Icons.svg("check-circle")];
-  const ARROW='<div class="af-ar" aria-hidden="true"><i></i>'+SV('<path d="m9.5 6 6 6-6 6"/>')+'<i></i></div>';
-  const steps=st.map((s,i)=>`<div class="af-s${bn&&bn.i===s.i?" bn":""}${s.n?"":" zero"}" data-st="${i}" tabindex="0"><div class="af-c">${IC[i]||IC[6]}</div><div class="af-nm">${esc(s.a)}</div><div class="af-t"><b>${s.n}</b>${s.over?`<em class="bad">${s.over} overdue</em>`:s.n?`<em class="ok">On time</em>`:`<em></em>`}</div></div>`).join(ARROW);
-  const done=cnt(rows,"Approved")+cnt(rows,"Implemented");
-  return `<div class="af-row">${steps}</div>
-    <div class="af-foot"><div class="af-w"><div><b>${total}</b><span>waiting for a decision</span>${tip("Each change is counted once, at the approval step it is waiting on now.")}</div><small>Counted once, at the step they are waiting on</small></div>
-      <div class="af-o"><div><i style="background:var(--ok)"></i><b>${done}</b></div><span>Approved<br>through all steps</span></div>
-      <div class="af-o"><div><i style="background:var(--red)"></i><b>${cnt(rows,"Rejected")}</b></div><span>Rejected</span></div>
-      <div class="af-o"><div><i style="background:var(--faint)"></i><b>${cnt(rows,"Returned for rework")}</b></div><span>Returned for rework</span></div>
-      <div class="af-b${bn?"":" none"}"><span class="ic">${SV('<circle cx="12" cy="12" r="9.2"/><path d="M12 7.2v5.6M12 16.4h.01"/>')}</span><div><em>${bn?"Bottleneck":"No bottleneck"}</em><b>${bn?`${esc(bn.a)} — ${bn.n} waiting, ${bn.over} past the ${AP_SLA}-day target`:"No approval step has two or more changes waiting"}</b></div></div></div>`;
-}
-
-
 /* ------------------------------------------------------------ rule-based insights */
 /* Each insight: key, icon, up to three headline figures, a one-line action, the full text (issue / why / action) and the changes behind it (shown in the pop-up) */
 function insights(rows){
@@ -13198,12 +13222,12 @@ function insights(rows){
     out.push({k:"Approval",title:"Approval",icon:"clock",
       m:[{v:sl.n,l:"changes waiting",s:`${sl.avg.toFixed(1)} days on average`},{v:sl.over,l:"overdue",s:`vs ${AP_SLA}-day target`}],short:`Clear the ${sl.a.toLowerCase()} approval queue or delegate.`,
       issue:`${sl.a} approval is the slowest step: ${sl.n} changes waiting, ${sl.avg.toFixed(1)} days on average against a ${AP_SLA}-day target (${sl.over} overdue).`,why:"A change cannot be implemented, and its saving cannot start, until every approval step has cleared. This step holds the longest queue.",act:`Ask ${roleLabel(sl.role)} to clear the ${sl.a} queue first, or agree a delegate for this step.`,
-      list:l,col:{h:"Waiting",f:r=>dayDiff(r.stageSince,T0)+" days"+(r.overdue?` · ${r.overdue} over`:"")},go:"tcm:go=tc-approval",lab:"Approval Workflow"}); }
+      list:l,col:{h:"Waiting",f:r=>dayDiff(r.stageSince,T0)+" days"+(r.overdue?` · ${r.overdue} over`:"")},go:"tcm:kpi=Pending approval",lab:"Change Register"}); }
   const awaiting=rows.filter(r=>(r.life==="Pending approval"||r.life==="Returned for rework")&&r.ann!=null&&r.ann<0).sort((a,b)=>a.ann-b.ann);
   if(awaiting.length) out.push({k:"Decisions",title:"Decisions",icon:"file",
     m:[{v:awaiting.length,l:plural(awaiting.length,"change pending decision","changes pending decision"),s:`${money(sav(awaiting))}/yr potential savings`},{v:awaiting.filter(r=>r.overdue>0).length,l:"past",s:"target date"}],short:`Prioritise ${awaiting.slice(0,2).map(r=>r.wf).join(" and ")}.`,
     issue:`${awaiting.length} change${plural(awaiting.length,"","s")} with ${money(sav(awaiting))}/yr of savings ${plural(awaiting.length,"is","are")} waiting for a decision; ${awaiting.filter(r=>r.overdue>0).length} past the target date.`,why:"Savings only start after approval and implementation, so each day of waiting is a day of savings not realised.",act:`Decide ${awaiting.slice(0,2).map(r=>r.wf).join(" and ")} first — the largest savings waiting.`,
-    list:awaiting,col:{h:"Waiting at",f:r=>r.life==="Pending approval"?AP[r.apStep]:"Rework · "+AP[r.apStep]},go:"tcm:go=tc-approval",lab:"Approval Workflow"});
+    list:awaiting,col:{h:"Waiting at",f:r=>r.life==="Pending approval"?AP[r.apStep]:"Rework · "+AP[r.apStep]},go:"tcm:kpi=Pending approval",lab:"Change Register"});
   const late=rows.filter(r=>r.life==="Approved"&&r.impl&&r.impl.s==="Delayed").sort((a,b)=>b.impl.d-a.impl.d);
   if(late.length) out.push({k:"Implementation",title:"Implementation",icon:"settings",
     m:[{v:late.length,l:plural(late.length,"approved change delayed","approved changes delayed"),s:sav(late)?`${money(sav(late))}/yr savings not in effect`:"planned date passed"}],short:"Confirm tooling, PO and drawing release with buyer and SRM.",
@@ -13263,7 +13287,7 @@ function buildOverview(){
   add(w,`<div class="pd-kw"><div class="pd-kpis k5">${[
     kpi({icon:"file",label:"Total changes",value:n,sub:n?`${prj} project${prj===1?"":"s"} · ${live} in the live workflow`:"no change matches the filters",act:"tcm:go=change-register",tip:"Every change in the register that matches the filters. Click to open the Change Register."}),
     kpi({icon:"clipboard",label:"Open changes",value:cnt(rows,"Open"),sub:pc(cnt(rows,"Open"),n)+"% of total · not yet submitted for approval",act:"tcm:kpi=Open",tip:"Created and being evaluated, validated, priced or analysed — not yet submitted for approval. Click to see them in the Change Register."}),
-    kpi({icon:"clock",label:"Pending approvals",value:pend,sub:od?`${od} past the ${AP_SLA}-day target`:pc(pend,n)+"% of total · none overdue",stone:od?"bad":"",act:"tcm:go=tc-approval",tip:`Submitted and waiting at one approval step. Each is counted once. Target: ${AP_SLA} days per step. Click to open Approval Workflow.`}),
+    kpi({icon:"clock",label:"Pending approvals",value:pend,sub:od?`${od} past the ${AP_SLA}-day target`:pc(pend,n)+"% of total · none overdue",stone:od?"bad":"",act:"tcm:kpi=Pending approval",tip:`Submitted and waiting at one approval step. Each is counted once. Target: ${AP_SLA} days per step. Click to see them in the Change Register.`}),
     kpi({icon:"check-circle",label:"Approved changes",value:cnt(rows,"Approved"),sub:pc(cnt(rows,"Approved"),n)+"% of total · not yet implemented",act:"tcm:kpi=Approved",tip:"Approved and waiting for implementation. Implemented changes are counted separately. Click to see them in the Change Register."}),
     kpi({icon:"settings",label:"Implemented",value:cnt(rows,"Implemented"),sub:pc(cnt(rows,"Implemented"),n)+"% of total",act:"tcm:go=tc-impl",tip:"Implementation finished and the change is closed. Click to open Implementation."})].join("")}</div></div>`);
 
@@ -13329,29 +13353,6 @@ function buildImpact(){
   w.appendChild(tp);
   const lv=all.find(r=>r.live&&CD[r.live].stageIdx>=6);
   if(lv) add(w,`<div class="tcm-go"><span>The detailed, per-change impact sheet (MOD sheet comparison, risk factors and similar changes) stays in the workflow.</span><button type="button" class="btn btn-sm" data-act="tcm:sheet=${esc(lv.live)}">Open impact sheet · ${esc(lv.wf)}</button></div>`);
-  foot(w,all); U.wire(w); return w;
-}
-
-/* ------------------------------------------------------------ 3 · Approval Workflow */
-function buildApproval(){
-  const {all,rows}=view(), w=shell("Approval Workflow","Where changes wait for a decision, how long they have waited, and which step is the bottleneck."), st=approvalStats(rows), pend=rows.filter(r=>r.life==="Pending approval"), bn=bottleneck(st);
-  const waits=pend.map(r=>dayDiff(r.stageSince,T0)), avg=waits.length?waits.reduce((a,b)=>a+b,0)/waits.length:0, ov=pend.filter(r=>r.overdue>0).length;
-  add(w,`<div class="pd-kw"><div class="pd-kpis k5">${[
-    kpi({icon:"clock",label:"Waiting for decision",value:pend.length,sub:"each counted once, at its current step"}),
-    kpi({icon:"alert",label:`Past ${AP_SLA}-day target`,value:ov,tone:ov?"bad":"",sub:pend.length?pc(ov,pend.length)+"% of waiting":"none waiting"}),
-    kpi({icon:"gauge",label:"Average wait",value:pend.length?avg.toFixed(1)+" d":"—",sub:pend.length?`longest ${Math.max(...waits)} days`:"none waiting",tip:"Days since the change arrived at its current approval step. Completed decisions are not timed in the prototype."}),
-    kpi({icon:"flag",label:"Bottleneck step",value:bn?esc(bn.a):"—",tone:"txt",sub:bn?`${bn.n} waiting · ${bn.over} overdue`:"no step has 2+ waiting",tip:"Step with the most overdue changes, then the longest average wait (at least two waiting)."}),
-    kpi({icon:"x-circle",label:"Rejected / returned",value:cnt(rows,"Rejected")+cnt(rows,"Returned for rework"),tone:cnt(rows,"Rejected")+cnt(rows,"Returned for rework")?"bad":"",sub:`${cnt(rows,"Rejected")} rejected · ${cnt(rows,"Returned for rework")} returned for rework`})].join("")}</div></div>`);
-  add(w,panel("Approval workflow status","The module's approval chain: Engineering → Quality → SRM → Finance → Commodity → Management → final confirmation by the AEKO Coordinator.",rows.length?approvalFlow(st,rows):empty("No change matches the filters."),{style:"margin-bottom:16px",sub:"Changes waiting for decision at each approval step"}));
-  const list=pend.slice().sort((a,b)=>b.overdue-a.overdue||dayDiff(b.stageSince,T0)-dayDiff(a.stageSince,T0));
-  const back=rows.filter(r=>r.life==="Rejected"||r.life==="Returned for rework");
-  const backBody=back.length?`<div class="pd-t tcm-back"><div class="h"><span>Change</span><span>Outcome</span><span>Stopped at</span><span class="ra">Since</span><span>Owner</span></div>${back.map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)}</b><small>${esc(r.wf)} · ${esc(shortP(r.project))}</small></span><span>${stChip(r.life)}</span><span class="s">${esc(AP[r.apStep])}</span><span class="v">${esc(D(r.stageSince))}</span><span class="s">${esc(r.owner)}</span></div>`).join("")}</div>`:empty("No change was rejected or returned for rework in this selection.");
-  const rejP=panel(`Rejected and returned for rework <span class="count-pill">${back.length}</span>`,"Changes that left the approval chain without approval.",backBody,{sub:"Rejected, or sent back to the requester for rework"});
-  const nShow=back.length||4;
-  const decP=panel("Decisions waiting","Every change waiting for an approval decision, longest wait first. Click a row for the change detail.",list.length?`<div class="pd-t tcm-pend"><div class="h"><span>Change</span><span>Step</span><span>Approver</span><span class="ra">Waiting</span><span class="ra">Impact / yr</span></div>${list.slice(0,nShow).map(r=>`<div class="r" data-act="tcm:open=${esc(r.id)}" role="button" tabindex="0"><span class="n"><b>${esc(r.part)}</b><small>${esc(r.wf)} · ${esc(shortP(r.project))}</small></span><span class="s">${esc(AP[r.apStep])}</span><span class="s">${esc(r.owner)}</span><span class="wt"><span class="${r.overdue?"od":""}"><b>${dayDiff(r.stageSince,T0)} d</b>${r.overdue?`<small>${r.overdue} over</small>`:`<small>on time</small>`}</span></span><span class="v ${r.ann==null?"":r.ann>0?"bad":"good"}">${r.ann==null?"—":sg(-r.ann)}</span></div>`).join("")}</div>`:empty("No change is waiting for an approval decision in this selection."),{id:"tcm-decisions",sub:"Changes awaiting approval, sorted by longest waiting time",right:list.length?`<button type="button" class="btn btn-sm" data-act="tcm:kpi=Pending approval">View all${list.length>nShow?" "+list.length:""}${Icons.svg("chevron-right")}</button>`:""});
-  grid(w,"g2",[rejP,decP]);
-  const lv=all.filter(r=>r.live&&CD[r.live].stageIdx>=7);
-  if(lv.length) add(w,`<div class="tcm-go"><span>Sign-off, reminders and escalation for a live change happen in its approval chain.</span>${lv.map(r=>`<button type="button" class="btn btn-sm" data-act="tcm:chain=${esc(r.live)}">Approval chain · ${esc(r.wf)}</button>`).join("")}</div>`);
   foot(w,all); U.wire(w); return w;
 }
 
@@ -13468,16 +13469,16 @@ Object.assign(U.actions,{tcm:v=>{ const i=v.indexOf("="), k=v.slice(0,i), a=v.sl
   else if(k==="sheet"){ T.ctx.activeId=a; go("impact-analysis"); }
   else if(k==="chain"){ T.ctx.activeId=a; go("approval-workflow"); }
   else if(k==="impl"){ T.ctx.activeId=a; go("implementation"); } }});
-const NEW=[["tc-impact","Change Impact","bar-chart",buildImpact],["tc-approval","Approval Workflow","check-circle",buildApproval],["tc-impl","Implementation","flag",buildImpl],["change-register","Change Register","list",buildRegister],["tc-change","Change detail","file",buildDetail]];
+const NEW=[["tc-impact","Change Impact","bar-chart",buildImpact],["tc-impl","Implementation","flag",buildImpl],["change-register","Change Register","list",buildRegister],["tc-change","Change detail","file",buildDetail]];
 const at=NAV.techchange.findIndex(x=>x.id==="change-dashboard");
 NEW.forEach(([id,label,ic,fn],i)=>{ NAV.techchange.splice(at+1+i,0,{id,label,icon:"📊"}); NAV_ICONS[id]=ic; NAV_SHORT[id]=label; SCREENS.techchange[id]=fn; });
 NAV_HIDDEN.add("tc-change"); SCREENS.techchange["change-dashboard"]=buildOverview;
-const LAB={"change-dashboard":"Overview","tc-impact":"Change Impact","tc-approval":"Approval Workflow","tc-impl":"Implementation","change-register":"Change Register","tc-change":"Change detail","impact-analysis":"Impact Sheet","approval-workflow":"Approval Chain","implementation":"Implementation Tasks"};
+const LAB={"change-dashboard":"Overview","tc-impact":"Change Impact","tc-impl":"Implementation","change-register":"Change Register","tc-change":"Change detail","impact-analysis":"Impact Sheet","approval-workflow":"Approval Chain","implementation":"Implementation Tasks"};
 NAV.techchange.forEach(i=>{ if(LAB[i.id]) i.label=LAB[i.id]; }); Object.assign(NAV_SHORT,LAB);
 Object.assign(NAV_ICONS,{"change-dashboard":"layout"});
 const _nl=navLabel; navLabel=function(m,s){ return (m==="techchange"&&LAB[s])||_nl(m,s); };
 MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
-  ["Dashboards",["change-dashboard","tc-impact","tc-approval","tc-impl","change-register"]],
+  ["Dashboards",["change-dashboard","tc-impact","tc-impl","change-register"]],
   ["Change workflow",["intake","doc-upload","eval-sheet","validation","supplier-offers","mod-sheet","impact-analysis","approval-workflow","implementation","change-history"]],
   ["Approvals & reports",["approvals","reports-tc"]]);
 /* Production-risk card: hover or focus the risk label in the Overview table */
@@ -13514,27 +13515,17 @@ MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
       <div class="gk one"><div><em>Delayed</em><b class="bad">${c("Delayed")}</b></div><div><em>At risk</em><b class="warn">${c("At risk")}</b></div><div><em>On track</em><b>${c("On track")}</b></div><div><em>Implemented</em><b>${c("Implemented")}</b></div></div>
       <div class="gk"><div><em>Project SOP</em><b>${sop?esc(D(sop))+(sop>T0?` · in ${dayDiff(T0,sop)} days`:" · in production"):"—"}</b></div><div><em>Next planned</em><b>${up?esc(D(up.plannedImpl))+`<small>${esc(up.part)}</small>`:"none ahead"}</b></div><div><em>Inside the ${SOP_BUFFER}-day pre-SOP window</em><b>${l.filter(r=>r.sopCrit).length}</b></div></div>`;
   };
-  const stHtml=i=>{
-    const rows=view().rows, st=approvalStats(rows), s=st[i], bn=bottleneck(st), pendN=rows.filter(r=>r.life==="Pending approval").length;
-    const wl=rows.filter(r=>r.life==="Pending approval"&&r.apStep===i).sort((a,b)=>b.overdue-a.overdue||dayDiff(b.stageSince,T0)-dayDiff(a.stageSince,T0));
-    const gap=s.max-AP_SLA, waitNote=!s.n?"nothing waiting":gap>0?`${gap} day${gap===1?"":"s"} over the ${AP_SLA}-day target`:`within the ${AP_SLA}-day target`;
-    return `<div class="hd"><b>${i+1}. ${esc(s.a)}${bn&&bn.i===i?' <span class="tcm-st" style="--c:var(--c-amber)"><i></i>Bottleneck</span>':""}</b><span>Approver role: ${esc(roleLabel(s.role))}</span></div>
-      <div class="gk one"><div><em>Waiting now</em><b>${s.n}</b></div><div><em>Longest wait</em><b class="${s.n&&gap>0?"warn":""}">${s.n?s.max+" d":"—"}</b></div><div><em>Overdue</em><b class="${s.over?"bad":""}">${s.over}</b></div><div><em>Passed</em><b>${s.passed}</b></div></div>
-      <ul><li class="${s.n&&gap>0?"hit":"ok"}"><i>${s.n&&gap>0?"!":"✓"}</i><span>Longest wait: ${esc(waitNote)}</span></li><li class="ok"><i>•</i><span>${pendN?Math.round(s.n/pendN*100):0}% of the ${pendN} change${pendN===1?"":"s"} waiting for a decision (${s.n} here)</span></li><li class="ok"><i>•</i><span>${s.passed} change${s.passed===1?" has":"s have"} passed this step${s.esc?` · ${s.esc} escalated`:""}</span></li></ul>
-      ${wl.length?`<div class="gk"><div style="grid-column:1/-1"><em>Waiting at this step</em>${wl.slice(0,4).map(r=>`<b>${esc(r.part)}<small>${esc(r.wf)} · ${esc(shortP(r.project))} · ${esc(r.owner)} · ${dayDiff(r.stageSince,T0)} d${r.overdue?` (${r.overdue} over)`:""}</small></b>`).join("")}${wl.length>4?`<small>+ ${wl.length-4} more</small>`:""}</div></div>`:""}
-      <div class="ft">Waiting time = days since the change reached the step · target ${AP_SLA} days per step</div>`;
-  };
   const npHtml=code=>{
     const f=fin(view().rows.filter(r=>r.project===code));
     return `<div class="hd"><b>${esc(carName(code))}</b></div><div class="nv"><div><span><i style="background:var(--red)"></i>Additional cost</span><b class="bad">${f.cost?esc(money(f.cost)):"—"}</b></div><div><span><i style="background:var(--ok)"></i>Savings</span><b class="good">${f.sav?esc(money(f.sav)):"—"}</b></div><div class="tot"><span>Net impact</span><b class="${f.net>=0?"good":"bad"}">${esc(sg(f.net))}</b></div></div>`;
   };
   const show=el=>{
-    const d=el.dataset, r=(d.gp||d.np||d.st!==undefined)?null:register().find(x=>x.id===(d.gm||d.rk)); if(!d.gp&&!d.np&&d.st===undefined&&!r) return; hide(); owner=el;
-    tip=document.createElement("div"); tip.className="tcm-tip"+(d.np?" s":d.gp||d.gm||d.st!==undefined?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.np?npHtml(d.np):d.st!==undefined?stHtml(+d.st):d.gm?gHtml(r):html(r); document.body.appendChild(tip);
+    const d=el.dataset, r=(d.gp||d.np)?null:register().find(x=>x.id===(d.gm||d.rk)); if(!d.gp&&!d.np&&!r) return; hide(); owner=el;
+    tip=document.createElement("div"); tip.className="tcm-tip"+(d.np?" s":d.gp||d.gm?" g":""); tip.setAttribute("role","tooltip"); tip.innerHTML=d.gp?gpHtml(d.gp):d.np?npHtml(d.np):d.gm?gHtml(r):html(r); document.body.appendChild(tip);
     const b=el.getBoundingClientRect(), t=tip.getBoundingClientRect(); let x=b.left+b.width/2-t.width/2, y=b.bottom+8;
     if(y+t.height>innerHeight-8) y=b.top-t.height-8; x=Math.max(8,Math.min(x,innerWidth-t.width-8)); tip.style.left=x+"px"; tip.style.top=Math.max(8,y)+"px";
   };
-  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk], .tcm-dm[data-gm], .tcm-gp[data-gp], .af-s[data-st], .tcm-div .r[data-np]");
+  const find=e=>e.target.closest&&e.target.closest(".tcm-chg .pq[data-rk], .tcm-dm[data-gm], .tcm-gp[data-gp], .tcm-div .r[data-np]");
   document.addEventListener("mouseover",e=>{ const el=find(e); if(el&&el!==owner) show(el); else if(!el&&owner&&!(e.target.closest&&e.target.closest(".tcm-tip"))) hide(); });
   document.addEventListener("focusin",e=>{ const el=find(e); if(el) show(el); });
   document.addEventListener("focusout",e=>{ if(find(e)) hide(); });
@@ -13552,7 +13543,7 @@ MODULE_TREE.techchange.splice(0,MODULE_TREE.techchange.length,
       <p>Approved + implemented changes: savings <b>${money(f.sav)}</b>/yr, additional cost <b>${money(f.cost)}</b>/yr, net <b>${sg(f.net)}</b>/yr (annualised, recurring; ${money(f.savI-f.costI)} of it implemented). One-time tooling ${U.cr(f.oneTime)} is not included.</p>
       <p>${od} change${od===1?" is":"s are"} past a due date${bn?`; the approval bottleneck is <b>${esc(bn.a)}</b> (${bn.n} waiting, ${bn.over} overdue)`:""}.</p>`;
     return R(html,{charts:[{kind:"bar",title:"Changes by status",unit:"currency",currencySymbol:"",source:"Technical Change register",orientation:"horizontal",series:[{key:"v",label:"Changes"}],rows:LIFE.map(l=>({label:l,values:{v:c(l)},tone:"neutral"}))}],
-      actions:[{l:"Overview",a:"goto:techchange/change-dashboard"},{l:"Approval Workflow",a:"goto:techchange/tc-approval"},{l:"Change Register",a:"goto:techchange/change-register"}],basis:"Technical Change register (5 live workflow changes + 60 illustrative records) · computed in this page"});
+      actions:[{l:"Overview",a:"goto:techchange/change-dashboard"},{l:"Change Register",a:"goto:techchange/change-register"}],basis:"Technical Change register (5 live workflow changes + 60 illustrative records) · computed in this page"});
   };
 })();
 window.V8TCM={register,fin,F,view};
